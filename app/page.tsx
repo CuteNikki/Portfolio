@@ -143,6 +143,7 @@ function Beams() {
   return (
     <div className='relative overflow-hidden'>
       <BackgroundBeams />
+      <div className='absolute inset-0 -z-10 h-full w-full bg-background [mask-image:radial-gradient(ellipse,transparent,black)]' />
       <motion.div
         initial={{ opacity: 0.0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
