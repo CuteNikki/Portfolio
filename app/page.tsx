@@ -27,7 +27,7 @@ export default function Page() {
   );
 }
 
-export function Aurora() {
+function Aurora() {
   return (
     <div className='relative overflow-hidden'>
       <AuroraBackground />
@@ -139,7 +139,7 @@ export function Aurora() {
   );
 }
 
-export function Beams() {
+function Beams() {
   return (
     <div className='relative overflow-hidden'>
       <BackgroundBeams />
@@ -252,7 +252,7 @@ export function Beams() {
   );
 }
 
-export function Stars() {
+function Stars() {
   const { resolvedTheme } = useTheme();
 
   return (
@@ -376,7 +376,7 @@ export function Stars() {
   );
 }
 
-export function Sparkles() {
+function Sparkles() {
   const { resolvedTheme } = useTheme();
 
   return (
@@ -498,7 +498,7 @@ export function Sparkles() {
   );
 }
 
-export function Vort() {
+function Vort() {
   return (
     <div className='relative overflow-hidden'>
       <Vortex backgroundColor='transparent'>
@@ -612,7 +612,7 @@ export function Vort() {
   );
 }
 
-export function Grid() {
+function Grid() {
   return (
     <div className='relative overflow-hidden'>
       <div className='bg-grid-black/[0.1] dark:bg-grid-white/[0.1] absolute inset-0 -z-20 h-full w-full' />
@@ -725,7 +725,7 @@ export function Grid() {
   );
 }
 
-export function SmallGrid() {
+function SmallGrid() {
   return (
     <div className='relative overflow-hidden'>
       <div className='bg-grid-small-black/[0.3] dark:bg-grid-small-white/[0.3] absolute inset-0 -z-20 h-full w-full' />
@@ -838,7 +838,7 @@ export function SmallGrid() {
   );
 }
 
-export function Dot() {
+function Dot() {
   return (
     <div className='relative overflow-hidden'>
       <div className='bg-dot-black/[0.3] dark:bg-dot-white/[0.3] absolute inset-0 -z-20 h-full w-full' />
