@@ -4,13 +4,11 @@ import React from 'react';
 
 import { cn } from '@/lib/utils';
 
-interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
+interface AuroraProps extends React.HTMLProps<HTMLDivElement> {
   showRadialGradient?: boolean;
 }
 
-export const AuroraBackground = ({
-  showRadialGradient = true,
-}: AuroraBackgroundProps) => {
+export const Aurora = ({ showRadialGradient = true }: AuroraProps) => {
   return (
     <div className='absolute inset-0 -z-10 overflow-hidden'>
       <div

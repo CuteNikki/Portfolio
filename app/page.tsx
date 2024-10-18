@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 
-import { AuroraBackground } from '@/components/backgrounds/aurora-background';
-import { BackgroundBeams } from '@/components/backgrounds/beams-background';
+import { Aurora } from '@/components/backgrounds/aurora-background';
+import { Beams } from '@/components/backgrounds/beams-background';
 import { ShootingStars } from '@/components/backgrounds/shooting-stars';
-import { SparklesCore } from '@/components/backgrounds/sparkles-background';
+import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { StarsBackground } from '@/components/backgrounds/stars-background';
 import { Vortex } from '@/components/backgrounds/vortex-background';
 import { ThemeSwitch } from '@/components/theme/theme-switch';
@@ -15,14 +15,14 @@ import { ThemeSwitch } from '@/components/theme/theme-switch';
 export default function Page() {
   return (
     <div>
-      <Aurora />
-      <Beams />
-      <Stars />
-      <Sparkles />
-      <Vort />
-      <Grid />
-      <SmallGrid />
-      <Dot />
+      <AuroraSection />
+      <BeamSection />
+      <StarSection />
+      <SparkleSection />
+      <VortexSection />
+      <GridSection />
+      <SmallGridSection />
+      <DotSection />
     </div>
   );
 }
@@ -142,26 +142,26 @@ function Vignette() {
   );
 }
 
-function Aurora() {
+function AuroraSection() {
   return (
     <div className='relative overflow-hidden'>
-      <AuroraBackground />
+      <Aurora />
       <Content />
     </div>
   );
 }
 
-function Beams() {
+function BeamSection() {
   return (
     <div className='relative overflow-hidden'>
-      <BackgroundBeams />
+      <Beams />
       <Vignette />
       <Content />
     </div>
   );
 }
 
-function Stars() {
+function StarSection() {
   const { resolvedTheme } = useTheme();
 
   return (
@@ -182,12 +182,12 @@ function Stars() {
   );
 }
 
-function Sparkles() {
+function SparkleSection() {
   const { resolvedTheme } = useTheme();
 
   return (
     <div className='relative overflow-hidden'>
-      <SparklesCore
+      <Sparkles
         background='transparent'
         minSize={0.4}
         maxSize={1}
@@ -201,7 +201,7 @@ function Sparkles() {
   );
 }
 
-function Vort() {
+function VortexSection() {
   return (
     <div className='relative overflow-hidden'>
       <Vortex backgroundColor='transparent'>
@@ -212,7 +212,7 @@ function Vort() {
   );
 }
 
-function Grid() {
+function GridSection() {
   return (
     <div className='relative overflow-hidden'>
       <div className='bg-grid-black/[0.1] dark:bg-grid-white/[0.1] absolute inset-0 -z-20 h-full w-full' />
@@ -222,7 +222,7 @@ function Grid() {
   );
 }
 
-function SmallGrid() {
+function SmallGridSection() {
   return (
     <div className='relative overflow-hidden'>
       <div className='bg-grid-small-black/[0.3] dark:bg-grid-small-white/[0.3] absolute inset-0 -z-20 h-full w-full' />
@@ -232,7 +232,7 @@ function SmallGrid() {
   );
 }
 
-function Dot() {
+function DotSection() {
   return (
     <div className='relative overflow-hidden'>
       <div className='bg-dot-black/[0.3] dark:bg-dot-white/[0.3] absolute inset-0 -z-20 h-full w-full' />
