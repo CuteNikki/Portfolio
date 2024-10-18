@@ -1,16 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useTheme } from 'next-themes';
 import Image from 'next/image';
 
-import { ThemeSwitch } from '@/components/theme-switch';
-import { AuroraBackground } from '@/components/ui/aurora-background';
-import { BackgroundBeams } from '@/components/ui/beams-background';
-import { ShootingStars } from '@/components/ui/shooting-stars';
-import { SparklesCore } from '@/components/ui/sparkles-background';
-import { StarsBackground } from '@/components/ui/stars-background';
-import { Vortex } from '@/components/ui/vortex-background';
-import { useTheme } from 'next-themes';
+import { AuroraBackground } from '@/components/backgrounds/aurora-background';
+import { BackgroundBeams } from '@/components/backgrounds/beams-background';
+import { ShootingStars } from '@/components/backgrounds/shooting-stars';
+import { SparklesCore } from '@/components/backgrounds/sparkles-background';
+import { StarsBackground } from '@/components/backgrounds/stars-background';
+import { Vortex } from '@/components/backgrounds/vortex-background';
+import { ThemeSwitch } from '@/components/theme/theme-switch';
 
 export default function Page() {
   return (
