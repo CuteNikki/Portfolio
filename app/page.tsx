@@ -4,25 +4,30 @@ import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import Image from 'next/image';
 
+import { HeroSection } from '@/components/sections/hero';
+
+import { ThemeSwitch } from '@/components/theme/theme-switch';
+
 import { Aurora } from '@/components/backgrounds/aurora-background';
 import { Beams } from '@/components/backgrounds/beams-background';
+import { Grid } from '@/components/backgrounds/grid-background';
 import { ShootingStars } from '@/components/backgrounds/shooting-stars';
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { StarsBackground } from '@/components/backgrounds/stars-background';
 import { Vortex } from '@/components/backgrounds/vortex-background';
-import { ThemeSwitch } from '@/components/theme/theme-switch';
 
 export default function Page() {
   return (
     <div>
-      <AuroraSection />
+      <HeroSection />
+      {/* <AuroraSection />
       <BeamSection />
       <StarSection />
       <SparkleSection />
       <VortexSection />
       <GridSection />
       <SmallGridSection />
-      <DotSection />
+      <DotSection /> */}
     </div>
   );
 }
@@ -142,6 +147,7 @@ function Vignette() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function AuroraSection() {
   return (
     <div className='relative overflow-hidden'>
@@ -151,6 +157,7 @@ function AuroraSection() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function BeamSection() {
   return (
     <div className='relative overflow-hidden'>
@@ -161,6 +168,7 @@ function BeamSection() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function StarSection() {
   const { resolvedTheme } = useTheme();
 
@@ -182,6 +190,7 @@ function StarSection() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function SparkleSection() {
   const { resolvedTheme } = useTheme();
 
@@ -201,6 +210,7 @@ function SparkleSection() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function VortexSection() {
   return (
     <div className='relative overflow-hidden'>
@@ -212,30 +222,33 @@ function VortexSection() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function GridSection() {
   return (
     <div className='relative overflow-hidden'>
-      <div className='bg-grid-black/[0.1] dark:bg-grid-white/[0.1] absolute inset-0 -z-20 h-full w-full' />
+      <Grid type='default' />
       <Vignette />
       <Content />
     </div>
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function SmallGridSection() {
   return (
     <div className='relative overflow-hidden'>
-      <div className='bg-grid-small-black/[0.3] dark:bg-grid-small-white/[0.3] absolute inset-0 -z-20 h-full w-full' />
+      <Grid type='small' />
       <Vignette />
       <Content />
     </div>
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function DotSection() {
   return (
     <div className='relative overflow-hidden'>
-      <div className='bg-dot-black/[0.3] dark:bg-dot-white/[0.3] absolute inset-0 -z-20 h-full w-full' />
+      <Grid type='dot' />
       <Vignette />
       <Content />
     </div>
