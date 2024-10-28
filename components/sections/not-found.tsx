@@ -20,9 +20,9 @@ export default function NotFound() {
           ease: 'easeInOut',
         }}
       >
-        <div className='flex min-h-screen flex-col items-center justify-center px-2 py-[72px] text-center'>
-          <h1 className='text-8xl font-extrabold'>404</h1>
-          <p className='mb-8 text-center'>Page could not be found</p>
+        <div className='flex min-h-screen flex-col items-center justify-center gap-4 px-4 py-[72px] text-center'>
+          <h1 className='text-8xl font-extrabold leading-[5rem]'>404</h1>
+          <p className='text-muted-foreground'>Page could not be found</p>
           <Button variant='outline' asChild>
             <Link href='/'>Go back home</Link>
           </Button>
