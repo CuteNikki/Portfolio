@@ -4,13 +4,14 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 import { Beams } from '@/components/backgrounds/beams-background';
+import { Vignette } from '@/components/misc/vignette';
 import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
   return (
-    <>
+    <div className='relative overflow-hidden'>
       <Beams />
-      <div className='absolute inset-0 -z-10 h-full w-full bg-background [mask-image:radial-gradient(ellipse,transparent,black)]' />
+      <Vignette />
       <motion.div
         initial={{ opacity: 0.0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -28,6 +29,6 @@ export default function NotFound() {
           </Button>
         </div>
       </motion.div>
-    </>
+    </div>
   );
 }

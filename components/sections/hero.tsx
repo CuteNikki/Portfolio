@@ -19,7 +19,7 @@ export function HeroSection() {
   const { toast } = useToast();
 
   return (
-    <>
+    <div className='relative overflow-hidden'>
       <Aurora />
       <motion.div
         initial={{ opacity: 0.0, y: 40 }}
@@ -112,6 +112,6 @@ export function HeroSection() {
           </div>
         </div>
       </motion.div>
-    </>
+    </div>
   );
 }
