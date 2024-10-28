@@ -66,7 +66,7 @@ export const Beams = React.memo(({ className }: { className?: string }) => {
       )}
     >
       <svg
-        className='pointer-events-none absolute -z-10 h-full w-full min-w-[1000px]'
+        className='pointer-events-none absolute -z-10 h-full min-h-[1080px] w-full min-w-[1920px]'
         width='100%'
         height='100%'
         viewBox='0 0 696 316'

@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 
 import './globals.css';
 
-import { Navbar } from '@/components/navbar';
+import { Navbar } from '@/components/misc/navbar';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
+    <html suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
