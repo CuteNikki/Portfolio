@@ -8,17 +8,17 @@ export function Navbar() {
       <div className='h-10 w-full max-w-screen-lg rounded-xl bg-background/20 outline outline-2 outline-foreground/5 drop-shadow-xl backdrop-blur-xl'>
         <div className='flex h-10 flex-row items-center justify-between sm:px-4'>
           <Button variant='link' asChild>
-            <Link href='/'>nikki</Link>
+            <Link href='/'>Nikki</Link>
           </Button>
           <div className='flex flex-row'>
             <Button variant='link' asChild>
-              <Link href='/'>home</Link>
+              <Link href='/'>Home</Link>
             </Button>
             <Button variant='link' asChild>
-              <Link href='/about'>about</Link>
+              <Link href='/about'>About</Link>
             </Button>
             <Button variant='link' asChild>
-              <Link href='/projects'>projects</Link>
+              <Link href='/projects'>Projects</Link>
             </Button>
           </div>
         </div>
