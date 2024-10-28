@@ -30,7 +30,7 @@ export function HeroSection() {
           ease: 'easeInOut',
         }}
       >
-        <div className='flex min-h-screen flex-col items-center justify-center gap-10 px-4 py-[72px] md:flex-row'>
+        <div className='flex min-h-[100dvh] flex-col items-center justify-center gap-10 px-4 py-[72px] md:flex-row'>
           <div className='flex flex-col items-center justify-center gap-4 text-balance text-center md:items-start md:text-start'>
             <h1 className='text-4xl font-bold sm:text-5xl'>
               Hey, I&apos;m Nikki.

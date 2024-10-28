@@ -28,7 +28,7 @@ export function About() {
           ease: 'easeInOut',
         }}
       >
-        <div className='flex min-h-screen flex-col items-center justify-center gap-10 px-4 py-[72px] md:flex-row'>
+        <div className='flex min-h-[100dvh] flex-col items-center justify-center gap-10 px-4 py-[72px] md:flex-row'>
           <h1>Test</h1>
         </div>
       </motion.div>
