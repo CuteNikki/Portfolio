@@ -400,7 +400,7 @@ export const socials = [
 
 export const skills = [
   {
-    text: 'Focus on user experience design',
+    text: 'Focus on user experience',
     icon: UserIcon,
   },
   {
