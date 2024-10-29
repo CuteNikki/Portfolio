@@ -39,9 +39,10 @@ export function HeroSection() {
             <Image
               unoptimized
               aria-hidden
+              draggable={false}
               src='https://placehold.co/288x288/png?text=Avatar\nPlaceholder'
               alt='avatar'
-              className='h-72 w-72 rounded-3xl outline outline-2 outline-foreground/10 drop-shadow-xl'
+              className='h-72 w-72 select-none rounded-3xl outline outline-1 outline-foreground/5 drop-shadow-xl'
               height={288}
               width={288}
             />
