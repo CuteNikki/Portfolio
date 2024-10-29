@@ -28,10 +28,10 @@ export function HeroSection() {
             </p>
             <div className='flex flex-wrap items-center justify-center gap-2'>
               <Button variant='default' asChild>
-                <Link href='/projects'>My projects</Link>
+                <Link href='/about'>Learn more</Link>
               </Button>
               <Button variant='secondary' asChild>
-                <Link href='/about'>Read more</Link>
+                <Link href='/projects'>My projects</Link>
               </Button>
             </div>
           </div>
