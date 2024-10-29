@@ -4,14 +4,7 @@ import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 
-import {
-  BookMarkedIcon,
-  ClipboardCopyIcon,
-  LinkIcon,
-  UserIcon,
-  UsersIcon,
-  WeightIcon,
-} from 'lucide-react';
+import { ClipboardCopyIcon, LinkIcon } from 'lucide-react';
 
 import {
   backend,
@@ -20,8 +13,10 @@ import {
   discord,
   frontend,
   languages,
+  skills,
   socials,
 } from '@/assets/about';
+
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { Vignette } from '@/components/misc/vignette';
 import { Button } from '@/components/ui/button';
@@ -159,7 +154,7 @@ function ToolsAndTechnologies() {
             {languages.map((language) => (
               <li
                 key={language.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
+                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
               >
                 <span className='size-4 fill-foreground'>{language.icon}</span>
                 <span className='text-sm'>{language.name}</span>
@@ -173,7 +168,7 @@ function ToolsAndTechnologies() {
             {backend.map((backend) => (
               <li
                 key={backend.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
+                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
               >
                 <span className='size-4 fill-foreground'>{backend.icon}</span>
                 <span className='text-sm'>{backend.name}</span>
@@ -187,7 +182,7 @@ function ToolsAndTechnologies() {
             {frontend.map((frontend) => (
               <li
                 key={frontend.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
+                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
               >
                 <span className='size-4 fill-foreground'>{frontend.icon}</span>
                 <span className='text-sm'>{frontend.name}</span>
@@ -201,7 +196,7 @@ function ToolsAndTechnologies() {
             {databases.map((database) => (
               <li
                 key={database.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
+                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
               >
                 <span className='size-4 fill-foreground'>{database.icon}</span>
                 <span className='text-sm'>{database.name}</span>
@@ -215,7 +210,7 @@ function ToolsAndTechnologies() {
             {design.map((tool) => (
               <li
                 key={tool.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
+                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
               >
                 <span className='size-4 fill-foreground'>{tool.icon}</span>
                 <span className='text-sm'>{tool.name}</span>
@@ -233,22 +228,15 @@ function Skills() {
     <div className='flex flex-col justify-center'>
       <h1 className='font-bold'>Skills</h1>
       <ul className='flex flex-col gap-2'>
-        <li className='flex w-fit flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'>
-          <UserIcon className='size-4' />
-          <span className='text-sm'>Focus on user experience design.</span>
-        </li>
-        <li className='flex w-fit flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'>
-          <WeightIcon className='size-4' />
-          <span className='text-sm'>Strong problem-solving abilities.</span>
-        </li>
-        <li className='flex w-fit flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'>
-          <BookMarkedIcon className='size-4' />
-          <span className='text-sm'>Commitment to continuous learning.</span>
-        </li>
-        <li className='flex w-fit flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'>
-          <UsersIcon className='size-4' />
-          <span className='text-sm'>Collaborative and supportive.</span>
-        </li>
+        {skills.map((skill) => (
+          <li
+            key={skill.text}
+            className='flex w-fit flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+          >
+            <skill.icon className='size-4' />
+            <span className='text-sm'>{skill.text}</span>
+          </li>
+        ))}
       </ul>
     </div>
   );
