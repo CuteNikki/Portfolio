@@ -18,8 +18,8 @@ export function ThemeSwitch() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='link' size='icon'>
-          <SunIcon className='dark:hidden block' />
-          <MoonIcon className='dark:block hidden' />
+          <SunIcon className='block dark:hidden' />
+          <MoonIcon className='hidden dark:block' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='center' side='bottom'>
