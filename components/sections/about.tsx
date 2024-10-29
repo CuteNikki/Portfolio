@@ -56,8 +56,8 @@ export function About() {
       >
         <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
           <div className='flex flex-col justify-center gap-6'>
-            <Socials />
             <Description />
+            <Socials />
             <Skills />
             <ToolsAndTechnologies />
           </div>
@@ -108,17 +108,21 @@ function Socials() {
       <h1 className='font-bold'>Socials</h1>
       <div className='flex flex-wrap gap-2'>
         {socials.map((social) => (
-          <Button key={social.name} variant='outline' asChild>
-            <Link href={social.url} className='fill-foreground'>
-              {social.icon}
+          <Button key={social.name} variant='default' asChild>
+            <Link href={social.url}>
+              <span className='size-4 fill-primary-foreground'>
+                {social.icon}
+              </span>
               {social.name}
             </Link>
           </Button>
         ))}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' className='fill-foreground'>
-              {discord.icon}
+            <Button variant='default'>
+              <span className='size-4 fill-primary-foreground'>
+                {discord.icon}
+              </span>
               Discord
             </Button>
           </DropdownMenuTrigger>
@@ -157,7 +161,7 @@ function ToolsAndTechnologies() {
                 key={language.name}
                 className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
               >
-                <span className='size-4'>{language.icon}</span>
+                <span className='size-4 fill-foreground'>{language.icon}</span>
                 <span className='text-sm'>{language.name}</span>
               </li>
             ))}
@@ -171,7 +175,7 @@ function ToolsAndTechnologies() {
                 key={backend.name}
                 className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
               >
-                <span className='size-4'>{backend.icon}</span>
+                <span className='size-4 fill-foreground'>{backend.icon}</span>
                 <span className='text-sm'>{backend.name}</span>
               </li>
             ))}
@@ -185,7 +189,7 @@ function ToolsAndTechnologies() {
                 key={frontend.name}
                 className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
               >
-                <span className='size-4'>{frontend.icon}</span>
+                <span className='size-4 fill-foreground'>{frontend.icon}</span>
                 <span className='text-sm'>{frontend.name}</span>
               </li>
             ))}
@@ -199,7 +203,7 @@ function ToolsAndTechnologies() {
                 key={database.name}
                 className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
               >
-                <span className='size-4'>{database.icon}</span>
+                <span className='size-4 fill-foreground'>{database.icon}</span>
                 <span className='text-sm'>{database.name}</span>
               </li>
             ))}
@@ -213,7 +217,7 @@ function ToolsAndTechnologies() {
                 key={tool.name}
                 className='flex flex-row items-center justify-between gap-2 rounded-md border border-input bg-background px-4 py-2 shadow-sm'
               >
-                <span className='size-4'>{tool.icon}</span>
+                <span className='size-4 fill-foreground'>{tool.icon}</span>
                 <span className='text-sm'>{tool.name}</span>
               </li>
             ))}

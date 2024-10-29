@@ -27,11 +27,11 @@ export function HeroSection() {
               A developer and designer from Germany.
             </p>
             <div className='flex flex-wrap items-center justify-center gap-2'>
-              <Button variant='outline' asChild>
-                <Link href='/about'>Read more</Link>
-              </Button>
-              <Button variant='outline' asChild>
+              <Button variant='default' asChild>
                 <Link href='/projects'>My projects</Link>
+              </Button>
+              <Button variant='secondary' asChild>
+                <Link href='/about'>Read more</Link>
               </Button>
             </div>
           </div>
