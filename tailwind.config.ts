@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import svgToDataUri from 'mini-svg-data-uri';
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
