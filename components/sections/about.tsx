@@ -4,17 +4,17 @@ import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 
-import { ClipboardCopyIcon, LinkIcon } from 'lucide-react';
+import { ClipboardCopyIcon, ClipboardTypeIcon, LinkIcon } from 'lucide-react';
 
 import {
   backend,
   databases,
-  design,
   discord,
   frontend,
   languages,
   skills,
   socials,
+  tools,
 } from '@/assets/about';
 
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
@@ -34,8 +34,8 @@ export function About() {
     <div className='relative overflow-hidden'>
       <Sparkles
         background='transparent'
-        minSize={0.4}
-        maxSize={1}
+        minSize={0.3}
+        maxSize={2}
         particleDensity={100}
         particleColor={resolvedTheme === 'light' ? '#000000' : '#ffffff'}
       />
@@ -54,7 +54,11 @@ export function About() {
             <Description />
             <Socials />
             <Skills />
-            <ToolsAndTechnologies />
+            <Languages />
+            <BackEnd />
+            <FrontEnd />
+            <Databases />
+            <OtherTools />
           </div>
         </div>
       </motion.div>
@@ -64,42 +68,38 @@ export function About() {
 
 function Description() {
   return (
-    <div>
-      <h1 className='font-bold'>Description</h1>
-      <p className='text-pretty'>
-        Hi, I&apos;m Nikki, a designer and full-stack developer who loves
-        solving problems
-        <br />
-        and building accessible, user-friendly experiences.
-        <br />
-        I enjoy the flexibility of working across the stack, bringing ideas to
-        life at every level.
-        <br />
-        I&apos;m also always exploring new tools to keep my skills sharp and
-        up-to-date.
-        <br />
-        Feel free to{' '}
-        <Link href='/projects' className='underline underline-offset-4'>
-          explore my work
-        </Link>{' '}
-        or{' '}
-        <Link
-          href='mailto:contact@yanera.xyz'
-          className='underline underline-offset-4'
-        >
-          connect with me
-        </Link>
-        .
-        <br />
-        I&apos;d love to hear from you!
-      </p>
-    </div>
+    <p className='max-w-screen-md text-pretty rounded-md border border-foreground/5 bg-background px-4 py-2'>
+      I&apos;m a designer and full-stack developer who loves solving problems
+      <br />
+      and building accessible, user-friendly experiences.
+      <br />
+      I enjoy the flexibility of working across the stack, bringing ideas to
+      life at every level.
+      <br />
+      I&apos;m also always exploring new tools to keep my skills sharp and
+      up-to-date.
+      <br />
+      Feel free to{' '}
+      <Link href='/projects' className='underline underline-offset-4'>
+        explore my work
+      </Link>{' '}
+      or{' '}
+      <Link
+        href='mailto:contact@yanera.xyz'
+        className='underline underline-offset-4'
+      >
+        connect with me
+      </Link>
+      .
+      <br />
+      I&apos;d love to hear from you!
+    </p>
   );
 }
 
 function Socials() {
   return (
-    <div className='flex flex-col justify-center'>
+    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
       <h1 className='font-bold'>Socials</h1>
       <div className='flex flex-wrap gap-2'>
         {socials.map((social) => (
@@ -127,13 +127,21 @@ function Socials() {
                 navigator.clipboard.writeText(discord.username);
               }}
             >
+              <ClipboardTypeIcon />
+              Copy name
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                navigator.clipboard.writeText(discord.id);
+              }}
+            >
               <ClipboardCopyIcon />
-              Copy Username
+              Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
               <a href={`https://discord.com/users/${discord.id}`}>
                 <LinkIcon />
-                Open Profile
+                Profile Link
               </a>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -143,98 +151,113 @@ function Socials() {
   );
 }
 
-function ToolsAndTechnologies() {
+function Skills() {
   return (
-    <div>
-      <h1 className='mb-2 font-bold'>Tools & Technologies</h1>
-      <div className='flex flex-col gap-4'>
-        <div className='flex flex-col gap-2'>
-          <span className='ml-2'>Languages:</span>
-          <ul className='flex flex-wrap gap-2'>
-            {languages.map((language) => (
-              <li
-                key={language.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
-              >
-                <span className='size-4 fill-foreground'>{language.icon}</span>
-                <span className='text-sm'>{language.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <span className='ml-2'>Back-End:</span>
-          <ul className='flex flex-wrap gap-2'>
-            {backend.map((backend) => (
-              <li
-                key={backend.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
-              >
-                <span className='size-4 fill-foreground'>{backend.icon}</span>
-                <span className='text-sm'>{backend.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <span className='ml-2'>Front-End:</span>
-          <ul className='flex flex-wrap gap-2'>
-            {frontend.map((frontend) => (
-              <li
-                key={frontend.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
-              >
-                <span className='size-4 fill-foreground'>{frontend.icon}</span>
-                <span className='text-sm'>{frontend.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <span className='ml-2'>Databases:</span>
-          <ul className='flex flex-wrap gap-2'>
-            {databases.map((database) => (
-              <li
-                key={database.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
-              >
-                <span className='size-4 fill-foreground'>{database.icon}</span>
-                <span className='text-sm'>{database.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className='flex flex-col gap-2'>
-          <span className='ml-2'>Design Tools:</span>
-          <ul className='flex flex-wrap gap-2'>
-            {design.map((tool) => (
-              <li
-                key={tool.name}
-                className='flex flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
-              >
-                <span className='size-4 fill-foreground'>{tool.icon}</span>
-                <span className='text-sm'>{tool.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+      <h1 className='font-bold'>Skills</h1>
+      <ul className='flex flex-wrap gap-2'>
+        {skills.map((skill) => (
+          <span
+            key={skill.text}
+            className='flex w-fit flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 text-start text-sm shadow-sm'
+          >
+            <skill.icon className='size-4' />
+            {skill.text}
+          </span>
+        ))}
+      </ul>
     </div>
   );
 }
 
-function Skills() {
+function Languages() {
   return (
-    <div className='flex flex-col justify-center'>
-      <h1 className='font-bold'>Skills</h1>
-      <ul className='flex flex-col gap-2'>
-        {skills.map((skill) => (
+    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+      <span className='font-bold'>Languages</span>
+      <ul className='flex flex-wrap gap-2'>
+        {languages.map((language) => (
           <li
-            key={skill.text}
-            className='flex w-fit flex-row items-center justify-between gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+            key={language.name}
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
           >
-            <skill.icon className='size-4' />
-            <span className='text-sm'>{skill.text}</span>
+            <span className='size-4 fill-foreground'>{language.icon}</span>
+            <span className='text-sm'>{language.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function BackEnd() {
+  return (
+    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+      <span className='font-bold'>Back-End</span>
+      <ul className='flex flex-wrap gap-2'>
+        {backend.map((backend) => (
+          <li
+            key={backend.name}
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+          >
+            <span className='size-4 fill-foreground'>{backend.icon}</span>
+            <span className='text-sm'>{backend.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function FrontEnd() {
+  return (
+    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+      <span className='font-bold'>Front-End</span>
+      <ul className='flex flex-wrap gap-2'>
+        {frontend.map((frontend) => (
+          <li
+            key={frontend.name}
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+          >
+            <span className='size-4 fill-foreground'>{frontend.icon}</span>
+            <span className='text-sm'>{frontend.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Databases() {
+  return (
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+      <span className='font-bold'>Databases</span>
+      <ul className='flex flex-wrap gap-2'>
+        {databases.map((database) => (
+          <li
+            key={database.name}
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+          >
+            <span className='size-4 fill-foreground'>{database.icon}</span>
+            <span className='text-sm'>{database.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function OtherTools() {
+  return (
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+      <span className='font-bold'>Other Tools</span>
+      <ul className='flex flex-wrap gap-2'>
+        {tools.map((tool) => (
+          <li
+            key={tool.name}
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+          >
+            <span className='size-4 fill-foreground'>{tool.icon}</span>
+            <span className='text-sm'>{tool.name}</span>
           </li>
         ))}
       </ul>
