@@ -82,7 +82,7 @@ export const languages = [
 
 export const backend = [
   {
-    name: 'Node.js',
+    name: 'Node',
     icon: (
       <svg
         fill='#5FA04E'
@@ -159,7 +159,7 @@ export const backend = [
 
 export const frontend = [
   {
-    name: 'Next.js',
+    name: 'Next',
     icon: (
       <svg role='img' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
         <title>Next.js</title>
@@ -426,4 +426,17 @@ export const discord = {
   ),
   username: 'cutenikki',
   id: '303142922780672013',
+};
+
+export const about = {
+  name: 'Nikki Sophie B',
+  title: 'Developer & Designer',
+  location: 'Germany',
+  email: 'contact@yanera.xyz',
+  description: `I focus on creating accessible, user-friendly solutions that work seamlessly and look great. 
+  Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date.
+  Working across the stack allows me to turn ideas into reality from start to finish.
+
+  Feel free to explore my work or reach out—I'd love to connect!
+  `,
 };

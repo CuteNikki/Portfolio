@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { ClipboardCopyIcon, ClipboardTypeIcon, LinkIcon } from 'lucide-react';
 
 import {
+  about,
   backend,
   databases,
   discord,
@@ -50,10 +51,14 @@ export function About() {
         }}
       >
         <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
-          <div className='flex flex-col justify-center gap-6'>
-            <Description />
-            <Socials />
-            <Skills />
+          <div className='grid justify-center gap-2'>
+            <div className='flex flex-col gap-2 lg:flex-row'>
+              <Info />
+              <div className='flex flex-col gap-2'>
+                <Skills />
+                <Socials />
+              </div>
+            </div>
             <Languages />
             <BackEnd />
             <FrontEnd />
@@ -66,40 +71,23 @@ export function About() {
   );
 }
 
-function Description() {
+function Info() {
   return (
-    <p className='max-w-screen-md text-pretty rounded-md border border-foreground/5 bg-background px-4 py-2'>
-      I&apos;m a designer and full-stack developer who loves solving problems
-      <br />
-      and building accessible, user-friendly experiences.
-      <br />
-      I enjoy the flexibility of working across the stack, bringing ideas to
-      life at every level.
-      <br />
-      I&apos;m also always exploring new tools to keep my skills sharp and
-      up-to-date.
-      <br />
-      Feel free to{' '}
-      <Link href='/projects' className='underline underline-offset-4'>
-        explore my work
-      </Link>{' '}
-      or{' '}
-      <Link
-        href='mailto:contact@yanera.xyz'
-        className='underline underline-offset-4'
-      >
-        connect with me
-      </Link>
-      .
-      <br />
-      I&apos;d love to hear from you!
-    </p>
+    <div className='flex h-fit max-w-[32rem] flex-col rounded-md border border-foreground/10 bg-card px-4 py-2'>
+      <span className='text-lg font-bold'>{about.name}</span>
+      <ul className='flex flex-row gap-1 text-sm text-muted-foreground'>
+        <li>{about.title}</li>
+        <li>•</li>
+        <li>{about.location}</li>
+      </ul>
+      <p className='whitespace-pre-line text-pretty'>{about.description}</p>
+    </div>
   );
 }
 
 function Socials() {
   return (
-    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+    <div className='flex h-fit w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <h1 className='font-bold'>Socials</h1>
       <div className='flex flex-wrap gap-2'>
         {socials.map((social) => (
@@ -153,13 +141,13 @@ function Socials() {
 
 function Skills() {
   return (
-    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+    <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <h1 className='font-bold'>Skills</h1>
       <ul className='flex flex-wrap gap-2'>
         {skills.map((skill) => (
           <span
             key={skill.text}
-            className='flex w-fit flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 text-start text-sm shadow-sm'
+            className='flex w-fit flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 text-start text-sm shadow-sm'
           >
             <skill.icon className='size-4' />
             {skill.text}
@@ -172,13 +160,13 @@ function Skills() {
 
 function Languages() {
   return (
-    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+    <div className='flex max-w-screen-sm flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Languages</span>
       <ul className='flex flex-wrap gap-2'>
         {languages.map((language) => (
           <li
             key={language.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{language.icon}</span>
             <span className='text-sm'>{language.name}</span>
@@ -191,13 +179,13 @@ function Languages() {
 
 function BackEnd() {
   return (
-    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Back-End</span>
       <ul className='flex flex-wrap gap-2'>
         {backend.map((backend) => (
           <li
             key={backend.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{backend.icon}</span>
             <span className='text-sm'>{backend.name}</span>
@@ -210,13 +198,13 @@ function BackEnd() {
 
 function FrontEnd() {
   return (
-    <div className='flex max-w-screen-md flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Front-End</span>
       <ul className='flex flex-wrap gap-2'>
         {frontend.map((frontend) => (
           <li
             key={frontend.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{frontend.icon}</span>
             <span className='text-sm'>{frontend.name}</span>
@@ -229,13 +217,13 @@ function FrontEnd() {
 
 function Databases() {
   return (
-    <div className='flex flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Databases</span>
       <ul className='flex flex-wrap gap-2'>
         {databases.map((database) => (
           <li
             key={database.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{database.icon}</span>
             <span className='text-sm'>{database.name}</span>
@@ -248,13 +236,13 @@ function Databases() {
 
 function OtherTools() {
   return (
-    <div className='flex flex-col gap-2 rounded-md border border-foreground/5 bg-background px-4 py-4'>
+    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Other Tools</span>
       <ul className='flex flex-wrap gap-2'>
         {tools.map((tool) => (
           <li
             key={tool.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/5 bg-background px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{tool.icon}</span>
             <span className='text-sm'>{tool.name}</span>
