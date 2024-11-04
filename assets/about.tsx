@@ -429,7 +429,7 @@ export const discord = {
 };
 
 export const about = {
-  name: 'Nikki Sophie B',
+  name: 'Nikki Sophie Berthold',
   title: 'Developer & Designer',
   location: 'Germany',
   email: 'contact@yanera.xyz',
@@ -437,6 +437,6 @@ export const about = {
   Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date.
   Working across the stack allows me to turn ideas into reality from start to finish.
 
-  Feel free to explore my work or reach out—I'd love to connect!
+  Feel free to explore my work or reach out — I'd love to connect!
   `,
 };

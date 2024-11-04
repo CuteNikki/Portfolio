@@ -27,6 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Image from 'next/image';
 
 export function About() {
   const { resolvedTheme } = useTheme();
@@ -52,18 +53,20 @@ export function About() {
       >
         <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
           <div className='grid justify-center gap-2'>
-            <div className='flex flex-col gap-2 lg:flex-row'>
+            <div className='flex max-w-screen-lg flex-col gap-2 xl:flex-row'>
               <Info />
               <div className='flex flex-col gap-2'>
                 <Skills />
                 <Socials />
               </div>
             </div>
-            <Languages />
-            <BackEnd />
-            <FrontEnd />
-            <Databases />
-            <OtherTools />
+            <div className='grid max-w-[36rem] gap-2 sm:grid-cols-2 xl:max-w-screen-lg xl:grid-cols-3'>
+              <Languages />
+              <BackEnd />
+              <FrontEnd />
+              <Databases />
+              <OtherTools />
+            </div>
           </div>
         </div>
       </motion.div>
@@ -73,13 +76,27 @@ export function About() {
 
 function Info() {
   return (
-    <div className='flex h-fit max-w-[32rem] flex-col rounded-md border border-foreground/10 bg-card px-4 py-2'>
-      <span className='text-lg font-bold'>{about.name}</span>
-      <ul className='flex flex-row gap-1 text-sm text-muted-foreground'>
-        <li>{about.title}</li>
-        <li>•</li>
-        <li>{about.location}</li>
-      </ul>
+    <div className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-card p-4 xl:max-w-full'>
+      <div className='flex flex-row items-center gap-2'>
+        <Image
+          unoptimized
+          aria-hidden
+          draggable={false}
+          src='https://placehold.co/40x40/png?text=Avatar'
+          alt='avatar'
+          className='h-10 w-10 select-none rounded-3xl outline outline-1 outline-foreground/5 drop-shadow-xl'
+          height={40}
+          width={40}
+        />
+        <div className='flex flex-col'>
+          <span className='text-lg font-bold'>{about.name}</span>
+          <ul className='flex flex-row gap-1 text-sm text-muted-foreground'>
+            <li>{about.title}</li>
+            <li>•</li>
+            <li>{about.location}</li>
+          </ul>
+        </div>
+      </div>
       <p className='whitespace-pre-line text-pretty'>{about.description}</p>
     </div>
   );
@@ -87,7 +104,7 @@ function Info() {
 
 function Socials() {
   return (
-    <div className='flex h-fit w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <h1 className='font-bold'>Socials</h1>
       <div className='flex flex-wrap gap-2'>
         {socials.map((social) => (
@@ -160,7 +177,7 @@ function Skills() {
 
 function Languages() {
   return (
-    <div className='flex max-w-screen-sm flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Languages</span>
       <ul className='flex flex-wrap gap-2'>
         {languages.map((language) => (
@@ -179,7 +196,7 @@ function Languages() {
 
 function BackEnd() {
   return (
-    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Back-End</span>
       <ul className='flex flex-wrap gap-2'>
         {backend.map((backend) => (
@@ -198,7 +215,7 @@ function BackEnd() {
 
 function FrontEnd() {
   return (
-    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Front-End</span>
       <ul className='flex flex-wrap gap-2'>
         {frontend.map((frontend) => (
@@ -217,7 +234,7 @@ function FrontEnd() {
 
 function Databases() {
   return (
-    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Databases</span>
       <ul className='flex flex-wrap gap-2'>
         {databases.map((database) => (
@@ -236,7 +253,7 @@ function Databases() {
 
 function OtherTools() {
   return (
-    <div className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
       <span className='font-bold'>Other Tools</span>
       <ul className='flex flex-wrap gap-2'>
         {tools.map((tool) => (
