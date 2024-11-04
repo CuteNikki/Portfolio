@@ -40,7 +40,7 @@ export function HeroSection() {
               unoptimized
               aria-hidden
               draggable={false}
-              src='https://placehold.co/288x288/png?text=Avatar\nPlaceholder'
+              src='https://placehold.co/288x288/png?text=Placeholder'
               alt='avatar'
               className='h-72 w-72 select-none rounded-md'
               height={288}

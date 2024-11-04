@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ClipboardCopyIcon, ClipboardTypeIcon, LinkIcon } from 'lucide-react';
@@ -27,7 +28,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import Image from 'next/image';
 
 export function About() {
   const { resolvedTheme } = useTheme();
@@ -82,7 +82,7 @@ function Info() {
           unoptimized
           aria-hidden
           draggable={false}
-          src='https://placehold.co/40x40/png?text=Avatar'
+          src='https://placehold.co/40x40/png?text=N'
           alt='avatar'
           className='h-10 w-10 select-none rounded-full'
           height={40}
