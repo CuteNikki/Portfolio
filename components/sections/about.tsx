@@ -76,7 +76,7 @@ export function About() {
 
 function Info() {
   return (
-    <div className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-card p-4 xl:max-w-full'>
+    <div className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:max-w-full'>
       <div className='flex flex-row items-center gap-2'>
         <Image
           unoptimized
@@ -84,7 +84,7 @@ function Info() {
           draggable={false}
           src='https://placehold.co/40x40/png?text=Avatar'
           alt='avatar'
-          className='h-10 w-10 select-none rounded-3xl outline outline-1 outline-foreground/5 drop-shadow-xl'
+          className='h-10 w-10 select-none rounded-full'
           height={40}
           width={40}
         />
@@ -104,7 +104,7 @@ function Info() {
 
 function Socials() {
   return (
-    <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
       <h1 className='font-bold'>Socials</h1>
       <div className='flex flex-wrap gap-2'>
         {socials.map((social) => (
@@ -158,13 +158,13 @@ function Socials() {
 
 function Skills() {
   return (
-    <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
       <h1 className='font-bold'>Skills</h1>
       <ul className='flex flex-wrap gap-2'>
         {skills.map((skill) => (
           <span
             key={skill.text}
-            className='flex w-fit flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 text-start text-sm shadow-sm'
+            className='flex w-fit flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 text-start text-sm shadow-sm'
           >
             <skill.icon className='size-4' />
             {skill.text}
@@ -177,13 +177,13 @@ function Skills() {
 
 function Languages() {
   return (
-    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
       <span className='font-bold'>Languages</span>
       <ul className='flex flex-wrap gap-2'>
         {languages.map((language) => (
           <li
             key={language.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{language.icon}</span>
             <span className='text-sm'>{language.name}</span>
@@ -196,13 +196,13 @@ function Languages() {
 
 function BackEnd() {
   return (
-    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
       <span className='font-bold'>Back-End</span>
       <ul className='flex flex-wrap gap-2'>
         {backend.map((backend) => (
           <li
             key={backend.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{backend.icon}</span>
             <span className='text-sm'>{backend.name}</span>
@@ -215,13 +215,13 @@ function BackEnd() {
 
 function FrontEnd() {
   return (
-    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
       <span className='font-bold'>Front-End</span>
       <ul className='flex flex-wrap gap-2'>
         {frontend.map((frontend) => (
           <li
             key={frontend.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{frontend.icon}</span>
             <span className='text-sm'>{frontend.name}</span>
@@ -234,13 +234,13 @@ function FrontEnd() {
 
 function Databases() {
   return (
-    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
       <span className='font-bold'>Databases</span>
       <ul className='flex flex-wrap gap-2'>
         {databases.map((database) => (
           <li
             key={database.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{database.icon}</span>
             <span className='text-sm'>{database.name}</span>
@@ -253,13 +253,13 @@ function Databases() {
 
 function OtherTools() {
   return (
-    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-card px-4 py-4'>
+    <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
       <span className='font-bold'>Other Tools</span>
       <ul className='flex flex-wrap gap-2'>
         {tools.map((tool) => (
           <li
             key={tool.name}
-            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-card px-4 py-2 shadow-sm'
+            className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
           >
             <span className='size-4 fill-foreground'>{tool.icon}</span>
             <span className='text-sm'>{tool.name}</span>
