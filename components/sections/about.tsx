@@ -108,21 +108,17 @@ function Socials() {
       <h1 className='font-bold'>Socials</h1>
       <div className='flex flex-wrap gap-2'>
         {socials.map((social) => (
-          <Button key={social.name} variant='default' asChild>
+          <Button key={social.name} variant='secondary' asChild>
             <Link href={social.url}>
-              <span className='size-4 fill-primary-foreground'>
-                {social.icon}
-              </span>
+              <span className='size-4 fill-foreground'>{social.icon}</span>
               {social.name}
             </Link>
           </Button>
         ))}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='default'>
-              <span className='size-4 fill-primary-foreground'>
-                {discord.icon}
-              </span>
+            <Button variant='secondary'>
+              <span className='size-4 fill-foreground'>{discord.icon}</span>
               Discord
             </Button>
           </DropdownMenuTrigger>
