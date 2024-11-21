@@ -52,15 +52,15 @@ export function About() {
         }}
       >
         <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
-          <div className='grid justify-center gap-2'>
-            <div className='flex max-w-screen-lg flex-col gap-2 xl:flex-row'>
+          <div className='grid justify-center gap-4'>
+            <div className='flex max-w-screen-lg flex-col gap-4 xl:flex-row'>
               <Info />
-              <div className='flex flex-col gap-2'>
+              <div className='flex flex-col gap-4'>
                 <Skills />
                 <Socials />
               </div>
             </div>
-            <div className='grid max-w-[36rem] gap-2 sm:grid-cols-2 xl:max-w-screen-lg xl:grid-cols-3'>
+            <div className='grid max-w-[36rem] gap-4 sm:grid-cols-2 xl:max-w-screen-lg xl:grid-cols-3'>
               <Languages />
               <BackEnd />
               <FrontEnd />
@@ -82,7 +82,7 @@ function Info() {
           unoptimized
           aria-hidden
           draggable={false}
-          src='https://placehold.co/40x40/png?text=N'
+          src={about.avatar}
           alt='avatar'
           className='h-10 w-10 select-none rounded-full'
           height={40}
@@ -97,7 +97,20 @@ function Info() {
           </ul>
         </div>
       </div>
-      <p className='whitespace-pre-line text-pretty'>{about.description}</p>
+      <p className='flex flex-col gap-4 whitespace-pre-line text-pretty'>
+        {about.description}
+        <span>
+          {about.addition.split('explore my work')[0]}
+          <Link href='/projects' className='underline underline-offset-4'>
+            explore my work
+          </Link>
+          {about.addition.split('explore my work')[1].split('reach out')[0]}
+          <Link href='/contact' className='underline underline-offset-4'>
+            reach out
+          </Link>
+          {about.addition.split('reach out')[1]}
+        </span>
+      </p>
     </div>
   );
 }

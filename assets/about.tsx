@@ -428,15 +428,24 @@ export const discord = {
   id: '303142922780672013',
 };
 
+export const hero = {
+  title: "Hey, I'm Nikki",
+  subtitle: 'Welcome to very own portfolio.',
+  buttons: [
+    { href: '/about', text: 'Learn More' },
+    { href: '/projects', text: 'View Projects' },
+  ],
+};
+
 export const about = {
+  image: 'https://placehold.co/288x288/png?text=Nikki\\nPlaceholder',
+  avatar: 'https://placehold.co/40x40/png?text=N',
   name: 'Nikki Sophie Berthold',
-  title: 'Developer & Designer',
+  title: 'Developer/Designer',
   location: 'Germany',
   email: 'contact@yanera.xyz',
   description: `I focus on creating accessible, user-friendly solutions that work seamlessly and look great. 
   Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date.
-  Working across the stack allows me to turn ideas into reality from start to finish.
-
-  Feel free to explore my work or reach out — I'd love to connect!
-  `,
+  Working across the stack allows me to turn ideas into reality from start to finish.`,
+  addition: `Feel free to explore my work or reach out — I'd love to connect!`,
 };
