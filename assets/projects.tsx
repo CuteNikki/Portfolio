@@ -1,21 +1,23 @@
 export const list = [
   {
-    name: 'This Portfolio',
-    tags: ['Website', 'Front-End'],
+    name: 'Portfolio',
+    description: 'Well, this website...',
+    tags: ['Front-End', 'Website'],
     links: [
-      { href: '/', label: 'Visit Website' },
-      { href: 'https://github.com/CuteNikki/portfolio', label: 'View Source' },
+      { href: '/', label: 'Website' },
+      { href: 'https://github.com/CuteNikki/portfolio', label: 'Source' },
     ],
     icon: 'https://placehold.co/40x40/png?text=P',
     image: 'https://placehold.co/400x300/png?text=Portfolio\\nPlaceholder',
   },
   {
     name: 'Yanera',
-    tags: ['Website', 'Front-End', 'Discord Bot', 'Back-End'],
+    description: 'A Discord Bot and Dashboard.',
+    tags: ['Front-End', 'Back-End', 'Website', 'Dashboard', 'Discord Bot', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'],
     links: [
-      { href: 'https://yanera.xyz', label: 'Visit Website' },
+      { href: 'https://yanera.xyz', label: 'Website' },
       {
-        href: 'https://github.com/CuteNikki/discord-bot',
+        href: 'https://github.com/CuteNikki/yanera-dashboard',
         label: 'Website Source',
       },
       {

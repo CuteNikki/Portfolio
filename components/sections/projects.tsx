@@ -45,7 +45,7 @@ export function Projects() {
           }}
         >
           <div className='flex min-h-[100dvh] flex-col items-center px-4 pb-4 pt-[72px]'>
-            <div className='flex flex-row gap-4 pb-4'>
+            <div className='flex flex-col gap-4 pb-4 sm:flex-row'>
               <Input
                 type='text'
                 placeholder='Search...'
@@ -60,7 +60,11 @@ export function Projects() {
                   setTags(selectedItems);
                 }}
               >
-                {tags.length ? `Filtering by: ${tags.join(', ')}` : 'Filter'}
+                <span className='max-w-[254px] truncate'>
+                  {tags.length
+                    ? `Filtering by: ${tags.map((t) => (t.length > 25 ? t.slice(0, 25) + '...' : t)).join(', ')}`
+                    : 'Filter'}
+                </span>
               </MultiSelect>
             </div>
             <div className='flex flex-wrap items-center justify-center gap-5'>
@@ -80,19 +84,21 @@ export function Projects() {
 
 export function Project({
   name,
+  description,
   links,
   tags,
   image,
   icon,
 }: {
   name: string;
+  description: string;
   tags: string[];
   links: { href: string; label: string }[];
   image: string;
   icon: string;
 }) {
   return (
-    <div className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:max-w-full'>
+    <div className='flex flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:max-w-full'>
       <div className='flex flex-row items-center gap-2'>
         <Image
           unoptimized
@@ -106,14 +112,7 @@ export function Project({
         />
         <div className='flex flex-col'>
           <span className='text-lg font-bold'>{name}</span>
-          <ul className='flex flex-row gap-1 text-sm text-muted-foreground'>
-            {tags.map((tag, index) => (
-              <li key={index} className='flex flex-row gap-1'>
-                <span>{tag}</span>
-                {index !== tags.length - 1 && <p>•</p>}
-              </li>
-            ))}
-          </ul>
+          <span className='text-sm text-muted-foreground'>{description}</span>
         </div>
       </div>
       <Image
@@ -127,7 +126,7 @@ export function Project({
         height={300}
       />
       {links.length > 0 && (
-        <div className='flex flex-row gap-2'>
+        <div className='flex flex-wrap gap-2'>
           {links.map((link, i) => (
             <Link
               href={link.href}
@@ -140,6 +139,14 @@ export function Project({
           ))}
         </div>
       )}
+      <ul className='flex max-w-[400px] flex-wrap gap-1 text-sm text-muted-foreground'>
+        {tags.map((tag, index) => (
+          <li key={index} className='flex flex-row gap-1'>
+            <span className='max-w-[200px] truncate'>{tag}</span>
+            {index !== tags.length - 1 && <p>•</p>}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
