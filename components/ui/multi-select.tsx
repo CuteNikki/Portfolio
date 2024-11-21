@@ -18,22 +18,23 @@ interface ISelectProps {
 }
 const MultiSelect = ({ values, children, onSelectionChange }: ISelectProps) => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+
   const handleSelectChange = (value: string) => {
     let updatedSelectedItems;
+
     if (!selectedItems.includes(value)) {
       updatedSelectedItems = [...selectedItems, value];
     } else {
       updatedSelectedItems = selectedItems.filter((item) => item !== value);
     }
+
     setSelectedItems(updatedSelectedItems);
+
     if (onSelectionChange) {
       onSelectionChange(updatedSelectedItems);
     }
   };
 
-  const isOptionSelected = (value: string): boolean => {
-    return selectedItems.includes(value) ? true : false;
-  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -50,7 +51,7 @@ const MultiSelect = ({ values, children, onSelectionChange }: ISelectProps) => {
             <DropdownMenuCheckboxItem
               onSelect={(e) => e.preventDefault()}
               key={index}
-              checked={isOptionSelected(value.key)}
+              checked={selectedItems.includes(value.key)}
               onCheckedChange={() => handleSelectChange(value.key)}
             >
               {value.value}
