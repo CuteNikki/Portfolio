@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { list } from '@/assets/projects';
 import { Vortex } from '@/components/backgrounds/vortex-background';
 import { Vignette } from '@/components/misc/vignette';
+import { Button } from '@/components/ui/button';
 
 export function Projects() {
   return (
@@ -23,9 +24,12 @@ export function Projects() {
           }}
         >
           <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
-            <div>
-              {list.map((project) => (
-                <Project key={project.name} {...project} />
+            <div className='flex flex-wrap items-center justify-center gap-5'>
+              {list.map((project, index) => (
+                <Project
+                  key={`project-${index}-${project.name}`}
+                  {...project}
+                />
               ))}
             </div>
           </div>
@@ -37,22 +41,19 @@ export function Projects() {
 
 export function Project({
   name,
-  href,
+  links,
   tags,
   image,
   icon,
 }: {
   name: string;
-  href: string;
   tags: string[];
+  links: { href: string; label: string }[];
   image: string;
   icon: string;
 }) {
   return (
-    <Link
-      href={href}
-      className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:max-w-full'
-    >
+    <div className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:max-w-full'>
       <div className='flex flex-row items-center gap-2'>
         <Image
           unoptimized
@@ -86,6 +87,20 @@ export function Project({
         width={400}
         height={300}
       />
-    </Link>
+      {links.length > 0 && (
+        <div className='flex flex-row gap-2'>
+          {links.map((link, i) => (
+            <Link
+              href={link.href}
+              key={`project-${i}-${name}-${link.href}-link`}
+            >
+              <Button variant={i === 0 ? 'default' : 'secondary'}>
+                {link.label}
+              </Button>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
