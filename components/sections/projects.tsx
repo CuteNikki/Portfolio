@@ -3,13 +3,34 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 
 import { list } from '@/assets/projects';
+
 import { Vortex } from '@/components/backgrounds/vortex-background';
 import { Vignette } from '@/components/misc/vignette';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import MultiSelect from '@/components/ui/multi-select';
 
 export function Projects() {
+  const [tags, setTags] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const filteredProjects = list
+    .filter((project) => {
+      const searchLower = searchTerm.toLowerCase();
+      return searchTerm
+        ? project.name.toLowerCase().includes(searchLower) ||
+            project.tags.some((tag) => tag.toLowerCase().includes(searchLower))
+        : true;
+    })
+    .filter((project) =>
+      tags.length ? tags.every((tag) => project.tags.includes(tag)) : true,
+    );
+
+  const uniqueTags = [...new Set(list.flatMap((project) => project.tags))];
+
   return (
     <div className='relative overflow-hidden'>
       <Vortex backgroundColor='transparent'>
@@ -23,9 +44,27 @@ export function Projects() {
             ease: 'easeInOut',
           }}
         >
-          <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
+          <div className='flex min-h-[100dvh] flex-col items-center px-4 pb-4 pt-[72px]'>
+            <div className='flex flex-row gap-4 pb-4'>
+              <Input
+                type='text'
+                placeholder='Search...'
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <MultiSelect
+                values={uniqueTags.map((tag) => ({
+                  key: tag,
+                  value: tag,
+                }))}
+                onSelectionChange={(selectedItems) => {
+                  setTags(selectedItems);
+                }}
+              >
+                {tags.length ? `Filtering by: ${tags.join(', ')}` : 'Filter'}
+              </MultiSelect>
+            </div>
             <div className='flex flex-wrap items-center justify-center gap-5'>
-              {list.map((project, index) => (
+              {filteredProjects.map((project, index) => (
                 <Project
                   key={`project-${index}-${project.name}`}
                   {...project}
