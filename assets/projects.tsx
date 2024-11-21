@@ -11,7 +11,7 @@ export const list = [
   },
   {
     name: 'Yanera',
-    tags: ['Website', 'Discord Bot', 'Back-End'],
+    tags: ['Website', 'Front-End', 'Discord Bot', 'Back-End'],
     links: [
       { href: 'https://yanera.xyz', label: 'Visit Website' },
       {
