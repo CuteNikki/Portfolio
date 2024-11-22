@@ -26,8 +26,6 @@ export function Projects() {
       ?.split(',')
       .filter((v) => v !== '') ?? [];
 
-  console.log(searchTags);
-
   const setSearchTags = useCallback(
     (value: string) => {
       const params = new URLSearchParams(searchParams.toString());
