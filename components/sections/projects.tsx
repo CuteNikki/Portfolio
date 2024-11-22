@@ -181,6 +181,7 @@ export function Project({
             {links.map((link, i) => (
               <Button
                 asChild
+                size='sm'
                 variant={i === 0 ? 'default' : 'secondary'}
                 key={`project-${i}-${name}-${link.href}-link`}
               >
