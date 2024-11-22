@@ -38,7 +38,7 @@ const MultiSelect = ({ values, children, onSelectionChange }: ISelectProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' className='flex gap-2 font-bold'>
+        <Button variant='outline' className='flex gap-2 font-bold w-fit'>
           {children}
         </Button>
       </DropdownMenuTrigger>

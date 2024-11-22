@@ -22,7 +22,10 @@ export function Projects() {
       const searchLower = searchTerm.toLowerCase();
       return searchTerm
         ? project.name.toLowerCase().includes(searchLower) ||
-            project.tags.some((tag) => tag.toLowerCase().includes(searchLower))
+            project.tags.some((tag) =>
+              tag.toLowerCase().includes(searchLower),
+            ) ||
+            project.description.toLowerCase().includes(searchLower)
         : true;
     })
     .filter((project) =>
@@ -45,7 +48,7 @@ export function Projects() {
           }}
         >
           <div className='flex min-h-[100dvh] flex-col items-center px-4 pb-4 pt-[72px]'>
-            <div className='flex flex-col gap-4 pb-4 sm:flex-row'>
+            <div className='flex flex-row gap-4 pb-4'>
               <Input
                 type='text'
                 placeholder='Search...'
@@ -60,11 +63,26 @@ export function Projects() {
                   setTags(selectedItems);
                 }}
               >
-                <span className='max-w-[254px] truncate'>
-                  {tags.length
-                    ? `Filtering by: ${tags.map((t) => (t.length > 25 ? t.slice(0, 25) + '...' : t)).join(', ')}`
-                    : 'Filter'}
-                </span>
+                {tags.length > 0 ? (
+                  <>
+                    <span className='sm:hidden'>
+                      {tags.length} Filter{tags.length > 1 ? 's' : ''}
+                    </span>
+                    <span className='hidden max-w-72 truncate sm:block'>
+                      {tags.length} Filter{tags.length > 1 ? 's' : ''}:{' '}
+                      {tags
+                        .map((t) =>
+                          t.length > 25 ? t.slice(0, 25) + '...' : t,
+                        )
+                        .join(', ')}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className='sm:hidden'>Filter</span>
+                    <span className='hidden sm:block'>Filter</span>
+                  </>
+                )}
               </MultiSelect>
             </div>
             <div className='flex flex-wrap items-center justify-center gap-5'>
