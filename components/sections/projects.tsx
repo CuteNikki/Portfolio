@@ -1,6 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import Fuse from 'fuse.js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -17,20 +18,15 @@ export function Projects() {
   const [tags, setTags] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
 
-  const filteredProjects = list
-    .filter((project) => {
-      const searchLower = searchTerm.toLowerCase();
-      return searchTerm
-        ? project.name.toLowerCase().includes(searchLower) ||
-            project.tags.some((tag) =>
-              tag.toLowerCase().includes(searchLower),
-            ) ||
-            project.description.toLowerCase().includes(searchLower)
-        : true;
-    })
-    .filter((project) =>
-      tags.length ? tags.every((tag) => project.tags.includes(tag)) : true,
-    );
+  const fuse = new Fuse(list, {
+    keys: ['name', 'description', 'tags', 'links.label'],
+    threshold: 0.4,
+    useExtendedSearch: true,
+  });
+
+  const filteredProjects = searchTerm.length
+    ? fuse.search(searchTerm).map((result) => result.item)
+    : list;
 
   const uniqueTags = [...new Set(list.flatMap((project) => project.tags))];
 
