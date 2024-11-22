@@ -1,9 +1,12 @@
 import { Projects } from '@/components/sections/projects';
+import { Suspense } from 'react';
 
 export default function ProjectsPage() {
   return (
     <main className='relative overflow-hidden'>
-      <Projects />
+      <Suspense fallback={<></>}>
+        <Projects />
+      </Suspense>
     </main>
   );
 }
