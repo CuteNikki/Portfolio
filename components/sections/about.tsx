@@ -5,13 +5,11 @@ import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ClipboardCopyIcon, ClipboardTypeIcon, LinkIcon } from 'lucide-react';
-
 import {
   about,
   backend,
   databases,
-  discord,
+  discordButton,
   frontend,
   languages,
   skills,
@@ -22,18 +20,12 @@ import {
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { Vignette } from '@/components/misc/vignette';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
 export function About() {
   const { resolvedTheme } = useTheme();
 
   return (
-    <div className='relative overflow-hidden'>
+    <>
       <Sparkles
         background='transparent'
         minSize={0.3}
@@ -60,7 +52,7 @@ export function About() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -95,7 +87,7 @@ function Info() {
         </div>
         <p className='flex flex-col gap-4 whitespace-pre-line text-pretty'>
           {about.description}
-          <span>
+          <span className='whitespace-pre-line text-balance'>
             {about.addition.split('explore my work')[0]}
             <Link href='/projects' className='underline underline-offset-4'>
               explore my work
@@ -138,7 +130,7 @@ function Skills() {
   );
 }
 
-function Socials() {
+export function Socials() {
   return (
     <motion.div
       layout
@@ -146,49 +138,25 @@ function Socials() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
+      <div
+        id='socials'
+        className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'
+      >
         <h1 className='font-bold'>Socials</h1>
         <div className='flex flex-wrap gap-2'>
-          {socials.map((social) => (
-            <Button key={social.name} variant='secondary' asChild>
+          {socials.map((social, index) => (
+            <Button
+              key={`social-${index}-${social.name}`}
+              variant='secondary'
+              asChild
+            >
               <Link href={social.url}>
                 <span className='size-4 fill-foreground'>{social.icon}</span>
                 {social.name}
               </Link>
             </Button>
           ))}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='secondary'>
-                <span className='size-4 fill-foreground'>{discord.icon}</span>
-                Discord
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(discord.username);
-                }}
-              >
-                <ClipboardTypeIcon />
-                Copy name
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(discord.id);
-                }}
-              >
-                <ClipboardCopyIcon />
-                Copy ID
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <a href={`https://discord.com/users/${discord.id}`}>
-                  <LinkIcon />
-                  Profile Link
-                </a>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {discordButton}
         </div>
       </div>
     </motion.div>
