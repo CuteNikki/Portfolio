@@ -11,16 +11,16 @@ export function HeroSection() {
   return (
     <div className='relative overflow-hidden'>
       <Aurora />
-      <motion.div
-        initial={{ opacity: 0.0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{
-          delay: 0.3,
-          duration: 0.8,
-          ease: 'easeInOut',
-        }}
-      >
-        <div className='flex min-h-[100dvh] flex-col items-center justify-center gap-10 px-4 py-[72px] md:flex-row'>
+      <div className='flex min-h-[100dvh] flex-col items-center justify-center gap-10 px-4 py-[72px] md:flex-row'>
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{
+            delay: 0.1,
+            duration: 0.2,
+            ease: 'easeInOut',
+          }}
+        >
           <div className='flex flex-col items-center justify-center gap-4 text-balance text-center md:items-start md:text-start'>
             <h1 className='text-4xl font-bold md:text-5xl'>{hero.title}</h1>
             <p className='text-lg font-semibold text-foreground/80 md:block md:text-xl'>
@@ -38,6 +38,16 @@ export function HeroSection() {
               ))}
             </div>
           </div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0.0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{
+            delay: 0.2,
+            duration: 0.2,
+            ease: 'easeInOut',
+          }}
+        >
           <div>
             <Image
               unoptimized
@@ -50,8 +60,8 @@ export function HeroSection() {
               width={288}
             />
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }
