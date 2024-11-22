@@ -4,7 +4,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import Fuse from 'fuse.js';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback } from 'react';
 
 import { list } from '@/assets/projects';
 
@@ -15,8 +16,37 @@ import { Input } from '@/components/ui/input';
 import MultiSelect from '@/components/ui/multi-select';
 
 export function Projects() {
-  const [tags, setTags] = useState<string[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const searchTags =
+    searchParams
+      .get('tags')
+      ?.split(',')
+      .filter((v) => v !== '') ?? [];
+
+  console.log(searchTags);
+
+  const setSearchTags = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('tags', value);
+      return params.toString();
+    },
+    [searchParams],
+  );
+
+  const searchTerm = searchParams.get('search') ?? '';
+
+  const setSearchTerm = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('search', value);
+      return params.toString();
+    },
+    [searchParams],
+  );
 
   const fuse = new Fuse(list, {
     keys: ['name', 'description', 'tags', 'links.label'],
@@ -24,66 +54,75 @@ export function Projects() {
     useExtendedSearch: true,
   });
 
-  const filteredProjects = searchTerm.length
+  const searchResults = searchTerm?.length
     ? fuse.search(searchTerm).map((result) => result.item)
     : list;
+
+  const filteredProjects = searchResults.filter((project) =>
+    searchTags.length
+      ? searchTags.every((tag) => project.tags.includes(tag))
+      : true,
+  );
 
   const uniqueTags = [...new Set(list.flatMap((project) => project.tags))];
 
   return (
-    <div className='relative overflow-hidden'>
-      <Vortex backgroundColor='transparent'>
-        <Vignette />
-        <div className='flex min-h-[100dvh] flex-col items-center px-4 pb-4 pt-[72px]'>
-          <div className='flex flex-row gap-4 pb-4'>
-            <Input
-              type='text'
-              placeholder='Search...'
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <MultiSelect
-              values={uniqueTags.map((tag) => ({
-                key: tag,
-                value: tag,
-              }))}
-              onSelectionChange={(selectedItems) => {
-                setTags(selectedItems);
-              }}
-            >
-              {tags.length > 0 ? (
-                <>
-                  <span className='sm:hidden'>
-                    {tags.length} Filter{tags.length > 1 ? 's' : ''}
-                  </span>
-                  <span className='hidden max-w-72 truncate sm:block'>
-                    {tags.length} Filter{tags.length > 1 ? 's' : ''}:{' '}
-                    {tags
-                      .map((t) => (t.length > 25 ? t.slice(0, 25) + '...' : t))
-                      .join(', ')}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className='sm:hidden'>Filter</span>
-                  <span className='hidden sm:block'>Filter</span>
-                </>
-              )}
-            </MultiSelect>
-          </div>
-          <div className='flex flex-wrap items-center justify-center gap-5'>
-            <AnimatePresence mode='wait'>
-              {filteredProjects.map((project, index) => (
-                <Project
-                  index={index}
-                  key={`project-${index}-${project.name}`}
-                  {...project}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
+    <Vortex backgroundColor='transparent'>
+      <Vignette />
+      <div className='flex min-h-[100dvh] flex-col items-center px-4 pb-4 pt-[72px]'>
+        <div className='flex flex-row gap-4 pb-4'>
+          <Input
+            type='text'
+            placeholder='Search...'
+            onChange={(e) =>
+              router.push(pathname + '?' + setSearchTerm(e.target.value))
+            }
+          />
+          <MultiSelect
+            values={uniqueTags.map((tag) => ({
+              key: tag,
+              value: tag,
+            }))}
+            defaultValues={searchTags}
+            onSelectionChange={(selectedItems) =>
+              router.push(
+                pathname + '?' + setSearchTags(selectedItems.join(',')),
+              )
+            }
+          >
+            {searchTags && searchTags.length > 0 ? (
+              <>
+                <span className='sm:hidden'>
+                  {searchTags.length} Filter{searchTags.length > 1 ? 's' : ''}
+                </span>
+                <span className='hidden max-w-72 truncate sm:block'>
+                  {searchTags.length} Filter{searchTags.length > 1 ? 's' : ''}:{' '}
+                  {searchTags
+                    .map((t) => (t!.length > 25 ? t!.slice(0, 25) + '...' : t))
+                    .join(', ')}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className='sm:hidden'>Filter</span>
+                <span className='hidden sm:block'>Filter</span>
+              </>
+            )}
+          </MultiSelect>
         </div>
-      </Vortex>
-    </div>
+        <div className='flex flex-wrap items-center justify-center gap-5'>
+          <AnimatePresence mode='wait'>
+            {filteredProjects.map((project, index) => (
+              <Project
+                index={index}
+                key={`project-${index}-${project.name}`}
+                {...project}
+              />
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
+    </Vortex>
   );
 }
 
