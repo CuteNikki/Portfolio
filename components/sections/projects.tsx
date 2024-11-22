@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Fuse from 'fuse.js';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -109,15 +109,13 @@ export function Projects() {
           </MultiSelect>
         </div>
         <div className='flex flex-wrap items-center justify-center gap-5'>
-          <AnimatePresence mode='wait'>
-            {filteredProjects.map((project, index) => (
-              <Project
-                index={index}
-                key={`project-${index}-${project.name}`}
-                {...project}
-              />
-            ))}
-          </AnimatePresence>
+          {filteredProjects.map((project, index) => (
+            <Project
+              index={index}
+              key={`project-${index}-${project.name}`}
+              {...project}
+            />
+          ))}
         </div>
       </div>
     </Vortex>
