@@ -71,8 +71,8 @@ function Info() {
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.1, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: -40 }}
+      animate={{ opacity: 1, x: 0 }}
     >
       <div className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:h-full xl:max-w-full'>
         <div className='flex flex-row items-center gap-2'>
@@ -121,8 +121,8 @@ function Skills() {
       drag
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
     >
       <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
         <h1 className='font-bold'>Skills</h1>
