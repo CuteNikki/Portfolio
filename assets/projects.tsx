@@ -1,7 +1,7 @@
 export const list = [
   {
     name: 'Portfolio',
-    description: 'Well, this website...',
+    description: "You're looking at it!",
     tags: ['Front-End', 'Website'],
     links: [
       { href: '/', label: 'Website' },
@@ -13,7 +13,7 @@ export const list = [
   {
     name: 'Yanera',
     description: 'A Discord Bot and Dashboard.',
-    tags: ['Front-End', 'Back-End', 'Website', 'Dashboard', 'Discord Bot', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'],
+    tags: ['Front-End', 'Back-End', 'Website', 'Dashboard', 'Discord Bot'],
     links: [
       { href: 'https://yanera.xyz', label: 'Website' },
       {
