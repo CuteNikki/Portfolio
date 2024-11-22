@@ -142,14 +142,13 @@ export function Project({
         {links.length > 0 && (
           <div className='flex flex-wrap gap-2'>
             {links.map((link, i) => (
-              <Link
-                href={link.href}
+              <Button
+                asChild
+                variant={i === 0 ? 'default' : 'secondary'}
                 key={`project-${i}-${name}-${link.href}-link`}
               >
-                <Button variant={i === 0 ? 'default' : 'secondary'}>
-                  {link.label}
-                </Button>
-              </Link>
+                <Link href={link.href}>{link.label}</Link>
+              </Button>
             ))}
           </div>
         )}
