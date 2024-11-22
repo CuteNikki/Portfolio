@@ -68,8 +68,6 @@ function Info() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.1, ease: 'easeInOut' }}
       initial={{ opacity: 0, x: -40 }}
       animate={{ opacity: 1, x: 0 }}
@@ -118,8 +116,6 @@ function Skills() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
@@ -146,8 +142,6 @@ function Socials() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.3, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
@@ -205,8 +199,6 @@ function Languages() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.4, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
@@ -233,8 +225,6 @@ function BackEnd() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.5, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
@@ -261,8 +251,6 @@ function FrontEnd() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.6, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
@@ -289,8 +277,6 @@ function Databases() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.7, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
@@ -317,8 +303,6 @@ function OtherTools() {
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: 0.8, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}

@@ -107,8 +107,6 @@ export function Project({
   return (
     <motion.div
       layout
-      drag
-      dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       transition={{ duration: 0.2, delay: index * 0.1, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
