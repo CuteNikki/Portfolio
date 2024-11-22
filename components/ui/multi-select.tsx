@@ -13,11 +13,19 @@ interface ISelectProps {
     key: string;
     value: string;
   }[];
+  defaultValues?: string[];
   children?: React.ReactNode;
   onSelectionChange?: (selectedItems: string[]) => void;
 }
-const MultiSelect = ({ values, children, onSelectionChange }: ISelectProps) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+const MultiSelect = ({
+  values,
+  defaultValues,
+  children,
+  onSelectionChange,
+}: ISelectProps) => {
+  const [selectedItems, setSelectedItems] = useState<string[]>(
+    defaultValues || [],
+  );
 
   const handleSelectChange = (value: string) => {
     let updatedSelectedItems;
@@ -38,7 +46,7 @@ const MultiSelect = ({ values, children, onSelectionChange }: ISelectProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='outline' className='flex gap-2 font-bold w-fit'>
+        <Button variant='outline' className='flex w-fit gap-2 font-bold'>
           {children}
         </Button>
       </DropdownMenuTrigger>
