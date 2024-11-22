@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export function HeroSection() {
   return (
-    <div className='relative overflow-hidden'>
+    <>
       <Aurora />
       <div className='flex min-h-[100dvh] flex-col items-center justify-center gap-10 px-4 py-[72px] md:flex-row'>
         <motion.div
@@ -62,6 +62,6 @@ export function HeroSection() {
           </div>
         </motion.div>
       </div>
-    </div>
+    </>
   );
 }

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
   return (
-    <div className='relative overflow-hidden'>
+    <>
       <Beams />
       <Vignette />
       <motion.div
@@ -29,6 +29,6 @@ export default function NotFound() {
           </Button>
         </div>
       </motion.div>
-    </div>
+    </>
   );
 }
