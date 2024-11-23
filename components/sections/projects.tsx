@@ -5,7 +5,7 @@ import Fuse from 'fuse.js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 import { list } from '@/assets/projects';
 
@@ -35,6 +35,21 @@ export function Projects() {
     [searchParams],
   );
 
+  const searchTechs =
+    searchParams
+      .get('techs')
+      ?.split(',')
+      .filter((v) => v !== '') ?? [];
+
+  const setSearchTechs = useCallback(
+    (value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('techs', value);
+      return params.toString();
+    },
+    [searchParams],
+  );
+
   const searchTerm = searchParams.get('search') ?? '';
 
   const setSearchTerm = useCallback(
@@ -47,7 +62,7 @@ export function Projects() {
   );
 
   const fuse = new Fuse(list, {
-    keys: ['name', 'description', 'tags', 'links.label'],
+    keys: ['name', 'description', 'tags', 'links.label', 'technoligies.name'],
     threshold: 0.4,
     useExtendedSearch: true,
   });
@@ -56,13 +71,24 @@ export function Projects() {
     ? fuse.search(searchTerm).map((result) => result.item)
     : list;
 
-  const filteredProjects = searchResults.filter((project) =>
-    searchTags.length
-      ? searchTags.every((tag) => project.tags.includes(tag))
-      : true,
+  const filteredProjects = searchResults.filter(
+    (project) =>
+      (searchTags.length
+        ? searchTags.every((tag) => project.tags.includes(tag))
+        : true) &&
+      (searchTechs.length
+        ? searchTechs.every((tech) =>
+            project.technoligies.some((t) => t.name === tech),
+          )
+        : true),
   );
 
   const uniqueTags = [...new Set(list.flatMap((project) => project.tags))];
+  const uniqueTechs = [
+    ...new Set(
+      list.flatMap((project) => project.technoligies.map((tech) => tech.name)),
+    ),
+  ];
 
   return (
     <Vortex backgroundColor='transparent'>
@@ -91,10 +117,10 @@ export function Projects() {
             {searchTags && searchTags.length > 0 ? (
               <>
                 <span className='sm:hidden'>
-                  {searchTags.length} Filter{searchTags.length > 1 ? 's' : ''}
+                  {searchTags.length} Tag{searchTags.length > 1 ? 's' : ''}
                 </span>
-                <span className='hidden max-w-72 truncate sm:block'>
-                  {searchTags.length} Filter{searchTags.length > 1 ? 's' : ''}:{' '}
+                <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
+                  {searchTags.length} Tag{searchTags.length > 1 ? 's' : ''}:{' '}
                   {searchTags
                     .map((t) => (t!.length > 25 ? t!.slice(0, 25) + '...' : t))
                     .join(', ')}
@@ -102,8 +128,39 @@ export function Projects() {
               </>
             ) : (
               <>
-                <span className='sm:hidden'>Filter</span>
-                <span className='hidden sm:block'>Filter</span>
+                <span className='sm:hidden'>Tag</span>
+                <span className='hidden sm:block'>Tag</span>
+              </>
+            )}
+          </MultiSelect>
+          <MultiSelect
+            values={uniqueTechs.map((tag) => ({
+              key: tag,
+              value: tag,
+            }))}
+            defaultValues={searchTechs}
+            onSelectionChange={(selectedItems) =>
+              router.push(
+                pathname + '?' + setSearchTechs(selectedItems.join(',')),
+              )
+            }
+          >
+            {searchTechs && searchTechs.length > 0 ? (
+              <>
+                <span className='sm:hidden'>
+                  {searchTechs.length} Tech{searchTechs.length > 1 ? 's' : ''}
+                </span>
+                <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
+                  {searchTechs.length} Tech{searchTechs.length > 1 ? 's' : ''}:{' '}
+                  {searchTechs
+                    .map((t) => (t!.length > 25 ? t!.slice(0, 25) + '...' : t))
+                    .join(', ')}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className='sm:hidden'>Tech</span>
+                <span className='hidden sm:block'>Tech</span>
               </>
             )}
           </MultiSelect>
@@ -125,6 +182,7 @@ export function Projects() {
 export function Project({
   name,
   description,
+  technoligies,
   links,
   tags,
   image,
@@ -133,6 +191,7 @@ export function Project({
 }: {
   name: string;
   description: string;
+  technoligies: { name: string; icon: ReactNode }[];
   tags: string[];
   links: { href: string; label: string }[];
   image: string;
@@ -155,14 +214,28 @@ export function Project({
             draggable={false}
             src={icon}
             alt='avatar'
-            className='h-10 w-10 select-none rounded-full'
-            height={40}
-            width={40}
+            className='h-11 w-11 select-none rounded-full'
+            height={44}
+            width={44}
           />
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>{name}</span>
             <span className='text-sm text-muted-foreground'>{description}</span>
           </div>
+        </div>
+        <div className='flex max-w-[400px] flex-col gap-2 sm:flex-row sm:items-center'>
+          <div className='flex h-fit flex-wrap gap-1 text-sm text-muted-foreground'>
+            {technoligies.map((tech, index) => (
+              <span
+                key={`technoligies-${index}-${tech.name}`}
+                className='size-4 fill-foreground'
+              >
+                {tech.icon}
+              </span>
+            ))}
+          </div>
+          <p className='hidden sm:block'>•</p>
+          <div className='text-sm text-muted-foreground'>{tags.join(', ')}</div>
         </div>
         <Image
           unoptimized
@@ -188,14 +261,6 @@ export function Project({
             ))}
           </div>
         )}
-        <ul className='flex max-w-[400px] flex-wrap gap-1 text-sm text-muted-foreground'>
-          {tags.map((tag, index) => (
-            <li key={index} className='flex flex-row gap-1'>
-              <span className='max-w-[200px] truncate'>{tag}</span>
-              {index !== tags.length - 1 && <p>•</p>}
-            </li>
-          ))}
-        </ul>
       </div>
     </motion.div>
   );
