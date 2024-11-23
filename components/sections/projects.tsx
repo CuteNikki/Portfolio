@@ -5,9 +5,9 @@ import Fuse from 'fuse.js';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ReactNode, useCallback } from 'react';
+import { useCallback } from 'react';
 
-import { list } from '@/assets/projects';
+import { list, Project as ProjectType } from '@/assets/projects';
 
 import { Vortex } from '@/components/backgrounds/vortex-background';
 import { Vignette } from '@/components/misc/vignette';
@@ -188,16 +188,7 @@ export function Project({
   image,
   icon,
   index,
-}: {
-  name: string;
-  description: string;
-  technoligies: { name: string; icon: ReactNode }[];
-  tags: string[];
-  links: { href: string; label: string }[];
-  image: string;
-  icon: string;
-  index: number;
-}) {
+}: ProjectType & { index: number }) {
   return (
     <motion.div
       layout
@@ -256,7 +247,10 @@ export function Project({
                 variant={i === 0 ? 'default' : 'secondary'}
                 key={`project-${i}-${name}-${link.href}-link`}
               >
-                <Link href={link.href}>{link.label}</Link>
+                <Link href={link.href}>
+                  <span className='fill-foreground'>{link.icon}</span>{' '}
+                  {link.label}
+                </Link>
               </Button>
             ))}
           </div>
