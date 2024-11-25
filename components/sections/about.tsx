@@ -60,7 +60,7 @@ function Info() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.1, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
       initial={{ opacity: 0, x: -40 }}
       animate={{ opacity: 1, x: 0 }}
     >
@@ -108,7 +108,7 @@ function Skills() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 0.4, ease: 'easeInOut' }}
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
     >
@@ -134,7 +134,7 @@ export function Socials() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.3, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 0.6, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
@@ -167,7 +167,7 @@ function Languages() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.4, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 0.8, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
@@ -193,7 +193,7 @@ function BackEnd() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.5, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 1, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
@@ -219,7 +219,7 @@ function FrontEnd() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.6, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 1.2, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
@@ -245,7 +245,7 @@ function Databases() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.7, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 1.4, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
@@ -271,7 +271,7 @@ function OtherTools() {
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: 0.8, ease: 'easeInOut' }}
+      transition={{ duration: 0.2, delay: 1.6, ease: 'easeInOut' }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >

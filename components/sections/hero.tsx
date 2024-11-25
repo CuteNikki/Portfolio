@@ -17,6 +17,7 @@ export function HeroSection() {
           animate={{ opacity: 1, x: 0 }}
           transition={{
             duration: 0.2,
+            delay: 0.2,
             ease: 'easeInOut',
           }}
         >
@@ -42,7 +43,7 @@ export function HeroSection() {
           initial={{ opacity: 0.0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{
-            delay: 0.2,
+            delay: 0.4,
             duration: 0.2,
             ease: 'easeInOut',
           }}

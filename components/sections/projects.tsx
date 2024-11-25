@@ -192,7 +192,11 @@ export function Project({
   return (
     <motion.div
       layout
-      transition={{ duration: 0.2, delay: index * 0.1, ease: 'easeInOut' }}
+      transition={{
+        duration: 0.2,
+        delay: index * 0.2 + 0.2,
+        ease: 'easeInOut',
+      }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 40 }}
