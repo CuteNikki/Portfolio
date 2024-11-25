@@ -94,85 +94,97 @@ export function Projects() {
     <Vortex backgroundColor='transparent'>
       <Vignette />
       <div className='flex min-h-[100dvh] flex-col items-center px-4 pb-4 pt-[72px]'>
-        <div className='flex flex-row gap-4 pb-4'>
-          <Input
-            type='text'
-            placeholder='Search...'
-            onChange={(e) =>
-              router.push(pathname + '?' + setSearchTerm(e.target.value))
-            }
-          />
-          <MultiSelect
-            values={uniqueTags.map((tag) => ({
-              key: tag,
-              value: tag,
-            }))}
-            defaultValues={searchTags}
-            onSelectionChange={(selectedItems) =>
-              router.push(
-                pathname + '?' + setSearchTags(selectedItems.join(',')),
-              )
-            }
-          >
-            {searchTags && searchTags.length > 0 ? (
-              <>
-                <span className='sm:hidden'>
-                  {searchTags.length} Tag{searchTags.length > 1 ? 's' : ''}
-                </span>
-                <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
-                  {searchTags.length} Tag{searchTags.length > 1 ? 's' : ''}:{' '}
-                  {searchTags
-                    .map((t) => (t!.length > 25 ? t!.slice(0, 25) + '...' : t))
-                    .join(', ')}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className='sm:hidden'>Tag</span>
-                <span className='hidden sm:block'>Tag</span>
-              </>
-            )}
-          </MultiSelect>
-          <MultiSelect
-            values={uniqueTechs.map((tag) => ({
-              key: tag,
-              value: tag,
-            }))}
-            defaultValues={searchTechs}
-            onSelectionChange={(selectedItems) =>
-              router.push(
-                pathname + '?' + setSearchTechs(selectedItems.join(',')),
-              )
-            }
-          >
-            {searchTechs && searchTechs.length > 0 ? (
-              <>
-                <span className='sm:hidden'>
-                  {searchTechs.length} Tech{searchTechs.length > 1 ? 's' : ''}
-                </span>
-                <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
-                  {searchTechs.length} Tech{searchTechs.length > 1 ? 's' : ''}:{' '}
-                  {searchTechs
-                    .map((t) => (t!.length > 25 ? t!.slice(0, 25) + '...' : t))
-                    .join(', ')}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className='sm:hidden'>Tech</span>
-                <span className='hidden sm:block'>Tech</span>
-              </>
-            )}
-          </MultiSelect>
+        <div className='w-full'>
+          <div className='flex flex-col items-center'>
+            <div className='flex flex-row gap-4 pb-4'>
+              <Input
+                type='text'
+                placeholder='Search'
+                onChange={(e) =>
+                  router.push(pathname + '?' + setSearchTerm(e.target.value))
+                }
+              />
+              <MultiSelect
+                values={uniqueTags.map((tag) => ({
+                  key: tag,
+                  value: tag,
+                }))}
+                defaultValues={searchTags}
+                onSelectionChange={(selectedItems) =>
+                  router.push(
+                    pathname + '?' + setSearchTags(selectedItems.join(',')),
+                  )
+                }
+              >
+                {searchTags && searchTags.length > 0 ? (
+                  <>
+                    <span className='sm:hidden'>
+                      {searchTags.length} Tag{searchTags.length > 1 ? 's' : ''}
+                    </span>
+                    <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
+                      {searchTags.length} Tag{searchTags.length > 1 ? 's' : ''}:{' '}
+                      {searchTags
+                        .map((t) =>
+                          t!.length > 25 ? t!.slice(0, 25) + '...' : t,
+                        )
+                        .join(', ')}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className='sm:hidden'>Tag</span>
+                    <span className='hidden sm:block'>Tag</span>
+                  </>
+                )}
+              </MultiSelect>
+              <MultiSelect
+                values={uniqueTechs.map((tag) => ({
+                  key: tag,
+                  value: tag,
+                }))}
+                defaultValues={searchTechs}
+                onSelectionChange={(selectedItems) =>
+                  router.push(
+                    pathname + '?' + setSearchTechs(selectedItems.join(',')),
+                  )
+                }
+              >
+                {searchTechs && searchTechs.length > 0 ? (
+                  <>
+                    <span className='sm:hidden'>
+                      {searchTechs.length} Tech
+                      {searchTechs.length > 1 ? 's' : ''}
+                    </span>
+                    <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
+                      {searchTechs.length} Tech
+                      {searchTechs.length > 1 ? 's' : ''}:{' '}
+                      {searchTechs
+                        .map((t) =>
+                          t!.length > 25 ? t!.slice(0, 25) + '...' : t,
+                        )
+                        .join(', ')}
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span className='sm:hidden'>Tech</span>
+                    <span className='hidden sm:block'>Tech</span>
+                  </>
+                )}
+              </MultiSelect>
+            </div>
+          </div>
         </div>
-        <div className='flex flex-wrap items-center justify-center gap-5'>
-          {filteredProjects.map((project, index) => (
-            <Project
-              index={index}
-              key={`project-${index}-${project.name}`}
-              {...project}
-            />
-          ))}
+        <div className='flex w-full flex-1 items-center justify-center'>
+          <div className='flex flex-wrap items-center justify-center gap-5'>
+            {filteredProjects.map((project, index) => (
+              <Project
+                index={index}
+                key={`project-${index}-${project.name}`}
+                {...project}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </Vortex>
