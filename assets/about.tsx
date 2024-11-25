@@ -30,8 +30,9 @@ export const about = {
   image: 'https://placehold.co/288x288/png?text=Nikki\\nPlaceholder',
   avatar: 'https://placehold.co/40x40/png?text=N',
   name: 'Nikki Sophie Berthold',
-  title: 'Developer/Designer',
-  location: 'Germany',
+  title: 'Developer & Designer',
+  age: '20 years old',
+  location: 'From Germany',
   email: 'nikkisophieberthold@gmail.com',
   description: `I focus on creating accessible, user-friendly solutions that work seamlessly and look great. 
 

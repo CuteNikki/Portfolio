@@ -78,10 +78,14 @@ function Info() {
           />
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>{about.name}</span>
-            <ul className='flex flex-row gap-1 text-sm text-muted-foreground'>
+            <ul className='flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row'>
               <li>{about.title}</li>
-              <li>•</li>
-              <li>{about.location}</li>
+              <li className='hidden sm:block'>•</li>
+              <ul className='flex flex-row gap-1'>
+                <li>{about.location}</li>
+                <li>•</li>
+                <li>{about.age}</li>
+              </ul>
             </ul>
           </div>
         </div>
