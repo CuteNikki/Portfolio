@@ -8,8 +8,10 @@ import Link from 'next/link';
 import {
   about,
   backend,
+  career,
   databases,
   discordButton,
+  editors,
   frontend,
   languages,
   skills,
@@ -20,6 +22,12 @@ import {
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { Vignette } from '@/components/misc/vignette';
 import { Button } from '@/components/ui/button';
+import {
+  BriefcaseBusiness,
+  Building2,
+  CalendarDays,
+  MapPin,
+} from 'lucide-react';
 
 export function About() {
   const { resolvedTheme } = useTheme();
@@ -35,21 +43,23 @@ export function About() {
       />
       <Vignette />
       <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
-        <div className='grid justify-center gap-4'>
-          <div className='flex max-w-screen-lg flex-col gap-4 xl:flex-row'>
+        <div className='grid max-w-screen-lg items-center justify-center gap-4'>
+          <div className='flex flex-col gap-4 md:flex-row'>
             <Info />
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col justify-evenly gap-4 sm:flex-row md:flex-col'>
               <Skills />
               <Socials />
             </div>
           </div>
-          <div className='grid max-w-[36rem] gap-4 sm:grid-cols-2 xl:max-w-screen-lg xl:grid-cols-3'>
+          <div className='grid gap-4 sm:grid-cols-2 md:grid-cols-3'>
             <Languages />
             <BackEnd />
             <FrontEnd />
             <Databases />
+            <Editors />
             <OtherTools />
           </div>
+          <Career />
         </div>
       </div>
     </>
@@ -64,7 +74,7 @@ function Info() {
       initial={{ opacity: 0, x: -40 }}
       animate={{ opacity: 1, x: 0 }}
     >
-      <div className='flex max-w-[36rem] flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:h-full xl:max-w-full'>
+      <div className='flex h-full w-full flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4'>
         <div className='flex flex-row items-center gap-2'>
           <Image
             unoptimized
@@ -78,15 +88,15 @@ function Info() {
           />
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>{about.name}</span>
-            <ul className='flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row'>
-              <li>{about.title}</li>
-              <li className='hidden sm:block'>•</li>
-              <ul className='flex flex-row gap-1'>
-                <li>{about.location}</li>
-                <li>•</li>
-                <li>{about.age}</li>
-              </ul>
-            </ul>
+            <div className='flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row'>
+              <span>{about.title}</span>
+              <span className='hidden sm:block'>•</span>
+              <div className='flex flex-row items-center gap-1'>
+                <span>{about.location}</span>
+                <span>•</span>
+                <span>{about.age}</span>
+              </div>
+            </div>
           </div>
         </div>
         <p className='flex flex-col gap-4 whitespace-pre-line text-pretty'>
@@ -116,7 +126,7 @@ function Skills() {
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
     >
-      <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
+      <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <h1 className='font-bold'>Skills</h1>
         <ul className='flex flex-wrap gap-2'>
           {skills.map((skill) => (
@@ -144,7 +154,7 @@ export function Socials() {
     >
       <div
         id='socials'
-        className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'
+        className='flex h-full max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'
       >
         <h1 className='font-bold'>Socials</h1>
         <div className='flex flex-wrap gap-2'>
@@ -175,7 +185,7 @@ function Languages() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
+      <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Languages</span>
         <ul className='flex flex-wrap gap-2'>
           {languages.map((language) => (
@@ -201,7 +211,7 @@ function BackEnd() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
+      <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Back-End</span>
         <ul className='flex flex-wrap gap-2'>
           {backend.map((backend) => (
@@ -227,7 +237,7 @@ function FrontEnd() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
+      <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Front-End</span>
         <ul className='flex flex-wrap gap-2'>
           {frontend.map((frontend) => (
@@ -253,7 +263,7 @@ function Databases() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
+      <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Databases</span>
         <ul className='flex flex-wrap gap-2'>
           {databases.map((database) => (
@@ -271,7 +281,7 @@ function Databases() {
   );
 }
 
-function OtherTools() {
+function Editors() {
   return (
     <motion.div
       layout
@@ -279,7 +289,33 @@ function OtherTools() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background px-4 py-4'>
+      <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
+        <span className='font-bold'>Editors</span>
+        <ul className='flex flex-wrap gap-2'>
+          {editors.map((editor) => (
+            <li
+              key={editor.name}
+              className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
+            >
+              <span className='size-4 fill-foreground'>{editor.icon}</span>
+              <span className='text-sm'>{editor.name}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </motion.div>
+  );
+}
+
+function OtherTools() {
+  return (
+    <motion.div
+      layout
+      transition={{ duration: 0.2, delay: 1.8, ease: 'easeInOut' }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Other Tools</span>
         <ul className='flex flex-wrap gap-2'>
           {tools.map((tool) => (
@@ -292,6 +328,49 @@ function OtherTools() {
             </li>
           ))}
         </ul>
+      </div>
+    </motion.div>
+  );
+}
+
+function Career() {
+  return (
+    <motion.div
+      layout
+      transition={{ duration: 0.2, delay: 2, ease: 'easeInOut' }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+    >
+      <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
+        <span className='font-bold'>Career</span>
+        <div className='grid gap-4 md:grid-cols-2'>
+          {career.map((job, index) => (
+            <div
+              key={`job-${index}`}
+              className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'
+            >
+              <span className='flex flex-row items-center gap-1 text-foreground/80'>
+                <BriefcaseBusiness className='size-4 min-h-4 min-w-4 text-foreground' />
+                {job.title}
+              </span>
+              <span className='flex flex-row items-center gap-1 text-lg text-foreground'>
+                <Building2 className='size-4 min-h-4 min-w-4' />
+                {job.company}
+              </span>
+              <span className='flex flex-row items-center gap-1 text-foreground/80'>
+                <MapPin className='size-4 min-h-4 min-w-4 text-foreground' />
+                {job.location}
+              </span>
+              <span className='flex flex-row items-center gap-1 text-foreground/80'>
+                <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
+                From {job.from} to {job.to}
+              </span>
+              <span className='flex flex-row items-center gap-1 text-pretty text-foreground/80'>
+                {job.description}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </motion.div>
   );

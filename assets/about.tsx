@@ -1,8 +1,11 @@
+import { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
+
 import {
   BookMarkedIcon,
   ClipboardCopyIcon,
   ClipboardTypeIcon,
   LinkIcon,
+  LucideProps,
   Mail,
   UserIcon,
   UsersIcon,
@@ -17,6 +20,49 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
+export type Career = {
+  from: string;
+  to: string;
+  title: string;
+  company: string;
+  location: string;
+  description: string;
+};
+
+export type NameIcon = {
+  name: string;
+  icon: ReactNode;
+};
+
+export type Skill = {
+  text: string;
+  icon: ForwardRefExoticComponent<
+    Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>
+  >;
+};
+
+export type Social = {
+  name: string;
+  url: string;
+  icon: ReactNode;
+};
+
+export const about = {
+  image: 'https://placehold.co/288x288/png?text=Nikki\\nPlaceholder',
+  avatar: 'https://placehold.co/40x40/png?text=N',
+  name: 'Nikki Sophie Berthold',
+  title: 'Developer & Designer',
+  age: '20 years old',
+  location: 'from Germany',
+  email: 'nikkisophieberthold@gmail.com',
+  description: `I focus on creating accessible, user-friendly solutions that work seamlessly and look great. 
+
+  Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date.
+  
+  Working across the stack allows me to turn ideas into reality from start to finish.`,
+  addition: `Feel free to explore my work or reach out — I'd love to connect!`,
+};
+
 export const hero = {
   title: "Hey, I'm Nikki",
   subtitle: 'Welcome to very own portfolio.',
@@ -26,21 +72,53 @@ export const hero = {
   ],
 };
 
-export const about = {
-  image: 'https://placehold.co/288x288/png?text=Nikki\\nPlaceholder',
-  avatar: 'https://placehold.co/40x40/png?text=N',
-  name: 'Nikki Sophie Berthold',
-  title: 'Developer & Designer',
-  age: '20 years old',
-  location: 'From Germany',
-  email: 'nikkisophieberthold@gmail.com',
-  description: `I focus on creating accessible, user-friendly solutions that work seamlessly and look great. 
-
-  Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date.
-  
-  Working across the stack allows me to turn ideas into reality from start to finish.`,
-  addition: `Feel free to explore my work or reach out — I'd love to connect!`,
-};
+export const career: Career[] = [
+  {
+    from: '08/2024',
+    to: 'Present',
+    title: 'Application Developer',
+    company: 'Prodress Software GmbH',
+    location: 'Bielefeld, Germany',
+    description:
+      'Developing and maintaining software applications, collaborating with cross-functional teams to deliver high-quality products.',
+  },
+  {
+    from: '08/2024',
+    to: '08/2027',
+    title: 'Student',
+    company: 'Carl-Severing-Berufskolleg',
+    location: 'Bielefeld, Germany',
+    description:
+      'Pursuing vocational education in software development, focusing on practical skills and theoretical knowledge.',
+  },
+  {
+    from: '17/09/2022',
+    to: '21/09/2022',
+    title: 'Application Developer',
+    company: 'Mittwald CM Service',
+    location: 'Espelkamp, Germany',
+    description:
+      'Completed an internship, gaining hands-on experience in application development and understanding industry practices.',
+  },
+  {
+    from: '09/2015',
+    to: '08/2021',
+    title: 'Student',
+    company: 'Bertolt-Brecht-Gesamtschule',
+    location: 'Löhne, Germany',
+    description:
+      'Completed secondary school education with a focus on science and technology subjects.',
+  },
+  {
+    from: '09/2011',
+    to: '08/2015',
+    title: 'Student',
+    company: 'Ev. Grundschule Obernbeck',
+    location: 'Löhne Obernbeck, Germany',
+    description:
+      'Completed primary/elementary school education, laying the foundation for further academic pursuits.',
+  },
+];
 
 export const discord = {
   icon: (
@@ -53,7 +131,7 @@ export const discord = {
   id: '303142922780672013',
 };
 
-export const languages = [
+export const languages: NameIcon[] = [
   {
     name: 'HTML',
     icon: (
@@ -133,7 +211,7 @@ export const languages = [
   },
 ];
 
-export const backend = [
+export const backend: NameIcon[] = [
   {
     name: 'Node',
     icon: (
@@ -210,7 +288,7 @@ export const backend = [
   },
 ];
 
-export const frontend = [
+export const frontend: NameIcon[] = [
   {
     name: 'Next',
     icon: (
@@ -273,7 +351,7 @@ export const frontend = [
   },
 ];
 
-export const databases = [
+export const databases: NameIcon[] = [
   {
     name: 'MongoDB',
     icon: (
@@ -346,7 +424,155 @@ export const databases = [
   },
 ];
 
-export const tools = [
+export const editors: NameIcon[] = [
+  {
+    name: 'VS Code',
+    icon: (
+      <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 100 100'>
+        <title>VS Code</title>
+        <mask
+          id='mask0'
+          width='100'
+          height='100'
+          x='0'
+          y='0'
+          maskUnits='userSpaceOnUse'
+        >
+          <path
+            fill='#fff'
+            fillRule='evenodd'
+            d='M70.912 99.317a6.22 6.22 0 0 0 4.96-.19l20.589-9.907A6.25 6.25 0 0 0 100 83.587V16.413a6.25 6.25 0 0 0-3.54-5.632L75.874.874a6.23 6.23 0 0 0-7.104 1.21L29.355 38.04 12.187 25.01a4.16 4.16 0 0 0-5.318.236l-5.506 5.009a4.17 4.17 0 0 0-.004 6.162L16.247 50 1.36 63.583a4.17 4.17 0 0 0 .004 6.162l5.506 5.01a4.16 4.16 0 0 0 5.318.236l17.168-13.032L68.77 97.917a6.2 6.2 0 0 0 2.143 1.4M75.015 27.3 45.11 50l29.906 22.701z'
+            clipRule='evenodd'
+          ></path>
+        </mask>
+        <g mask='url(#mask0)'>
+          <path
+            fill='#0065A9'
+            d='M96.461 10.796 75.857.876a6.23 6.23 0 0 0-7.107 1.207l-67.451 61.5a4.167 4.167 0 0 0 .004 6.162l5.51 5.009a4.17 4.17 0 0 0 5.32.236l81.228-61.62c2.725-2.067 6.639-.124 6.639 3.297v-.24a6.25 6.25 0 0 0-3.539-5.63'
+          ></path>
+          <g filter='url(#filter0_d)'>
+            <path
+              fill='#007ACC'
+              d='m96.461 89.204-20.604 9.92a6.23 6.23 0 0 1-7.107-1.207l-67.451-61.5a4.167 4.167 0 0 1 .004-6.162l5.51-5.009a4.17 4.17 0 0 1 5.32-.236l81.228 61.62c2.725 2.067 6.639.124 6.639-3.297v.24a6.25 6.25 0 0 1-3.539 5.63'
+            ></path>
+          </g>
+          <g filter='url(#filter1_d)'>
+            <path
+              fill='#1F9CF0'
+              d='M75.858 99.126a6.23 6.23 0 0 1-7.108-1.21c2.306 2.307 6.25.674 6.25-2.588V4.672c0-3.262-3.944-4.895-6.25-2.589a6.23 6.23 0 0 1 7.108-1.21l20.6 9.908A6.25 6.25 0 0 1 100 16.413v67.174a6.25 6.25 0 0 1-3.541 5.633z'
+            ></path>
+          </g>
+          <path
+            fill='url(#paint0_linear)'
+            fillRule='evenodd'
+            d='M70.851 99.317a6.22 6.22 0 0 0 4.96-.19L96.4 89.22a6.25 6.25 0 0 0 3.54-5.633V16.413a6.25 6.25 0 0 0-3.54-5.632L75.812.874a6.23 6.23 0 0 0-7.104 1.21L29.294 38.04 12.126 25.01a4.16 4.16 0 0 0-5.317.236l-5.507 5.009a4.17 4.17 0 0 0-.004 6.162L16.186 50 1.298 63.583a4.17 4.17 0 0 0 .004 6.162l5.507 5.009a4.16 4.16 0 0 0 5.317.236L29.294 61.96l39.414 35.958a6.2 6.2 0 0 0 2.143 1.4M74.954 27.3 45.048 50l29.906 22.701z'
+            clipRule='evenodd'
+            opacity='0.25'
+            style={{ mixBlendMode: 'overlay' }}
+          ></path>
+        </g>
+        <defs>
+          <filter
+            id='filter0_d'
+            width='116.727'
+            height='92.246'
+            x='-8.394'
+            y='15.829'
+            colorInterpolationFilters='sRGB'
+            filterUnits='userSpaceOnUse'
+          >
+            <feFlood floodOpacity='0' result='BackgroundImageFix'></feFlood>
+            <feColorMatrix
+              in='SourceAlpha'
+              values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+            ></feColorMatrix>
+            <feOffset></feOffset>
+            <feGaussianBlur stdDeviation='4.167'></feGaussianBlur>
+            <feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0'></feColorMatrix>
+            <feBlend
+              in2='BackgroundImageFix'
+              mode='overlay'
+              result='effect1_dropShadow'
+            ></feBlend>
+            <feBlend
+              in='SourceGraphic'
+              in2='effect1_dropShadow'
+              result='shape'
+            ></feBlend>
+          </filter>
+          <filter
+            id='filter1_d'
+            width='47.917'
+            height='116.151'
+            x='60.417'
+            y='-8.076'
+            colorInterpolationFilters='sRGB'
+            filterUnits='userSpaceOnUse'
+          >
+            <feFlood floodOpacity='0' result='BackgroundImageFix'></feFlood>
+            <feColorMatrix
+              in='SourceAlpha'
+              values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0'
+            ></feColorMatrix>
+            <feOffset></feOffset>
+            <feGaussianBlur stdDeviation='4.167'></feGaussianBlur>
+            <feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0'></feColorMatrix>
+            <feBlend
+              in2='BackgroundImageFix'
+              mode='overlay'
+              result='effect1_dropShadow'
+            ></feBlend>
+            <feBlend
+              in='SourceGraphic'
+              in2='effect1_dropShadow'
+              result='shape'
+            ></feBlend>
+          </filter>
+          <linearGradient
+            id='paint0_linear'
+            x1='49.939'
+            x2='49.939'
+            y1='0.258'
+            y2='99.742'
+            gradientUnits='userSpaceOnUse'
+          >
+            <stop stopColor='#fff'></stop>
+            <stop offset='1' stopColor='#fff' stopOpacity='0'></stop>
+          </linearGradient>
+        </defs>
+      </svg>
+    ),
+  },
+  {
+    name: 'Eclipse IDE',
+    icon: (
+      <svg role='img' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+        <title>Eclipse IDE</title>
+        <path d='M11.109.024a15.58 15.58 0 00-.737.023C6.728.361 3.469 2.517 1.579 5.86A12.53 12.53 0 00.021 11.11c-.04.517-.02 1.745.035 2.208.306 2.682 1.353 5.06 3.07 6.965 1.962 2.173 4.586 3.467 7.437 3.663.42.032 1.043.04 1.02.012a2.404 2.404 0 00-.338-.074c-1.674-.33-3.388-1.13-4.777-2.232a12.344 12.344 0 01-2.45-2.636A12.387 12.387 0 011.884 12.5a12.413 12.413 0 01.56-4.274c.785-2.522 2.37-4.726 4.475-6.228A11.073 11.073 0 0111.156.122l.443-.098zm1.474.51C10.646.65 8.807 1.299 7.301 2.4 5.426 3.77 3.995 5.644 3.22 7.746c-.145.397-.282.82-.282.879 0 .012 3.828.024 10.31.024 8.463 0 10.315-.008 10.315-.036 0-.047-.153-.525-.283-.878-.153-.42-.576-1.31-.82-1.722-.4-.683-.91-1.373-1.474-1.992-1.65-1.82-3.593-2.934-5.82-3.334-.785-.141-1.8-.2-2.585-.153zM23.83 9.97c-.02 0-4.792 0-10.609.004l-10.573.008-.011.059c-.036.16-.134 1.081-.134 1.242 0 .028 1.785.032 10.746.032H24v-.075c0-.102-.07-.791-.106-1.054-.02-.16-.04-.216-.063-.216zm-10.573 2.635c-9.37-.004-10.73 0-10.742.035-.02.04.024.557.075.973.02.157.035.298.035.314 0 .027 2.137.035 10.624.035h10.624l.024-.188c.043-.326.102-.97.094-1.067l-.008-.094zm.003 2.718c-8.882 0-10.321.004-10.321.035 0 .02.054.208.12.42a11.122 11.122 0 002.072 3.741c.282.342.945 1.036 1.228 1.287 1.568 1.4 3.247 2.216 5.18 2.53.605.094.886.113 1.75.11.91 0 1.297-.032 2.023-.177 2.11-.416 3.914-1.451 5.53-3.17 1.267-1.348 2.106-2.76 2.628-4.41l.117-.366z' />
+      </svg>
+    ),
+  },
+  {
+    name: 'IntelliJ IDEA',
+    icon: (
+      <svg role='img' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+        <title>IntelliJ IDEA</title>
+        <path d='M0 0v24h24V0zm3.723 3.111h5v1.834h-1.39v6.277h1.39v1.834h-5v-1.834h1.444V4.945H3.723zm11.055 0H17v6.5c0 .612-.055 1.111-.222 1.556-.167.444-.39.777-.723 1.11-.277.279-.666.557-1.11.668a3.933 3.933 0 0 1-1.445.278c-.778 0-1.444-.167-1.944-.445a4.81 4.81 0 0 1-1.279-1.056l1.39-1.555c.277.334.555.555.833.722.277.167.611.278.945.278.389 0 .721-.111 1-.389.221-.278.333-.667.333-1.278zM2.222 19.5h9V21h-9z' />
+      </svg>
+    ),
+  },
+  {
+    name: 'WebStorm',
+    icon: (
+      <svg role='img' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+        <title>WebStorm</title>
+        <path d='M0 0v24h24V0H0zm17.889 2.889c1.444 0 2.667.444 3.667 1.278l-1.111 1.667c-.889-.611-1.722-1-2.556-1s-1.278.389-1.278.889v.056c0 .667.444.889 2.111 1.333 2 .556 3.111 1.278 3.111 3v.056c0 2-1.5 3.111-3.611 3.111-1.5-.056-3-.611-4.167-1.667l1.278-1.556c.889.722 1.833 1.222 2.944 1.222.889 0 1.389-.333 1.389-.944v-.056c0-.556-.333-.833-2-1.278-2-.5-3.222-1.056-3.222-3.056v-.056c0-1.833 1.444-3 3.444-3zm-16.111.222h2.278l1.5 5.778 1.722-5.778h1.667l1.667 5.778 1.5-5.778h2.333l-2.833 9.944H9.723L8.112 7.277l-1.667 5.778H4.612L1.779 3.111zm.5 16.389h9V21h-9v-1.5z' />
+      </svg>
+    ),
+  },
+];
+
+export const tools: NameIcon[] = [
   {
     name: 'Git',
     icon: (
@@ -428,7 +654,7 @@ export const tools = [
   },
 ];
 
-export const socials = [
+export const socials: Social[] = [
   {
     name: 'Mail',
     url: 'mailto:' + about.email,
@@ -476,7 +702,7 @@ export const socials = [
   },
 ];
 
-export const skills = [
+export const skills: Skill[] = [
   {
     text: 'Focus on user experience',
     icon: UserIcon,
