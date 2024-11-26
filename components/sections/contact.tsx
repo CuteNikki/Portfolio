@@ -3,8 +3,8 @@
 import { motion } from 'framer-motion';
 
 import { Grid } from '@/components/backgrounds/grid-background';
-import { Socials } from '@/components/sections/about';
 import { Vignette } from '@/components/misc/vignette';
+import { Socials } from '@/components/sections/about';
 
 export default function Contact() {
   return (
@@ -12,7 +12,7 @@ export default function Contact() {
       <Grid type='dot' />
       <Vignette />
       <motion.div
-        transition={{ duration: 0.2, ease: 'easeInOut' }}
+        transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
       >
