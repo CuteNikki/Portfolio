@@ -133,7 +133,7 @@ export const career: Career[] = [
     company: 'Self-Employed',
     location: 'Remote',
     description:
-      'Worked on various freelance projects, building websites and web applications for clients across different industries.',
+      'Worked on various freelance projects, building websites and more for clients across different industries.',
   },
 ];
 
