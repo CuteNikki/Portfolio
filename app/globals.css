@@ -95,3 +95,9 @@
     @apply !mr-0 !overflow-visible;
   }
 }
+
+@layer utilities {
+  .anim-underline {
+    @apply relative cursor-pointer transition-all ease-in-out before:absolute before:bottom-0 before:left-[50%] before:h-[1px] before:w-0 before:origin-center before:bg-foreground before:transition-[width] before:duration-700 before:ease-in-out after:absolute after:bottom-0 after:right-[50%] after:h-[1px] after:w-0 after:origin-center after:bg-foreground after:transition-[width] after:duration-700 after:ease-in-out group-hover:text-foreground group-hover:before:w-[50%] group-hover:after:w-[50%];
+  }
+}
