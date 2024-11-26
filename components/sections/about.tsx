@@ -12,6 +12,7 @@ import {
   databases,
   discordButton,
   editors,
+  education,
   frontend,
   languages,
   skills,
@@ -24,6 +25,7 @@ import { Vignette } from '@/components/misc/vignette';
 import { Button } from '@/components/ui/button';
 import {
   BriefcaseBusiness,
+  Building,
   Building2,
   CalendarDays,
   MapPin,
@@ -46,7 +48,7 @@ export function About() {
         <div className='grid max-w-screen-lg items-center justify-center gap-4'>
           <div className='flex flex-col gap-4 md:flex-row'>
             <Info />
-            <div className='flex flex-col justify-evenly gap-4 sm:flex-row md:flex-col'>
+            <div className='flex flex-col gap-4 sm:flex-row md:flex-col'>
               <Skills />
               <Socials />
             </div>
@@ -59,7 +61,10 @@ export function About() {
             <Editors />
             <OtherTools />
           </div>
-          <Career />
+          <div className='grid gap-4 md:grid-cols-2'>
+            <Career />
+            <Education />
+          </div>
         </div>
       </div>
     </>
@@ -295,7 +300,7 @@ function Editors() {
           {editors.map((editor) => (
             <li
               key={editor.name}
-              className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
+              className='flex items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
             >
               <span className='size-4 fill-foreground'>{editor.icon}</span>
               <span className='text-sm'>{editor.name}</span>
@@ -321,7 +326,7 @@ function OtherTools() {
           {tools.map((tool) => (
             <li
               key={tool.name}
-              className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
+              className='flex items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
             >
               <span className='size-4 fill-foreground'>{tool.icon}</span>
               <span className='text-sm'>{tool.name}</span>
@@ -338,35 +343,74 @@ function Career() {
     <motion.div
       layout
       transition={{ duration: 0.2, delay: 2, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, x: -40 }}
+      animate={{ opacity: 1, x: 0 }}
     >
-      <div className='flex flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
+      <div className='grid gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Career</span>
-        <div className='grid gap-4 md:grid-cols-2'>
+        <div className='grid gap-4'>
           {career.map((job, index) => (
             <div
               key={`job-${index}`}
-              className='flex w-fit flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'
+              className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
             >
-              <span className='flex flex-row items-center gap-1 text-foreground/80'>
+              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
                 <BriefcaseBusiness className='size-4 min-h-4 min-w-4 text-foreground' />
                 {job.title}
               </span>
-              <span className='flex flex-row items-center gap-1 text-lg text-foreground'>
+              <span className='flex items-center gap-1 text-lg text-foreground sm:gap-2'>
                 <Building2 className='size-4 min-h-4 min-w-4' />
                 {job.company}
               </span>
-              <span className='flex flex-row items-center gap-1 text-foreground/80'>
+              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
                 <MapPin className='size-4 min-h-4 min-w-4 text-foreground' />
                 {job.location}
               </span>
-              <span className='flex flex-row items-center gap-1 text-foreground/80'>
+              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
                 <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
                 From {job.from} to {job.to}
               </span>
-              <span className='flex flex-row items-center gap-1 text-pretty text-foreground/80'>
+              <span className='flex items-center gap-1 text-pretty text-foreground/80'>
                 {job.description}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function Education() {
+  return (
+    <motion.div
+      layout
+      transition={{ duration: 0.2, delay: 2.2, ease: 'easeInOut' }}
+      initial={{ opacity: 0, x: 40 }}
+      animate={{ opacity: 1, x: 0 }}
+    >
+      <div className='grid gap-2 rounded-md border border-foreground/10 bg-background p-4'>
+        <span className='font-bold'>Education</span>
+        <div className='grid gap-4'>
+          {education.map((ed, index) => (
+            <div
+              key={`education-${index}`}
+              className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
+            >
+              <span className='flex items-center gap-1 text-lg text-foreground sm:gap-2'>
+                <Building className='size-4 min-h-4 min-w-4' />
+                {ed.school}
+              </span>
+              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+                <MapPin className='size-4 min-h-4 min-w-4 text-foreground' />
+                {ed.location}
+              </span>
+              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+                <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
+                From {ed.from} to {ed.to}
+              </span>
+              <span className='text-pretty text-foreground/80'>
+                {ed.description}
               </span>
             </div>
           ))}

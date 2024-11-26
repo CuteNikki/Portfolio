@@ -29,6 +29,14 @@ export type Career = {
   description: string;
 };
 
+export type Education = {
+  from: string;
+  to: string;
+  school: string;
+  location: string;
+  description: string;
+};
+
 export type NameIcon = {
   name: string;
   icon: ReactNode;
@@ -72,6 +80,33 @@ export const hero = {
   ],
 };
 
+export const education: Education[] = [
+  {
+    from: '08/2024',
+    to: '08/2027',
+    school: 'Carl-Severing-Berufskolleg',
+    location: 'Bielefeld, Germany',
+    description:
+      'Pursuing vocational education in software development, focusing on practical skills and theoretical knowledge.',
+  },
+  {
+    from: '09/2015',
+    to: '08/2021',
+    school: 'Bertolt-Brecht-Gesamtschule',
+    location: 'Löhne, Germany',
+    description:
+      'Completed secondary school education with a focus on science and technology subjects.',
+  },
+  {
+    from: '09/2011',
+    to: '08/2015',
+    school: 'Ev. Grundschule Obernbeck',
+    location: 'Löhne Obernbeck, Germany',
+    description:
+      'Completed primary/elementary school education, laying the foundation for further academic pursuits.',
+  },
+];
+
 export const career: Career[] = [
   {
     from: '08/2024',
@@ -81,15 +116,6 @@ export const career: Career[] = [
     location: 'Bielefeld, Germany',
     description:
       'Developing and maintaining software applications, collaborating with cross-functional teams to deliver high-quality products.',
-  },
-  {
-    from: '08/2024',
-    to: '08/2027',
-    title: 'Student',
-    company: 'Carl-Severing-Berufskolleg',
-    location: 'Bielefeld, Germany',
-    description:
-      'Pursuing vocational education in software development, focusing on practical skills and theoretical knowledge.',
   },
   {
     from: '17/09/2022',
@@ -102,21 +128,12 @@ export const career: Career[] = [
   },
   {
     from: '09/2015',
-    to: '08/2021',
-    title: 'Student',
-    company: 'Bertolt-Brecht-Gesamtschule',
-    location: 'Löhne, Germany',
+    to: '08/2024',
+    title: 'Freelancer',
+    company: 'Self-Employed',
+    location: 'Remote',
     description:
-      'Completed secondary school education with a focus on science and technology subjects.',
-  },
-  {
-    from: '09/2011',
-    to: '08/2015',
-    title: 'Student',
-    company: 'Ev. Grundschule Obernbeck',
-    location: 'Löhne Obernbeck, Germany',
-    description:
-      'Completed primary/elementary school education, laying the foundation for further academic pursuits.',
+      'Worked on various freelance projects, building websites and web applications for clients across different industries.',
   },
 ];
 
