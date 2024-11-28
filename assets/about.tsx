@@ -82,7 +82,7 @@ export const hero = {
 
 export const education: Education[] = [
   {
-    from: '08/2024',
+    from: '09/2024',
     to: '08/2027',
     school: 'Carl-Severing-Berufskolleg',
     location: 'Bielefeld, Germany',
