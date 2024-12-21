@@ -32,6 +32,7 @@ export type Career = {
 export type Education = {
   from: string;
   to: string;
+  title: string;
   school: string;
   location: string;
   description: string;
@@ -85,6 +86,7 @@ export const education: Education[] = [
   {
     from: '09/2024',
     to: '08/2027',
+    title: 'Student',
     school: 'Carl-Severing-Berufskolleg',
     location: 'Bielefeld, Germany',
     description:
@@ -93,6 +95,7 @@ export const education: Education[] = [
   {
     from: '09/2015',
     to: '08/2021',
+    title: 'Student',
     school: 'Bertolt-Brecht-Gesamtschule',
     location: 'Löhne, Germany',
     description:
@@ -101,6 +104,7 @@ export const education: Education[] = [
   {
     from: '09/2011',
     to: '08/2015',
+    title: 'Student',
     school: 'Ev. Grundschule Obernbeck',
     location: 'Löhne, Germany',
     description:
@@ -109,6 +113,7 @@ export const education: Education[] = [
   {
     from: '2008',
     to: '08/2011',
+    title: 'Kindergartner',
     school: 'Ev. Kindergarten Die Arche',
     location: 'Löhne, Germany',
     description:

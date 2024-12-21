@@ -9,6 +9,7 @@ import {
   Building,
   Building2,
   CalendarDays,
+  CaptionsIcon,
   MapPin,
 } from 'lucide-react';
 
@@ -381,6 +382,10 @@ function Education() {
             key={`education-${index}`}
             className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
           >
+            <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+              <CaptionsIcon className='size-4 min-h-4 min-w-4 text-foreground' />
+              {ed.title}
+            </span>
             <span className='flex items-center gap-1 text-lg text-foreground sm:gap-2'>
               <Building className='size-4 min-h-4 min-w-4' />
               {ed.school}
