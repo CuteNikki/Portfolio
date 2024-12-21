@@ -102,7 +102,7 @@ export const education: Education[] = [
     from: '09/2011',
     to: '08/2015',
     school: 'Ev. Grundschule Obernbeck',
-    location: 'Löhne Obernbeck, Germany',
+    location: 'Löhne, Germany',
     description:
       'Completed primary/elementary school education, laying the foundation for further academic pursuits.',
   },

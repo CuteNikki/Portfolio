@@ -335,36 +335,33 @@ function Career() {
       initial={{ opacity: 0, x: -40 }}
       animate={{ opacity: 1, x: 0 }}
     >
-      <div className='grid gap-2 rounded-md border border-foreground/10 bg-background p-4'>
-        <span className='font-bold'>Career</span>
-        <div className='grid gap-4'>
-          {career.map((job, index) => (
-            <div
-              key={`job-${index}`}
-              className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
-            >
-              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
-                <BriefcaseBusiness className='size-4 min-h-4 min-w-4 text-foreground' />
-                {job.title}
-              </span>
-              <span className='flex items-center gap-1 text-lg text-foreground sm:gap-2'>
-                <Building2 className='size-4 min-h-4 min-w-4' />
-                {job.company}
-              </span>
-              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
-                <MapPin className='size-4 min-h-4 min-w-4 text-foreground' />
-                {job.location}
-              </span>
-              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
-                <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
-                From {job.from} to {job.to}
-              </span>
-              <span className='flex items-center gap-1 text-pretty text-foreground/80'>
-                {job.description}
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className='grid gap-4'>
+        {career.map((job, index) => (
+          <div
+            key={`job-${index}`}
+            className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
+          >
+            <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+              <BriefcaseBusiness className='size-4 min-h-4 min-w-4 text-foreground' />
+              {job.title}
+            </span>
+            <span className='flex items-center gap-1 text-lg text-foreground sm:gap-2'>
+              <Building2 className='size-4 min-h-4 min-w-4' />
+              {job.company}
+            </span>
+            <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+              <MapPin className='size-4 min-h-4 min-w-4 text-foreground' />
+              {job.location}
+            </span>
+            <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+              <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
+              From {job.from} to {job.to}
+            </span>
+            <span className='flex items-center gap-1 text-pretty text-foreground/80'>
+              {job.description}
+            </span>
+          </div>
+        ))}
       </div>
     </motion.div>
   );
@@ -378,32 +375,29 @@ function Education() {
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
     >
-      <div className='grid gap-2 rounded-md border border-foreground/10 bg-background p-4'>
-        <span className='font-bold'>Education</span>
-        <div className='grid gap-4'>
-          {education.map((ed, index) => (
-            <div
-              key={`education-${index}`}
-              className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
-            >
-              <span className='flex items-center gap-1 text-lg text-foreground sm:gap-2'>
-                <Building className='size-4 min-h-4 min-w-4' />
-                {ed.school}
-              </span>
-              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
-                <MapPin className='size-4 min-h-4 min-w-4 text-foreground' />
-                {ed.location}
-              </span>
-              <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
-                <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
-                From {ed.from} to {ed.to}
-              </span>
-              <span className='text-pretty text-foreground/80'>
-                {ed.description}
-              </span>
-            </div>
-          ))}
-        </div>
+      <div className='grid gap-4'>
+        {education.map((ed, index) => (
+          <div
+            key={`education-${index}`}
+            className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
+          >
+            <span className='flex items-center gap-1 text-lg text-foreground sm:gap-2'>
+              <Building className='size-4 min-h-4 min-w-4' />
+              {ed.school}
+            </span>
+            <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+              <MapPin className='size-4 min-h-4 min-w-4 text-foreground' />
+              {ed.location}
+            </span>
+            <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
+              <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
+              From {ed.from} to {ed.to}
+            </span>
+            <span className='text-pretty text-foreground/80'>
+              {ed.description}
+            </span>
+          </div>
+        ))}
       </div>
     </motion.div>
   );
