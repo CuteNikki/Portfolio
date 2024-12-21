@@ -60,14 +60,15 @@ export const about = {
   avatar: 'https://placehold.co/40x40/png?text=N',
   name: 'Nikki Sophie Berthold',
   title: 'Developer & Designer',
-  age: '20 years old',
-  location: 'from Germany',
   email: 'nikkisophieberthold@gmail.com',
-  description: `I focus on creating accessible, user-friendly solutions that work seamlessly and look great. 
-
-  Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date.
+  description: `Based in Germany and currently 20 years old, I bring fresh perspectives to my work.
   
-  Working across the stack allows me to turn ideas into reality from start to finish.`,
+I focus on creating accessible, user-friendly solutions that work seamlessly and look great.
+I'm passionate about building products that make a difference and help people.
+Working across the stack allows me to turn ideas into reality from start to finish.
+
+Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date.
+`,
   addition: `Feel free to explore my work or reach out — I'd love to connect!`,
 };
 

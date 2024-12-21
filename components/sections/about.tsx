@@ -93,15 +93,7 @@ function Info() {
           />
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>{about.name}</span>
-            <div className='flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row'>
-              <span>{about.title}</span>
-              <span className='hidden sm:block'>•</span>
-              <div className='flex flex-row items-center gap-1'>
-                <span>{about.location}</span>
-                <span>•</span>
-                <span>{about.age}</span>
-              </div>
-            </div>
+            <span className='text-sm text-muted-foreground'>{about.title}</span>
           </div>
         </div>
         <p className='flex flex-col gap-4 whitespace-pre-line text-pretty'>
