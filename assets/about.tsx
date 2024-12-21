@@ -105,6 +105,14 @@ export const education: Education[] = [
     description:
       'Completed primary/elementary school education, laying the foundation for further academic pursuits.',
   },
+  {
+    from: '2008',
+    to: '08/2011',
+    school: 'Ev. Kindergarten Die Arche',
+    location: 'Löhne, Germany',
+    description:
+      'Attended kindergarten, developing social skills and preparing for formal education.',
+  },
 ];
 
 export const career: Career[] = [
