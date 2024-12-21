@@ -2,8 +2,17 @@
 
 import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
-import Image from 'next/image';
 import Link from 'next/link';
+
+import {
+  BriefcaseBusiness,
+  Building,
+  Building2,
+  CalendarDays,
+  MapPin,
+} from 'lucide-react';
+
+import { getAcronym } from '@/lib/utils';
 
 import {
   about,
@@ -22,14 +31,8 @@ import {
 
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { Vignette } from '@/components/misc/vignette';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import {
-  BriefcaseBusiness,
-  Building,
-  Building2,
-  CalendarDays,
-  MapPin,
-} from 'lucide-react';
 
 export function About() {
   const { resolvedTheme } = useTheme();
@@ -81,16 +84,10 @@ function Info() {
     >
       <div className='flex h-full w-full flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4'>
         <div className='flex flex-row items-center gap-2'>
-          <Image
-            unoptimized
-            aria-hidden
-            draggable={false}
-            src={about.avatar}
-            alt='avatar'
-            className='h-10 w-10 select-none rounded-full'
-            height={40}
-            width={40}
-          />
+          <Avatar>
+            <AvatarImage src={about.avatar} />
+            <AvatarFallback>{getAcronym(about.name)}</AvatarFallback>
+          </Avatar>
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>{about.name}</span>
             <span className='text-sm text-muted-foreground'>{about.title}</span>

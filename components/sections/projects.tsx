@@ -7,10 +7,13 @@ import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
+import { getAcronym } from '@/lib/utils';
+
 import { list, Project as ProjectType } from '@/assets/projects';
 
 import { Vortex } from '@/components/backgrounds/vortex-background';
 import { Vignette } from '@/components/misc/vignette';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import MultiSelect from '@/components/ui/multi-select';
@@ -215,16 +218,10 @@ export function Project({
     >
       <div className='flex flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:max-w-full'>
         <div className='flex flex-row items-center gap-2'>
-          <Image
-            unoptimized
-            aria-hidden
-            draggable={false}
-            src={icon}
-            alt='avatar'
-            className='h-11 w-11 select-none rounded-full'
-            height={44}
-            width={44}
-          />
+          <Avatar>
+            <AvatarImage src={icon} />
+            <AvatarFallback>{getAcronym(name)}</AvatarFallback>
+          </Avatar>
           <div className='flex flex-col'>
             <span className='text-lg font-bold'>{name}</span>
             <span className='text-sm text-muted-foreground'>{description}</span>
