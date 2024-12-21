@@ -17,6 +17,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import MultiSelect from '@/components/ui/multi-select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export function Projects() {
   const router = useRouter();
@@ -230,12 +235,14 @@ export function Project({
         <div className='flex max-w-[400px] flex-col gap-2 sm:flex-row sm:items-center'>
           <div className='flex h-fit flex-wrap gap-1 text-sm text-muted-foreground'>
             {technoligies.map((tech, index) => (
-              <span
-                key={`technoligies-${index}-${tech.name}`}
-                className='size-4 fill-foreground'
-              >
-                {tech.icon}
-              </span>
+              <Tooltip key={`technoligies-${index}-${tech.name}`}>
+                <TooltipTrigger asChild>
+                  <span className='size-4 fill-foreground'>{tech.icon}</span>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{tech.name}</p>
+                </TooltipContent>
+              </Tooltip>
             ))}
           </div>
           <p className='hidden sm:block'>•</p>
