@@ -5,6 +5,7 @@ import './globals.css';
 
 import { Navbar } from '@/components/misc/navbar';
 import { ThemeProvider } from '@/components/theme/theme-provider';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -40,8 +41,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          {children}
+          <TooltipProvider delayDuration={200}>
+            <Navbar />
+            {children}
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
