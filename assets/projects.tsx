@@ -180,7 +180,7 @@ export const list: Project[] = [
   },
   {
     name: 'Yanera Bot',
-    description: 'A Discord Bot.',
+    description: 'A Discord bot.',
     tags: ['Back-End', 'Bot'],
     technoligies: [
       {
@@ -217,7 +217,7 @@ export const list: Project[] = [
   },
   {
     name: 'Portfolio',
-    description: "You're looking at it!",
+    description: "You're looking at it.",
     tags: ['Front-End', 'Website'],
     technoligies: [
       {
