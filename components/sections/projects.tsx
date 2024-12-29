@@ -170,9 +170,9 @@ export function Project({ name, description, technoligies, links, tags, image, i
       exit={{ opacity: 0, y: 40 }}
     >
       <div className='flex flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4 xl:max-w-full'>
-        <div className='flex flex-row items-center gap-2'>
-          <Avatar>
-            <AvatarImage src={icon} />
+        <div className='flex flex-row items-center gap-4'>
+          <Avatar className='rounded-lg'>
+            <AvatarImage aria-hidden draggable={false} src={icon} className='select-none' />
             <AvatarFallback>{getAcronym(name)}</AvatarFallback>
           </Avatar>
           <div className='flex flex-col'>
@@ -196,7 +196,16 @@ export function Project({ name, description, technoligies, links, tags, image, i
           <p className='hidden sm:block'>•</p>
           <div className='text-sm text-muted-foreground'>{tags.join(', ')}</div>
         </div>
-        <Image unoptimized aria-hidden draggable={false} src={image} alt='placeholder' className='w-full select-none rounded-md' width={400} height={300} />
+        <Image
+          unoptimized
+          aria-hidden
+          draggable={false}
+          src={image}
+          alt='placeholder'
+          className='aspect-[4/3] select-none rounded-md object-cover'
+          width={400}
+          height={300}
+        />
         {links.length > 0 && (
           <div className='flex flex-wrap gap-2'>
             {links.map((link, i) => (

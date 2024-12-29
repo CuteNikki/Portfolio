@@ -122,8 +122,8 @@ export const list: Project[] = [
         ),
       },
     ],
-    icon: 'https://placehold.co/44x44/png?text=TH',
-    image: 'https://placehold.co/400x300/png?text=Tinderhaj\\nPlaceholder',
+    icon: '/project_tinderhaj_icon.webp',
+    image: '/project_tinderhaj_image.png',
   },
   {
     name: 'Yanera Dashboard',
@@ -175,8 +175,8 @@ export const list: Project[] = [
         ),
       },
     ],
-    icon: 'https://placehold.co/44x44/png?text=YW',
-    image: 'https://placehold.co/400x300/png?text=Yanera\\nPlaceholder',
+    icon: '/project_yanera_icon.png',
+    image: '/project_yanera_image.png',
   },
   {
     name: 'Yanera Bot',
@@ -212,8 +212,8 @@ export const list: Project[] = [
         ),
       },
     ],
-    icon: 'https://placehold.co/44x44/png?text=YB',
-    image: 'https://placehold.co/400x300/png?text=Yanera\\nPlaceholder',
+    icon: '/project_yanera_icon.png',
+    image: 'https://placehold.co/400x300/png?text=Yanera+Bot\\nPlaceholder',
   },
   {
     name: 'Portfolio',
@@ -265,7 +265,7 @@ export const list: Project[] = [
         ),
       },
     ],
-    icon: 'https://placehold.co/44x44/png?text=P',
-    image: 'https://placehold.co/400x300/png?text=Portfolio\\nPlaceholder',
+    icon: '/project_portfolio_icon.png',
+    image: '/project_portfolio_image.png',
   },
 ];
