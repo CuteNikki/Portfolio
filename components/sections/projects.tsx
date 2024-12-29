@@ -17,11 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import MultiSelect from '@/components/ui/multi-select';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export function Projects() {
   const router = useRouter();
@@ -75,28 +71,16 @@ export function Projects() {
     useExtendedSearch: true,
   });
 
-  const searchResults = searchTerm?.length
-    ? fuse.search(searchTerm).map((result) => result.item)
-    : list;
+  const searchResults = searchTerm?.length ? fuse.search(searchTerm).map((result) => result.item) : list;
 
   const filteredProjects = searchResults.filter(
     (project) =>
-      (searchTags.length
-        ? searchTags.every((tag) => project.tags.includes(tag))
-        : true) &&
-      (searchTechs.length
-        ? searchTechs.every((tech) =>
-            project.technoligies.some((t) => t.name === tech),
-          )
-        : true),
+      (searchTags.length ? searchTags.every((tag) => project.tags.includes(tag)) : true) &&
+      (searchTechs.length ? searchTechs.every((tech) => project.technoligies.some((t) => t.name === tech)) : true),
   );
 
   const uniqueTags = [...new Set(list.flatMap((project) => project.tags))];
-  const uniqueTechs = [
-    ...new Set(
-      list.flatMap((project) => project.technoligies.map((tech) => tech.name)),
-    ),
-  ];
+  const uniqueTechs = [...new Set(list.flatMap((project) => project.technoligies.map((tech) => tech.name)))];
 
   return (
     <Vortex backgroundColor='transparent'>
@@ -105,24 +89,14 @@ export function Projects() {
         <div className='w-full'>
           <div className='flex flex-col items-center'>
             <div className='flex flex-row gap-4 pb-4'>
-              <Input
-                type='text'
-                placeholder='Search'
-                onChange={(e) =>
-                  router.push(pathname + '?' + setSearchTerm(e.target.value))
-                }
-              />
+              <Input type='text' placeholder='Search' onChange={(e) => router.push(pathname + '?' + setSearchTerm(e.target.value))} />
               <MultiSelect
                 values={uniqueTags.map((tag) => ({
                   key: tag,
                   value: tag,
                 }))}
                 defaultValues={searchTags}
-                onSelectionChange={(selectedItems) =>
-                  router.push(
-                    pathname + '?' + setSearchTags(selectedItems.join(',')),
-                  )
-                }
+                onSelectionChange={(selectedItems) => router.push(pathname + '?' + setSearchTags(selectedItems.join(',')))}
               >
                 {searchTags && searchTags.length > 0 ? (
                   <>
@@ -131,11 +105,7 @@ export function Projects() {
                     </span>
                     <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
                       {searchTags.length} Tag{searchTags.length > 1 ? 's' : ''}:{' '}
-                      {searchTags
-                        .map((t) =>
-                          t!.length > 25 ? t!.slice(0, 25) + '...' : t,
-                        )
-                        .join(', ')}
+                      {searchTags.map((t) => (t!.length > 25 ? t!.slice(0, 25) + '...' : t)).join(', ')}
                     </span>
                   </>
                 ) : (
@@ -151,11 +121,7 @@ export function Projects() {
                   value: tag,
                 }))}
                 defaultValues={searchTechs}
-                onSelectionChange={(selectedItems) =>
-                  router.push(
-                    pathname + '?' + setSearchTechs(selectedItems.join(',')),
-                  )
-                }
+                onSelectionChange={(selectedItems) => router.push(pathname + '?' + setSearchTechs(selectedItems.join(',')))}
               >
                 {searchTechs && searchTechs.length > 0 ? (
                   <>
@@ -165,12 +131,7 @@ export function Projects() {
                     </span>
                     <span className='hidden max-w-40 truncate sm:block md:max-w-56 lg:max-w-72'>
                       {searchTechs.length} Tech
-                      {searchTechs.length > 1 ? 's' : ''}:{' '}
-                      {searchTechs
-                        .map((t) =>
-                          t!.length > 25 ? t!.slice(0, 25) + '...' : t,
-                        )
-                        .join(', ')}
+                      {searchTechs.length > 1 ? 's' : ''}: {searchTechs.map((t) => (t!.length > 25 ? t!.slice(0, 25) + '...' : t)).join(', ')}
                     </span>
                   </>
                 ) : (
@@ -186,11 +147,7 @@ export function Projects() {
         <div className='flex w-full flex-1 items-center justify-center'>
           <div className='flex flex-wrap items-center justify-center gap-5'>
             {filteredProjects.map((project, index) => (
-              <Project
-                index={index}
-                key={`project-${index}-${project.name}`}
-                {...project}
-              />
+              <Project index={index} key={`project-${index}-${project.name}`} {...project} />
             ))}
           </div>
         </div>
@@ -199,16 +156,7 @@ export function Projects() {
   );
 }
 
-export function Project({
-  name,
-  description,
-  technoligies,
-  links,
-  tags,
-  image,
-  icon,
-  index,
-}: ProjectType & { index: number }) {
+export function Project({ name, description, technoligies, links, tags, image, icon, index }: ProjectType & { index: number }) {
   return (
     <motion.div
       layout
@@ -248,28 +196,13 @@ export function Project({
           <p className='hidden sm:block'>•</p>
           <div className='text-sm text-muted-foreground'>{tags.join(', ')}</div>
         </div>
-        <Image
-          unoptimized
-          aria-hidden
-          draggable={false}
-          src={image}
-          alt='placeholder'
-          className='w-full select-none rounded-md'
-          width={400}
-          height={300}
-        />
+        <Image unoptimized aria-hidden draggable={false} src={image} alt='placeholder' className='w-full select-none rounded-md' width={400} height={300} />
         {links.length > 0 && (
           <div className='flex flex-wrap gap-2'>
             {links.map((link, i) => (
-              <Button
-                asChild
-                size='sm'
-                variant={i === 0 ? 'default' : 'secondary'}
-                key={`project-${i}-${name}-${link.href}-link`}
-              >
+              <Button asChild size='sm' variant={i === 0 ? 'default' : 'secondary'} key={`project-${i}-${name}-${link.href}-link`}>
                 <Link href={link.href}>
-                  <span className='fill-foreground'>{link.icon}</span>{' '}
-                  {link.label}
+                  <span className='fill-foreground'>{link.icon}</span> {link.label}
                 </Link>
               </Button>
             ))}

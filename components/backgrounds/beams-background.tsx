@@ -59,12 +59,7 @@ export const Beams = React.memo(({ className }: { className?: string }) => {
     'M-37 -581C-37 -581 31 -176 495 -49C959 78 1027 483 1027 483',
   ];
   return (
-    <div
-      className={cn(
-        'absolute inset-0 -z-20 flex h-full w-full items-center justify-center [mask-repeat:no-repeat] [mask-size:40px]',
-        className,
-      )}
-    >
+    <div className={cn('absolute inset-0 -z-20 flex h-full w-full items-center justify-center [mask-repeat:no-repeat] [mask-size:40px]', className)}>
       <svg
         className='pointer-events-none absolute -z-10 h-full min-h-[1080px] w-full min-w-[1920px]'
         width='100%'
@@ -81,13 +76,7 @@ export const Beams = React.memo(({ className }: { className?: string }) => {
         ></path>
 
         {paths.map((path, index) => (
-          <motion.path
-            key={`path-` + index}
-            d={path}
-            stroke={`url(#linearGradient-${index})`}
-            strokeOpacity='0.6'
-            strokeWidth='0.6'
-          ></motion.path>
+          <motion.path key={`path-` + index} d={path} stroke={`url(#linearGradient-${index})`} strokeOpacity='0.6' strokeWidth='0.6'></motion.path>
         ))}
         <defs>
           {paths.map((_, index) => (

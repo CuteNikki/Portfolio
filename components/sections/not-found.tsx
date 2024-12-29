@@ -24,9 +24,7 @@ export default function NotFound() {
         >
           <div className='flex flex-col items-center justify-center gap-4 text-balance text-center md:items-start md:text-start'>
             <h1 className='text-5xl font-bold'>Oops!</h1>
-            <p className='whitespace-pre-line text-xl font-semibold text-foreground/80'>
-              {`Page not found.`}
-            </p>
+            <p className='whitespace-pre-line text-xl font-semibold text-foreground/80'>{`Page not found.`}</p>
             <div className='flex flex-wrap items-center justify-center gap-2'>
               <Button asChild>
                 <Link href='/'>Go back home</Link>

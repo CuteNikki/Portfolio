@@ -1,12 +1,7 @@
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface ISelectProps {
   values: {
@@ -17,15 +12,8 @@ interface ISelectProps {
   children?: React.ReactNode;
   onSelectionChange?: (selectedItems: string[]) => void;
 }
-const MultiSelect = ({
-  values,
-  defaultValues,
-  children,
-  onSelectionChange,
-}: ISelectProps) => {
-  const [selectedItems, setSelectedItems] = useState<string[]>(
-    defaultValues || [],
-  );
+const MultiSelect = ({ values, defaultValues, children, onSelectionChange }: ISelectProps) => {
+  const [selectedItems, setSelectedItems] = useState<string[]>(defaultValues || []);
 
   const handleSelectChange = (value: string) => {
     let updatedSelectedItems;
@@ -50,10 +38,7 @@ const MultiSelect = ({
           {children}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className='w-56'
-        onCloseAutoFocus={(e) => e.preventDefault()}
-      >
+      <DropdownMenuContent className='w-56' onCloseAutoFocus={(e) => e.preventDefault()}>
         {values.map((value: ISelectProps['values'][0], index: number) => {
           return (
             <DropdownMenuCheckboxItem

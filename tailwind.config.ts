@@ -5,11 +5,7 @@ import animate from 'tailwindcss-animate';
 
 const config: Config = {
   darkMode: ['class'],
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./pages/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}', './app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       animation: {
@@ -110,17 +106,9 @@ function grids({ matchUtilities, theme }: any) {
 }
 
 // This plugin adds each Tailwind color as a global CSS variable, e.g. var(--gray-200).
-function addVariablesForColors({
-  addBase,
-  theme,
-}: {
-  addBase: (base: any) => void;
-  theme: (path: string) => any;
-}) {
+function addVariablesForColors({ addBase, theme }: { addBase: (base: any) => void; theme: (path: string) => any }) {
   const allColors = flattenColorPalette(theme('colors'));
-  const newVars = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val]),
-  );
+  const newVars = Object.fromEntries(Object.entries(allColors).map(([key, val]) => [`--${key}`, val]));
 
   addBase({
     ':root': newVars,
@@ -130,9 +118,7 @@ function addVariablesForColors({
 function flattenColorPalette(colors: any): any {
   return Object.assign(
     {},
-    ...Object.entries(
-      colors !== null && colors !== void 0 ? colors : {},
-    ).flatMap(([color, values]) =>
+    ...Object.entries(colors !== null && colors !== void 0 ? colors : {}).flatMap(([color, values]) =>
       typeof values == 'object'
         ? Object.entries(flattenColorPalette(values)).map(([number, hex]) => ({
             [color + (number === 'DEFAULT' ? '' : `-${number}`)]: hex,

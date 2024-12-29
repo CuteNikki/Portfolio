@@ -4,31 +4,11 @@ import { motion } from 'framer-motion';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 
-import {
-  BriefcaseBusiness,
-  Building,
-  Building2,
-  CalendarDays,
-  CaptionsIcon,
-  MapPin,
-} from 'lucide-react';
+import { BriefcaseBusiness, Building, Building2, CalendarDays, CaptionsIcon, MapPin } from 'lucide-react';
 
 import { getAcronym } from '@/lib/utils';
 
-import {
-  about,
-  backend,
-  career,
-  databases,
-  discordButton,
-  editors,
-  education,
-  frontend,
-  languages,
-  skills,
-  socials,
-  tools,
-} from '@/assets/about';
+import { about, backend, career, databases, discordButton, editors, education, frontend, languages, skills, socials, tools } from '@/assets/about';
 
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { Vignette } from '@/components/misc/vignette';
@@ -40,13 +20,7 @@ export function About() {
 
   return (
     <>
-      <Sparkles
-        background='transparent'
-        minSize={0.3}
-        maxSize={2}
-        particleDensity={100}
-        particleColor={resolvedTheme === 'light' ? '#000000' : '#ffffff'}
-      />
+      <Sparkles background='transparent' minSize={0.3} maxSize={2} particleDensity={100} particleColor={resolvedTheme === 'light' ? '#000000' : '#ffffff'} />
       <Vignette />
       <div className='flex min-h-[100dvh] flex-col items-center justify-center px-4 pb-4 pt-[72px]'>
         <div className='grid max-w-screen-lg items-center justify-center gap-4'>
@@ -77,12 +51,7 @@ export function About() {
 
 function Info() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }}
-      initial={{ opacity: 0, x: -40 }}
-      animate={{ opacity: 1, x: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 0.2, ease: 'easeInOut' }} initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}>
       <div className='flex h-full w-full flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4'>
         <div className='flex flex-row items-center gap-2'>
           <Avatar>
@@ -115,12 +84,7 @@ function Info() {
 
 function Skills() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 0.4, ease: 'easeInOut' }}
-      initial={{ opacity: 0, x: 40 }}
-      animate={{ opacity: 1, x: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 0.4, ease: 'easeInOut' }} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}>
       <div className='flex h-fit max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <h1 className='font-bold'>Skills</h1>
         <ul className='flex flex-wrap gap-2'>
@@ -141,24 +105,12 @@ function Skills() {
 
 export function Socials() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 0.6, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
-      <div
-        id='socials'
-        className='flex h-full max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'
-      >
+    <motion.div layout transition={{ duration: 0.2, delay: 0.6, ease: 'easeInOut' }} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
+      <div id='socials' className='flex h-full max-w-[36rem] flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <h1 className='font-bold'>Socials</h1>
         <div className='flex flex-wrap gap-2'>
           {socials.map((social, index) => (
-            <Button
-              key={`social-${index}-${social.name}`}
-              variant='secondary'
-              asChild
-            >
+            <Button key={`social-${index}-${social.name}`} variant='secondary' asChild>
               <Link href={social.url}>
                 <span className='size-4 fill-foreground'>{social.icon}</span>
                 {social.name}
@@ -174,20 +126,12 @@ export function Socials() {
 
 function Languages() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 0.8, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 0.8, ease: 'easeInOut' }} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
       <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Languages</span>
         <ul className='flex flex-wrap gap-2'>
           {languages.map((language) => (
-            <li
-              key={language.name}
-              className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
-            >
+            <li key={language.name} className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'>
               <span className='size-4 fill-foreground'>{language.icon}</span>
               <span className='text-sm'>{language.name}</span>
             </li>
@@ -200,20 +144,12 @@ function Languages() {
 
 function BackEnd() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 1, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 1, ease: 'easeInOut' }} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
       <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Back-End</span>
         <ul className='flex flex-wrap gap-2'>
           {backend.map((backend) => (
-            <li
-              key={backend.name}
-              className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
-            >
+            <li key={backend.name} className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'>
               <span className='size-4 fill-foreground'>{backend.icon}</span>
               <span className='text-sm'>{backend.name}</span>
             </li>
@@ -226,20 +162,12 @@ function BackEnd() {
 
 function FrontEnd() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 1.2, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 1.2, ease: 'easeInOut' }} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
       <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Front-End</span>
         <ul className='flex flex-wrap gap-2'>
           {frontend.map((frontend) => (
-            <li
-              key={frontend.name}
-              className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
-            >
+            <li key={frontend.name} className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'>
               <span className='size-4 fill-foreground'>{frontend.icon}</span>
               <span className='text-sm'>{frontend.name}</span>
             </li>
@@ -252,20 +180,12 @@ function FrontEnd() {
 
 function Databases() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 1.4, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 1.4, ease: 'easeInOut' }} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
       <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Databases</span>
         <ul className='flex flex-wrap gap-2'>
           {databases.map((database) => (
-            <li
-              key={database.name}
-              className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
-            >
+            <li key={database.name} className='flex flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'>
               <span className='size-4 fill-foreground'>{database.icon}</span>
               <span className='text-sm'>{database.name}</span>
             </li>
@@ -278,20 +198,12 @@ function Databases() {
 
 function Editors() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 1.6, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 1.6, ease: 'easeInOut' }} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
       <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Editors</span>
         <ul className='flex flex-wrap gap-2'>
           {editors.map((editor) => (
-            <li
-              key={editor.name}
-              className='flex items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
-            >
+            <li key={editor.name} className='flex items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'>
               <span className='size-4 fill-foreground'>{editor.icon}</span>
               <span className='text-sm'>{editor.name}</span>
             </li>
@@ -304,20 +216,12 @@ function Editors() {
 
 function OtherTools() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 1.8, ease: 'easeInOut' }}
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 1.8, ease: 'easeInOut' }} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }}>
       <div className='flex h-full w-full flex-col gap-2 rounded-md border border-foreground/10 bg-background p-4'>
         <span className='font-bold'>Other Tools</span>
         <ul className='flex flex-wrap gap-2'>
           {tools.map((tool) => (
-            <li
-              key={tool.name}
-              className='flex items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'
-            >
+            <li key={tool.name} className='flex items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 shadow-sm'>
               <span className='size-4 fill-foreground'>{tool.icon}</span>
               <span className='text-sm'>{tool.name}</span>
             </li>
@@ -330,18 +234,10 @@ function OtherTools() {
 
 function Career() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 2, ease: 'easeInOut' }}
-      initial={{ opacity: 0, x: -40 }}
-      animate={{ opacity: 1, x: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 2, ease: 'easeInOut' }} initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}>
       <div className='grid gap-4'>
         {career.map((job, index) => (
-          <div
-            key={`job-${index}`}
-            className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
-          >
+          <div key={`job-${index}`} className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'>
             <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
               <BriefcaseBusiness className='size-4 min-h-4 min-w-4 text-foreground' />
               {job.title}
@@ -358,9 +254,7 @@ function Career() {
               <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
               From {job.from} to {job.to}
             </span>
-            <span className='flex items-center gap-1 text-pretty text-foreground/80'>
-              {job.description}
-            </span>
+            <span className='flex items-center gap-1 text-pretty text-foreground/80'>{job.description}</span>
           </div>
         ))}
       </div>
@@ -370,18 +264,10 @@ function Career() {
 
 function Education() {
   return (
-    <motion.div
-      layout
-      transition={{ duration: 0.2, delay: 2.2, ease: 'easeInOut' }}
-      initial={{ opacity: 0, x: 40 }}
-      animate={{ opacity: 1, x: 0 }}
-    >
+    <motion.div layout transition={{ duration: 0.2, delay: 2.2, ease: 'easeInOut' }} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }}>
       <div className='grid gap-4'>
         {education.map((ed, index) => (
-          <div
-            key={`education-${index}`}
-            className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'
-          >
+          <div key={`education-${index}`} className='grid w-fit gap-2 rounded-md border border-foreground/10 bg-background p-4'>
             <span className='flex items-center gap-1 text-foreground/80 sm:gap-2'>
               <CaptionsIcon className='size-4 min-h-4 min-w-4 text-foreground' />
               {ed.title}
@@ -398,9 +284,7 @@ function Education() {
               <CalendarDays className='size-4 min-h-4 min-w-4 text-foreground' />
               From {ed.from} to {ed.to}
             </span>
-            <span className='text-pretty text-foreground/80'>
-              {ed.description}
-            </span>
+            <span className='text-pretty text-foreground/80'>{ed.description}</span>
           </div>
         ))}
       </div>

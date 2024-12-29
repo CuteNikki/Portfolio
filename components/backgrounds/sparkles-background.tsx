@@ -21,15 +21,7 @@ type ParticlesProps = {
 };
 
 export const Sparkles = (props: ParticlesProps) => {
-  const {
-    id,
-    background,
-    minSize,
-    maxSize,
-    speed,
-    particleColor,
-    particleDensity,
-  } = props;
+  const { id, background, minSize, maxSize, speed, particleColor, particleDensity } = props;
   const [init, setInit] = useState(false);
   useEffect(() => {
     initParticlesEngine(async (engine) => {

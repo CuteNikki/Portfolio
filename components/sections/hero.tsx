@@ -23,16 +23,10 @@ export function HeroSection() {
         >
           <div className='flex flex-col items-center justify-center gap-4 text-balance text-center md:items-start md:text-start'>
             <h1 className='text-4xl font-bold md:text-5xl'>{hero.title}</h1>
-            <p className='text-lg font-semibold text-foreground/80 md:block md:text-xl'>
-              {hero.subtitle}
-            </p>
+            <p className='text-lg font-semibold text-foreground/80 md:block md:text-xl'>{hero.subtitle}</p>
             <div className='flex flex-wrap items-center justify-center gap-2'>
               {hero.buttons.map((button, index) => (
-                <Button
-                  key={`hero-button-${index}`}
-                  variant={index === 0 ? 'default' : 'secondary'}
-                  asChild
-                >
+                <Button key={`hero-button-${index}`} variant={index === 0 ? 'default' : 'secondary'} asChild>
                   <Link href={button.href}>{button.text}</Link>
                 </Button>
               ))}

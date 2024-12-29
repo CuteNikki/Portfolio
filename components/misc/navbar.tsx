@@ -14,11 +14,7 @@ export function Navbar() {
           </Link>
           <div className='flex flex-row'>
             {routes.map((route, index) => (
-              <Link
-                href={route.href}
-                key={`navbar-link-${index}-${route.name}-${route.href}`}
-                className='group rounded-md px-4 py-2'
-              >
+              <Link href={route.href} key={`navbar-link-${index}-${route.name}-${route.href}`} className='group rounded-md px-4 py-2'>
                 <span className='anim-underline'>{route.name}</span>
               </Link>
             ))}
