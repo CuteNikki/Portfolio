@@ -55,7 +55,7 @@ function Info() {
       <div className='flex h-full w-full flex-col gap-4 rounded-md border border-foreground/10 bg-background p-4'>
         <div className='flex flex-row items-center gap-2'>
           <Avatar>
-            <AvatarImage src={about.avatar} />
+            <AvatarImage aria-hidden draggable={false} src={about.avatar} className='select-none' />
             <AvatarFallback>{getAcronym(about.name)}</AvatarFallback>
           </Avatar>
           <div className='flex flex-col'>
