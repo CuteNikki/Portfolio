@@ -69,7 +69,7 @@ export const list: Project[] = [
         ),
       },
     ],
-    icon: 'https://placehold.co/44x44/png?text=CG',
+    icon: '/project_codegoblins_icon.png',
     image: 'https://placehold.co/400x300/png?text=Codegoblins\\nPlaceholder',
   },
   {
