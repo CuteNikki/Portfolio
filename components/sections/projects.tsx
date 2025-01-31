@@ -9,7 +9,7 @@ import { useCallback } from 'react';
 
 import { getAcronym } from '@/lib/utils';
 
-import { list, Project as ProjectType } from '@/constants/projects';
+import { list } from '@/constants/projects';
 
 import { Vortex } from '@/components/backgrounds/vortex-background';
 import { Vignette } from '@/components/misc/vignette';
@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import MultiSelect from '@/components/ui/multi-select';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Project as ProjectType } from '@/lib/types';
 
 export function Projects() {
   const router = useRouter();
