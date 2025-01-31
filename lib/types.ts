@@ -5,7 +5,7 @@ import { LucideProps } from 'lucide-react';
 export type Route = {
   name: string;
   href: string;
-}
+};
 
 export type Career = {
   from: string;
