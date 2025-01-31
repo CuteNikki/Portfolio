@@ -9,7 +9,7 @@ import { useCallback } from 'react';
 
 import { getAcronym } from '@/lib/utils';
 
-import { list, Project as ProjectType } from '@/assets/projects';
+import { list, Project as ProjectType } from '@/constants/projects';
 
 import { Vortex } from '@/components/backgrounds/vortex-background';
 import { Vignette } from '@/components/misc/vignette';

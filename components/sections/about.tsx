@@ -8,7 +8,7 @@ import { BriefcaseBusiness, Building, Building2, CalendarDays, CaptionsIcon, Map
 
 import { getAcronym } from '@/lib/utils';
 
-import { about, backend, career, databases, discordButton, editors, education, frontend, languages, skills, socials, tools } from '@/assets/about';
+import { about, backend, career, databases, discordButton, editors, education, frontend, languages, skills, socials, tools } from '@/constants/about';
 
 import { Sparkles } from '@/components/backgrounds/sparkles-background';
 import { Vignette } from '@/components/misc/vignette';

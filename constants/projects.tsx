@@ -1,22 +1,6 @@
 import { Globe } from 'lucide-react';
-import { ReactNode } from 'react';
 
-export type Project = {
-  name: string;
-  description: string;
-  tags: string[];
-  technoligies: {
-    name: string;
-    icon: ReactNode;
-  }[];
-  links: {
-    href: string;
-    label: string;
-    icon?: ReactNode;
-  }[];
-  icon: string;
-  image: string;
-};
+import { Project } from '@/lib/types';
 
 export const list: Project[] = [
   {

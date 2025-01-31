@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { about, hero } from '@/assets/about';
+import { about, hero } from '@/constants/about';
 
 import { Aurora } from '@/components/backgrounds/aurora-background';
 import { Button } from '@/components/ui/button';

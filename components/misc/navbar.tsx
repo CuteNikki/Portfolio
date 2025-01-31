@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { routes } from '@/assets/routes';
+import { navbarLinks } from '@/constants/routes';
 
 import { ThemeSwitch } from '@/components/theme/theme-switch';
 
@@ -13,7 +13,7 @@ export function Navbar() {
             <span className='anim-underline'>Nikki</span>
           </Link>
           <div className='flex flex-row'>
-            {routes.map((route, index) => (
+            {navbarLinks.map((route, index) => (
               <Link href={route.href} key={`navbar-link-${index}-${route.name}-${route.href}`} className='group rounded-md px-4 py-2'>
                 <span className='anim-underline'>{route.name}</span>
               </Link>

@@ -1,43 +1,9 @@
-import { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
-
-import { BookMarkedIcon, ClipboardCopyIcon, ClipboardTypeIcon, LinkIcon, LucideProps, Mail, UserIcon, UsersIcon, WeightIcon } from 'lucide-react';
+import { BookMarkedIcon, ClipboardCopyIcon, ClipboardTypeIcon, LinkIcon, Mail, UserIcon, UsersIcon, WeightIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-export type Career = {
-  from: string;
-  to: string;
-  title: string;
-  company: string;
-  location: string;
-  description: string;
-};
-
-export type Education = {
-  from: string;
-  to: string;
-  title: string;
-  school: string;
-  location: string;
-  description: string;
-};
-
-export type NameIcon = {
-  name: string;
-  icon: ReactNode;
-};
-
-export type Skill = {
-  text: string;
-  icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
-};
-
-export type Social = {
-  name: string;
-  url: string;
-  icon: ReactNode;
-};
+import { Career, Education, NameIcon, Skill, Social } from '@/lib/types';
 
 export const about = {
   image: '/avatar.png',
