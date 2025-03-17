@@ -146,7 +146,7 @@ export function Projects() {
           </div>
         </div>
         <div className='flex w-full flex-1 items-center justify-center'>
-          <div className='flex flex-wrap items-center justify-center gap-5'>
+          <div className='flex max-w-screen-2xl flex-wrap items-center justify-center gap-5'>
             {filteredProjects.map((project, index) => (
               <Project index={index} key={`project-${index}-${project.name}`} {...project} />
             ))}
