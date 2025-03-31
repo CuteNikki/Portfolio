@@ -1,6 +1,4 @@
-import { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
-
-import { LucideProps } from 'lucide-react';
+import { ReactNode } from 'react';
 
 export type Route = {
   name: string;
@@ -32,7 +30,7 @@ export type NameIcon = {
 
 export type Skill = {
   text: string;
-  icon: ForwardRefExoticComponent<Omit<LucideProps, 'ref'> & RefAttributes<SVGSVGElement>>;
+  icon: ReactNode;
 };
 
 export type Social = {

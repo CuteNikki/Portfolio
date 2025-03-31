@@ -93,7 +93,7 @@ function Skills() {
               key={skill.text}
               className='flex w-fit flex-row items-center gap-2 rounded-md border border-foreground/10 bg-background px-4 py-2 text-start text-sm shadow-sm'
             >
-              <skill.icon className='size-4' />
+              {skill.icon}
               {skill.text}
             </span>
           ))}
