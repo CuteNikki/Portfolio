@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import './globals.css';
 
+import { NavigationBar } from '@/components/navigation/navbar';
 import { ThemeProvider } from '@/components/theme/provider';
 
 const geistSans = Geist({
@@ -27,11 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col overflow-y-scroll antialiased`}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-          <nav className='p-4'>Navbar</nav>
+          <NavigationBar />
           <main className='flex flex-1 flex-col'>{children}</main>
-          <footer className='p-4'>Footer</footer>
+          <div className='p-4' /> {/* Stops the page from becoming scrollable during animation */}
         </ThemeProvider>
       </body>
     </html>

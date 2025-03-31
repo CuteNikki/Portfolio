@@ -1,69 +1,53 @@
-import Image from 'next/image';
+'use client';
+
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+
+import { ArrowRightIcon } from 'lucide-react';
 
 import { ThemeButton } from '@/components/theme/button';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   return (
-    <div className='grid flex-1 grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 sm:p-20'>
-      <div className='row-start-2 flex flex-col items-center gap-8 sm:items-start'>
-        <Image className='dark:invert' src='/next.svg' alt='Next.js logo' width={180} height={38} priority />
-        <ol className='list-inside list-decimal text-center font-[family-name:var(--font-geist-mono)] text-sm sm:text-left'>
-          <li className='mb-2'>
-            Get started by editing <code className='rounded-sm bg-black/[.05] px-1 py-0.5 font-semibold dark:bg-white/[.06]'>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className='flex flex-1 items-center justify-center'>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className='mx-auto max-w-2xl text-center'>
+        <motion.h1
+          className='mb-6 text-4xl font-bold tracking-tight md:text-6xl'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.7 }}
+        >
+          Hey, I&apos;m Nikki
+        </motion.h1>
 
-        <div className='flex flex-col items-center gap-4 sm:flex-row'>
-          <a
-            className='bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm transition-colors hover:bg-[#383838] sm:h-12 sm:px-5 sm:text-base dark:hover:bg-[#ccc]'
-            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <Image className='dark:invert' src='/vercel.svg' alt='Vercel logomark' width={20} height={20} />
-            Deploy now
-          </a>
-          <a
-            className='flex h-10 items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base dark:border-white/[.145] dark:hover:bg-[#1a1a1a]'
-            href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Read our docs
-          </a>
+        <motion.p
+          className='text-muted-foreground mb-12 text-xl md:text-2xl'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.7 }}
+        >
+          Welcome to my portfolio.
+        </motion.p>
+
+        <motion.div
+          className='flex flex-col items-center justify-center gap-4 sm:flex-row'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.7 }}
+        >
+          <Button asChild size='lg' className='group text-base'>
+            <Link href='/about'>
+              About Me
+              <ArrowRightIcon className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
+            </Link>
+          </Button>
+          <Button asChild size='lg' variant='secondary' className='text-base'>
+            <Link href='/about'>View Projects</Link>
+          </Button>
           <ThemeButton />
-        </div>
-      </div>
-      <div className='row-start-3 flex flex-wrap items-center justify-center gap-6'>
-        <a
-          className='flex items-center gap-2 hover:underline hover:underline-offset-4'
-          href='https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <Image aria-hidden src='/file.svg' alt='File icon' width={16} height={16} />
-          Learn
-        </a>
-        <a
-          className='flex items-center gap-2 hover:underline hover:underline-offset-4'
-          href='https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <Image aria-hidden src='/window.svg' alt='Window icon' width={16} height={16} />
-          Examples
-        </a>
-        <a
-          className='flex items-center gap-2 hover:underline hover:underline-offset-4'
-          href='https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          <Image aria-hidden src='/globe.svg' alt='Globe icon' width={16} height={16} />
-          Go to nextjs.org →
-        </a>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 }

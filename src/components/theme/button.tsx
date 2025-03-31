@@ -1,6 +1,6 @@
 'use client';
 
-import { Moon, Sun } from 'lucide-react';
+import { Moon, MoonIcon, OrbitIcon, Sun, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 import { Button } from '@/components/ui/button';
@@ -18,10 +18,16 @@ export function ThemeButton() {
           <span className='sr-only'>Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuItem onClick={() => setTheme('light')}>Light</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('dark')}>Dark</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('system')}>System</DropdownMenuItem>
+      <DropdownMenuContent align='center' side='bottom'>
+        <DropdownMenuItem className='justify-between' onClick={() => setTheme('light')}>
+          Light <SunIcon />
+        </DropdownMenuItem>
+        <DropdownMenuItem className='justify-between' onClick={() => setTheme('dark')}>
+          Dark <MoonIcon />
+        </DropdownMenuItem>
+        <DropdownMenuItem className='justify-between' onClick={() => setTheme('system')}>
+          System <OrbitIcon />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
