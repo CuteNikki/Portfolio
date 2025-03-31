@@ -2,102 +2,16 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { /*Github, Globe, */Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-
-// Project interface
-interface Project {
-  id: number;
-  name: string;
-  shortDescription: string;
-  technologies: string[];
-  tags: string[];
-  links: {
-    type: string;
-    url: string;
-    icon: React.ReactNode;
-  }[];
-  imageSrc: string;
-}
-
-// Sample project data
-const projectsData: Project[] = [
-  // {
-  //   id: 1,
-  //   name: 'Portfolio Website',
-  //   shortDescription: 'Personal showcase',
-  //   technologies: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Shadcn/UI'],
-  //   tags: ['Front-End', 'Website', 'Personal'],
-  //   links: [
-  //     { type: 'Website', url: '#', icon: <Globe className='h-4 w-4' /> },
-  //     { type: 'Source', url: '#', icon: <Github className='h-4 w-4' /> },
-  //   ],
-  //   imageSrc: 'https://v0.dev/placeholder.svg?height=800&width=1200',
-  // },
-  // {
-  //   id: 2,
-  //   name: 'E-commerce Platform',
-  //   shortDescription: 'Online shopping experience',
-  //   technologies: ['React', 'Node.js', 'Express', 'MongoDB'],
-  //   tags: ['Full-Stack', 'Website', 'E-commerce'],
-  //   links: [
-  //     { type: 'Website', url: '#', icon: <Globe className='h-4 w-4' /> },
-  //     { type: 'Source', url: '#', icon: <Github className='h-4 w-4' /> },
-  //   ],
-  //   imageSrc: 'https://v0.dev/placeholder.svg?height=800&width=1200',
-  // },
-  // {
-  //   id: 3,
-  //   name: 'Task Manager',
-  //   shortDescription: 'Productivity tool',
-  //   technologies: ['React Native', 'Firebase', 'Redux'],
-  //   tags: ['Mobile', 'App', 'Productivity'],
-  //   links: [
-  //     { type: 'Website', url: '#', icon: <Globe className='h-4 w-4' /> },
-  //     { type: 'Source', url: '#', icon: <Github className='h-4 w-4' /> },
-  //   ],
-  //   imageSrc: 'https://v0.dev/placeholder.svg?height=800&width=1200',
-  // },
-  // {
-  //   id: 4,
-  //   name: 'Weather App',
-  //   shortDescription: 'Real-time forecasts',
-  //   technologies: ['JavaScript', 'HTML', 'CSS', 'Weather API'],
-  //   tags: ['Front-End', 'API', 'Weather'],
-  //   links: [
-  //     { type: 'Website', url: '#', icon: <Globe className='h-4 w-4' /> },
-  //     { type: 'Source', url: '#', icon: <Github className='h-4 w-4' /> },
-  //   ],
-  //   imageSrc: 'https://v0.dev/placeholder.svg?height=800&width=1200',
-  // },
-  // {
-  //   id: 5,
-  //   name: 'Discord Bot',
-  //   shortDescription: 'Server management',
-  //   technologies: ['Node.js', 'Discord.js', 'MongoDB'],
-  //   tags: ['Back-End', 'Discord Bot', 'Automation'],
-  //   links: [{ type: 'Source', url: '#', icon: <Github className='h-4 w-4' /> }],
-  //   imageSrc: 'https://v0.dev/placeholder.svg?height=800&width=1200',
-  // },
-  // {
-  //   id: 6,
-  //   name: 'VS Code Extension',
-  //   shortDescription: 'Developer productivity',
-  //   technologies: ['TypeScript', 'VS Code API'],
-  //   tags: ['Plugin', 'Developer Tool', 'Productivity'],
-  //   links: [
-  //     { type: 'Website', url: '#', icon: <Globe className='h-4 w-4' /> },
-  //     { type: 'Source', url: '#', icon: <Github className='h-4 w-4' /> },
-  //   ],
-  //   imageSrc: 'https://v0.dev/placeholder.svg?height=800&width=1200',
-  // },
-];
+import { Project, projects } from '@/constants/projects';
 
 export default function ProjectsPage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -107,7 +21,7 @@ export default function ProjectsPage() {
   // Extract all unique tags and technologies
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    projectsData.forEach((project) => {
+    projects.forEach((project) => {
       project.tags.forEach((tag) => tags.add(tag));
     });
     return Array.from(tags).sort();
@@ -115,7 +29,7 @@ export default function ProjectsPage() {
 
   const allTechnologies = useMemo(() => {
     const techs = new Set<string>();
-    projectsData.forEach((project) => {
+    projects.forEach((project) => {
       project.technologies.forEach((tech) => techs.add(tech));
     });
     return Array.from(techs).sort();
@@ -123,12 +37,12 @@ export default function ProjectsPage() {
 
   // Filter projects based on search query and selected filters
   const filteredProjects = useMemo(() => {
-    return projectsData.filter((project) => {
+    return projects.filter((project) => {
       // Filter by search query
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         const matchesName = project.name.toLowerCase().includes(query);
-        const matchesDescription = project.shortDescription.toLowerCase().includes(query);
+        const matchesDescription = project.description.toLowerCase().includes(query);
         const matchesTags = project.tags.some((tag) => tag.toLowerCase().includes(query));
         const matchesTechnologies = project.technologies.some((tech) => tech.toLowerCase().includes(query));
 
@@ -185,7 +99,7 @@ export default function ProjectsPage() {
 
         {/* Search and Filter Controls */}
         <motion.div className='mb-8 space-y-4' initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
-          <div className='flex flex-col justify-center items-center gap-2 sm:flex-row'>
+          <div className='flex flex-col items-center justify-center gap-2 sm:flex-row'>
             <div className='relative'>
               <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
               <Input placeholder='Search projects...' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className='w-fit pl-9' />
@@ -286,8 +200,8 @@ export default function ProjectsPage() {
           </motion.div>
         ) : (
           <motion.div variants={container} initial='hidden' animate='show' className='flex flex-wrap justify-center gap-6'>
-            {filteredProjects.map((project) => (
-              <motion.div key={project.id} variants={item}>
+            {filteredProjects.map((project, index) => (
+              <motion.div key={index} variants={item}>
                 <ProjectCard project={project} />
               </motion.div>
             ))}
@@ -307,31 +221,31 @@ function ProjectCard({ project }: ProjectCardProps) {
     <Card className='flex h-full w-72 flex-col gap-2 overflow-hidden pt-0'>
       {/* Image */}
       <div className='relative h-48 overflow-hidden'>
-        <Image src={project.imageSrc || 'https://v0.dev/placeholder.svg'} alt={project.name} fill className='object-cover' />
+        <Image src={project.image} alt={project.name} fill className='object-cover' />
       </div>
 
       {/* Name and description */}
       <CardHeader className='pt-4 pb-2'>
         <CardTitle>{project.name}</CardTitle>
-        <CardDescription>{project.shortDescription}</CardDescription>
+        <CardDescription>{project.description}</CardDescription>
       </CardHeader>
 
       {/* Content */}
       <CardContent className='flex-grow pb-2'>
-        <div className='mb-3 flex flex-wrap gap-1.5'>
+        <div className='mb-3 flex flex-wrap gap-1'>
           {project.tags.map((tag, index) => (
-            <span key={index} className='bg-secondary text-secondary-foreground inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium'>
+            <Badge variant='outline' key={index}>
               {tag}
-            </span>
+            </Badge>
           ))}
         </div>
 
         {/* Technologies */}
-        <div className='flex flex-wrap gap-1.5'>
+        <div className='flex flex-wrap gap-1'>
           {project.technologies.map((tech, index) => (
-            <span key={index} className='bg-primary/10 text-primary inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium'>
+            <Badge variant='secondary' key={index}>
               {tech}
-            </span>
+            </Badge>
           ))}
         </div>
       </CardContent>
@@ -339,8 +253,8 @@ function ProjectCard({ project }: ProjectCardProps) {
       {/* Footer with links */}
       <CardFooter className='mt-auto flex gap-2'>
         {project.links.map((link, index) => (
-          <Button key={index} variant={index === 0 ? 'default' : 'secondary'} size='sm' className='gap-1.5' asChild>
-            <a href={link.url} target='_blank' rel='noopener noreferrer'>
+          <Button key={index} variant={index === 0 ? 'default' : 'secondary'} size='sm' asChild>
+            <a href={link.href} target='_blank' rel='noopener noreferrer'>
               {link.icon}
               <span>{link.type}</span>
             </a>
