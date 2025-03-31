@@ -28,11 +28,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en' suppressHydrationWarning>
+      {/* Permanently show scrollbar to prevent layout shift */}
       <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col overflow-y-scroll antialiased`}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+          {/* Anchor for the top of the page */}
+          <div id='top' />
+          {/* Navbar */}
           <NavigationBar />
+          {/* Page content */}
           <main className='flex flex-1 flex-col'>{children}</main>
-          <div className='p-4' /> {/* Stops the page from becoming scrollable during animation */}
+          {/* Anchor for the bottom of the page | Stop the page from becoming scrollable during animation */}
+          <div id='bottom' className='p-4' />
         </ThemeProvider>
       </body>
     </html>
