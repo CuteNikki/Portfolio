@@ -6,7 +6,6 @@ import Link from 'next/link';
 import { ArrowRightIcon } from 'lucide-react';
 
 import { AuroraBackground } from '@/components/theme/aurora';
-import { ThemeButton } from '@/components/theme/button';
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
@@ -47,7 +46,6 @@ export default function Home() {
           <Button asChild variant='secondary' className='text-base'>
             <Link href='/projects'>View Projects</Link>
           </Button>
-          <ThemeButton />
         </motion.div>
       </motion.div>
     </div>
