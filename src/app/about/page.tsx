@@ -8,6 +8,8 @@ import { Brain, Briefcase, Calendar, Copy, ExternalLink, GraduationCap, Users } 
 
 import { aboutMe, career, categories, education, skills, socials } from '@/constants/about';
 
+import { ShootingStars } from '@/components/theme/shooting-stars';
+import { StarsBackground } from '@/components/theme/stars-background';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,6 +38,8 @@ export default function AboutPage() {
 
   return (
     <div className='flex flex-1 items-center justify-center'>
+      <ShootingStars />
+      <StarsBackground />
       <div className='container max-w-5xl p-4'>
         <motion.div variants={container} initial='hidden' animate='show' className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           {/* About Me */}
