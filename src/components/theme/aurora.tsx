@@ -10,7 +10,7 @@ interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
 
 export const AuroraBackground = ({ className, showRadialGradient = true, ...props }: AuroraBackgroundProps) => {
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }} className='absolute inset-0 -z-10 overflow-hidden'>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }} className='absolute inset-0 -z-10 overflow-hidden'>
       <div
         className={cn('transition-bg relative flex h-[100vh] flex-col items-center justify-center bg-zinc-50 text-slate-950 dark:bg-zinc-900', className)}
         {...props}
