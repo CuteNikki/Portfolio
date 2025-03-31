@@ -5,12 +5,14 @@ import Link from 'next/link';
 
 import { ArrowRightIcon } from 'lucide-react';
 
+import { AuroraBackground } from '@/components/theme/aurora';
 import { ThemeButton } from '@/components/theme/button';
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
   return (
     <div className='flex flex-1 items-center justify-center'>
+      <AuroraBackground />
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className='mx-auto max-w-2xl text-center'>
         <motion.h1
           className='mb-6 text-4xl font-bold tracking-tight md:text-6xl'
