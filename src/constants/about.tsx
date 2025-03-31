@@ -348,7 +348,7 @@ export const career: Career[] = [
   },
   {
     from: '09/2015',
-    to: '08/2024',
+    to: 'Present',
     title: 'Freelancer',
     company: 'Self-Employed',
     location: 'Remote',
