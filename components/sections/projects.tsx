@@ -67,7 +67,7 @@ export function Projects() {
   );
 
   const fuse = new Fuse(list, {
-    keys: ['name', 'description', 'tags', 'links.label', 'technoligies.name'],
+    keys: ['name', 'description', 'tags', 'links.label', 'technologies.name'],
     threshold: 0.4,
     useExtendedSearch: true,
   });
@@ -77,11 +77,11 @@ export function Projects() {
   const filteredProjects = searchResults.filter(
     (project) =>
       (searchTags.length ? searchTags.every((tag) => project.tags.includes(tag)) : true) &&
-      (searchTechs.length ? searchTechs.every((tech) => project.technoligies.some((t) => t.name === tech)) : true),
+      (searchTechs.length ? searchTechs.every((tech) => project.technologies.some((t) => t.name === tech)) : true),
   );
 
   const uniqueTags = [...new Set(list.flatMap((project) => project.tags))];
-  const uniqueTechs = [...new Set(list.flatMap((project) => project.technoligies.map((tech) => tech.name)))];
+  const uniqueTechs = [...new Set(list.flatMap((project) => project.technologies.map((tech) => tech.name)))];
 
   return (
     <Vortex backgroundColor='transparent'>
@@ -157,7 +157,7 @@ export function Projects() {
   );
 }
 
-export function Project({ name, description, technoligies, links, tags, image, icon, index }: ProjectType & { index: number }) {
+export function Project({ name, description, technologies, links, tags, image, icon, index }: ProjectType & { index: number }) {
   return (
     <motion.div
       layout
@@ -183,8 +183,8 @@ export function Project({ name, description, technoligies, links, tags, image, i
         </div>
         <div className='flex max-w-[400px] flex-col gap-2 sm:flex-row sm:items-center'>
           <div className='flex h-fit flex-wrap gap-1 text-sm text-muted-foreground'>
-            {technoligies.map((tech, index) => (
-              <Tooltip key={`technoligies-${index}-${tech.name}`}>
+            {technologies.map((tech, index) => (
+              <Tooltip key={`technologies-${index}-${tech.name}`}>
                 <TooltipTrigger asChild>
                   <span className='size-4 fill-foreground'>{tech.icon}</span>
                 </TooltipTrigger>

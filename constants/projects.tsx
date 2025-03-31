@@ -7,7 +7,7 @@ export const list: Project[] = [
     name: 'NisoPlugin',
     description: 'a PaperMC plugin for Minecraft 1.21.4',
     tags: ['Back-End', 'Plugin', 'Minecraft'],
-    technoligies: [
+    technologies: [
       {
         name: 'Java',
         icon: (
@@ -51,7 +51,7 @@ export const list: Project[] = [
     name: 'Tinderhaj',
     description: "The world's first dating site exclusively for Blåhaj!",
     tags: ['Front-End', 'Back-End', 'Website', 'Dashboard', 'API'],
-    technoligies: [
+    technologies: [
       {
         name: 'Next.js',
         icon: (
@@ -104,7 +104,7 @@ export const list: Project[] = [
     name: 'Yanera Dashboard',
     description: 'A Discord bot dashboard.',
     tags: ['Front-End', 'Back-End', 'Website', 'Dashboard', 'API'],
-    technoligies: [
+    technologies: [
       {
         name: 'Next.js',
         icon: (
@@ -157,7 +157,7 @@ export const list: Project[] = [
     name: 'Yanera Bot',
     description: 'A Discord bot.',
     tags: ['Back-End', 'Bot'],
-    technoligies: [
+    technologies: [
       {
         name: 'TypeScript',
         icon: (
@@ -194,7 +194,7 @@ export const list: Project[] = [
     name: 'Portfolio',
     description: "You're looking at it.",
     tags: ['Front-End', 'Website'],
-    technoligies: [
+    technologies: [
       {
         name: 'Next.js',
         icon: (

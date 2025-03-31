@@ -45,7 +45,7 @@ export type Project = {
   name: string;
   description: string;
   tags: string[];
-  technoligies: {
+  technologies: {
     name: string;
     icon: ReactNode;
   }[];
