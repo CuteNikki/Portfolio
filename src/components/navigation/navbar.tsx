@@ -16,9 +16,9 @@ export function NavigationBar() {
   const pathname = usePathname();
 
   return (
-    <header className='bg-background/95 supports-[backdrop-filter]:bg-background/60 border-background sticky top-0 z-50 w-full border-b backdrop-blur'>
+    <header className='bg-background/95 supports-[backdrop-filter]:bg-background/50 border-background/30 sticky top-0 z-50 w-full border-b backdrop-blur'>
       <div className='container mx-auto flex items-center justify-between px-4 py-3'>
-        <Link href='/' className='text-primary text-xl font-bold'>
+        <Link href='#top' className='font-bold'>
           Nikki
         </Link>
 
