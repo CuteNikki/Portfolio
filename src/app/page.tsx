@@ -45,7 +45,7 @@ export default function Home() {
             </Link>
           </Button>
           <Button asChild variant='secondary' className='text-base'>
-            <Link href='/about'>View Projects</Link>
+            <Link href='/projects'>View Projects</Link>
           </Button>
           <ThemeButton />
         </motion.div>
