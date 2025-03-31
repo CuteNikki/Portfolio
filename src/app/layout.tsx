@@ -5,6 +5,7 @@ import './globals.css';
 
 import { NavigationBar } from '@/components/navigation/navbar';
 import { ThemeProvider } from '@/components/theme/provider';
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,7 +31,10 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       {/* Permanently show scrollbar to prevent layout shift */}
       <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col overflow-y-scroll antialiased`}>
+        {/* Apply system theme */}
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
+          {/* Sonner toasts */}
+          <Toaster richColors />
           {/* Anchor for the top of the page */}
           <div id='top' />
           {/* Navbar */}
