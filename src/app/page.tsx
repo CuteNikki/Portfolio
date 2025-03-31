@@ -38,13 +38,13 @@ export default function Home() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.7 }}
         >
-          <Button asChild size='lg' className='group text-base'>
+          <Button asChild className='group text-base'>
             <Link href='/about'>
               About Me
-              <ArrowRightIcon className='ml-2 h-4 w-4 transition-transform group-hover:translate-x-1' />
+              <ArrowRightIcon className='h-4 w-4 transition-transform group-hover:translate-x-1' />
             </Link>
           </Button>
-          <Button asChild size='lg' variant='secondary' className='text-base'>
+          <Button asChild variant='secondary' className='text-base'>
             <Link href='/about'>View Projects</Link>
           </Button>
           <ThemeButton />
