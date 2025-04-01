@@ -109,7 +109,7 @@ export const list: Project[] = [
         icon: <ShadcnIcon />,
       },
     ],
-    links: [{ href: 'https://suki.elry.moe', label: 'Website', icon: <Globe /> }],
+    links: [{ href: 'https://suki.buzz/', label: 'Website', icon: <Globe /> }],
     icon: 'https://placehold.co/100x100/png?text=Suki',
     image: '/project_website_image.png',
   },
