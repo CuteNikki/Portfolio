@@ -88,8 +88,8 @@ export const list: Project[] = [
     image: 'project_codegoblins_image.png',
   },
   {
-    name: 'Suki Website',
-    description: 'Personal website made for Suki.',
+    name: 'Lucy Website',
+    description: 'Personal website made for Lucy.',
     tags: ['Front-End', 'Website'],
     technologies: [
       {
@@ -109,8 +109,8 @@ export const list: Project[] = [
         icon: <ShadcnIcon />,
       },
     ],
-    links: [{ href: 'https://suki.buzz/', label: 'Website', icon: <Globe /> }],
-    icon: 'https://placehold.co/100x100/png?text=Suki',
+    links: [{ href: 'https://lucys.gg/', label: 'Website', icon: <Globe /> }],
+    icon: 'https://placehold.co/100x100/png?text=Lucy',
     image: '/project_website_image.png',
   },
   {
