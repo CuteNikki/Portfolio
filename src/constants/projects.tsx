@@ -21,10 +21,7 @@ export const projects: Project[] = [
     description: 'PaperMC plugin for Minecraft 1.21.4',
     tags: ['Back-End', 'Plugin', 'Minecraft'],
     technologies: ['Java', 'PostgreSQL'],
-    links: [
-      { href: 'https://github.com/CuteNikki/NisoPlugin', type: 'Website', icon: <Globe /> },
-      { href: 'https://github.com/CuteNikki/NisoPlugin', type: 'Source', icon: <GitHubIcon /> },
-    ],
+    links: [{ href: 'https://github.com/CuteNikki/NisoPlugin', type: 'Source', icon: <GitHubIcon className='!fill-primary-foreground' /> }],
     image: '/project_nisoplugin_image.png',
   },
   {
