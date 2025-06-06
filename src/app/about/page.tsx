@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DiscordIcon } from '@/components/ui/icons';
 
 export default function AboutPage() {
   const copyToClipboard = (text: string, label: string) => {
@@ -95,8 +96,9 @@ export default function AboutPage() {
 
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant='outline' size='sm' className='gap-1.5'>
-                        <span>Discord</span>
+                      <Button variant='outline' size='sm'>
+                        <DiscordIcon />
+                        Discord
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
