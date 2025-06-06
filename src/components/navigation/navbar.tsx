@@ -22,10 +22,10 @@ export function NavigationBar() {
   const pathname = usePathname();
 
   return (
-    <header className='sticky top-0 z-50 px-2 py-4'>
+    <header className='sticky top-0 z-50 hidden px-2 py-4 sm:block'>
       <div className='bg-background/95 supports-[backdrop-filter]:bg-background/50 outline-foreground/10 mx-auto w-full max-w-6xl rounded-xl outline backdrop-blur'>
         <div className='flex items-center justify-between px-4 py-2'>
-          <Link href='#top' className='hover:text-primary text-sm font-medium px-2 text-gray-600 transition-colors dark:text-gray-300 dark:hover:text-white'>
+          <Link href='#top' className='hover:text-primary px-2 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300 dark:hover:text-white'>
             Nikki
           </Link>
 

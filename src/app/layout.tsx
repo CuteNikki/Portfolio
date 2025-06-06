@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import './globals.css';
 
+import { AlternativeNavbar } from '@/components/navigation/alternative-navbar';
 import { NavigationBar } from '@/components/navigation/navbar';
 import { ThemeProvider } from '@/components/theme/provider';
 import { Toaster } from '@/components/ui/sonner';
@@ -43,6 +44,8 @@ export default function RootLayout({
           <main className='flex flex-1 flex-col'>{children}</main>
           {/* Anchor for the bottom of the page | Stop the page from becoming scrollable during animation */}
           <div id='bottom' className='p-4' />
+          {/* Alternative Navbar at the bottom */}
+          <AlternativeNavbar />
         </ThemeProvider>
       </body>
     </html>
