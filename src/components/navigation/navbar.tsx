@@ -4,13 +4,9 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { MenuIcon } from 'lucide-react';
-
 import { cn } from '@/lib/utils';
 
 import { ThemeButton } from '@/components/theme/button';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
 const links = [
   { href: '/', label: 'Home' },
@@ -31,8 +27,7 @@ export function NavigationBar() {
 
           <div className='flex gap-2'>
             <ThemeButton />
-            {/* Desktop navigation */}
-            <nav className='hidden items-center space-x-1 sm:flex'>
+            <nav className='flex items-center space-x-1'>
               {links.map((link) => {
                 const isActive = pathname === link.href;
                 return (
@@ -56,48 +51,6 @@ export function NavigationBar() {
                 );
               })}
             </nav>
-            {/* Mobile navigation */}
-            <div className='sm:hidden'>
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant='ghost' size='icon'>
-                    <MenuIcon />
-                    <span className='sr-only'>Open navigation menu</span>
-                  </Button>
-                </SheetTrigger>
-                <SheetContent className='flex justify-between'>
-                  <SheetHeader>
-                    <SheetTitle className='sr-only'>Navigation menu</SheetTitle>
-                    <SheetDescription className='sr-only'>Select a page to navigate to.</SheetDescription>
-                  </SheetHeader>
-                  <nav className='flex flex-col items-center justify-center gap-2'>
-                    {links.map((link) => {
-                      const isActive = pathname === link.href;
-                      return (
-                        <Link
-                          key={link.href}
-                          href={link.href}
-                          className={cn(
-                            'relative w-full rounded-md px-4 py-2 text-center text-sm font-medium transition-colors',
-                            isActive ? 'text-primary' : 'hover:text-primary text-gray-600 dark:text-gray-300 dark:hover:text-white',
-                          )}
-                        >
-                          {link.label}
-                          {isActive && (
-                            <motion.div
-                              className='bg-primary absolute top-0 left-0 h-full w-0.5'
-                              layoutId='navbar-indicator'
-                              transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                            />
-                          )}
-                        </Link>
-                      );
-                    })}
-                  </nav>
-                  <div></div>
-                </SheetContent>
-              </Sheet>
-            </div>
           </div>
         </div>
       </div>
