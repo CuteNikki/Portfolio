@@ -53,7 +53,7 @@ export function AlternativeNavbar() {
                 {isActive && (
                   <motion.div
                     className='bg-primary absolute right-0 bottom-0 left-0 h-0.5'
-                    layoutId='navbar-indicator'
+                    layoutId='alt-navbar-indicator'
                     transition={{ type: 'spring', stiffness: 350, damping: 30 }}
                   />
                 )}
