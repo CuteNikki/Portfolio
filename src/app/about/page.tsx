@@ -6,6 +6,8 @@ import { toast } from 'sonner';
 
 import { Brain, Briefcase, Calendar, Copy, ExternalLink, GraduationCap, Users } from 'lucide-react';
 
+import { calculateAge } from '@/lib/utils';
+
 import { aboutMe, career, categories, education, skills, socials } from '@/constants/about';
 
 import { ShootingStars } from '@/components/theme/shooting-stars';
@@ -15,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { DiscordIcon } from '@/components/ui/icons';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function AboutPage() {
   const copyToClipboard = (text: string, label: string) => {
@@ -41,106 +44,109 @@ export default function AboutPage() {
     <div className='flex flex-1 items-center justify-center'>
       <ShootingStars />
       <StarsBackground />
-      <div className='container max-w-5xl p-4'>
+      <div className='container max-w-7xl p-4'>
         <motion.div variants={container} initial='hidden' animate='show' className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           {/* About Me */}
-          <motion.div variants={item} className='md:col-span-2'>
-            <Card>
+          <motion.div variants={item} className=''>
+            <Card className='h-full gap-4'>
               <CardHeader>
-                <CardTitle className='text-2xl'>{aboutMe.name}</CardTitle>
-                <CardDescription>{aboutMe.title}</CardDescription>
+                <CardTitle className='text-xl sm:text-2xl'>{aboutMe.name}</CardTitle>
+                <CardDescription>
+                  {aboutMe.title}
+                  <div className='flex items-center gap-2'>
+                    <span>{aboutMe.location}</span>
+                    <span>•</span>
+                    <span>{calculateAge(aboutMe.dob)} y/o</span>
+                  </div>
+                </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className='flex flex-col gap-4'>
                 <p className='whitespace-pre-line'>{aboutMe.description}</p>
-              </CardContent>
-            </Card>
-          </motion.div>
 
-          {/* Skills */}
-          <motion.div variants={item}>
-            <Card className='h-full gap-4'>
-              <CardHeader className='flex flex-row items-center gap-2'>
-                <Brain className='text-primary h-5 w-5' />
-                <CardTitle>Skills</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className='space-y-2'>
-                  {skills.map((skill, index) => (
-                    <li key={index} className='flex items-start gap-2'>
-                      <span className='text-primary'>•</span>
-                      <span>{skill}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.div>
+                <div className='flex flex-col gap-2'>
+                  <div className='flex flex-row items-center gap-2'>
+                    <Brain className='text-primary h-5 w-5' />
+                    <CardTitle>Skills</CardTitle>
+                  </div>
+                  <ul>
+                    {skills.map((skill, index) => (
+                      <li key={index} className='flex items-start gap-2'>
+                        <span className='text-primary'>•</span>
+                        <span>{skill}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-          {/* Socials */}
-          <motion.div variants={item}>
-            <Card className='h-full gap-4'>
-              <CardHeader className='flex flex-row items-center gap-2'>
-                <Users className='text-primary h-5 w-5' />
-                <CardTitle>Socials</CardTitle>
-              </CardHeader>
-              <CardContent className='space-y-3'>
-                <div className='flex flex-wrap gap-2'>
-                  {socials.map((social, index) => (
-                    <Button key={index} asChild variant='outline' size='sm' className='gap-1.5'>
-                      <Link href={social.href} target='_blank' rel='noopener noreferrer'>
-                        {social.icon}
-                        <span>{social.name}</span>
-                      </Link>
-                    </Button>
-                  ))}
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant='outline' size='sm'>
-                        <DiscordIcon />
-                        Discord
+                <div className='flex flex-col gap-2'>
+                  <div className='flex flex-row items-center gap-2'>
+                    <Users className='text-primary h-5 w-5' />
+                    <CardTitle>Socials</CardTitle>
+                  </div>
+                  <div className='flex flex-wrap gap-2'>
+                    {socials.map((social, index) => (
+                      <Button key={index} asChild variant='outline' size='sm' className='gap-1.5'>
+                        <Link href={social.href} target='_blank' rel='noopener noreferrer'>
+                          {social.icon}
+                          <span>{social.name}</span>
+                        </Link>
                       </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem onClick={() => copyToClipboard('303142922780672013', 'User ID')}>
-                        <Copy className='mr-2 h-4 w-4' />
-                        Copy User ID
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => copyToClipboard('cutenikki', 'Username')}>
-                        <Copy className='mr-2 h-4 w-4' />
-                        Copy Username
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => window.open('https://discord.com/users/303142922780672013', '_blank')}>
-                        <ExternalLink className='mr-2 h-4 w-4' />
-                        Open Profile
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                    ))}
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant='outline' size='sm'>
+                          <DiscordIcon />
+                          Discord
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuItem onClick={() => copyToClipboard('303142922780672013', 'User ID')}>
+                          <Copy className='mr-2 h-4 w-4' />
+                          Copy User ID
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => copyToClipboard('cutenikki', 'Username')}>
+                          <Copy className='mr-2 h-4 w-4' />
+                          Copy Username
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => window.open('https://discord.com/users/303142922780672013', '_blank')}>
+                          <ExternalLink className='mr-2 h-4 w-4' />
+                          Open Profile
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* Languages, back-end, front-end, editors, other tools */}
-          {categories.map((category, index) => (
-            <motion.div key={index} variants={item}>
-              <Card className='h-full gap-4'>
-                <CardHeader className='flex flex-row items-center gap-2'>
-                  {category.icon}
-                  <CardTitle>{category.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className='flex flex-wrap gap-2'>
+          <motion.div variants={item}>
+            <Card>
+              {categories.map((category, index) => (
+                <div key={index} className='flex flex-col gap-4'>
+                  <CardHeader className='flex flex-row items-center gap-2'>
+                    {category.icon}
+                    <CardTitle>{category.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className='flex flex-wrap gap-2'>
                     {category.items.map((item, index) => (
-                      <Badge variant='secondary' key={index}>
-                        {item.icon} {item.name}
-                      </Badge>
+                      <Tooltip key={index}>
+                        <TooltipTrigger>
+                          <Link href={item.url} target='_blank' rel='noopener noreferrer'>
+                            <Badge variant='secondary'>
+                              {item.icon} {item.name}
+                            </Badge>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent>{item.description}</TooltipContent>
+                      </Tooltip>
                     ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
+                  </CardContent>
+                </div>
+              ))}
+            </Card>
+          </motion.div>
 
           {/* Career and Education */}
           <motion.div variants={item} className='flex w-full flex-col gap-6 md:col-span-2 md:flex-row'>

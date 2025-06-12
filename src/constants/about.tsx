@@ -67,7 +67,7 @@ export type Social = {
 export type Category = {
   name: string;
   icon: React.ReactNode;
-  items: { name: string; icon: React.ReactNode }[];
+  items: { name: string; icon: React.ReactNode; description: string; url: string }[];
 };
 export type Skill = string;
 
@@ -81,16 +81,12 @@ export type Skill = string;
 export const aboutMe = {
   email: 'contact@niso.moe',
   name: 'Nikki Sophie Berthold',
-  title: 'Developer & Designer',
-  description: `Based in Germany and currently 20 years old, I bring fresh perspectives to my work.
-
-I focus on creating accessible, user-friendly solutions that work seamlessly and look great.
-I'm passionate about building products that make a difference and help people.
-Working across the stack allows me to turn ideas into reality from start to finish.
-
-Always eager to improve, I regularly explore new tools and technologies to keep my skills sharp and up-to-date. 
-
-Feel free to explore my work or reach out — I'd love to connect!`,
+  title: 'Full Stack Developer & Designer',
+  location: '📍 Bielefeld, Germany',
+  dob: '2004-09-26',
+  description: `I care deeply about building accessible, user-friendly experiences that not only work well but feel great to use.
+I enjoy turning ideas into polished, functional products from start to finish.
+Curious by nature, I'm always exploring new tools and technologies to stay sharp and evolve as a developer.`,
 };
 
 // Skills
@@ -134,26 +130,38 @@ export const categories: Category[] = [
       {
         name: 'JavaScript',
         icon: <JavaScriptIcon />,
+        description: 'Dynamic scripting language for the web',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
       },
       {
         name: 'TypeScript',
         icon: <TypeScriptIcon />,
+        description: 'Typed superset of JavaScript',
+        url: 'https://www.typescriptlang.org/',
       },
       {
         name: 'HTML',
         icon: <HTML5Icon />,
+        description: 'Markup language for structuring web pages',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/HTML',
       },
       {
         name: 'CSS',
         icon: <CSS3Icon />,
+        description: 'Style sheet language for web design',
+        url: 'https://developer.mozilla.org/en-US/docs/Web/CSS',
       },
       {
         name: 'Java',
         icon: <JavaIcon />,
+        description: 'Object-oriented language used across platforms',
+        url: 'https://www.java.com/',
       },
       {
         name: 'Python',
         icon: <PythonIcon />,
+        description: 'Readable, versatile scripting language',
+        url: 'https://www.python.org/',
       },
     ],
   },
@@ -162,36 +170,52 @@ export const categories: Category[] = [
     icon: <ServerIcon />,
     items: [
       {
-        name: 'Node.js',
+        name: 'Node',
         icon: <NodeJSIcon />,
+        description: 'JavaScript runtime for back-end development',
+        url: 'https://nodejs.org/',
       },
       {
         name: 'Bun',
         icon: <BunIcon />,
+        description: 'Fast all-in-one JavaScript runtime',
+        url: 'https://bun.sh/',
       },
       {
         name: 'NPM',
         icon: <NPMIcon />,
+        description: 'Package manager for JavaScript',
+        url: 'https://www.npmjs.com/',
       },
       {
         name: 'PNPM',
         icon: <PNPMIcon />,
+        description: 'Efficient, fast package manager',
+        url: 'https://pnpm.io/',
       },
       {
         name: 'Yarn',
         icon: <YarnIcon />,
+        description: 'Alternative JavaScript package manager',
+        url: 'https://yarnpkg.com/',
       },
       {
         name: 'Express',
         icon: <ExpressIcon />,
+        description: 'Minimal web framework for Node',
+        url: 'https://expressjs.com/',
       },
       {
         name: 'Nest.js',
         icon: <NestJSIcon />,
+        description: 'Scalable Node framework with TypeScript',
+        url: 'https://nestjs.com/',
       },
       {
-        name: 'Discord.js',
+        name: 'discord.js',
         icon: <DiscordIcon />,
+        description: 'Library for building Discord bots',
+        url: 'https://discord.js.org/',
       },
     ],
   },
@@ -200,24 +224,34 @@ export const categories: Category[] = [
     icon: <GlobeIcon />,
     items: [
       {
-        name: 'Next.js',
-        icon: <NextJSIcon />,
-      },
-      {
         name: 'React',
         icon: <ReactIcon />,
+        description: 'Library for building user interfaces',
+        url: 'https://react.dev/',
       },
       {
         name: 'React Native',
         icon: <ReactNativeIcon />,
+        description: 'React-based framework for native apps',
+        url: 'https://reactnative.dev/',
+      },
+      {
+        name: 'Next.js',
+        icon: <NextJSIcon />,
+        description: 'React framework with SSR and routing',
+        url: 'https://nextjs.org/',
       },
       {
         name: 'Tailwind CSS',
         icon: <TailwindCSSIcon />,
+        description: 'Utility-first CSS framework',
+        url: 'https://tailwindcss.com/',
       },
       {
         name: 'Shadcn/UI',
         icon: <ShadcnIcon />,
+        description: 'Customizable UI components for React',
+        url: 'https://ui.shadcn.com/',
       },
     ],
   },
@@ -228,18 +262,26 @@ export const categories: Category[] = [
       {
         name: 'MongoDB',
         icon: <MongoDBIcon />,
+        description: 'NoSQL database using JSON-like docs',
+        url: 'https://www.mongodb.com/',
       },
       {
         name: 'PostgreSQL',
         icon: <PostgreSQLIcon />,
+        description: 'Advanced open-source SQL database',
+        url: 'https://www.postgresql.org/',
       },
       {
         name: 'MySQL',
         icon: <MySQLIcon />,
+        description: 'Popular open-source SQL database',
+        url: 'https://www.mysql.com/',
       },
       {
         name: 'Redis',
         icon: <RedisIcon />,
+        description: 'In-memory key-value store',
+        url: 'https://redis.io/',
       },
     ],
   },
@@ -250,18 +292,26 @@ export const categories: Category[] = [
       {
         name: 'Visual Studio Code',
         icon: <VisualStudioCodeIcon />,
+        description: 'Lightweight code editor with extensions',
+        url: 'https://code.visualstudio.com/',
       },
       {
         name: 'Eclipse IDE',
         icon: <EclipseIDEIcon />,
+        description: 'Extensible IDE, mainly for Java',
+        url: 'https://www.eclipse.org/',
       },
       {
         name: 'IntelliJ IDEA',
         icon: <IntelliJIDEAIcon />,
+        description: 'Powerful IDE for JVM-based languages',
+        url: 'https://www.jetbrains.com/idea/',
       },
       {
         name: 'WebStorm',
         icon: <WebStormIcon />,
+        description: 'IDE for JavaScript and web development',
+        url: 'https://www.jetbrains.com/webstorm/',
       },
     ],
   },
@@ -272,22 +322,32 @@ export const categories: Category[] = [
       {
         name: 'Git',
         icon: <GitIcon />,
+        description: 'Version control system for code tracking',
+        url: 'https://git-scm.com/',
       },
       {
         name: 'Copilot',
         icon: <CopilotIcon />,
+        description: 'AI-powered code completion tool',
+        url: 'https://github.com/features/copilot',
       },
       {
         name: 'Figma',
         icon: <FigmaIcon />,
+        description: 'Collaborative design and prototyping tool',
+        url: 'https://www.figma.com/',
       },
       {
         name: 'Photoshop',
         icon: <PhotoshopIcon />,
+        description: 'Image editing and design software',
+        url: 'https://www.adobe.com/products/photoshop.html',
       },
       {
         name: 'Illustrator',
         icon: <IllustratorIcon />,
+        description: 'Vector graphics design software',
+        url: 'https://www.adobe.com/products/illustrator.html',
       },
     ],
   },

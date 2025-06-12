@@ -89,7 +89,7 @@ export default function ProjectsPage() {
   return (
     <div className='flex flex-1 justify-center'>
       <LinesBackground />
-      <div className='container max-w-5xl p-4'>
+      <div className='container max-w-7xl p-4'>
         <motion.h1
           className='mb-8 text-center text-3xl font-bold'
           initial={{ opacity: 0, y: -20 }}
