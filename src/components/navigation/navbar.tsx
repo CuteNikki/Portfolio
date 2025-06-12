@@ -44,7 +44,7 @@ export function DesktopNavbar() {
 
   return (
     <header className='sticky top-0 z-50 hidden px-2 py-4 sm:block'>
-      <div className='bg-background/95 supports-[backdrop-filter]:bg-background/50 outline-foreground/10 mx-auto w-full max-w-6xl rounded-xl outline backdrop-blur'>
+      <div className='bg-card/95 supports-[backdrop-filter]:bg-card/50 outline-foreground/10 mx-auto w-full max-w-6xl rounded-xl outline backdrop-blur'>
         <div className='flex items-center justify-between px-4 py-2'>
           <Link href='#top' className='hover:text-primary px-2 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300 dark:hover:text-white'>
             Nikki
@@ -112,7 +112,7 @@ export function MobileNavbar() {
 
   return (
     <header className='sticky bottom-0 z-50 px-2 py-4 sm:hidden'>
-      <div className='bg-background/95 supports-[backdrop-filter]:bg-background/50 outline-foreground/10 mx-auto w-fit rounded-xl outline backdrop-blur'>
+      <div className='bg-card/95 supports-[backdrop-filter]:bg-card/50 outline-foreground/10 mx-auto w-fit rounded-xl outline backdrop-blur'>
         <nav ref={navRef} suppressHydrationWarning className='relative flex items-center gap-2 px-4 pt-2'>
           <DropdownMenu>
             <DropdownMenuTrigger className='cursor-pointer'>
