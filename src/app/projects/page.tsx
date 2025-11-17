@@ -255,11 +255,18 @@ function ProjectCard({ project }: ProjectCardProps) {
       {/* Footer with links */}
       <CardFooter className='mt-auto flex gap-2'>
         {project.links.map((link, index) => (
-          <Button key={index} variant={index === 0 ? 'default' : 'secondary'} size='sm' asChild>
-            <a href={link.href} target='_blank' rel='noopener noreferrer'>
-              {link.icon}
-              <span>{link.type}</span>
-            </a>
+          <Button key={index} variant={index === 0 ? 'default' : 'secondary'} size='sm' disabled={link.disabled} asChild>
+            {link.disabled ? (
+              <span>
+                {link.icon}
+                <span>{link.type}</span>
+              </span>
+            ) : (
+              <a href={link.href} target='_blank' rel='noopener noreferrer'>
+                {link.icon}
+                <span>{link.type}</span>
+              </a>
+            )}
           </Button>
         ))}
       </CardFooter>

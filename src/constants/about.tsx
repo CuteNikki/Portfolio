@@ -125,7 +125,7 @@ export const socials: Social[] = [
 export const categories: Category[] = [
   {
     name: 'Languages',
-    icon: <CodeIcon />,
+    icon: <CodeIcon className='size-4' />,
     items: [
       {
         name: 'JavaScript',
@@ -167,7 +167,7 @@ export const categories: Category[] = [
   },
   {
     name: 'Back-End',
-    icon: <ServerIcon />,
+    icon: <ServerIcon className='size-4' />,
     items: [
       {
         name: 'Node',
@@ -221,7 +221,7 @@ export const categories: Category[] = [
   },
   {
     name: 'Front-End',
-    icon: <GlobeIcon />,
+    icon: <GlobeIcon className='size-4' />,
     items: [
       {
         name: 'React',
@@ -257,7 +257,7 @@ export const categories: Category[] = [
   },
   {
     name: 'Databases',
-    icon: <DatabaseIcon />,
+    icon: <DatabaseIcon className='size-4' />,
     items: [
       {
         name: 'MongoDB',
@@ -287,7 +287,7 @@ export const categories: Category[] = [
   },
   {
     name: 'Editors',
-    icon: <LaptopIcon />,
+    icon: <LaptopIcon className='size-4' />,
     items: [
       {
         name: 'Visual Studio Code',
@@ -317,7 +317,7 @@ export const categories: Category[] = [
   },
   {
     name: 'Other Tools',
-    icon: <WrenchIcon />,
+    icon: <WrenchIcon className='size-4' />,
     items: [
       {
         name: 'Git',

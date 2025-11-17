@@ -48,19 +48,19 @@ export default function AboutPage() {
         <motion.div variants={container} initial='hidden' animate='show' className='grid grid-cols-1 gap-6 md:grid-cols-2'>
           {/* About Me */}
           <motion.div variants={item} className=''>
-            <Card className='h-full gap-4'>
+            <Card className='h-full gap-2'>
               <CardHeader>
                 <CardTitle className='text-xl sm:text-2xl'>{aboutMe.name}</CardTitle>
-                <CardDescription>
-                  {aboutMe.title}
-                  <div className='flex items-center gap-2'>
+                <CardDescription className='text-foreground'>
+                  <span className='text-base'>{aboutMe.title}</span>
+                  <div className='flex items-center gap-1'>
                     <span>{aboutMe.location}</span>
                     <span>•</span>
                     <span>{calculateAge(aboutMe.dob)} y/o</span>
                   </div>
                 </CardDescription>
               </CardHeader>
-              <CardContent className='flex flex-col gap-4'>
+              <CardContent className='flex flex-col gap-10'>
                 <p className='whitespace-pre-line'>{aboutMe.description}</p>
 
                 <div className='flex flex-col gap-2'>
