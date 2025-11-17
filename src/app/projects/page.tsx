@@ -103,13 +103,13 @@ export default function ProjectsPage() {
         <motion.div className='mb-8 space-y-4' initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
           <div className='flex flex-col items-center justify-center gap-2 sm:flex-row'>
             <div className='relative'>
-              <Search className='text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 transform' />
+              <Search className='text-muted-foreground absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 transform' />
               <Input placeholder='Search projects...' value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className='w-fit pl-9' />
               {searchQuery && (
                 <Button
                   variant='secondary'
                   size='icon'
-                  className='absolute top-1/2 right-1 h-7 w-7 -translate-y-1/2 transform'
+                  className='absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 transform'
                   onClick={() => setSearchQuery('')}
                 >
                   <X className='h-4 w-4' />
@@ -227,7 +227,7 @@ function ProjectCard({ project }: ProjectCardProps) {
       </div>
 
       {/* Name and description */}
-      <CardHeader className='pt-4 pb-2'>
+      <CardHeader className='pb-2 pt-4'>
         <CardTitle>{project.name}</CardTitle>
         <CardDescription>{project.description}</CardDescription>
       </CardHeader>

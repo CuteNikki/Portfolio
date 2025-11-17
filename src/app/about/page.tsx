@@ -160,7 +160,7 @@ export default function AboutPage() {
                 <div className='space-y-6'>
                   {career.map((item, index) => (
                     <div key={index} className='border-muted relative border-l pb-6 pl-6 last:pb-0'>
-                      <div className='bg-primary absolute top-0 left-0 h-3 w-3 -translate-x-1/2 rounded-full'></div>
+                      <div className='bg-primary absolute left-0 top-0 h-3 w-3 -translate-x-1/2 rounded-full'></div>
                       <div className='mb-1 flex flex-col justify-between gap-1 lg:flex-row lg:items-center'>
                         <div className='flex flex-col'>
                           <p className='text-muted-foreground mb-1 text-sm'>{item.title}</p>
@@ -188,7 +188,7 @@ export default function AboutPage() {
                 <div className='space-y-6'>
                   {education.map((item, index) => (
                     <div key={index} className='border-muted relative w-full border-l pb-6 pl-6 last:pb-0'>
-                      <div className='bg-primary absolute top-0 left-0 h-3 w-3 -translate-x-1/2 rounded-full'></div>
+                      <div className='bg-primary absolute left-0 top-0 h-3 w-3 -translate-x-1/2 rounded-full'></div>
                       <div className='mb-1 flex flex-col justify-between gap-1 lg:flex-row lg:items-center'>
                         <div className='flex flex-col'>
                           <p className='text-muted-foreground mb-1 text-sm'>{item.title}</p>
