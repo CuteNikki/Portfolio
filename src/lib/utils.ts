@@ -30,7 +30,7 @@ export function getAge(birthdate: Date, reference = new Date()): number {
   return age;
 }
 
-export function formatDate(date: Date | string): string {
+export function formatDate(date: Date | string, showDays = false): string {
   if (typeof date === 'string') {
     return date;
   }
@@ -38,5 +38,6 @@ export function formatDate(date: Date | string): string {
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
+    day: showDays ? '2-digit' : undefined,
   }).format(date);
 }

@@ -82,6 +82,7 @@ export default function Home() {
       {
         from: new Date('2022-09-17'),
         to: new Date('2022-09-21'),
+        showDays: true,
         title: 'Application Developer',
         company: 'Mittwald CM Service',
         location: 'Espelkamp, Germany',
@@ -101,8 +102,8 @@ export default function Home() {
   };
 
   return (
-    <div className='flex flex-1 items-center justify-center'>
-      <main className='container mx-auto flex flex-col items-start gap-8 p-4 py-16'>
+    <div className='flex flex-1 items-start justify-center'>
+      <main className='container mx-auto flex flex-col items-start gap-8 p-4 py-16 md:py-32'>
         <h1 className='text-4xl font-bold'>
           Hello, I&apos;m <span className='text-primary-text'>Nikki</span>! 👋
         </h1>
@@ -126,39 +127,55 @@ export default function Home() {
             </li>
           ))}
         </ul>
-        <Tabs defaultValue='work' className='w-full max-w-2xl'>
+        <Tabs defaultValue='career' className='w-full max-w-2xl'>
           <TabsList className='w-full'>
-            <TabsTrigger value='work'>Work</TabsTrigger>
+            <TabsTrigger value='career'>Career</TabsTrigger>
             <TabsTrigger value='education'>Education</TabsTrigger>
           </TabsList>
-          <TabsContent value='work'>
-            <div className='border-muted relative flex flex-col border-l-2 pl-4'>
+          <TabsContent value='career' className='border'>
+            <div className='relative m-8 flex flex-col border-l-2 pl-6'>
               {ABOUT.career.map(
-                ({ from, to, title, company, location, description }) => (
+                ({
+                  from,
+                  to,
+                  title,
+                  company,
+                  location,
+                  description,
+                  showDays,
+                }) => (
                   <div
                     key={`${title}-${company}`}
                     className='relative mb-10 last:mb-0'
                   >
                     {/* The Dot */}
                     <span
-                      className='bg-primary border-background absolute top-1.5 -left-4 size-4 -translate-x-1/2 rounded-full border-2'
+                      className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
                       aria-hidden='true'
                     />
 
                     {/* Content */}
                     <div className='flex flex-col gap-1'>
-                      <div className='flex flex-col sm:flex-row sm:items-baseline sm:justify-between'>
-                        <h3 className='text-xl leading-none font-bold'>
-                          {company}
-                        </h3>
-                        <time className='text-muted-foreground text-sm font-medium'>
-                          {formatDate(from)} — {formatDate(to)}
+                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                        <h3 className='text-xl font-bold'>{company}</h3>
+                        <time className='text-muted-foreground text-sm'>
+                          {formatDate(from, showDays)} —{' '}
+                          {typeof to === 'string' &&
+                          to.toLowerCase() === 'present' ? (
+                            <span className='font-extrabold'>
+                              {formatDate(to)}
+                            </span>
+                          ) : (
+                            formatDate(to, showDays)
+                          )}
                         </time>
                       </div>
-                      <h4 className='text-lg font-medium'>{title}</h4>
-                      <p className='text-muted-foreground text-sm'>
-                        {location}
-                      </p>
+                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                        <h4 className='text-base'>{title}</h4>
+                        <p className='text-muted-foreground text-sm'>
+                          {location}
+                        </p>
+                      </div>
                       <p className='text-foreground/80 mt-2 leading-relaxed'>
                         {description}
                       </p>
@@ -168,8 +185,8 @@ export default function Home() {
               )}
             </div>
           </TabsContent>
-          <TabsContent value='education'>
-            <div className='border-muted relative flex flex-col border-l-2 pl-4'>
+          <TabsContent value='education' className='border'>
+            <div className='relative m-8 flex flex-col border-l-2 pl-6'>
               {ABOUT.education.map(
                 ({ from, to, title, school, location, description }) => (
                   <div
@@ -178,24 +195,24 @@ export default function Home() {
                   >
                     {/* The Dot */}
                     <span
-                      className='bg-primary border-background absolute top-1.5 -left-4 size-4 -translate-x-1/2 rounded-full border-2'
+                      className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
                       aria-hidden='true'
                     />
 
                     {/* Content */}
                     <div className='flex flex-col gap-1'>
-                      <div className='flex flex-col sm:flex-row sm:items-baseline sm:justify-between'>
-                        <h3 className='text-xl leading-none font-bold'>
-                          {school}
-                        </h3>
-                        <time className='text-muted-foreground text-sm font-medium'>
+                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                        <h3 className='text-xl font-bold'>{school}</h3>
+                        <time className='text-muted-foreground text-sm'>
                           {formatDate(from)} — {formatDate(to)}
                         </time>
                       </div>
-                      <h4 className='text-lg font-medium'>{title}</h4>
-                      <p className='text-muted-foreground text-sm'>
-                        {location}
-                      </p>
+                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                        <h4 className='text-base'>{title}</h4>
+                        <p className='text-muted-foreground text-sm'>
+                          {location}
+                        </p>
+                      </div>
                       <p className='text-foreground/80 mt-2 leading-relaxed'>
                         {description}
                       </p>
