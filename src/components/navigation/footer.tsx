@@ -1,3 +1,4 @@
+import { ThemeSwitcher } from '@/components/theme/switcher';
 import Link from 'next/link';
 
 export function Footer() {
@@ -26,6 +27,7 @@ export function Footer() {
             ))}
           </ul>
         </div>
+        <ThemeSwitcher />
       </div>
     </footer>
   );
