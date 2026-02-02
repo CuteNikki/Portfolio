@@ -126,42 +126,84 @@ export default function Home() {
             </li>
           ))}
         </ul>
-        <Tabs defaultValue='work' className='w-full max-w-xl'>
+        <Tabs defaultValue='work' className='w-full max-w-2xl'>
           <TabsList className='w-full'>
             <TabsTrigger value='work'>Work</TabsTrigger>
             <TabsTrigger value='education'>Education</TabsTrigger>
           </TabsList>
           <TabsContent value='work'>
-            <ul>
+            <div className='border-muted relative flex flex-col border-l-2 pl-4'>
               {ABOUT.career.map(
                 ({ from, to, title, company, location, description }) => (
-                  <li key={`${title}-${company}`} className='mb-6'>
-                    <h3 className='text-lg'>{title}</h3>
-                    <h3 className='text-xl font-semibold'>{company}</h3>
-                    <p className='text-muted-foreground text-sm'>
-                      {formatDate(from)} - {formatDate(to)} | {location}
-                    </p>
-                    <p className='mt-2'>{description}</p>
-                  </li>
+                  <div
+                    key={`${title}-${company}`}
+                    className='relative mb-10 last:mb-0'
+                  >
+                    {/* The Dot */}
+                    <span
+                      className='bg-primary border-background absolute top-1.5 -left-4 size-4 -translate-x-1/2 rounded-full border-2'
+                      aria-hidden='true'
+                    />
+
+                    {/* Content */}
+                    <div className='flex flex-col gap-1'>
+                      <div className='flex flex-col sm:flex-row sm:items-baseline sm:justify-between'>
+                        <h3 className='text-xl leading-none font-bold'>
+                          {company}
+                        </h3>
+                        <time className='text-muted-foreground text-sm font-medium'>
+                          {formatDate(from)} — {formatDate(to)}
+                        </time>
+                      </div>
+                      <h4 className='text-lg font-medium'>{title}</h4>
+                      <p className='text-muted-foreground text-sm'>
+                        {location}
+                      </p>
+                      <p className='text-foreground/80 mt-2 leading-relaxed'>
+                        {description}
+                      </p>
+                    </div>
+                  </div>
                 ),
               )}
-            </ul>
+            </div>
           </TabsContent>
           <TabsContent value='education'>
-            <ul>
+            <div className='border-muted relative flex flex-col border-l-2 pl-4'>
               {ABOUT.education.map(
                 ({ from, to, title, school, location, description }) => (
-                  <li key={`${title}-${school}`} className='mb-6'>
-                    <h3 className='text-lg'>{title}</h3>
-                    <h3 className='text-xl font-semibold'>{school}</h3>
-                    <p className='text-muted-foreground text-sm'>
-                      {formatDate(from)} - {formatDate(to)} | {location}
-                    </p>
-                    <p className='mt-2 text-base'>{description}</p>
-                  </li>
+                  <div
+                    key={`${title}-${school}`}
+                    className='relative mb-10 last:mb-0'
+                  >
+                    {/* The Dot */}
+                    <span
+                      className='bg-primary border-background absolute top-1.5 -left-4 size-4 -translate-x-1/2 rounded-full border-2'
+                      aria-hidden='true'
+                    />
+
+                    {/* Content */}
+                    <div className='flex flex-col gap-1'>
+                      <div className='flex flex-col sm:flex-row sm:items-baseline sm:justify-between'>
+                        <h3 className='text-xl leading-none font-bold'>
+                          {school}
+                        </h3>
+                        <time className='text-muted-foreground text-sm font-medium'>
+                          {formatDate(from)} — {formatDate(to)}
+                        </time>
+                      </div>
+                      <h4 className='text-lg font-medium'>{title}</h4>
+                      <p className='text-muted-foreground text-sm'>
+                        {location}
+                      </p>
+                      <p className='text-foreground/80 mt-2 leading-relaxed'>
+                        {description}
+                      </p>
+                    </div>
+                  </div>
                 ),
               )}
-            </ul>
+            </div>
           </TabsContent>
         </Tabs>
       </main>
