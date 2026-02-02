@@ -1,15 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ThemeSwitcher } from '@/components/theme/switcher';
 import { Button } from '@/components/ui/button';
 
 export default function Home() {
   return (
-    <div className='flex min-h-screen items-center justify-center'>
-      <main className='flex min-h-screen w-full max-w-3xl flex-col items-center justify-between px-16 py-32 sm:items-start'>
+    <div className='flex flex-1 items-center justify-center'>
+      <main className='container mx-auto flex flex-col items-start gap-8 p-4 py-32'>
         <Image
-          className='dark:invert'
+          className='min-w-64 dark:invert'
           src='/next.svg'
           alt='Next.js logo'
           unoptimized
@@ -17,7 +16,7 @@ export default function Home() {
           height={20}
           priority
         />
-        <div className='flex flex-col items-center gap-6 text-center sm:items-start sm:text-left'>
+        <div className='flex flex-col gap-6'>
           <h1 className='max-w-xs text-3xl leading-10 font-semibold tracking-tight'>
             To get started, edit the page.tsx file.
           </h1>
@@ -39,8 +38,8 @@ export default function Home() {
             center.
           </p>
         </div>
-        <div className='flex flex-col gap-4 sm:flex-row'>
-          <Button asChild>
+        <div className='flex flex-wrap gap-4'>
+          <Button size='lg' asChild>
             <Link
               href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
               target='_blank'
@@ -56,7 +55,7 @@ export default function Home() {
               Deploy Now
             </Link>
           </Button>
-          <Button variant='secondary' asChild>
+          <Button variant='secondary' size='lg' asChild>
             <Link
               href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
               target='_blank'
@@ -65,7 +64,6 @@ export default function Home() {
               Documentation
             </Link>
           </Button>
-          <ThemeSwitcher />
         </div>
       </main>
     </div>

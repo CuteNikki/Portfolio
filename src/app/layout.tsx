@@ -1,12 +1,15 @@
 import type { Metadata } from 'next';
 import { JetBrains_Mono } from 'next/font/google';
 
-import { ThemeProvider } from '@/components/theme/provider';
 import './globals.css';
+
+import { Footer } from '@/components/navigation/footer';
+import { Navbar } from '@/components/navigation/navbar';
+import { ThemeProvider } from '@/components/theme/provider';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
@@ -20,15 +23,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // Suppress hydration warning due to theme mismatch between server and client
     <html lang='en' suppressHydrationWarning>
-      <body className={`${jetbrainsMono.variable} font-sans antialiased`}>
+      {/* always show scrollbar to avoid layout shift when switching between scrollable and non-scrollable pages */}
+      <body
+        className={`${jetbrainsMono.variable} overflow-y-scroll font-mono antialiased`}
+      >
         <ThemeProvider
           enableSystem
           disableTransitionOnChange
           defaultTheme='system'
           attribute='class'
         >
-          {children}
+          <div className='flex min-h-screen flex-col items-center justify-center'>
+            <Navbar />
+            {children}
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>
