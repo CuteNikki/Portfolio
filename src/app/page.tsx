@@ -102,128 +102,125 @@ export default function Home() {
   };
 
   return (
-    <div className='flex flex-1 items-start justify-center'>
-      <main className='container mx-auto flex flex-col items-start gap-8 p-4 py-16 md:py-32'>
-        <h1 className='text-4xl font-bold'>
-          Hello, I&apos;m <span className='text-primary-text'>Nikki</span>! 👋
-        </h1>
-        <p className='text-lg'>
-          {ABOUT.age}-year-old {ABOUT.title} based in {ABOUT.country}{' '}
-          {ABOUT.flag}
-        </p>
-        <p className='max-w-prose'>{ABOUT.description}</p>
-        <ul className='flex flex-wrap gap-4'>
-          {ABOUT.socials.map(({ platform, icon: Icon, url }) => (
-            <li key={platform}>
-              <Link
-                href={url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='hover:text-primary-text flex items-center gap-1 transition-colors'
-              >
-                <Icon className='text-primary-text size-5' />
-                {platform}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <Tabs defaultValue='career' className='w-full max-w-2xl'>
-          <TabsList className='w-full'>
-            <TabsTrigger value='career'>Career</TabsTrigger>
-            <TabsTrigger value='education'>Education</TabsTrigger>
-          </TabsList>
-          <TabsContent value='career' className='border'>
-            <div className='relative m-8 flex flex-col border-l-2 pl-6'>
-              {ABOUT.career.map(
-                ({
-                  from,
-                  to,
-                  title,
-                  company,
-                  location,
-                  description,
-                  showDays,
-                }) => (
-                  <div
-                    key={`${title}-${company}`}
-                    className='relative mb-10 last:mb-0'
-                  >
-                    {/* The Dot */}
-                    <span
-                      className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
-                      aria-hidden='true'
-                    />
+    <>
+      <h1 className='text-4xl font-bold'>
+        Hello, I&apos;m <span className='text-primary-text'>Nikki</span>! 👋
+      </h1>
+      <p className='text-lg'>
+        {ABOUT.age}-year-old {ABOUT.title} based in {ABOUT.country} {ABOUT.flag}
+      </p>
+      <p className='max-w-prose'>{ABOUT.description}</p>
+      <ul className='flex flex-wrap gap-4'>
+        {ABOUT.socials.map(({ platform, icon: Icon, url }) => (
+          <li key={platform}>
+            <Link
+              href={url}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='hover:text-primary-text flex items-center gap-1 transition-colors'
+            >
+              <Icon className='text-primary-text size-5' />
+              {platform}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <Tabs defaultValue='career' className='w-full max-w-2xl'>
+        <TabsList className='w-full'>
+          <TabsTrigger value='career'>Career</TabsTrigger>
+          <TabsTrigger value='education'>Education</TabsTrigger>
+        </TabsList>
+        <TabsContent value='career' className='border'>
+          <div className='relative m-8 flex flex-col border-l-2 pl-6'>
+            {ABOUT.career.map(
+              ({
+                from,
+                to,
+                title,
+                company,
+                location,
+                description,
+                showDays,
+              }) => (
+                <div
+                  key={`${title}-${company}`}
+                  className='relative mb-10 last:mb-0'
+                >
+                  {/* The Dot */}
+                  <span
+                    className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
+                    aria-hidden='true'
+                  />
 
-                    {/* Content */}
-                    <div className='flex flex-col gap-1'>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h2 className='text-xl font-bold'>{company}</h2>
-                        <time className='text-muted-foreground text-sm'>
-                          {formatDate(from, showDays)} —{' '}
-                          {typeof to === 'string' &&
-                          to.toLowerCase() === 'present' ? (
-                            <span className='font-extrabold'>
-                              {formatDate(to)}
-                            </span>
-                          ) : (
-                            formatDate(to, showDays)
-                          )}
-                        </time>
-                      </div>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h3 className='text-base'>{title}</h3>
-                        <p className='text-muted-foreground text-sm'>
-                          {location}
-                        </p>
-                      </div>
-                      <p className='text-foreground/80 mt-2 leading-relaxed'>
-                        {description}
+                  {/* Content */}
+                  <div className='flex flex-col gap-1'>
+                    <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                      <h2 className='text-xl font-bold'>{company}</h2>
+                      <time className='text-muted-foreground text-sm'>
+                        {formatDate(from, showDays)} —{' '}
+                        {typeof to === 'string' &&
+                        to.toLowerCase() === 'present' ? (
+                          <span className='font-extrabold'>
+                            {formatDate(to)}
+                          </span>
+                        ) : (
+                          formatDate(to, showDays)
+                        )}
+                      </time>
+                    </div>
+                    <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                      <h3 className='text-base'>{title}</h3>
+                      <p className='text-muted-foreground text-sm'>
+                        {location}
                       </p>
                     </div>
+                    <p className='text-foreground/80 mt-2 leading-relaxed'>
+                      {description}
+                    </p>
                   </div>
-                ),
-              )}
-            </div>
-          </TabsContent>
-          <TabsContent value='education' className='border'>
-            <div className='relative m-8 flex flex-col border-l-2 pl-6'>
-              {ABOUT.education.map(
-                ({ from, to, title, school, location, description }) => (
-                  <div
-                    key={`${title}-${school}`}
-                    className='relative mb-10 last:mb-0'
-                  >
-                    {/* The Dot */}
-                    <span
-                      className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
-                      aria-hidden='true'
-                    />
+                </div>
+              ),
+            )}
+          </div>
+        </TabsContent>
+        <TabsContent value='education' className='border'>
+          <div className='relative m-8 flex flex-col border-l-2 pl-6'>
+            {ABOUT.education.map(
+              ({ from, to, title, school, location, description }) => (
+                <div
+                  key={`${title}-${school}`}
+                  className='relative mb-10 last:mb-0'
+                >
+                  {/* The Dot */}
+                  <span
+                    className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
+                    aria-hidden='true'
+                  />
 
-                    {/* Content */}
-                    <div className='flex flex-col gap-1'>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h2 className='text-xl font-bold'>{school}</h2>
-                        <time className='text-muted-foreground text-sm'>
-                          {formatDate(from)} — {formatDate(to)}
-                        </time>
-                      </div>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h3 className='text-base'>{title}</h3>
-                        <p className='text-muted-foreground text-sm'>
-                          {location}
-                        </p>
-                      </div>
-                      <p className='text-foreground/80 mt-2 leading-relaxed'>
-                        {description}
+                  {/* Content */}
+                  <div className='flex flex-col gap-1'>
+                    <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                      <h2 className='text-xl font-bold'>{school}</h2>
+                      <time className='text-muted-foreground text-sm'>
+                        {formatDate(from)} — {formatDate(to)}
+                      </time>
+                    </div>
+                    <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
+                      <h3 className='text-base'>{title}</h3>
+                      <p className='text-muted-foreground text-sm'>
+                        {location}
                       </p>
                     </div>
+                    <p className='text-foreground/80 mt-2 leading-relaxed'>
+                      {description}
+                    </p>
                   </div>
-                ),
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </main>
-    </div>
+                </div>
+              ),
+            )}
+          </div>
+        </TabsContent>
+      </Tabs>
+    </>
   );
 }
