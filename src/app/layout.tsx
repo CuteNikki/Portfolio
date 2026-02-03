@@ -37,8 +37,8 @@ export default function RootLayout({
         >
           <div className='flex min-h-screen flex-col items-center justify-center'>
             <Navbar />
-            <div className='flex flex-1 items-start justify-center'>
-              <main className='container mx-auto flex flex-col items-start gap-8 p-4 py-16 md:py-32'>
+            <div className='flex w-full flex-1'>
+              <main className='container mx-auto flex flex-col items-center gap-8 p-4 py-16 md:py-32'>
                 {children}
               </main>
             </div>

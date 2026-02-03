@@ -102,7 +102,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <div className='flex flex-col gap-8'>
       <h1 className='text-4xl font-bold'>
         Hello, I&apos;m <span className='text-primary-text'>Nikki</span>! 👋
       </h1>
@@ -221,6 +221,6 @@ export default function Home() {
           </div>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 }
