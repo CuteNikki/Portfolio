@@ -1,5 +1,5 @@
 import { ImprintContent } from '@/components/legal/imprint';
 
 export default function Imprint() {
-  return <ImprintContent defaultLanguage='en' />;
+  return <ImprintContent defaultLanguage='de' />;
 }
