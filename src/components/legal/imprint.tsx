@@ -5,25 +5,26 @@ import { useState } from 'react';
 
 import {
   ArrowLeft,
-  AtSignIcon,
   CopyrightIcon,
   HouseIcon,
   LanguagesIcon,
   LinkIcon,
   MailIcon,
   MapPinIcon,
-  PhoneIcon,
   ScaleIcon,
 } from 'lucide-react';
 
+import { EmailAndPhone } from '@/components/common/contact';
 import { Button } from '@/components/ui/button';
+
+import { PERSONAL_DETAILS } from '@/constants/personal';
 
 export function ImprintContent({
   defaultLanguage,
 }: {
   defaultLanguage: 'en' | 'de';
 }) {
-  const [language, setLanguage] = useState<'en' | 'de'>(defaultLanguage);
+  const [language] = useState<'en' | 'de'>(defaultLanguage);
 
   const CONTENT = {
     en: {
@@ -34,15 +35,13 @@ export function ImprintContent({
       languageToggle: 'Read in German',
       provider: {
         title: 'Provider',
-        name: 'Nikki Sophie Berthold',
-        addressLine1: 'Friedrich-Karl-Straße 28',
-        addressLine2: '32584 Löhne',
-        country: 'Germany',
+        name: PERSONAL_DETAILS.fullName,
+        addressLineOne: PERSONAL_DETAILS.address.lineOne,
+        addressLineTwo: PERSONAL_DETAILS.address.lineTwo,
+        country: PERSONAL_DETAILS.address.country,
       },
       contact: {
         title: 'Contact',
-        email: 'Email: ',
-        phone: 'Phone: ',
       },
       liabilityContent: {
         title: 'Liability for Content',
@@ -76,15 +75,13 @@ export function ImprintContent({
       languageToggle: 'Read in English',
       provider: {
         title: 'Anbieter',
-        name: 'Nikki Sophie Berthold',
-        addressLine1: 'Friedrich-Karl-Straße 28',
-        addressLine2: '32584 Löhne',
-        country: 'Deutschland',
+        name: PERSONAL_DETAILS.fullName,
+        addressLineOne: PERSONAL_DETAILS.address.lineOne,
+        addressLineTwo: PERSONAL_DETAILS.address.lineTwo,
+        country: PERSONAL_DETAILS.address.country,
       },
       contact: {
         title: 'Kontakt',
-        email: 'E-Mail: ',
-        phone: 'Telef.: ',
       },
       liabilityContent: {
         title: 'Haftung für Inhalte',
@@ -138,8 +135,8 @@ export function ImprintContent({
         <div className='flex items-start gap-2'>
           <MapPinIcon className='text-primary-text size-4 shrink-0' />
           <ul className='text-sm sm:text-base'>
-            <li>{CONTENT[language].provider.addressLine1}</li>
-            <li>{CONTENT[language].provider.addressLine2}</li>
+            <li>{CONTENT[language].provider.addressLineOne}</li>
+            <li>{CONTENT[language].provider.addressLineTwo}</li>
             <li>{CONTENT[language].provider.country}</li>
           </ul>
         </div>
@@ -149,19 +146,7 @@ export function ImprintContent({
           <MailIcon className='shrink-0' />
           {CONTENT[language].contact.title}
         </h2>
-        <div>
-          <Link
-            href={'mailto:contact@niso.moe'}
-            className='flex items-center gap-2'
-          >
-            <AtSignIcon className='text-primary-text size-4 shrink-0' />
-            {CONTENT[language].contact.email} contact@niso.moe
-          </Link>
-          <Link href={'tel:+4917646236314'} className='flex items-center gap-2'>
-            <PhoneIcon className='text-primary-text size-4 shrink-0' />
-            {CONTENT[language].contact.phone} +49 176 46236314
-          </Link>
-        </div>
+        <EmailAndPhone language={language} />
       </div>
       <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
         <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>

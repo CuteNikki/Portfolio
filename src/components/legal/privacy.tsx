@@ -5,7 +5,6 @@ import { useState } from 'react';
 
 import {
   ArrowLeft,
-  AtSignIcon,
   CircleQuestionMarkIcon,
   ClockIcon,
   DownloadIcon,
@@ -16,20 +15,22 @@ import {
   ListEndIcon,
   MailIcon,
   PenBoxIcon,
-  PhoneIcon,
   ScaleIcon,
   ShieldIcon,
   Trash2Icon,
 } from 'lucide-react';
 
+import { EmailAndPhone } from '@/components/common/contact';
 import { Button } from '@/components/ui/button';
+
+import { PERSONAL_DETAILS } from '@/constants/personal';
 
 export function PrivacyContent({
   defaultLanguage,
 }: {
   defaultLanguage: 'en' | 'de';
 }) {
-  const [language, setLanguage] = useState<'en' | 'de'>(defaultLanguage);
+  const [language] = useState<'en' | 'de'>(defaultLanguage);
 
   const CONTENT = {
     en: {
@@ -57,11 +58,9 @@ export function PrivacyContent({
         title: 'Data Controller',
         description:
           'The responsible party for data processing on this website is:',
-        name: 'Nikki Sophie Berthold',
-        addressLine1: 'Friedrich-Karl-Straße 28',
-        addressLine2: '32584 Löhne, Germany',
-        email: 'Email: ',
-        phone: 'Phone: ',
+        name: PERSONAL_DETAILS.fullName,
+        addressLine1: PERSONAL_DETAILS.address.lineOne,
+        addressLine2: PERSONAL_DETAILS.address.lineTwoWithCountry,
       },
       dataRetention: {
         title: 'Data Retention',
@@ -111,8 +110,6 @@ export function PrivacyContent({
         title: 'Questions about Privacy?',
         description:
           'If you have questions about how we handle your data or want to exercise your rights, please contact us:',
-        email: 'Email: ',
-        phone: 'Phone: ',
         note: 'We typically respond to privacy-related inquiries within 30 days as required by GDPR.',
       },
     },
@@ -141,11 +138,9 @@ export function PrivacyContent({
         title: 'Datenverantwortlicher',
         description:
           'Verantwortlicher für die Datenverarbeitung auf dieser Website ist:',
-        name: 'Nikki Sophie Berthold',
-        addressLine1: 'Friedrich-Karl-Straße 28',
-        addressLine2: '32584 Löhne, Deutschland',
-        email: 'E-Mail: ',
-        phone: 'Telef.: ',
+        name: PERSONAL_DETAILS.fullName,
+        addressLine1: PERSONAL_DETAILS.address.lineOne,
+        addressLine2: PERSONAL_DETAILS.address.lineTwoWithCountry,
       },
       dataRetention: {
         title: 'Speicherdauer',
@@ -199,8 +194,6 @@ export function PrivacyContent({
         title: 'Fragen zum Datenschutz?',
         description:
           'Wenn Sie Fragen dazu haben, wie wir mit Ihren Daten umgehen oder Ihre Rechte ausüben möchten, kontaktieren Sie uns bitte:',
-        email: 'E-Mail: ',
-        phone: 'Telef.: ',
         note: 'Wir antworten auf datenschutzbezogene Anfragen in der Regel innerhalb von 30 Tagen, wie von der DSGVO vorgeschrieben.',
       },
     },
@@ -271,19 +264,7 @@ export function PrivacyContent({
               {CONTENT[language].dataController.addressLine2}
             </li>
           </ul>
-          <div className='flex flex-col gap-2'>
-            <Link
-              href='mailto:contact@niso.moe'
-              className='flex items-center gap-2'
-            >
-              <AtSignIcon className='text-primary-text size-4 shrink-0' />
-              {CONTENT[language].dataController.email} contact@niso.moe
-            </Link>
-            <Link href='tel:+4917646236314' className='flex items-center gap-2'>
-              <PhoneIcon className='text-primary-text size-4 shrink-0' />
-              {CONTENT[language].dataController.phone} +49 176 46236314
-            </Link>
-          </div>
+          <EmailAndPhone language={language} />
         </div>
       </div>
 
@@ -325,7 +306,7 @@ export function PrivacyContent({
           <p>
             {CONTENT[language].yourRights.notice.replace(
               '{mail}',
-              'contact@niso.moe',
+              PERSONAL_DETAILS.email,
             )}
           </p>
         </div>
@@ -340,18 +321,8 @@ export function PrivacyContent({
           {CONTENT[language].questions.title}
         </h2>
         <p>{CONTENT[language].questions.description}</p>
-        <div className='flex flex-col gap-2 border p-4 text-sm sm:text-base'>
-          <Link
-            href='mailto:contact@niso.moe'
-            className='flex items-center gap-2'
-          >
-            <AtSignIcon className='text-primary-text size-4 shrink-0' />
-            {CONTENT[language].questions.email} contact@niso.moe
-          </Link>
-          <Link href='tel:+4917646236314' className='flex items-center gap-2'>
-            <PhoneIcon className='text-primary-text size-4 shrink-0' />
-            {CONTENT[language].questions.phone} +49 176 46236314
-          </Link>
+        <div className='border p-4'>
+          <EmailAndPhone language={language} />
         </div>
         <p className='text-muted-foreground text-sm'>
           {CONTENT[language].questions.note}

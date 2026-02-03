@@ -11,25 +11,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Calculates the age in years based on the given birthdate and an optional reference date.
- *
- * @param birthdate - The date of birth.
- * @param reference - The reference date to calculate the age from. Defaults to the current date if not provided.
- * @returns The calculated age in years.
- */
-export function getAge(birthdate: Date, reference = new Date()): number {
-  let age = reference.getFullYear() - birthdate.getFullYear();
-  const monthDiff = reference.getMonth() - birthdate.getMonth();
-  if (
-    monthDiff < 0 ||
-    (monthDiff === 0 && reference.getDate() < birthdate.getDate())
-  ) {
-    age--;
-  }
-  return age;
-}
-
 export function formatDate(date: Date | string, showDays = false): string {
   if (typeof date === 'string') {
     return date;
