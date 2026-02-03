@@ -29,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${jetbrainsMono.variable} overflow-y-scroll font-mono antialiased`}
       >
+        <div id='top' />
         <ThemeProvider
           enableSystem
           disableTransitionOnChange
@@ -45,6 +46,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </ThemeProvider>
+        <div id='bottom' />
       </body>
     </html>
   );
