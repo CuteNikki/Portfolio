@@ -14,14 +14,9 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
-export function Navbar() {
-  const NAVBAR_LINKS = [
-    { href: '/', label: 'Home' },
-    { href: '/projects', label: 'Projects' },
-    // { href: '/blog', label: 'Blog' },
-    { href: '/contact', label: 'Contact' },
-  ];
+import { NAVBAR_LINKS } from '@/constants/links';
 
+export function Navbar() {
   return (
     <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
       <div className='container mx-auto flex items-center justify-between gap-4 p-4'>
@@ -31,11 +26,11 @@ export function Navbar() {
           </Link>
         </div>
         <ul className='hidden items-center gap-6 text-sm font-medium sm:flex'>
-          {NAVBAR_LINKS.map(({ href, label }) => (
-            <li key={href}>
+          {NAVBAR_LINKS.map(({ url, label }) => (
+            <li key={url}>
               <Link
-                href={href}
-                className='hover:text-primary-text text-muted-foreground transition-colors'
+                href={url}
+                className='hover:text-primary-text text-muted-foreground lowercase transition-colors'
               >
                 {label}
               </Link>
@@ -63,11 +58,11 @@ export function Navbar() {
               </SheetHeader>
               <SheetBody>
                 <ul className='flex flex-col gap-2'>
-                  {NAVBAR_LINKS.map(({ href, label }) => (
-                    <li key={href}>
+                  {NAVBAR_LINKS.map(({ url, label }) => (
+                    <li key={url}>
                       <Link
-                        href={href}
-                        className='hover:text-primary-text transition-colors'
+                        href={url}
+                        className='hover:text-primary-text lowercase transition-colors'
                       >
                         {label}
                       </Link>

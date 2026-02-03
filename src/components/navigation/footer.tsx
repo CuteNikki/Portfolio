@@ -1,12 +1,10 @@
-import { ThemeSwitcher } from '@/components/theme/switcher';
 import Link from 'next/link';
 
-export function Footer() {
-  const FOOTER_LINKS = [
-    { href: '/imprint', label: 'Imprint' },
-    { href: '/privacy', label: 'Privacy' },
-  ];
+import { ThemeSwitcher } from '@/components/theme/switcher';
 
+import { FOOTER_LINKS } from '@/constants/links';
+
+export function Footer() {
   return (
     <footer className='bg-background/95 w-full border-t'>
       <div className='container mx-auto flex items-center justify-between gap-4 p-4 tracking-tight'>
@@ -15,11 +13,11 @@ export function Footer() {
         </p>
         <div className='text-muted-foreground text-sm'>
           <ul className='flex flex-wrap gap-4'>
-            {FOOTER_LINKS.map(({ href, label }) => (
-              <li key={href}>
+            {FOOTER_LINKS.map(({ url, label }) => (
+              <li key={url}>
                 <Link
-                  href={href}
-                  className='hover:text-primary-text transition-colors'
+                  href={url}
+                  className='hover:text-primary-text lowercase transition-colors'
                 >
                   {label}
                 </Link>
