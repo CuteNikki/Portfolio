@@ -157,7 +157,7 @@ export default function Home() {
                     {/* Content */}
                     <div className='flex flex-col gap-1'>
                       <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h3 className='text-xl font-bold'>{company}</h3>
+                        <h2 className='text-xl font-bold'>{company}</h2>
                         <time className='text-muted-foreground text-sm'>
                           {formatDate(from, showDays)} —{' '}
                           {typeof to === 'string' &&
@@ -171,7 +171,7 @@ export default function Home() {
                         </time>
                       </div>
                       <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h4 className='text-base'>{title}</h4>
+                        <h3 className='text-base'>{title}</h3>
                         <p className='text-muted-foreground text-sm'>
                           {location}
                         </p>
@@ -202,13 +202,13 @@ export default function Home() {
                     {/* Content */}
                     <div className='flex flex-col gap-1'>
                       <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h3 className='text-xl font-bold'>{school}</h3>
+                        <h2 className='text-xl font-bold'>{school}</h2>
                         <time className='text-muted-foreground text-sm'>
                           {formatDate(from)} — {formatDate(to)}
                         </time>
                       </div>
                       <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h4 className='text-base'>{title}</h4>
+                        <h3 className='text-base'>{title}</h3>
                         <p className='text-muted-foreground text-sm'>
                           {location}
                         </p>
