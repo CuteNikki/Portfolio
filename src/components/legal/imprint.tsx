@@ -4,9 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import {
-  ArrowUp,
   CopyrightIcon,
-  HomeIcon,
   HouseIcon,
   LanguagesIcon,
   LinkIcon,
@@ -15,10 +13,12 @@ import {
   ScaleIcon,
 } from 'lucide-react';
 
-import { EmailAndPhone } from '@/components/common/contact';
-import { Button } from '@/components/ui/button';
-
 import { PERSONAL_DETAILS } from '@/constants/personal';
+
+import { HomeButton } from '@/components/common/home-button';
+import { EmailAndPhone } from '@/components/common/mail-phone-details';
+import { ScrollToTopButton } from '@/components/common/scroll-top-buttont';
+import { Button } from '@/components/ui/button';
 
 export function ImprintContent({
   defaultLanguage,
@@ -183,16 +183,8 @@ export function ImprintContent({
       </div>
 
       <div className='flex flex-col items-center gap-2 sm:flex-row'>
-        <Button size='lg' asChild>
-          <Link href='/'>
-            <HomeIcon className='shrink-0' />
-            Go to Home
-          </Link>
-        </Button>
-        <Button size='lg' onClick={() => window.scrollTo({ top: 0 })}>
-          <ArrowUp className='shrink-0' />
-          Back to Top
-        </Button>
+        <HomeButton />
+        <ScrollToTopButton />
       </div>
     </div>
   );
