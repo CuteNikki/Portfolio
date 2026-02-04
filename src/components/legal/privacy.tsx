@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import {
   ArrowLeft,
+  ArrowUp,
   CheckIcon,
   CircleQuestionMarkIcon,
   ClockIcon,
@@ -58,8 +59,8 @@ export function PrivacyContent({
           { href: '#server-logs', label: 'Server Logs' },
           { href: '#data-retention', label: 'Data Retention' },
           { href: '#cookies-and-sessions', label: 'Cookies & Sessions' },
-          { href: '#your-rights', label: 'Your Rights' },
           { href: '#data-security', label: 'Data Security' },
+          { href: '#your-rights', label: 'Your Rights' },
           { href: '#questions', label: 'Questions' },
         ],
       },
@@ -222,8 +223,8 @@ export function PrivacyContent({
           { href: '#server-logs', label: 'Server-Logs' },
           { href: '#data-retention', label: 'Speicherdauer' },
           { href: '#cookies-and-sessions', label: 'Cookies & Sessions' },
-          { href: '#your-rights', label: 'Ihre Rechte' },
           { href: '#data-security', label: 'Datensicherheit' },
+          { href: '#your-rights', label: 'Ihre Rechte' },
           { href: '#questions', label: 'Fragen' },
         ],
       },
@@ -596,12 +597,18 @@ export function PrivacyContent({
         </p>
       </div>
 
-      <Button size='lg' asChild>
-        <Link href='/'>
-          <ArrowLeft />
-          Back to Home
-        </Link>
-      </Button>
+      <div className='flex flex-col items-center gap-2 sm:flex-row'>
+        <Button size='lg' asChild>
+          <Link href='/'>
+            <ArrowLeft />
+            Back to Home
+          </Link>
+        </Button>
+        <Button size='lg' onClick={() => window.scrollTo({ top: 0 })}>
+          <ArrowUp />
+          Back to Top
+        </Button>
+      </div>
     </div>
   );
 }

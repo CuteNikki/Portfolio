@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import {
   ArrowLeft,
+  ArrowUp,
   CopyrightIcon,
   HouseIcon,
   LanguagesIcon,
@@ -181,12 +182,18 @@ export function ImprintContent({
         ))}
       </div>
 
-      <Button size='lg' asChild>
-        <Link href='/'>
-          <ArrowLeft />
-          Back to Home
-        </Link>
-      </Button>
+      <div className='flex flex-col items-center gap-2 sm:flex-row'>
+        <Button size='lg' asChild>
+          <Link href='/'>
+            <ArrowLeft />
+            Back to Home
+          </Link>
+        </Button>
+        <Button size='lg' onClick={() => window.scrollTo({ top: 0 })}>
+          <ArrowUp />
+          Back to Top
+        </Button>
+      </div>
     </div>
   );
 }
