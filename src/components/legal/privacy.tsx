@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import {
   CheckIcon,
+  ChevronRightIcon,
   CircleQuestionMarkIcon,
   ClockIcon,
   CookieIcon,
@@ -23,6 +24,7 @@ import {
   ServerIcon,
   ShieldIcon,
   Trash2Icon,
+  UserStarIcon,
 } from 'lucide-react';
 
 import { PERSONAL_DETAILS } from '@/constants/personal';
@@ -414,8 +416,8 @@ export function PrivacyContent({
         <ul className='text-muted-foreground *:hover:text-foreground grid list-inside grid-cols-1 gap-2 *:transition-all *:hover:translate-x-1 sm:grid-cols-2'>
           {CONTENT[language].quickNavigation.links.map(({ href, label }) => (
             <li key={href}>
-              <Link href={href}>
-                {'>'} {label}
+              <Link href={href} className='flex flex-row items-center gap-2'>
+                <ChevronRightIcon className='size-4 shrink-0' /> {label}
               </Link>
             </li>
           ))}
@@ -427,7 +429,7 @@ export function PrivacyContent({
         id='data-controller'
       >
         <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
-          <ShieldIcon className='shrink-0' />
+          <UserStarIcon className='shrink-0' />
           {CONTENT[language].dataController.title}
         </h2>
         <p>{CONTENT[language].dataController.description}</p>
