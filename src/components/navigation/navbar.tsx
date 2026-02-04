@@ -50,7 +50,7 @@ export function Navbar() {
             <SheetContent side='left'>
               <SheetHeader>
                 <SheetTitle>
-                  niso<span className='text-accent-text'>.moe</span>
+                  niso<span className='text-primary-text'>.moe</span>
                 </SheetTitle>
                 <SheetDescription>
                   Navigate to different sections
