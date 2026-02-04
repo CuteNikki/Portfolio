@@ -11,5 +11,5 @@ export const FOOTER_LINKS: Link[] = [
 export const NAVBAR_LINKS: Link[] = [
   { label: 'Home', url: '/#top' },
   { label: 'Projects', url: '/projects#top' },
-  { label: 'Blog', url: '/blog#top' },
+  { label: 'Contact', url: '/contact#top' },
 ];
