@@ -18,6 +18,7 @@ import {
   MailIcon,
   PenBoxIcon,
   ScaleIcon,
+  ServerIcon,
   ShieldIcon,
   Trash2Icon,
 } from 'lucide-react';
@@ -51,6 +52,7 @@ export function PrivacyContent({
         title: 'Quick Navigation',
         links: [
           { href: '#data-controller', label: 'Data Controller' },
+          { href: '#server-logs', label: 'Server Logs' },
           { href: '#data-retention', label: 'Data Retention' },
           { href: '#your-rights', label: 'Your Rights' },
           { href: '#data-security', label: 'Data Security' },
@@ -64,6 +66,35 @@ export function PrivacyContent({
         name: PERSONAL_DETAILS.fullName,
         addressLine1: PERSONAL_DETAILS.address.lineOne,
         addressLine2: PERSONAL_DETAILS.address.lineTwoWithCountry,
+      },
+      serverLogs: {
+        title: 'Server Logs',
+        description:
+          'Our web server automatically collects and temporarily stores the following technical information when you visit our website:',
+        data: [
+          'IP Address (anonymized)',
+          'Date and Time of Access',
+          'Requested Page/Resource',
+          'HTTP Status Code',
+          'Browser Type and Version',
+          'Operating System',
+          'Referrer URL (previously visited page)',
+        ],
+        purpose: {
+          title: 'Purpose:',
+          description:
+            'Security analysis, debugging errors, and ensuring the stability and availability of our service.',
+        },
+        legalBasis: {
+          title: 'Legal basis:',
+          description:
+            'Art. 6 para. 1 lit. f GDPR (legitimate interest in ensuring the security and proper functioning of our service).',
+        },
+        retention: {
+          title: 'Retention:',
+          description:
+            'These logs are automatically deleted after 30 days or when overwritten by new logs.',
+        },
       },
       dataRetention: {
         title: 'Data Retention',
@@ -154,6 +185,7 @@ export function PrivacyContent({
         title: 'Schnellnavigation',
         links: [
           { href: '#data-controller', label: 'Datenverantwortlicher' },
+          { href: '#server-logs', label: 'Server-Logs' },
           { href: '#data-retention', label: 'Speicherdauer' },
           { href: '#your-rights', label: 'Ihre Rechte' },
           { href: '#data-security', label: 'Datensicherheit' },
@@ -168,6 +200,35 @@ export function PrivacyContent({
         addressLine1: PERSONAL_DETAILS.address.lineOne,
         addressLine2: PERSONAL_DETAILS.address.lineTwoWithCountry,
       },
+      serverLogs: {
+        title: 'Server-Logs',
+        description:
+          'Unser Webserver erfasst und speichert automatisch und temporär folgende technische Informationen, wenn Sie unsere Website besuchen:',
+        data: [
+          'IP-Adresse (anonymisiert)',
+          'Datum und Uhrzeit des Zugriffs',
+          'Angeforderte Seite/Ressource',
+          'HTTP-Statuscode',
+          'Browsertyp und -version',
+          'Betriebssystem',
+          'Referrer URL (vorher besuchte Seite)',
+        ],
+        purpose: {
+          title: 'Zweck:',
+          description:
+            'Sicherheitsanalyse, Fehlerbehebung und Gewährleistung der Stabilität und Verfügbarkeit unseres Dienstes.',
+        },
+        legalBasis: {
+          title: 'Rechtsgrundlage:',
+          description:
+            'Art. 6 Abs. 1 lit. f DSGVO (Berechtigtes Interesse an der Gewährleistung der Sicherheit und des ordnungsgemäßen Betriebs unseres Dienstes).',
+        },
+        retention: {
+          title: 'Speicherdauer:',
+          description:
+            'Diese Logs werden nach 30 Tagen automatisch gelöscht oder überschrieben.',
+        },
+      },
       dataRetention: {
         title: 'Speicherdauer',
         description: 'Wir speichern Ihre Daten wie folgt:',
@@ -176,6 +237,11 @@ export function PrivacyContent({
             title: 'Kontaktformular-Einsendungen:',
             description:
               'Gespeichert bis die Anfrage bearbeitet ist oder maximal 2 Jahre.',
+          },
+          {
+            title: 'Server-Logs:',
+            description:
+              'Automatisch gelöscht nach 30 Tagen oder wenn sie durch neue Logs aufgrund der Speicherrotation überschrieben werden.',
           },
         ],
       },
@@ -245,8 +311,8 @@ export function PrivacyContent({
 
   return (
     <div className='flex w-full flex-col items-center gap-4 tracking-tight'>
-      <div className='flex w-full max-w-5xl flex-col items-center justify-between gap-2 p-4 sm:flex-row'>
-        <div className='flex flex-col gap-2 pb-4 text-center sm:text-start'>
+      <div className='flex w-full max-w-5xl flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'>
+        <div className='flex flex-col gap-2 pb-4'>
           <h1 className='text-4xl font-bold tracking-normal'>
             {CONTENT[language].header.title}
           </h1>
@@ -310,6 +376,36 @@ export function PrivacyContent({
           </ul>
           <EmailAndPhone language={language} />
         </div>
+      </div>
+
+      <div
+        className='flex w-full max-w-5xl scroll-m-20 flex-col gap-4 border p-4 sm:p-8'
+        id='server-logs'
+      >
+        <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
+          <ServerIcon className='shrink-0' />
+          {CONTENT[language].serverLogs.title}
+        </h2>
+        <p>{CONTENT[language].serverLogs.description}</p>
+        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-2 border p-4 pl-8 marker:text-lg'>
+          {CONTENT[language].serverLogs.data.map((text) => (
+            <li key={text}>
+              <p className='text-muted-foreground'>{text}</p>
+            </li>
+          ))}
+        </ul>
+        <p>
+          <b>{CONTENT[language].serverLogs.purpose.title} </b>
+          {CONTENT[language].serverLogs.purpose.description}
+        </p>
+        <p>
+          <b>{CONTENT[language].serverLogs.legalBasis.title} </b>
+          {CONTENT[language].serverLogs.legalBasis.description}
+        </p>
+        <p>
+          <b>{CONTENT[language].serverLogs.retention.title} </b>
+          {CONTENT[language].serverLogs.retention.description}
+        </p>
       </div>
 
       <div
