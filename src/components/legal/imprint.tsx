@@ -111,8 +111,8 @@ export function ImprintContent({
 
   return (
     <div className='flex flex-col items-center gap-4 tracking-tight'>
-      <div className='flex w-full max-w-5xl flex-col items-center justify-between gap-2 p-4 sm:flex-row'>
-        <div className='flex flex-col gap-2 pb-4 text-center sm:text-start'>
+      <div className='flex w-full max-w-5xl flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'>
+        <div className='flex flex-col gap-2 pb-4'>
           <h1 className='text-4xl font-bold tracking-normal'>
             {CONTENT[language].header.title}
           </h1>
@@ -127,6 +127,7 @@ export function ImprintContent({
           </Link>
         </Button>
       </div>
+
       <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
         <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
           <HouseIcon className='shrink-0' /> {CONTENT[language].provider.title}
@@ -141,6 +142,7 @@ export function ImprintContent({
           </ul>
         </div>
       </div>
+
       <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
         <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
           <MailIcon className='shrink-0' />
@@ -159,6 +161,7 @@ export function ImprintContent({
           ),
         )}
       </div>
+
       <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
         <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
           <LinkIcon className='shrink-0' />
@@ -177,6 +180,7 @@ export function ImprintContent({
           <p key={index}>{paragraph}</p>
         ))}
       </div>
+
       <Button size='lg' asChild>
         <Link href='/'>
           <ArrowLeft />
