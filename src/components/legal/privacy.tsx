@@ -8,13 +8,16 @@ import {
   CheckIcon,
   CircleQuestionMarkIcon,
   ClockIcon,
+  CookieIcon,
   DownloadIcon,
   EyeIcon,
   GavelIcon,
   HandIcon,
+  InfoIcon,
   LanguagesIcon,
   ListEndIcon,
   LockIcon,
+  LucideIcon,
   MailIcon,
   PenBoxIcon,
   ScaleIcon,
@@ -54,6 +57,7 @@ export function PrivacyContent({
           { href: '#data-controller', label: 'Data Controller' },
           { href: '#server-logs', label: 'Server Logs' },
           { href: '#data-retention', label: 'Data Retention' },
+          { href: '#cookies-and-sessions', label: 'Cookies & Sessions' },
           { href: '#your-rights', label: 'Your Rights' },
           { href: '#data-security', label: 'Data Security' },
           { href: '#questions', label: 'Questions' },
@@ -111,6 +115,36 @@ export function PrivacyContent({
               'Automatically deleted after 30 days or when overwritten by new logs due to storage rotation.',
           },
         ],
+      },
+      cookiesAndSessions: {
+        title: 'Cookies & Session Storage',
+        description:
+          'We use only essential cookies necessary for the website to function. No tracking, analytics, or advertising cookies.',
+        cookies: [
+          // {
+          //   icon: KeyRoundIcon,
+          //   title: 'Session Cookie',
+          //   essential: '(Essential)',
+          //   description:
+          //     'Keeps you logged in and maintains your session state while browsing the site.',
+          //   duration: 'Duration: Session (cleared when browser is closed)',
+          // },
+          // {
+          //   icon: ShieldIcon,
+          //   title: 'CSRF Token',
+          //   essential: '(Essential)',
+          //   description:
+          //     'Security token to protect against cross-site request forgery attacks.',
+          //   duration: 'Duration: Session',
+          // },
+        ] as Array<{
+          icon: LucideIcon;
+          title: string;
+          essential: string;
+          description: string;
+          duration: string;
+        }>,
+        note: 'These cookies are technically necessary for the operation of the website and cannot be disabled. We do not use any tracking, analytics, or advertising cookies.',
       },
       yourRights: {
         title: 'Your Rights Under GDPR',
@@ -187,6 +221,7 @@ export function PrivacyContent({
           { href: '#data-controller', label: 'Datenverantwortlicher' },
           { href: '#server-logs', label: 'Server-Logs' },
           { href: '#data-retention', label: 'Speicherdauer' },
+          { href: '#cookies-and-sessions', label: 'Cookies & Sessions' },
           { href: '#your-rights', label: 'Ihre Rechte' },
           { href: '#data-security', label: 'Datensicherheit' },
           { href: '#questions', label: 'Fragen' },
@@ -244,6 +279,37 @@ export function PrivacyContent({
               'Automatisch gelöscht nach 30 Tagen oder wenn sie durch neue Logs aufgrund der Speicherrotation überschrieben werden.',
           },
         ],
+      },
+      cookiesAndSessions: {
+        title: 'Cookies & Session-Speicher',
+        description:
+          'Wir verwenden nur essentielle Cookies, die für das Funktionieren der Website notwendig sind. Keine Tracking-, Analyse- oder Werbe-Cookies.',
+        cookies: [
+          // {
+          //   icon: KeyRoundIcon,
+          //   title: 'Session-Cookie',
+          //   essential: '(Essentiell)',
+          //   description:
+          //     'Hält Sie eingeloggt und behält Ihren Sitzungsstatus bei, während Sie unsere Website nutzen.',
+          //   duration:
+          //     'Dauer: Sitzung (wird beim Schließen des Browsers gelöscht)',
+          // },
+          // {
+          //   icon: ShieldIcon,
+          //   title: 'CSRF-Token',
+          //   essential: '(Essentiell)',
+          //   description:
+          //     'Sicherheitstoken zum Schutz vor Cross-Site-Request-Forgery-Angriffen.',
+          //   duration: 'Dauer: Sitzung',
+          // },
+        ] as Array<{
+          icon: LucideIcon;
+          title: string;
+          essential: string;
+          description: string;
+          duration: string;
+        }>,
+        note: 'Diese Cookies sind technisch notwendig für den Betrieb der Website und können nicht deaktiviert werden. Wir verwenden keine Tracking-, Analyse- oder Werbe-Cookies.',
       },
       yourRights: {
         title: 'Ihre Rechte gemäß DSGVO',
@@ -417,16 +483,47 @@ export function PrivacyContent({
           {CONTENT[language].dataRetention.title}
         </h2>
         <p>{CONTENT[language].dataRetention.description}</p>
-        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-2 border p-4 pl-8 marker:text-lg'>
+        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-4 border p-4 pl-8 marker:text-lg'>
           {CONTENT[language].dataRetention.data.map(
             ({ title, description }) => (
-              <li key={title} className=''>
+              <li key={title} className='space-y-2'>
                 <h3>{title}</h3>
                 <p className='text-muted-foreground'>{description}</p>
               </li>
             ),
           )}
         </ul>
+      </div>
+
+      <div
+        className='flex w-full max-w-5xl scroll-m-20 flex-col gap-4 border p-4 sm:p-8'
+        id='cookies-and-sessions'
+      >
+        <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
+          <CookieIcon className='shrink-0' />
+          {CONTENT[language].cookiesAndSessions.title}
+        </h2>
+        <p>{CONTENT[language].cookiesAndSessions.description}</p>
+        <ul className='flex flex-col gap-2'>
+          {CONTENT[language].cookiesAndSessions.cookies.map(
+            ({ description, title, essential, duration, icon: Icon }) => (
+              <li key={title} className='flex gap-4 border p-4'>
+                <Icon className='text-primary-text shrink-0' />
+                <div className='flex flex-col gap-2'>
+                  <h3>
+                    {title} {essential}
+                  </h3>
+                  <p className='text-muted-foreground'>{description}</p>
+                  <p className='text-muted-foreground text-sm'>{duration}</p>
+                </div>
+              </li>
+            ),
+          )}
+        </ul>
+        <div className='border-primary bg-primary/20 flex flex-row gap-2 border p-4'>
+          <InfoIcon className='text-primary-text shrink-0' />
+          <p>{CONTENT[language].cookiesAndSessions.note}</p>
+        </div>
       </div>
 
       <div
@@ -443,7 +540,7 @@ export function PrivacyContent({
             ({ icon: Icon, name, description }) => (
               <li key={name} className='flex gap-4 border p-4'>
                 <Icon className='text-primary-text shrink-0' />
-                <div className='flex flex-col'>
+                <div className='flex flex-col gap-2'>
                   <h3>{name}</h3>
                   <p className='text-muted-foreground'>{description}</p>
                 </div>
