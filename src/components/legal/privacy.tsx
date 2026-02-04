@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import {
-  ArrowLeft,
   ArrowUp,
   CheckIcon,
   CircleQuestionMarkIcon,
@@ -14,6 +13,7 @@ import {
   EyeIcon,
   GavelIcon,
   HandIcon,
+  HomeIcon,
   InfoIcon,
   LanguagesIcon,
   ListEndIcon,
@@ -600,12 +600,12 @@ export function PrivacyContent({
       <div className='flex flex-col items-center gap-2 sm:flex-row'>
         <Button size='lg' asChild>
           <Link href='/'>
-            <ArrowLeft />
-            Back to Home
+            <HomeIcon className='shrink-0' />
+            Go to Home
           </Link>
         </Button>
         <Button size='lg' onClick={() => window.scrollTo({ top: 0 })}>
-          <ArrowUp />
+          <ArrowUp className='shrink-0' />
           Back to Top
         </Button>
       </div>
