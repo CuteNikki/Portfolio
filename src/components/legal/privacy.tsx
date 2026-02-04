@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import {
   ArrowLeft,
+  CheckIcon,
   CircleQuestionMarkIcon,
   ClockIcon,
   DownloadIcon,
@@ -13,6 +14,7 @@ import {
   HandIcon,
   LanguagesIcon,
   ListEndIcon,
+  LockIcon,
   MailIcon,
   PenBoxIcon,
   ScaleIcon,
@@ -51,6 +53,7 @@ export function PrivacyContent({
           { href: '#data-controller', label: 'Data Controller' },
           { href: '#data-retention', label: 'Data Retention' },
           { href: '#your-rights', label: 'Your Rights' },
+          { href: '#data-security', label: 'Data Security' },
           { href: '#questions', label: 'Questions' },
         ],
       },
@@ -65,6 +68,18 @@ export function PrivacyContent({
       dataRetention: {
         title: 'Data Retention',
         description: 'We store your data as follows:',
+        data: [
+          {
+            title: 'Contact Form Submissions:',
+            description:
+              'Stored until the inquiry is resolved or for a maximum of 2 years.',
+          },
+          {
+            title: 'Server Logs:',
+            description:
+              'Automatically deleted after 30 days or when overwritten by new logs due to storage rotation.',
+          },
+        ],
       },
       yourRights: {
         title: 'Your Rights Under GDPR',
@@ -106,6 +121,16 @@ export function PrivacyContent({
         notice:
           'To exercise any of these rights, please contact us at {mail}. We will respond to your request within 30 days.',
       },
+      dataSecurity: {
+        title: 'Data Security',
+        description:
+          'We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse:',
+        measures: [
+          'HTTPS/TLS encryption for all connections',
+          'Regular security updates',
+        ],
+        note: 'Despite these measures, no method of transmission over the internet or electronic storage is 100% secure. While we strive to protect your data, we cannot guarantee absolute security.',
+      },
       questions: {
         title: 'Questions about Privacy?',
         description:
@@ -131,6 +156,7 @@ export function PrivacyContent({
           { href: '#data-controller', label: 'Datenverantwortlicher' },
           { href: '#data-retention', label: 'Speicherdauer' },
           { href: '#your-rights', label: 'Ihre Rechte' },
+          { href: '#data-security', label: 'Datensicherheit' },
           { href: '#questions', label: 'Fragen' },
         ],
       },
@@ -145,6 +171,13 @@ export function PrivacyContent({
       dataRetention: {
         title: 'Speicherdauer',
         description: 'Wir speichern Ihre Daten wie folgt:',
+        data: [
+          {
+            title: 'Kontaktformular-Einsendungen:',
+            description:
+              'Gespeichert bis die Anfrage bearbeitet ist oder maximal 2 Jahre.',
+          },
+        ],
       },
       yourRights: {
         title: 'Ihre Rechte gemäß DSGVO',
@@ -189,6 +222,17 @@ export function PrivacyContent({
         ],
         notice:
           'Um eines dieser Rechte auszuüben, kontaktieren Sie uns bitte unter {mail}. Wir werden Ihre Anfrage innerhalb von 30 Tagen beantworten.',
+      },
+
+      dataSecurity: {
+        title: 'Data Security',
+        description:
+          'We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse:',
+        measures: [
+          'HTTPS/TLS encryption for all connections',
+          'Regular security updates',
+        ],
+        note: 'Despite these measures, no method of transmission over the internet or electronic storage is 100% secure. While we strive to protect your data, we cannot guarantee absolute security.',
       },
       questions: {
         title: 'Fragen zum Datenschutz?',
@@ -277,6 +321,16 @@ export function PrivacyContent({
           {CONTENT[language].dataRetention.title}
         </h2>
         <p>{CONTENT[language].dataRetention.description}</p>
+        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-2 border p-4 pl-8 marker:text-lg'>
+          {CONTENT[language].dataRetention.data.map(
+            ({ title, description }) => (
+              <li key={title} className=''>
+                <h3>{title}</h3>
+                <p className='text-muted-foreground'>{description}</p>
+              </li>
+            ),
+          )}
+        </ul>
       </div>
 
       <div
@@ -310,6 +364,26 @@ export function PrivacyContent({
             )}
           </p>
         </div>
+      </div>
+
+      <div
+        className='flex w-full max-w-5xl scroll-m-20 flex-col gap-4 border p-4 sm:p-8'
+        id='data-security'
+      >
+        <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
+          <LockIcon className='shrink-0' />
+          {CONTENT[language].dataSecurity.title}
+        </h2>
+        <p>{CONTENT[language].dataSecurity.description}</p>
+        <ul className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
+          {CONTENT[language].dataSecurity.measures.map((text) => (
+            <li key={text} className='flex items-center gap-4'>
+              <CheckIcon className='text-primary-text shrink-0' />
+              <p className='text-muted-foreground'>{text}</p>
+            </li>
+          ))}
+        </ul>
+        <p className='text-sm'>{CONTENT[language].dataSecurity.note}</p>
       </div>
 
       <div
