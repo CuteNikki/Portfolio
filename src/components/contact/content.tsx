@@ -1,0 +1,184 @@
+'use client';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { z } from 'zod';
+
+import { Button } from '@/components/ui/button';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+  InputGroupTextarea,
+} from '@/components/ui/input-group';
+import { cn } from '@/lib/utils';
+import { SendHorizontalIcon } from 'lucide-react';
+
+const formSchema = z.object({
+  name: z.string().min(1, 'Name must be at least 1 characters long'),
+  email: z.email('Please enter a valid email address'),
+  subject: z.string().min(2, 'Subject must be at least 2 characters long'),
+  message: z
+    .string()
+    .min(10, 'Message must be at least 10 characters long')
+    .max(5000, 'Message must be at most 5000 characters long'),
+});
+
+export function ContactContent() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof formSchema>) {
+    toast('You submitted the following values:', {
+      description: (
+        <pre className='bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4'>
+          <code>{JSON.stringify(data, null, 2)}</code>
+        </pre>
+      ),
+      position: 'bottom-right',
+      classNames: {
+        content: 'flex flex-col gap-2',
+      },
+      style: {
+        '--border-radius': 'calc(var(--radius)  + 4px)',
+      } as React.CSSProperties,
+    });
+  }
+
+  return (
+    <div className='flex flex-col gap-4'>
+      <div className='flex max-w-3xl flex-col gap-2 pb-4'>
+        <h1 className='text-3xl font-bold'>Get in Touch</h1>
+        <p>
+          I would love to hear from you! Whether you have a question, want to
+          collaborate, or just want to say hello, feel free to reach out using
+          the form below.
+        </p>
+      </div>
+      <div>
+        <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldGroup>
+            <FieldGroup className='flex-row'>
+              <Controller
+                name='name'
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor='contact-name'>Your Name</FieldLabel>
+                    <Input
+                      {...field}
+                      id='contact-name'
+                      aria-invalid={fieldState.invalid}
+                      placeholder='Nikki'
+                      autoComplete='off'
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name='email'
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor='contact-email'>Your Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id='contact-email'
+                      aria-invalid={fieldState.invalid}
+                      placeholder='contact@niso.moe'
+                      type='email'
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+
+            <Controller
+              name='subject'
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor='contact-subject'>Subject</FieldLabel>
+                  <Input
+                    {...field}
+                    id='contact-subject'
+                    placeholder='*insert some subject here*'
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name='message'
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor='contact-message'>Message</FieldLabel>
+                  <InputGroup>
+                    <InputGroupTextarea
+                      {...field}
+                      id='contact-message'
+                      placeholder='Drop a note with any feedback or just say hi! 👋'
+                      rows={6}
+                      className='min-h-24 resize-none'
+                      aria-invalid={fieldState.invalid}
+                    />
+                    <InputGroupAddon align='block-end'>
+                      <InputGroupText
+                        className={cn(
+                          'tabular-nums',
+                          field.value.length > 1000 && 'text-destructive',
+                        )}
+                      >
+                        {field.value.length}/1000 characters
+                      </InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </FieldGroup>
+        </form>
+      </div>
+      <div>
+        <Field orientation='horizontal'>
+          <Button
+            type='submit'
+            form='contact'
+            disabled={form.formState.isSubmitting}
+          >
+            <SendHorizontalIcon />
+            Submit
+          </Button>
+        </Field>
+      </div>
+    </div>
+  );
+}

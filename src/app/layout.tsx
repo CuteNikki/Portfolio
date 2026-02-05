@@ -6,6 +6,7 @@ import './globals.css';
 import { Footer } from '@/components/navigation/footer';
 import { Navbar } from '@/components/navigation/navbar';
 import { ThemeProvider } from '@/components/theme/provider';
+import { ToastProvider } from '@/components/toastProvider';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -36,6 +37,7 @@ export default function RootLayout({
           defaultTheme='system'
           attribute='class'
         >
+          <ToastProvider />
           <div className='flex min-h-screen flex-col items-center justify-center'>
             <Navbar />
             <div className='flex w-full flex-1'>
