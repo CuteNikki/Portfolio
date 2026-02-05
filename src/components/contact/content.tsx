@@ -1,13 +1,19 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
+import { SendHorizontalIcon } from 'lucide-react';
+
+import { cn } from '@/lib/utils';
+
 import { Button } from '@/components/ui/button';
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -19,8 +25,6 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from '@/components/ui/input-group';
-import { cn } from '@/lib/utils';
-import { SendHorizontalIcon } from 'lucide-react';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name must be at least 1 characters long'),
@@ -164,6 +168,10 @@ export function ContactContent() {
                 </Field>
               )}
             />
+            <FieldDescription>
+              By submitting this form, you agree to the{' '}
+              <Link href='/privacy'>Privacy Policy</Link>.
+            </FieldDescription>
           </FieldGroup>
         </form>
       </div>
