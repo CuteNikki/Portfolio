@@ -9,11 +9,14 @@ import {
   CircleQuestionMarkIcon,
   ClockIcon,
   CookieIcon,
+  CrosshairIcon,
+  Disc3Icon,
   DownloadIcon,
   EyeIcon,
   GavelIcon,
   HandIcon,
   InfoIcon,
+  KeyRoundIcon,
   LanguagesIcon,
   ListEndIcon,
   LockIcon,
@@ -58,10 +61,11 @@ export function PrivacyContent({
         title: 'Quick Navigation',
         links: [
           { href: '#data-controller', label: 'Data Controller' },
-          { href: '#server-logs', label: 'Server Logs' },
+          { href: '#discord-oauth-login', label: 'Discord OAuth Login' },
           { href: '#data-retention', label: 'Data Retention' },
-          { href: '#cookies-and-sessions', label: 'Cookies & Sessions' },
+          { href: '#server-logs', label: 'Server Logs' },
           { href: '#data-security', label: 'Data Security' },
+          { href: '#cookies-and-sessions', label: 'Cookies & Sessions' },
           { href: '#your-rights', label: 'Your Rights' },
           { href: '#questions', label: 'Questions' },
         ],
@@ -73,6 +77,47 @@ export function PrivacyContent({
         name: PERSONAL_DETAILS.fullName,
         addressLine1: PERSONAL_DETAILS.address.lineOne,
         addressLine2: PERSONAL_DETAILS.address.lineTwoWithCountry,
+      },
+      discordOAuthLogin: {
+        title: 'Discord OAuth Login',
+        description:
+          'This website uses Discord OAuth for authentication. When you log in with Discord, we receive and store the following information:',
+        data: [
+          {
+            title: 'Discord User ID',
+            description:
+              'Your unique Discord identifier (for account identification)',
+          },
+          {
+            title: 'Username',
+            description: 'Your Discord username (for display)',
+          },
+          {
+            title: 'Avatar URL',
+            description: 'Your profile picture (for display)',
+          },
+          {
+            title: 'Email Address',
+            description:
+              'Your Discord Email (for account recovery and communication)',
+          },
+        ],
+        purpose: {
+          title: 'Purpose:',
+          description: 'Authentication and communication.',
+        },
+        legalBasis: {
+          title: 'Legal basis:',
+          description:
+            'Art. 6 para. 1 lit. a GDPR  (necessary for contract fulfillment - providing the service you requested).',
+        },
+        dataSharing: {
+          title: 'Data Sharing:',
+          description:
+            'This authentication process is handled by Discord. By logging in, you also agree to ',
+          privacyPolicy: "Discord's Privacy Policy",
+          url: 'https://discord.com/privacy',
+        },
       },
       serverLogs: {
         title: 'Server Logs',
@@ -108,6 +153,11 @@ export function PrivacyContent({
         description: 'We store your data as follows:',
         data: [
           {
+            title: 'Account Data (Discord OAuth):',
+            description:
+              'Stored as long as your account exists. You can request deletion at any time by contacting us or deleting your account.',
+          },
+          {
             title: 'Contact Form Submissions:',
             description:
               'Stored until the inquiry is resolved or for a maximum of 2 years.',
@@ -124,22 +174,22 @@ export function PrivacyContent({
         description:
           'We use only essential cookies necessary for the website to function. No tracking, analytics, or advertising cookies.',
         cookies: [
-          // {
-          //   icon: KeyRoundIcon,
-          //   title: 'Session Cookie',
-          //   essential: '(Essential)',
-          //   description:
-          //     'Keeps you logged in and maintains your session state while browsing the site.',
-          //   duration: 'Duration: Session (cleared when browser is closed)',
-          // },
-          // {
-          //   icon: ShieldIcon,
-          //   title: 'CSRF Token',
-          //   essential: '(Essential)',
-          //   description:
-          //     'Security token to protect against cross-site request forgery attacks.',
-          //   duration: 'Duration: Session',
-          // },
+          {
+            icon: KeyRoundIcon,
+            title: 'Session Cookie',
+            essential: '(Essential)',
+            description:
+              'Keeps you logged in and maintains your session state while browsing the site.',
+            duration: 'Duration: Session (cleared when browser is closed)',
+          },
+          {
+            icon: CrosshairIcon,
+            title: 'CSRF Token',
+            essential: '(Essential)',
+            description:
+              'Security token to protect against cross-site request forgery attacks.',
+            duration: 'Duration: Session',
+          },
         ] as Array<{
           icon: LucideIcon;
           title: string;
@@ -196,6 +246,9 @@ export function PrivacyContent({
         measures: [
           'HTTPS/TLS encryption for all connections',
           'Regular security updates',
+          'Protected database access',
+          'Firewall and intrusion detection',
+          'Regular automated backups',
         ],
         note: 'Despite these measures, no method of transmission over the internet or electronic storage is 100% secure. While we strive to protect your data, we cannot guarantee absolute security.',
       },
@@ -224,6 +277,7 @@ export function PrivacyContent({
           { href: '#data-controller', label: 'Datenverantwortlicher' },
           { href: '#server-logs', label: 'Server-Logs' },
           { href: '#data-retention', label: 'Speicherdauer' },
+          { href: '#discord-oauth-login', label: 'Discord OAuth Login' },
           { href: '#cookies-and-sessions', label: 'Cookies & Sessions' },
           { href: '#data-security', label: 'Datensicherheit' },
           { href: '#your-rights', label: 'Ihre Rechte' },
@@ -237,6 +291,47 @@ export function PrivacyContent({
         name: PERSONAL_DETAILS.fullName,
         addressLine1: PERSONAL_DETAILS.address.lineOne,
         addressLine2: PERSONAL_DETAILS.address.lineTwoWithCountry,
+      },
+      discordOAuthLogin: {
+        title: 'Discord OAuth Login',
+        description:
+          'Diese Seite verwendet Discord OAuth zur Authentifizierung. Wenn Sie sich mit Discord anmelden, erhalten und speichern wir folgende Informationen:',
+        data: [
+          {
+            title: 'Discord User ID',
+            description:
+              'Ihre eindeutige Discord-Kennung (zur Identifikation des Accounts)',
+          },
+          {
+            title: 'Benutzername',
+            description: 'Ihr Discord-Benutzername (zur Anzeige)',
+          },
+          {
+            title: 'Avatar-URL',
+            description: 'Ihr Profilbild (zur Anzeige)',
+          },
+          {
+            title: 'E-Mail-Adresse',
+            description:
+              'Ihre bei Discord hinterlegte E-Mail (zur Kontowiederherstellung und Kommunikation)',
+          },
+        ],
+        purpose: {
+          title: 'Zweck:',
+          description: 'Authentifizierung und Kommunikation.',
+        },
+        legalBasis: {
+          title: 'Rechtsgrundlage:',
+          description:
+            'Art. 6 Abs. 1 lit. a DSGVO (erforderlich zur Vertragserfüllung – Bereitstellung des von Ihnen angeforderten Dienstes).',
+        },
+        dataSharing: {
+          title: 'Datenweitergabe:',
+          description:
+            'Dieser Authentifizierungsprozess wird von Discord abgewickelt. Durch die Anmeldung stimmen Sie auch zu: ',
+          privacyPolicy: 'Datenschutzerklärung von Discord',
+          url: 'https://discord.com/privacy',
+        },
       },
       serverLogs: {
         title: 'Server-Logs',
@@ -272,6 +367,11 @@ export function PrivacyContent({
         description: 'Wir speichern Ihre Daten wie folgt:',
         data: [
           {
+            title: 'Kontodaten (Discord OAuth):',
+            description:
+              'Gespeichert, solange Ihr Konto besteht. Sie können die Löschung jederzeit beantragen, indem Sie uns kontaktieren oder Ihr Konto löschen.',
+          },
+          {
             title: 'Kontaktformular-Einsendungen:',
             description:
               'Gespeichert bis die Anfrage bearbeitet ist oder maximal 2 Jahre.',
@@ -288,23 +388,23 @@ export function PrivacyContent({
         description:
           'Wir verwenden nur essentielle Cookies, die für das Funktionieren der Website notwendig sind. Keine Tracking-, Analyse- oder Werbe-Cookies.',
         cookies: [
-          // {
-          //   icon: KeyRoundIcon,
-          //   title: 'Session-Cookie',
-          //   essential: '(Essentiell)',
-          //   description:
-          //     'Hält Sie eingeloggt und behält Ihren Sitzungsstatus bei, während Sie unsere Website nutzen.',
-          //   duration:
-          //     'Dauer: Sitzung (wird beim Schließen des Browsers gelöscht)',
-          // },
-          // {
-          //   icon: ShieldIcon,
-          //   title: 'CSRF-Token',
-          //   essential: '(Essentiell)',
-          //   description:
-          //     'Sicherheitstoken zum Schutz vor Cross-Site-Request-Forgery-Angriffen.',
-          //   duration: 'Dauer: Sitzung',
-          // },
+          {
+            icon: KeyRoundIcon,
+            title: 'Session-Cookie',
+            essential: '(Essentiell)',
+            description:
+              'Hält Sie eingeloggt und behält Ihren Sitzungsstatus bei, während Sie unsere Website nutzen.',
+            duration:
+              'Dauer: Sitzung (wird beim Schließen des Browsers gelöscht)',
+          },
+          {
+            icon: ShieldIcon,
+            title: 'CSRF-Token',
+            essential: '(Essentiell)',
+            description:
+              'Sicherheitstoken zum Schutz vor Cross-Site-Request-Forgery-Angriffen.',
+            duration: 'Dauer: Sitzung',
+          },
         ] as Array<{
           icon: LucideIcon;
           title: string;
@@ -360,14 +460,17 @@ export function PrivacyContent({
       },
 
       dataSecurity: {
-        title: 'Data Security',
+        title: 'Datensicherheit',
         description:
-          'We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse:',
+          'Wir setzen geeignete technische und organisatorische Maßnahmen ein, um Ihre personenbezogenen Daten vor unbefugtem Zugriff, Verlust oder Missbrauch zu schützen:',
         measures: [
-          'HTTPS/TLS encryption for all connections',
-          'Regular security updates',
+          'HTTPS/TLS-Verschlüsselung für alle Verbindungen',
+          'Regelmäßige Sicherheitsupdates',
+          'Geschützter Datenbankzugriff',
+          'Firewall und Eindringungserkennung',
+          'Regelmäßige automatisierte Backups',
         ],
-        note: 'Despite these measures, no method of transmission over the internet or electronic storage is 100% secure. While we strive to protect your data, we cannot guarantee absolute security.',
+        note: 'Trotz dieser Maßnahmen ist keine Übertragungsmethode über das Internet oder elektronische Speicherung zu 100% sicher. Obwohl wir uns bemühen, Ihre Daten zu schützen, können wir keine absolute Sicherheit garantieren.',
       },
       questions: {
         title: 'Fragen zum Datenschutz?',
@@ -405,7 +508,7 @@ export function PrivacyContent({
           <ShieldIcon className='text-primary-text shrink-0' />
           {CONTENT[language].notice.title}
         </h2>
-        <p className='text-balance'>{CONTENT[language].notice.description}</p>
+        <p>{CONTENT[language].notice.description}</p>
       </div>
 
       <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
@@ -449,6 +552,51 @@ export function PrivacyContent({
 
       <div
         className='flex w-full max-w-5xl scroll-m-20 flex-col gap-4 border p-4 sm:p-8'
+        id='discord-oauth-login'
+      >
+        <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
+          <Disc3Icon className='shrink-0' />
+          {CONTENT[language].discordOAuthLogin.title}
+        </h2>
+        <p>{CONTENT[language].discordOAuthLogin.description}</p>
+        <ul className='flex flex-col gap-2 border p-4'>
+          {CONTENT[language].discordOAuthLogin.data.map(
+            ({ title, description }) => (
+              <li key={title} className='flex flex-row items-center gap-4'>
+                <CheckIcon className='text-primary-text shrink-0' />
+                <p className='text-muted-foreground'>
+                  <b className='text-foreground whitespace-nowrap'>{title}</b>
+                  {' - '}
+                  {description}
+                </p>
+              </li>
+            ),
+          )}
+        </ul>
+        <p>
+          <b>{CONTENT[language].discordOAuthLogin.purpose.title} </b>
+          {CONTENT[language].discordOAuthLogin.purpose.description}
+        </p>
+        <p>
+          <b>{CONTENT[language].discordOAuthLogin.legalBasis.title} </b>
+          {CONTENT[language].discordOAuthLogin.legalBasis.description}
+        </p>
+        <p>
+          <b>{CONTENT[language].discordOAuthLogin.dataSharing.title} </b>
+          {CONTENT[language].discordOAuthLogin.dataSharing.description}
+          <Link
+            href={CONTENT[language].discordOAuthLogin.dataSharing.url}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-primary-text hover:underline'
+          >
+            {CONTENT[language].discordOAuthLogin.dataSharing.privacyPolicy}
+          </Link>
+        </p>
+      </div>
+
+      <div
+        className='flex w-full max-w-5xl scroll-m-20 flex-col gap-4 border p-4 sm:p-8'
         id='server-logs'
       >
         <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
@@ -486,10 +634,10 @@ export function PrivacyContent({
           {CONTENT[language].dataRetention.title}
         </h2>
         <p>{CONTENT[language].dataRetention.description}</p>
-        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-4 border p-4 pl-8 marker:text-lg'>
+        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-2 border p-4 pl-8 marker:text-lg'>
           {CONTENT[language].dataRetention.data.map(
             ({ title, description }) => (
-              <li key={title} className='space-y-2'>
+              <li key={title}>
                 <h3>{title}</h3>
                 <p className='text-muted-foreground'>{description}</p>
               </li>
@@ -510,10 +658,10 @@ export function PrivacyContent({
         <ul className='flex flex-col gap-2'>
           {CONTENT[language].cookiesAndSessions.cookies.map(
             ({ description, title, essential, duration, icon: Icon }) => (
-              <li key={title} className='flex gap-4 border p-4'>
-                <Icon className='text-primary-text shrink-0' />
+              <li key={title} className='border p-4'>
                 <div className='flex flex-col gap-2'>
-                  <h3>
+                  <h3 className='flex gap-2'>
+                    <Icon className='text-primary-text shrink-0' />
                     {title} {essential}
                   </h3>
                   <p className='text-muted-foreground'>{description}</p>
