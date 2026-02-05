@@ -136,6 +136,15 @@ export const PERSONAL_DETAILS = {
   get career(): readonly CareerEntry[] {
     return [
       {
+        from: new Date('2026-02-04'),
+        to: 'Present',
+        title: 'Java Developer',
+        company: 'TheVace',
+        location: 'Remote',
+        description:
+          'Developing and maintaining backend systems and plugins for TheVace Minecraft Network.',
+      },
+      {
         from: new Date('2024-08'),
         to: 'Present',
         title: 'Application Developer',
@@ -147,7 +156,6 @@ export const PERSONAL_DETAILS = {
       {
         from: new Date('2022-09-17'),
         to: new Date('2022-09-21'),
-        showDays: true,
         title: 'Application Developer',
         company: 'Mittwald CM Service',
         location: 'Espelkamp, Germany',
@@ -161,7 +169,7 @@ export const PERSONAL_DETAILS = {
         company: 'Self-Employed',
         location: 'Remote',
         description:
-          'Working on various freelance projects, building websites and more for clients across different industries.',
+          'Working on various freelance projects, building web applications and more for clients across different industries.',
       },
     ] as const;
   },
