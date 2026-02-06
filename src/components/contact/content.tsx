@@ -76,8 +76,8 @@ export function ContactContent() {
       </div>
       <div>
         <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
-            <FieldGroup className='flex-row'>
+          <FieldGroup className='border p-4 sm:p-8'>
+            <FieldGroup className='md:flex-row'>
               <Controller
                 name='name'
                 control={form.control}
@@ -172,20 +172,20 @@ export function ContactContent() {
               By submitting this form, you agree to the{' '}
               <Link href='/privacy'>Privacy Policy</Link>.
             </FieldDescription>
+            <div>
+              <Field orientation='horizontal'>
+                <Button
+                  type='submit'
+                  form='contact'
+                  disabled={form.formState.isSubmitting}
+                >
+                  <SendHorizontalIcon />
+                  Submit
+                </Button>
+              </Field>
+            </div>
           </FieldGroup>
         </form>
-      </div>
-      <div>
-        <Field orientation='horizontal'>
-          <Button
-            type='submit'
-            form='contact'
-            disabled={form.formState.isSubmitting}
-          >
-            <SendHorizontalIcon />
-            Submit
-          </Button>
-        </Field>
       </div>
     </div>
   );
