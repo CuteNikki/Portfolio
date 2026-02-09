@@ -10,6 +10,8 @@ import { SendHorizontalIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 
+import { submitContactForm } from '@/actions/contact';
+
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -47,21 +49,22 @@ export function ContactContent() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast('You submitted the following values:', {
-      description: (
-        <pre className='bg-code text-code-foreground mt-2 w-[320px] overflow-x-auto rounded-md p-4'>
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: 'bottom-right',
-      classNames: {
-        content: 'flex flex-col gap-2',
-      },
-      style: {
-        '--border-radius': 'calc(var(--radius)  + 4px)',
-      } as React.CSSProperties,
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+    const result = await submitContactForm(data);
+
+    if (result.error) {
+      toast.error('Something went wrong!', {
+        description: result.error,
+      });
+
+      return;
+    }
+
+    toast.success('Message sent!', {
+      description: 'Thanks for reaching out! I will get back to you soon.',
     });
+
+    form.reset();
   }
 
   return (
