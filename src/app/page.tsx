@@ -1,10 +1,13 @@
 import Link from 'next/link';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
+import { SITE_METADATA } from '@/constants/metadata';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { formatDate } from '@/lib/utils';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+export const metadata = SITE_METADATA.home;
 
 export default function Home() {
   return (
