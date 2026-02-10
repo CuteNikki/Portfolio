@@ -21,7 +21,10 @@ export function Navbar() {
     <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
       <div className='container mx-auto flex items-center justify-between gap-4 p-4'>
         <div className='flex items-center gap-2'>
-          <Link href='/#top' className='font-bold tracking-tight hover:opacity-80'>
+          <Link
+            href='/#top'
+            className='font-bold tracking-tight hover:opacity-80'
+          >
             niso<span className='text-primary-text'>.moe</span>
           </Link>
         </div>
@@ -57,12 +60,12 @@ export function Navbar() {
                 </SheetDescription>
               </SheetHeader>
               <SheetBody>
-                <ul className='flex flex-col gap-2'>
+                <ul className='flex flex-col gap-4 py-4'>
                   {NAVBAR_LINKS.map(({ url, label }) => (
                     <li key={url}>
                       <Link
                         href={url}
-                        className='hover:text-primary-text lowercase transition-colors'
+                        className='hover:text-primary-text active:text-primary-text focus:text-primary-text text-lg font-medium lowercase transition-colors'
                       >
                         {label}
                       </Link>
