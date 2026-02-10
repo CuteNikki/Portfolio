@@ -9,7 +9,6 @@ import {
   CircleQuestionMarkIcon,
   ClockIcon,
   CookieIcon,
-  CrosshairIcon,
   Disc3Icon,
   DownloadIcon,
   EyeIcon,
@@ -182,14 +181,14 @@ export function PrivacyContent({
               'Keeps you logged in and maintains your session state while browsing the site.',
             duration: 'Duration: Session (cleared when browser is closed)',
           },
-          {
-            icon: CrosshairIcon,
-            title: 'CSRF Token',
-            essential: '(Essential)',
-            description:
-              'Security token to protect against cross-site request forgery attacks.',
-            duration: 'Duration: Session',
-          },
+          // {
+          //   icon: CrosshairIcon,
+          //   title: 'CSRF Token',
+          //   essential: '(Essential)',
+          //   description:
+          //     'Security token to protect against cross-site request forgery attacks.',
+          //   duration: 'Duration: Session',
+          // },
         ] as Array<{
           icon: LucideIcon;
           title: string;
@@ -397,14 +396,14 @@ export function PrivacyContent({
             duration:
               'Dauer: Sitzung (wird beim Schließen des Browsers gelöscht)',
           },
-          {
-            icon: ShieldIcon,
-            title: 'CSRF-Token',
-            essential: '(Essentiell)',
-            description:
-              'Sicherheitstoken zum Schutz vor Cross-Site-Request-Forgery-Angriffen.',
-            duration: 'Dauer: Sitzung',
-          },
+          // {
+          //   icon: CrosshairIcon,
+          //   title: 'CSRF-Token',
+          //   essential: '(Essentiell)',
+          //   description:
+          //     'Sicherheitstoken zum Schutz vor Cross-Site-Request-Forgery-Angriffen.',
+          //   duration: 'Dauer: Sitzung',
+          // },
         ] as Array<{
           icon: LucideIcon;
           title: string;
