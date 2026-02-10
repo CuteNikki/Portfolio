@@ -11,7 +11,7 @@ export function Footer() {
         <p className='text-muted-foreground text-sm'>
           &copy; {new Date().getFullYear()} niso.moe
         </p>
-        <div className='text-muted-foreground text-sm'>
+        <div className='text-muted-foreground text-sm font-medium'>
           <ul className='flex flex-wrap gap-4'>
             {FOOTER_LINKS.map(({ url, label }) => (
               <li key={url}>
