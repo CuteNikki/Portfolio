@@ -70,7 +70,9 @@ export function ContactContent() {
   return (
     <div className='flex flex-col gap-4'>
       <div className='flex max-w-3xl flex-col gap-2 pb-4'>
-        <h1 className='text-3xl font-bold'>Get in Touch</h1>
+        <h1 className='text-3xl font-bold'>
+          Get in <span className='text-primary-text'>Touch</span>.
+        </h1>
         <p>
           I would love to hear from you! Whether you have a question, want to
           collaborate, or just want to say hello, feel free to reach out using
