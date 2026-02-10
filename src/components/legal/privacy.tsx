@@ -690,7 +690,7 @@ export function PrivacyContent({
             ({ icon: Icon, name, description }) => (
               <li key={name} className='flex gap-4 border p-4'>
                 <Icon className='text-primary-text shrink-0' />
-                <div className='flex flex-col gap-2'>
+                <div className='flex flex-col'>
                   <h3>{name}</h3>
                   <p className='text-muted-foreground'>{description}</p>
                 </div>
