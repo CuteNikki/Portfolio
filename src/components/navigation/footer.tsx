@@ -25,7 +25,7 @@ export function Footer() {
             ))}
           </ul>
         </div>
-        <ThemeSwitcher />
+        <ThemeSwitcher className='hidden sm:flex' />
       </div>
     </footer>
   );
