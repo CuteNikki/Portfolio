@@ -148,7 +148,7 @@ export const PERSONAL_DETAILS = {
         from: new Date('2024-08'),
         to: 'Present',
         title: 'Application Developer',
-        company: 'Prodress Software GmbH',
+        company: 'Prodress Software',
         location: 'Bielefeld, Germany',
         description:
           'Developing and maintaining software applications, collaborating with cross-functional teams to deliver high-quality products.',
