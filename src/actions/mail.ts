@@ -1,21 +1,15 @@
 'use server';
 
 import { Resend } from 'resend';
-import { z } from 'zod';
 
 import { ContactTemplate } from '@/components/resend/contact-template';
 
+import { MailSubmitData, mailSubmitSchema } from '@/types/mail';
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const formSchema = z.object({
-  name: z.string().min(1),
-  email: z.email(),
-  subject: z.string().min(2),
-  message: z.string().min(10).max(5000),
-});
-
-export async function submitContactForm(data: z.infer<typeof formSchema>) {
-  const validatedFields = formSchema.safeParse(data);
+export async function sendMail(data: MailSubmitData) {
+  const validatedFields = mailSubmitSchema.safeParse(data);
 
   if (!validatedFields.success) {
     return { error: 'Invalid fields' };

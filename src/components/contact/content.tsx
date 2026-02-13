@@ -4,13 +4,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from 'zod';
 
 import { SendHorizontalIcon } from 'lucide-react';
 
+import { sendMail } from '@/actions/mail';
+
 import { cn } from '@/lib/utils';
 
-import { submitContactForm } from '@/actions/contact';
+import { MailSubmitData, mailSubmitSchema } from '@/types/mail';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -28,29 +29,13 @@ import {
   InputGroupTextarea,
 } from '@/components/ui/input-group';
 
-const formSchema = z.object({
-  name: z.string().min(1, 'Name must be at least 1 characters long'),
-  email: z.email('Please enter a valid email address'),
-  subject: z.string().min(2, 'Subject must be at least 2 characters long'),
-  message: z
-    .string()
-    .min(10, 'Message must be at least 10 characters long')
-    .max(5000, 'Message must be at most 5000 characters long'),
-});
-
 export function ContactContent() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    },
+  const form = useForm<MailSubmitData>({
+    resolver: zodResolver(mailSubmitSchema),
   });
 
-  async function onSubmit(data: z.infer<typeof formSchema>) {
-    const result = await submitContactForm(data);
+  async function onSubmit(data: MailSubmitData) {
+    const result = await sendMail(data);
 
     if (result.error) {
       toast.error('Something went wrong!', {
@@ -160,10 +145,11 @@ export function ContactContent() {
                       <InputGroupText
                         className={cn(
                           'tabular-nums',
-                          field.value.length > 1000 && 'text-destructive',
+                          (field.value?.length ?? 0) > 1000 &&
+                            'text-destructive',
                         )}
                       >
-                        {field.value.length}/1000 characters
+                        {field.value?.length ?? 0}/1000 characters
                       </InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
