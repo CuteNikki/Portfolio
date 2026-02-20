@@ -587,7 +587,7 @@ export function PrivacyContent({
             href={CONTENT[language].discordOAuthLogin.dataSharing.url}
             target='_blank'
             rel='noopener noreferrer'
-            className='text-primary-text underline'
+            className='hover:text-primary-text underline underline-offset-4 transition-colors'
           >
             {CONTENT[language].discordOAuthLogin.dataSharing.privacyPolicy}
           </Link>
