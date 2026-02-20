@@ -1,5 +1,7 @@
 import z from 'zod';
 
+export const MAX_MESSAGE_LENGTH = 5000;
+
 export const mailSubmitSchema = z.object({
   name: z
     .string('Name must be a valid string')
@@ -15,7 +17,10 @@ export const mailSubmitSchema = z.object({
   message: z
     .string('Message must be a valid string')
     .min(10, 'Message must be at least 10 characters long')
-    .max(5000, 'Message must be at most 5000 characters long'),
+    .max(
+      MAX_MESSAGE_LENGTH,
+      `Message must be at most ${MAX_MESSAGE_LENGTH} characters long`,
+    ),
 });
 
 export type MailSubmitData = z.infer<typeof mailSubmitSchema>;

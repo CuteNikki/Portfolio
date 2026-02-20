@@ -11,7 +11,11 @@ import { sendMail } from '@/actions/mail';
 
 import { cn } from '@/lib/utils';
 
-import { MailSubmitData, mailSubmitSchema } from '@/types/mail';
+import {
+  MailSubmitData,
+  mailSubmitSchema,
+  MAX_MESSAGE_LENGTH,
+} from '@/types/mail';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -145,11 +149,12 @@ export function ContactContent() {
                       <InputGroupText
                         className={cn(
                           'tabular-nums',
-                          (field.value?.length ?? 0) > 1000 &&
+                          (field.value?.length ?? 0) > MAX_MESSAGE_LENGTH &&
                             'text-destructive',
                         )}
                       >
-                        {field.value?.length ?? 0}/1000 characters
+                        {field.value?.length ?? 0}/{MAX_MESSAGE_LENGTH}{' '}
+                        characters
                       </InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
