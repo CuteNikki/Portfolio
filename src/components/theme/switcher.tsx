@@ -33,6 +33,12 @@ export function ThemeSwitcher({ className }: { className?: string }) {
         <DropdownMenuItem onClick={() => setTheme('system')}>
           System
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('catppuccin-latte')}>
+          Catppuccin Latte
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme('catppuccin-macchiato')}>
+          Catppuccin Macchiato
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -33,6 +33,13 @@ export default function RootLayout({
           disableTransitionOnChange
           defaultTheme='system'
           attribute='class'
+          themes={[
+            'light',
+            'dark',
+            'system',
+            'catppuccin-latte',
+            'catppuccin-macchiato',
+          ]}
         >
           <ToastProvider />
           <div className='flex min-h-screen flex-col items-center justify-center'>

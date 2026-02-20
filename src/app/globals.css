@@ -3,6 +3,8 @@
 @import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant catppuccin-latte (&:is(.catppuccin-latte *));
+@custom-variant catppuccin-macchiato (&:is(.catppuccin-macchiato *));
 
 @theme inline {
   --color-background: var(--background);
@@ -116,6 +118,74 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+.catppuccin-latte {
+  --background: hsl(220 23% 95%);
+  --foreground: hsl(231 11% 36%);
+  --card: hsl(223 20% 92%);
+  --card-foreground: hsl(231 11% 36%);
+  --popover: hsl(223 20% 92%);
+  --popover-foreground: hsl(231 11% 36%);
+  --primary: hsl(220 81% 50%);
+  --primary-text: hsl(220 91% 40%);
+  --primary-foreground: hsl(220 23% 95%);
+  --secondary: hsl(225 18% 83%);
+  --secondary-foreground: hsl(231 11% 36%);
+  --muted: hsl(225 18% 83%);
+  --muted-foreground: hsl(231 10% 45%);
+  --accent: hsl(226 15% 77%);
+  --accent-foreground: hsl(231 11% 36%);
+  --destructive: hsl(347 87% 44%);
+  --destructive-foreground: hsl(220 23% 95%);
+  --border: hsl(228 12% 71%);
+  --input: hsl(228 12% 71%);
+  --ring: hsl(220 91% 54%);
+  --radius: 0.625rem;
+  --sidebar: hsl(226 23% 89%);
+  --sidebar-foreground: hsl(231 11% 36%);
+  --sidebar-primary: hsl(220 91% 54%);
+  --sidebar-primary-foreground: hsl(220 23% 95%);
+  --sidebar-accent: hsl(225 18% 83%);
+  --sidebar-accent-foreground: hsl(231 11% 36%);
+  --sidebar-border: hsl(226 15% 77%);
+  --sidebar-ring: hsl(220 91% 54%);
+}
+
+.catppuccin-macchiato {
+  --background: hsl(232 23% 18%);
+  --foreground: hsl(227 68% 88%);
+  --card: hsl(233 23% 15%);
+  --card-foreground: hsl(227 68% 88%);
+  --popover: hsl(233 23% 15%);
+  --popover-foreground: hsl(227 68% 88%);
+  --primary: hsl(220 91% 74%);
+  --primary-text: hsl(220 71% 64%);
+  --primary-foreground: hsl(232 23% 18%);
+  --secondary: hsl(230 19% 26%);
+  --secondary-foreground: hsl(227 68% 88%);
+  --muted: hsl(230 19% 26%);
+  --muted-foreground: hsl(228 39% 80%);
+  --accent: hsl(231 16% 34%);
+  --accent-foreground: hsl(227 68% 88%);
+  --destructive: hsl(351 74% 73%);
+  --destructive-foreground: hsl(232 23% 18%);
+  --border: hsl(230 14% 41%);
+  --input: hsl(230 14% 41%);
+  --ring: hsl(220 83% 75%);
+  --chart-1: hsl(351 74% 73%);
+  --chart-2: hsl(171 47% 69%);
+  --chart-3: hsl(220 83% 75%);
+  --chart-4: hsl(40 70% 78%);
+  --chart-5: hsl(105 48% 72%);
+  --sidebar: hsl(236 23% 12%);
+  --sidebar-foreground: hsl(228 39% 80%);
+  --sidebar-primary: hsl(220 83% 75%);
+  --sidebar-primary-foreground: hsl(236 23% 12%);
+  --sidebar-accent: hsl(230 19% 26%);
+  --sidebar-accent-foreground: hsl(227 68% 88%);
+  --sidebar-border: hsl(230 19% 26%);
+  --sidebar-ring: hsl(230 14% 41%);
 }
 
 @layer base {
