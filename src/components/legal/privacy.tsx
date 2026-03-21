@@ -11,6 +11,7 @@ import {
   CookieIcon,
   Disc3Icon,
   DownloadIcon,
+  ExternalLinkIcon,
   EyeIcon,
   GavelIcon,
   HandIcon,
@@ -24,6 +25,7 @@ import {
   PenBoxIcon,
   ScaleIcon,
   ServerIcon,
+  Share2Icon,
   ShieldIcon,
   Trash2Icon,
   UserStarIcon,
@@ -48,7 +50,7 @@ export function PrivacyContent({
       header: {
         title: 'Privacy Policy',
         description: 'Data protection according to GDPR',
-        lastUpdated: 'Last updated: February 2026',
+        lastUpdated: 'Last updated: March 2026',
       },
       languageToggle: 'Read in German',
       notice: {
@@ -238,6 +240,24 @@ export function PrivacyContent({
         notice:
           'To exercise any of these rights, please contact us at {mail}. We will respond to your request within 30 days.',
       },
+      thirdPartyServices: {
+        title: 'Third-Party Services',
+        services: [
+          {
+            icon: Disc3Icon,
+            name: 'Discord Inc.',
+            description:
+              "We use Discord's OAuth 2.0 API for authentication and Discord's API. When you use this site, your data is processed by Discord according to their privacy policy.",
+            sharedTitle: 'Data shared with Discord:',
+            sharedData:
+              'When you log in, Discord processes your authentication requests according to their terms.',
+            privacyPolicy: "View Discord's Privacy Policy",
+            url: 'https://discord.com/privacy',
+          },
+        ],
+        notice:
+          'We do not use any analytics services (like Google Analytics), advertising networks, or other third-party tracking services. Discord is the only third-party service we integrate with.',
+      },
       dataSecurity: {
         title: 'Data Security',
         description:
@@ -262,7 +282,7 @@ export function PrivacyContent({
       header: {
         title: 'Datenschutz-Erklärung',
         description: 'Datenschutz gemäß DSGVO',
-        lastUpdated: 'Zuletzt aktualisiert: Februar 2026',
+        lastUpdated: 'Zuletzt aktualisiert: März 2026',
       },
       languageToggle: 'Read in English',
       notice: {
@@ -457,7 +477,24 @@ export function PrivacyContent({
         notice:
           'Um eines dieser Rechte auszuüben, kontaktieren Sie uns bitte unter {mail}. Wir werden Ihre Anfrage innerhalb von 30 Tagen beantworten.',
       },
-
+      thirdPartyServices: {
+        title: 'Drittanbieter-Dienste',
+        services: [
+          {
+            icon: Disc3Icon,
+            name: 'Discord Inc.',
+            description:
+              'Wir verwenden Discords OAuth 2.0 API für die Authentifizierung und Discords API. Wenn Sie diese Seite nutzen, werden Ihre Daten von Discord gemäß deren Datenschutzrichtlinie verarbeitet.',
+            sharedTitle: 'Mit Discord geteilte Daten:',
+            sharedData:
+              'Wenn Sie sich anmelden, verarbeitet Discord Ihre Authentifizierungsanfragen gemäß deren Bedingungen.',
+            privacyPolicy: 'Datenschutzerklärung von Discord',
+            url: 'https://discord.com/privacy',
+          },
+        ],
+        notice:
+          'Wir verwenden keine Analyse-Tools (wie Google Analytics), Werbenetzwerke oder andere Tracking-Dienste von Drittanbietern. Discord ist der einzige Drittanbieterdienst, mit dem wir integrieren.',
+      },
       dataSecurity: {
         title: 'Datensicherheit',
         description:
@@ -707,6 +744,49 @@ export function PrivacyContent({
             )}
           </p>
         </div>
+      </div>
+
+      <div
+        className='flex w-full max-w-5xl scroll-m-20 flex-col gap-4 border p-4 sm:p-8'
+        id='third-party-services'
+      >
+        <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
+          <Share2Icon className='shrink-0' />
+          {CONTENT[language].thirdPartyServices.title}
+        </h2>
+        {CONTENT[language].thirdPartyServices.services.map(
+          ({
+            icon: Icon,
+            name,
+            description,
+            sharedData,
+            sharedTitle,
+            privacyPolicy,
+            url,
+          }) => (
+            <div key={name} className='flex flex-col gap-2 border p-4'>
+              <h3 className='flex items-center gap-2 text-lg font-semibold'>
+                <Icon className='text-primary-text shrink-0' />
+                {name}
+              </h3>
+              <p className='text-muted-foreground'>{description}</p>
+              <p className='text-muted-foreground'>
+                <b className='text-foreground'>{sharedTitle} </b>
+                {sharedData}
+              </p>
+              <Link
+                href={url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='hover:text-primary-text flex items-center gap-2 text-sm underline underline-offset-4 transition-colors'
+              >
+                {privacyPolicy}
+                <ExternalLinkIcon className='size-4 shrink-0' />
+              </Link>
+            </div>
+          ),
+        )}
+        <p>{CONTENT[language].thirdPartyServices.notice}</p>
       </div>
 
       <div
