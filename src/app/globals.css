@@ -127,8 +127,8 @@
   --card-foreground: hsl(231 11% 36%);
   --popover: hsl(223 20% 92%);
   --popover-foreground: hsl(231 11% 36%);
-  --primary: hsl(220 81% 50%);
-  --primary-text: hsl(220 91% 40%);
+  --primary: hsl(266 44% 49%);
+  --primary-text: hsl(266 44% 39%);
   --primary-foreground: hsl(220 23% 95%);
   --secondary: hsl(225 18% 83%);
   --secondary-foreground: hsl(231 11% 36%);
@@ -140,16 +140,16 @@
   --destructive-foreground: hsl(220 23% 95%);
   --border: hsl(228 12% 71%);
   --input: hsl(228 12% 71%);
-  --ring: hsl(220 91% 54%);
+  --ring: hsl(266 44% 49%);
   --radius: 0.625rem;
   --sidebar: hsl(226 23% 89%);
   --sidebar-foreground: hsl(231 11% 36%);
-  --sidebar-primary: hsl(220 91% 54%);
+  --sidebar-primary: hsl(266 44% 49%);
   --sidebar-primary-foreground: hsl(220 23% 95%);
   --sidebar-accent: hsl(225 18% 83%);
   --sidebar-accent-foreground: hsl(231 11% 36%);
   --sidebar-border: hsl(226 15% 77%);
-  --sidebar-ring: hsl(220 91% 54%);
+  --sidebar-ring: hsl(266 44% 49%);
 }
 
 .catppuccin-macchiato {
@@ -159,8 +159,8 @@
   --card-foreground: hsl(227 68% 88%);
   --popover: hsl(233 23% 15%);
   --popover-foreground: hsl(227 68% 88%);
-  --primary: hsl(220 91% 74%);
-  --primary-text: hsl(220 71% 64%);
+  --primary: hsl(267 83% 80%);
+  --primary-text: hsl(267 63% 70%);
   --primary-foreground: hsl(232 23% 18%);
   --secondary: hsl(230 19% 26%);
   --secondary-foreground: hsl(227 68% 88%);
@@ -172,15 +172,15 @@
   --destructive-foreground: hsl(232 23% 18%);
   --border: hsl(230 14% 41%);
   --input: hsl(230 14% 41%);
-  --ring: hsl(220 83% 75%);
+  --ring: hsl(267 83% 80%);
   --chart-1: hsl(351 74% 73%);
   --chart-2: hsl(171 47% 69%);
-  --chart-3: hsl(220 83% 75%);
+  --chart-3: hsl(267 83% 80%);
   --chart-4: hsl(40 70% 78%);
   --chart-5: hsl(105 48% 72%);
   --sidebar: hsl(236 23% 12%);
   --sidebar-foreground: hsl(228 39% 80%);
-  --sidebar-primary: hsl(220 83% 75%);
+  --sidebar-primary: hsl(267 83% 80%);
   --sidebar-primary-foreground: hsl(236 23% 12%);
   --sidebar-accent: hsl(230 19% 26%);
   --sidebar-accent-foreground: hsl(227 68% 88%);
