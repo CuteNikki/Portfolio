@@ -29,9 +29,9 @@ export const PERSONAL_DETAILS = {
   firstName: 'Nikki',
   middleName: 'Sophie',
   lastName: 'Berthold',
-  title: 'Software Developer',
+  title: 'Developer',
   description:
-    'Full-stack developer and designer focused on the intersection of code and user experience. I build fast, accessible, and well-structured web applications from the ground up.',
+    'I do full-stack development and design, focusing on the intersection of code and user experience. I build fast, accessible, and well-structured applications from the ground up.',
   dateOfBirth: new Date('2004-09-26'),
   get age() {
     const today = new Date();
