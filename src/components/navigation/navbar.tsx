@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { MenuIcon } from 'lucide-react';
 
+import { LINKS, NAVBAR_LINKS } from '@/constants/links';
+
 import { ThemeSwitcher } from '@/components/theme/switcher';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,15 +16,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
-import { NAVBAR_LINKS } from '@/constants/links';
-
 export function Navbar() {
   return (
     <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
       <div className='container mx-auto flex items-center justify-between gap-4 p-4'>
         <div className='flex items-center gap-2'>
           <Link
-            href='/#top'
+            href={LINKS.home.url}
             className='font-bold tracking-tight hover:opacity-80'
           >
             niso<span className='text-primary-text'>.moe</span>

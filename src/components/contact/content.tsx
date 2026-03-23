@@ -9,8 +9,8 @@ import { SendHorizontalIcon } from 'lucide-react';
 
 import { sendMail } from '@/actions/mail';
 
+import { LINKS } from '@/constants/links';
 import { cn } from '@/lib/utils';
-
 import {
   MailSubmitData,
   mailSubmitSchema,
@@ -36,6 +36,12 @@ import {
 export function ContactContent() {
   const form = useForm<MailSubmitData>({
     resolver: zodResolver(mailSubmitSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    },
   });
 
   async function onSubmit(data: MailSubmitData) {
@@ -166,7 +172,7 @@ export function ContactContent() {
             />
             <FieldDescription>
               By submitting this form, you agree to the{' '}
-              <Link href='/privacy'>Privacy Policy</Link>.
+              <Link href={LINKS.privacy.url}>{LINKS.privacy.label}</Link>.
             </FieldDescription>
             <div>
               <Field orientation='horizontal'>

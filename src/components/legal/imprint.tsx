@@ -13,6 +13,7 @@ import {
   ScaleIcon,
 } from 'lucide-react';
 
+import { LINKS } from '@/constants/links';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { HomeButton } from '@/components/common/home-button';
@@ -122,7 +123,9 @@ export function ImprintContent({
           </p>
         </div>
         <Button size='lg' asChild>
-          <Link href={language === 'en' ? '/impressum' : '/imprint'}>
+          <Link
+            href={language === 'en' ? LINKS.imprint.url : LINKS.impressum.url}
+          >
             <LanguagesIcon className='shrink-0' />
             {CONTENT[language].languageToggle}
           </Link>
