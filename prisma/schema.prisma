@@ -12,11 +12,19 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  USER // Can only read and comment
+  AUTHOR // Can read, comment and create posts
+  ADMIN // Can do everything, including managing other users
+}
+
 model User {
-  id        String @id @default(cuid())
-  discordId String @unique
-  username  String
-  avatarUrl String
+  id          String  @id @default(cuid())
+  discordId   String  @unique
+  displayName String?
+  username    String
+  avatarUrl   String
+  role        Role    @default(USER)
 
   sessions Session[]
   comments Comment[]
