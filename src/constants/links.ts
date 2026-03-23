@@ -8,6 +8,10 @@ export const LINKS = {
     label: 'Privacy Policy',
     url: '/privacy#top',
   },
+  privacyShort: {
+    label: 'Privacy',
+    url: '/privacy#top',
+  },
   datenschutz: {
     label: 'Datenschutz',
     url: '/datenschutz#top',
@@ -24,6 +28,10 @@ export const LINKS = {
     label: 'Home',
     url: '/#top',
   },
+  about: {
+    label: 'About',
+    url: '/#top',
+  },
   projects: {
     label: 'Projects',
     url: '/projects#top',
@@ -38,11 +46,11 @@ export const LINKS = {
   },
 };
 
-export const FOOTER_LINKS: Link[] = [LINKS.privacy, LINKS.imprint];
+export const FOOTER_LINKS: Link[] = [LINKS.privacyShort, LINKS.imprint];
 
 export const NAVBAR_LINKS: Link[] = [
-  LINKS.home,
+  LINKS.about,
   LINKS.projects,
-  LINKS.contact,
   LINKS.blog,
+  LINKS.contact,
 ];
