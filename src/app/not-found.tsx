@@ -8,7 +8,7 @@ export default function NotFound() {
   return (
     <div className='flex flex-col items-start gap-4'>
       <div className='flex max-w-3xl flex-col gap-2'>
-        <h1 className='text-3xl font-bold'>
+        <h1 className='text-3xl font-bold text-balance'>
           Page Not Found — <span className='text-primary-text'>Error 404</span>!
         </h1>
         <p>
