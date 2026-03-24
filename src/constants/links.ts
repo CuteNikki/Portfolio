@@ -94,6 +94,13 @@ export const NAVBAR_LINKS: Link[] = [
   LINKS.contact,
 ];
 
+export const SIDEBAR_LINKS: Link[] = [
+  LINKS.home,
+  LINKS.projects,
+  LINKS.blog,
+  LINKS.contact,
+];
+
 export const DASHBOARD_LINKS: Link[] = [
   LINKS.dashboardOverview,
   LINKS.dashboardUsers,

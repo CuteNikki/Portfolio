@@ -1,6 +1,6 @@
 'use client';
 
-import { DASHBOARD_LINKS, NAVBAR_LINKS } from '@/constants/links';
+import { DASHBOARD_LINKS, SIDEBAR_LINKS } from '@/constants/links';
 
 import { SidebarNavigationGroup } from '@/components/dashboard/sidebar/group';
 import { NavUser } from '@/components/dashboard/sidebar/user';
@@ -15,7 +15,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible='offcanvas' {...props}>
       <SidebarContent>
-        <SidebarNavigationGroup label='Main' items={NAVBAR_LINKS} />
+        <SidebarNavigationGroup label='Main' items={SIDEBAR_LINKS} />
         <SidebarNavigationGroup label='Dashboard' items={DASHBOARD_LINKS} />
       </SidebarContent>
       <SidebarFooter>
