@@ -21,8 +21,8 @@ export default function Home() {
         {PERSONAL_DETAILS.age}-year-old {PERSONAL_DETAILS.title} based in{' '}
         {PERSONAL_DETAILS.address.country} {PERSONAL_DETAILS.address.flag}
       </p>
-      <p className='max-w-prose'>{PERSONAL_DETAILS.description}</p>
-      <ul className='flex flex-wrap gap-4 py-2'>
+      <p className='max-w-prose text-pretty'>{PERSONAL_DETAILS.description}</p>
+      <ul className='grid grid-cols-2 justify-items-center gap-4 py-2 sm:grid-cols-4 sm:justify-items-start'>
         {PERSONAL_DETAILS.socials.map(({ platform, icon: Icon, url }) => (
           <li key={platform}>
             <Link
@@ -38,12 +38,12 @@ export default function Home() {
         ))}
       </ul>
       <Tabs defaultValue='career' className='w-full max-w-2xl'>
-        <TabsList className='w-full'>
+        <TabsList className='w-full border border-b-0'>
           <TabsTrigger value='career'>Career</TabsTrigger>
           <TabsTrigger value='education'>Education</TabsTrigger>
         </TabsList>
         <TabsContent value='career' className='border'>
-          <div className='relative m-8 flex flex-col border-l-2 pl-6'>
+          <div className='relative m-4 flex flex-col border-l-2 pl-6 sm:mx-8'>
             {PERSONAL_DETAILS.career.map(
               ({
                 from,
@@ -96,7 +96,7 @@ export default function Home() {
           </div>
         </TabsContent>
         <TabsContent value='education' className='border'>
-          <div className='relative m-8 flex flex-col border-l-2 pl-6'>
+          <div className='relative m-4 flex flex-col border-l-2 pl-6 sm:mx-8'>
             {PERSONAL_DETAILS.education.map(
               ({ from, to, title, school, location, description }) => (
                 <div
