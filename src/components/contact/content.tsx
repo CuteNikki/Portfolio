@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import { SendHorizontalIcon } from 'lucide-react';
+import { MailIcon, SendHorizontalIcon } from 'lucide-react';
 
 import { sendMail } from '@/actions/mail';
 
@@ -63,20 +63,18 @@ export function ContactContent() {
   }
 
   return (
-    <div className='flex flex-col gap-4'>
-      <div className='flex max-w-3xl flex-col gap-2 pb-4'>
-        <h1 className='text-3xl font-bold'>
-          Get in <span className='text-primary-text'>Touch</span>.
-        </h1>
-        <p>
-          I would love to hear from you! Whether you have a question, want to
-          collaborate, or just want to say hello, feel free to reach out using
-          the form below.
-        </p>
-      </div>
+    <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
+      <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
+        <MailIcon className='shrink-0' /> Get in Touch
+      </h1>
+      <p>
+        I would love to hear from you! Whether you have a question, want to
+        collaborate, or just want to say hello, feel free to reach out using the
+        form below.
+      </p>
       <div>
         <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup className='border p-4 sm:p-8'>
+          <FieldGroup>
             <FieldGroup className='md:flex-row'>
               <Controller
                 name='name'
