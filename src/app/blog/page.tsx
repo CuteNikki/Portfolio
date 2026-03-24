@@ -17,7 +17,7 @@ export default async function BlogPage() {
         <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
           <NewspaperIcon className='shrink-0' /> Blog
         </h1>
-        <div className='min-w-80 border p-4 sm:p-8'>
+        <div className='min-w-64 border p-4 sm:p-8'>
           {session ? (
             <div className='flex items-center justify-center gap-4'>
               {session.user.avatarUrl && (
