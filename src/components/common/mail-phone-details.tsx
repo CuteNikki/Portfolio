@@ -7,10 +7,12 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 export function EmailAndPhone({ language }: { language: 'en' | 'de' }) {
   const CONTENT = {
     en: {
+      icon: <AtSignIcon className='text-primary-text size-4 shrink-0' />,
       phone: 'Phone:',
       email: 'Email:',
     },
     de: {
+      icon: <PhoneIcon className='text-primary-text size-4 shrink-0' />,
       phone: 'Telef.:',
       email: 'E-Mail:',
     },
@@ -22,7 +24,7 @@ export function EmailAndPhone({ language }: { language: 'en' | 'de' }) {
         href={PERSONAL_DETAILS.emailLink}
         className='group flex items-center gap-2'
       >
-        <AtSignIcon className='text-primary-text size-4 shrink-0' />
+        {CONTENT[language].icon}
         {CONTENT[language].email}{' '}
         <span className='group-hover:underline'>{PERSONAL_DETAILS.email}</span>
       </Link>
@@ -30,7 +32,7 @@ export function EmailAndPhone({ language }: { language: 'en' | 'de' }) {
         href={PERSONAL_DETAILS.phoneLink}
         className='group flex items-center gap-2'
       >
-        <PhoneIcon className='text-primary-text size-4 shrink-0' />
+        {CONTENT[language].icon}
         {CONTENT[language].phone}{' '}
         <span className='group-hover:underline'>{PERSONAL_DETAILS.phone}</span>
       </Link>
