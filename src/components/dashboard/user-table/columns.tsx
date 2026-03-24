@@ -56,9 +56,9 @@ const userColumn: ColumnDef<User> = {
         unoptimized
         src={row.original.avatarUrl}
         alt='Avatar'
-        className='min-h-8 min-w-8 shrink-0 rounded-full'
-        width={32}
-        height={32}
+        className='min-h-6 min-w-6 shrink-0 rounded-full'
+        width={24}
+        height={24}
       />
       <span>{row.original.username}</span>
     </div>
@@ -118,7 +118,7 @@ const RoleSelectCell = ({ user }: { user: User }) => {
       onValueChange={handleRoleChange}
       disabled={isPending}
     >
-      <SelectTrigger className='w-40'>
+      <SelectTrigger size='sm' className='w-40'>
         <SelectValue placeholder='Role' />
         {isPending && (
           <LoaderCircleIcon className='size-4 shrink-0 animate-spin' />
