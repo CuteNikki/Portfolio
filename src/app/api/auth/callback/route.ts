@@ -4,13 +4,46 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { getUserAvatarUrl } from '@/lib/utils';
 
+import { LINKS } from '@/constants/links';
+
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get('code');
   const error = searchParams.get('error');
 
-  if (error || !code) {
-    return NextResponse.redirect(new URL('/?error=auth_failed', req.url));
+  if (error) {
+    console.error('OAuth Callback Error:', error);
+
+    return NextResponse.json(
+      { error: `OAuth Error: ${error}` },
+      { status: 400 },
+    );
+  }
+
+  if (!code) {
+    console.error('OAuth Callback Error: No code provided in query parameters');
+
+    return NextResponse.json(
+      { error: 'No authorization code provided' },
+      { status: 400 },
+    );
+  }
+
+  const REDIRECT_URI = process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI;
+  const CLIENT_ID = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID;
+  const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET;
+
+  if (!REDIRECT_URI || !CLIENT_ID || !CLIENT_SECRET) {
+    console.error('Missing Discord OAuth Configuration:', {
+      REDIRECT_URI,
+      CLIENT_ID,
+      CLIENT_SECRET: !!CLIENT_SECRET,
+    });
+
+    return NextResponse.json(
+      { error: 'Missing Discord OAuth Configuration' },
+      { status: 500 },
+    );
   }
 
   try {
@@ -19,11 +52,11 @@ export async function GET(req: NextRequest) {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        client_id: process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID!,
-        client_secret: process.env.DISCORD_CLIENT_SECRET!,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET,
         grant_type: 'authorization_code',
         code,
-        redirect_uri: process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI!,
+        redirect_uri: REDIRECT_URI,
       }),
     });
 
@@ -31,8 +64,10 @@ export async function GET(req: NextRequest) {
 
     if (!tokenResponse.ok) {
       console.error('Discord Token Error:', tokenData);
-      return NextResponse.redirect(
-        new URL('/?error=token_exchange_failed', req.url),
+
+      return NextResponse.json(
+        { error: 'Failed to exchange code for token' },
+        { status: 400 },
       );
     }
 
@@ -47,8 +82,10 @@ export async function GET(req: NextRequest) {
 
     if (!userResponse.ok) {
       console.error('Discord User Error:', userData);
-      return NextResponse.redirect(
-        new URL('/?error=profile_fetch_failed', req.url),
+
+      return NextResponse.json(
+        { error: 'Failed to fetch user profile' },
+        { status: 400 },
       );
     }
 
@@ -97,11 +134,13 @@ export async function GET(req: NextRequest) {
     });
 
     // 6. Redirect back!
-    return NextResponse.redirect(new URL('/', req.url));
+    return NextResponse.redirect(new URL(LINKS.home.url, req.url));
   } catch (error) {
     console.error('OAuth Callback Exception:', error);
-    return NextResponse.redirect(
-      new URL('/?error=internal_server_error', req.url),
+
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 },
     );
   }
 }
