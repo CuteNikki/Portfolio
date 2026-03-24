@@ -16,6 +16,13 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
   Table,
   TableBody,
   TableCell,
@@ -35,6 +42,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -46,25 +54,25 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
+      globalFilter,
     },
   });
 
   return (
     <div>
-      <div className='flex items-center py-4'>
+      <div className='flex items-center justify-center py-4 text-center md:justify-start md:text-start'>
         <Input
           placeholder='Filter Users...'
-          value={String(table.getColumn('discordId')?.getFilterValue() ?? '')}
-          onChange={(event) =>
-            table.getColumn('discordId')?.setFilterValue(event.target.value)
-          }
+          value={globalFilter ?? ''}
+          onChange={(event) => setGlobalFilter(event.target.value)}
           className='max-w-sm'
         />
       </div>
-      <div className='overflow-hidden rounded-md border'>
+      <div className='border'>
         <Table className='lg:table-fixed'>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -114,23 +122,64 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex items-center justify-end space-x-2 py-4'>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </Button>
-        <Button
-          variant='outline'
-          size='sm'
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </Button>
+      <div className='flex flex-col items-center justify-between gap-2 px-2 py-4 md:flex-row'>
+        {/* Left Side: Row Count / Selection Info */}
+        <div className='text-muted-foreground flex-1 text-sm'>
+          {table.getFilteredRowModel().rows.length} total row(s) found.
+        </div>
+
+        {/* Right Side: Pagination Controls */}
+        <div className='flex flex-col items-center gap-2 space-x-6 sm:flex-row lg:space-x-8'>
+          {/* Items Per Page Selector */}
+          <div className='flex items-center space-x-2'>
+            <p className='text-sm font-medium'>Rows per page</p>
+            <Select
+              value={`${table.getState().pagination.pageSize}`}
+              onValueChange={(value) => {
+                table.setPageSize(Number(value));
+              }}
+            >
+              <SelectTrigger className='h-8 w-16'>
+                <SelectValue
+                  placeholder={table.getState().pagination.pageSize}
+                />
+              </SelectTrigger>
+              <SelectContent side='top'>
+                {[5, 10, 15, 20, 25, 30, 40, 50].map((pageSize) => (
+                  <SelectItem key={pageSize} value={`${pageSize}`}>
+                    {pageSize}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Page Counter */}
+          <div className='flex w-25 items-center justify-center text-sm font-medium'>
+            Page {table.getState().pagination.pageIndex + 1} of{' '}
+            {table.getPageCount() || 1}
+          </div>
+
+          {/* Previous/Next Buttons */}
+          <div className='flex items-center space-x-2'>
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <Button
+              variant='outline'
+              size='sm'
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -6,7 +6,9 @@ import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import {
+  ArrowDownIcon,
   ArrowUpDownIcon,
+  ArrowUpIcon,
   LoaderCircleIcon,
   MoreHorizontalIcon,
 } from 'lucide-react';
@@ -39,7 +41,13 @@ const userColumn: ColumnDef<User> = {
       onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
     >
       User
-      <ArrowUpDownIcon className='h-4 w-4' />
+      {column.getIsSorted() === 'asc' ? (
+        <ArrowUpIcon className='h-4 w-4' />
+      ) : column.getIsSorted() === 'desc' ? (
+        <ArrowDownIcon className='h-4 w-4' />
+      ) : (
+        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+      )}
     </Button>
   ),
   cell: ({ row }) => (
@@ -54,6 +62,25 @@ const userColumn: ColumnDef<User> = {
       />
       <span>{row.original.username}</span>
     </div>
+  ),
+};
+
+const nameColumn: ColumnDef<User> = {
+  accessorKey: 'displayName',
+  header: ({ column }) => (
+    <Button
+      variant='ghost'
+      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    >
+      Name
+      {column.getIsSorted() === 'asc' ? (
+        <ArrowUpIcon className='h-4 w-4' />
+      ) : column.getIsSorted() === 'desc' ? (
+        <ArrowDownIcon className='h-4 w-4' />
+      ) : (
+        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+      )}
+    </Button>
   ),
 };
 
@@ -110,7 +137,21 @@ const RoleSelectCell = ({ user }: { user: User }) => {
 
 const roleColumn: ColumnDef<User> = {
   accessorKey: 'role',
-  header: 'Role',
+  header: ({ column }) => (
+    <Button
+      variant='ghost'
+      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    >
+      Role
+      {column.getIsSorted() === 'asc' ? (
+        <ArrowUpIcon className='h-4 w-4' />
+      ) : column.getIsSorted() === 'desc' ? (
+        <ArrowDownIcon className='h-4 w-4' />
+      ) : (
+        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+      )}
+    </Button>
+  ),
   cell: ({ row }) => <RoleSelectCell user={row.original} />,
 };
 
@@ -147,10 +188,29 @@ const actionsColumn: ColumnDef<User> = {
   ),
 };
 
+const idColumn: ColumnDef<User> = {
+  accessorKey: 'discordId',
+  header: ({ column }) => (
+    <Button
+      variant='ghost'
+      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+    >
+      ID
+      {column.getIsSorted() === 'asc' ? (
+        <ArrowUpIcon className='h-4 w-4' />
+      ) : column.getIsSorted() === 'desc' ? (
+        <ArrowDownIcon className='h-4 w-4' />
+      ) : (
+        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+      )}
+    </Button>
+  ),
+};
+
 export const columns: ColumnDef<User>[] = [
   userColumn,
-  { accessorKey: 'displayName', header: 'Name' },
+  nameColumn,
   roleColumn,
-  { accessorKey: 'discordId', header: 'ID' },
+  idColumn,
   actionsColumn,
 ];
