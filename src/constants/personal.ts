@@ -1,7 +1,8 @@
+import { IconType, SiDiscord } from '@icons-pack/react-simple-icons';
 import { GithubIcon, LinkedinIcon, LucideIcon, MailIcon } from 'lucide-react';
 
 export interface SocialLink {
-  icon: LucideIcon;
+  icon: IconType | LucideIcon;
   platform: string;
   url: string;
 }
@@ -89,6 +90,11 @@ export const PERSONAL_DETAILS = {
         icon: MailIcon,
         platform: 'Mail',
         url: this.emailLink,
+      },
+      {
+        icon: SiDiscord,
+        platform: 'Discord',
+        url: 'https://discord.com/users/303142922780672013',
       },
     ] as const;
   },
