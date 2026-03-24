@@ -170,7 +170,7 @@ const actionsColumn: ColumnDef<User> = {
             <MoreHorizontalIcon className='h-4 w-4 shrink-0' />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='center'>
+        <DropdownMenuContent align='end'>
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard
