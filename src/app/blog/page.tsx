@@ -1,15 +1,14 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { NewspaperIcon, SendHorizontalIcon } from 'lucide-react';
 
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { Button } from '@/components/ui/button';
 
 export default async function BlogPage() {
-  const user = await getCurrentUser();
+  const session = await getCurrentSession();
   const posts = await prisma.post.findMany();
 
   return (
@@ -19,22 +18,22 @@ export default async function BlogPage() {
           <NewspaperIcon className='shrink-0' /> Blog
         </h1>
         <div className='min-w-80 border p-4 sm:p-8'>
-          {user ? (
+          {session ? (
             <div className='flex items-center justify-center gap-4'>
-              {user.avatarUrl && (
+              {session.user.avatarUrl && (
                 <Image
-                  src={user.avatarUrl}
-                  alt={user.username}
+                  src={session.user.avatarUrl}
+                  alt={session.user.username}
                   width={64}
                   height={64}
                   className='size-16'
                 />
               )}
               <div className='flex flex-col gap-2'>
-                {user.displayName ? (
-                  <p className='font-semibold'>{user.displayName}</p>
+                {session.user.displayName ? (
+                  <p className='font-semibold'>{session.user.displayName}</p>
                 ) : (
-                  <p className='font-semibold'>@{user.username}</p>
+                  <p className='font-semibold'>@{session.user.username}</p>
                 )}
                 <form action='/api/auth/logout' method='POST'>
                   <Button type='submit' variant='destructive' size='sm'>
@@ -46,14 +45,12 @@ export default async function BlogPage() {
           ) : (
             <div className='flex flex-col items-center justify-center gap-2'>
               <p>Want to leave a comment?</p>
-              <Button asChild>
-                <Link
-                  href={`https://discord.com/api/oauth2/authorize?client_id=${process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID}&redirect_uri=${encodeURIComponent(process.env.NEXT_PUBLIC_DISCORD_REDIRECT_URI as string)}&response_type=code&scope=identify`}
-                >
+              <form action='/api/auth/login' method='GET'>
+                <Button type='submit'>
                   <SendHorizontalIcon className='shrink-0' />
                   Log in with Discord
-                </Link>
-              </Button>
+                </Button>
+              </form>
             </div>
           )}
         </div>

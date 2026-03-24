@@ -1,15 +1,15 @@
 import { redirect } from 'next/navigation';
 
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentSession } from '@/lib/auth';
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const user = await getCurrentUser();
+  const session = await getCurrentSession();
 
-  if (!user || user.role !== 'ADMIN') {
+  if (!session || session.user.role !== 'ADMIN') {
     redirect('/unauthorized');
   }
 

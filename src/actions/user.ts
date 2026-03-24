@@ -4,20 +4,20 @@ import { revalidatePath } from 'next/cache';
 
 import { Role } from '../../generated/prisma/enums';
 
-import { getCurrentUser } from '@/lib/auth';
+import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 export async function updateUserRole(formData: FormData) {
-  const currentUser = await getCurrentUser();
+  const session = await getCurrentSession();
 
-  if (!currentUser || currentUser.role !== Role.ADMIN) {
+  if (!session || session.user.role !== Role.ADMIN) {
     throw new Error('Unauthorized: only admins can update user roles');
   }
 
   const targetUserId = formData.get('userId') as string;
   const newRole = formData.get('role') as Role;
 
-  if (currentUser.id === targetUserId) {
+  if (session.user.id === targetUserId) {
     throw new Error('Invalid user: cannot change own role');
   }
 
