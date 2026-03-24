@@ -63,8 +63,8 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div>
-      <div className='flex items-center justify-center py-4 text-center md:justify-start md:text-start'>
+    <div className='flex flex-col gap-2'>
+      <div className='flex items-center justify-center text-center md:justify-start md:text-start'>
         <Input
           placeholder='Filter Users...'
           value={globalFilter ?? ''}
@@ -122,7 +122,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex flex-col items-center justify-between gap-2 px-2 py-4 md:flex-row'>
+      <div className='flex flex-col items-center justify-between gap-2 md:flex-row'>
         {/* Left Side: Row Count / Selection Info */}
         <div className='text-muted-foreground flex-1 text-sm'>
           {table.getFilteredRowModel().rows.length} total row(s) found.

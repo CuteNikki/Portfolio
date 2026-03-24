@@ -1,5 +1,6 @@
-import { SITE_METADATA } from '@/constants/metadata';
 import { PresentationIcon } from 'lucide-react';
+
+import { SITE_METADATA } from '@/constants/metadata';
 
 export const metadata = SITE_METADATA.projects;
 

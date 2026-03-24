@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { User } from '../../../../generated/prisma/client';
 
 import { columns } from './columns';
-import { DataTable } from './data-table';
+import { DataTable } from './table';
 
 async function getData(): Promise<User[]> {
   const users = await prisma.user.findMany({
