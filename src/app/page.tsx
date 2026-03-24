@@ -11,18 +11,18 @@ export const metadata = SITE_METADATA.home;
 
 export default function Home() {
   return (
-    <div className='flex flex-col gap-6'>
-      <h1 className='text-4xl font-bold'>
+    <div className='flex flex-col gap-4 border p-4 sm:p-8'>
+      <h1 className='flex items-center gap-2 text-xl font-semibold'>
         Hello, I&apos;m{' '}
         <span className='text-primary-text'>{PERSONAL_DETAILS.firstName}</span>!
         👋
       </h1>
-      <p className='text-lg'>
+      <p className='text-lg text-balance'>
         {PERSONAL_DETAILS.age}-year-old {PERSONAL_DETAILS.title} based in{' '}
         {PERSONAL_DETAILS.address.country} {PERSONAL_DETAILS.address.flag}
       </p>
       <p className='max-w-prose'>{PERSONAL_DETAILS.description}</p>
-      <ul className='flex flex-wrap gap-4'>
+      <ul className='flex flex-wrap gap-4 py-2'>
         {PERSONAL_DETAILS.socials.map(({ platform, icon: Icon, url }) => (
           <li key={platform}>
             <Link
