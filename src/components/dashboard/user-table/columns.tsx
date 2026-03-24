@@ -100,8 +100,11 @@ const RoleSelectCell = ({ user }: { user: User }) => {
 
       try {
         await updateUserRole(formData);
+        toast.success('Role updated successfully!', {
+          description: `${user.username} is now ${newRole}.`,
+        });
       } catch (error) {
-        toast.error('Failed to update role', {
+        toast.error('Failed to update role!', {
           description:
             error instanceof Error
               ? error.message
@@ -167,7 +170,7 @@ const actionsColumn: ColumnDef<User> = {
             <MoreHorizontalIcon className='h-4 w-4 shrink-0' />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align='center'>
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard
