@@ -83,6 +83,26 @@ export const LINKS = {
     url: '/dashboard/users#top',
     icon: Users2Icon,
   },
+  dashboardPosts: {
+    label: 'Posts',
+    url: '/dashboard/blog#top',
+    icon: NewspaperIcon,
+  },
+  dashboardPostNew: {
+    label: 'New Post',
+    url: '/dashboard/blog/new#top',
+    icon: NewspaperIcon,
+  },
+  dashboardPostEdit: {
+    label: 'Edit Post',
+    url: '/dashboard/blog/edit#top',
+    icon: NewspaperIcon,
+  },
+  dashboardPostEditWithId: (id: string) => ({
+    label: 'Edit Post',
+    url: `/dashboard/blog/edit/${id}#top`,
+    icon: NewspaperIcon,
+  }),
 };
 
 export const FOOTER_LINKS: Link[] = [LINKS.privacyShort, LINKS.imprint];
@@ -104,4 +124,5 @@ export const SIDEBAR_LINKS: Link[] = [
 export const DASHBOARD_LINKS: Link[] = [
   LINKS.dashboardOverview,
   LINKS.dashboardUsers,
+  LINKS.dashboardPosts,
 ];
