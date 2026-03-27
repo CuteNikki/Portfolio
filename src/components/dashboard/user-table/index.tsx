@@ -6,16 +6,7 @@ import { columns } from './columns';
 import { DataTable } from './table';
 
 async function getData(): Promise<User[]> {
-  const users = await prisma.user.findMany({
-    select: {
-      id: true,
-      discordId: true,
-      displayName: true,
-      username: true,
-      avatarUrl: true,
-      role: true,
-    },
-  });
+  const users = await prisma.user.findMany();
   return users;
 }
 
