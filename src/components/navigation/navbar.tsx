@@ -4,6 +4,7 @@ import { MenuIcon } from 'lucide-react';
 
 import { LINKS, NAVBAR_LINKS } from '@/constants/links';
 
+import { ProtectedNavLinks } from '@/components/navigation/protected-links';
 import { ThemeSwitcher } from '@/components/theme/switcher';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,6 +18,8 @@ import {
 } from '@/components/ui/sheet';
 
 export function Navbar() {
+  const publicLinks = NAVBAR_LINKS.filter((link) => !link.requiresAuth);
+
   return (
     <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
       <div className='container mx-auto flex items-center justify-between gap-4 p-4'>
@@ -29,7 +32,7 @@ export function Navbar() {
           </Link>
         </div>
         <ul className='hidden items-center gap-6 text-sm font-medium sm:flex'>
-          {NAVBAR_LINKS.map(({ url, label }) => (
+          {publicLinks.map(({ url, label }) => (
             <li key={url}>
               <Link
                 href={url}
@@ -39,6 +42,7 @@ export function Navbar() {
               </Link>
             </li>
           ))}
+          <ProtectedNavLinks />
         </ul>
 
         <div className='flex items-center gap-2'>
@@ -61,16 +65,18 @@ export function Navbar() {
               </SheetHeader>
               <SheetBody>
                 <ul className='flex flex-col gap-4 py-4'>
-                  {NAVBAR_LINKS.map(({ url, label }) => (
+                  {publicLinks.map(({ url, label, icon: Icon }) => (
                     <li key={url}>
                       <Link
                         href={url}
-                        className='hover:text-primary-text active:text-primary-text focus:text-primary-text text-lg font-medium lowercase transition-colors'
+                        className='hover:text-primary-text active:text-primary-text focus:text-primary-text flex items-center gap-2 text-lg font-medium lowercase transition-colors'
                       >
+                        {Icon && <Icon className='size-5 shrink-0' />}
                         {label}
                       </Link>
                     </li>
                   ))}
+                  <ProtectedNavLinks isMobile />
                 </ul>
               </SheetBody>
             </SheetContent>

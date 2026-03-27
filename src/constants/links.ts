@@ -13,6 +13,7 @@ import {
 
 export interface Link {
   icon?: LucideIcon;
+  requiresAuth?: boolean;
   label: string;
   url: string;
 }
@@ -68,40 +69,52 @@ export const LINKS = {
     url: '/blog#top',
     icon: NewspaperIcon,
   },
+  blogWithSlug: (slug: string) => ({
+    label: 'Blog Post',
+    url: `/blog/${slug}#top`,
+    icon: NewspaperIcon,
+  }),
   dashboard: {
     label: 'Dashboard',
     url: '/dashboard#top',
     icon: PanelsTopLeftIcon,
+    requiresAuth: true,
   },
   dashboardOverview: {
     label: 'Overview',
     url: '/dashboard#top',
     icon: PanelsTopLeftIcon,
+    requiresAuth: true,
   },
   dashboardUsers: {
     label: 'Users',
     url: '/dashboard/users#top',
     icon: Users2Icon,
+    requiresAuth: true,
   },
   dashboardPosts: {
     label: 'Posts',
     url: '/dashboard/blog#top',
     icon: NewspaperIcon,
+    requiresAuth: true,
   },
   dashboardPostNew: {
     label: 'New Post',
     url: '/dashboard/blog/new#top',
     icon: NewspaperIcon,
+    requiresAuth: true,
   },
   dashboardPostEdit: {
     label: 'Edit Post',
     url: '/dashboard/blog/edit#top',
     icon: NewspaperIcon,
+    requiresAuth: true,
   },
   dashboardPostEditWithId: (id: string) => ({
     label: 'Edit Post',
     url: `/dashboard/blog/edit/${id}#top`,
     icon: NewspaperIcon,
+    requiresAuth: true,
   }),
 };
 
@@ -112,6 +125,7 @@ export const NAVBAR_LINKS: Link[] = [
   LINKS.projects,
   LINKS.blog,
   LINKS.contact,
+  LINKS.dashboard,
 ];
 
 export const SIDEBAR_LINKS: Link[] = [
