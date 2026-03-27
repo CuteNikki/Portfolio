@@ -1,67 +1,125 @@
+import {
+  CalendarIcon,
+  ClockIcon,
+  NewspaperIcon,
+  SendHorizontalIcon,
+} from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
-import { NewspaperIcon, SendHorizontalIcon } from 'lucide-react';
-
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-
-import { Button } from '@/components/ui/button';
+import { Role } from '../../../../generated/prisma/enums';
 
 export default async function BlogPage() {
   const session = await getCurrentSession();
-  const posts = await prisma.post.findMany();
+  const isAdmin =
+    session?.user.role === Role.ADMIN || session?.user.role === Role.AUTHOR;
+
+  const posts = await prisma.post.findMany({
+    where: isAdmin ? {} : { published: true },
+    orderBy: { createdAt: 'desc' },
+    include: { author: true },
+  });
 
   return (
-    <div>
-      <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
-        <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
-          <NewspaperIcon className='shrink-0' /> Blog
+    <div className='flex w-full max-w-5xl flex-col gap-6 border p-4 sm:p-8'>
+      {/* Header */}
+      <div className='flex items-center justify-between'>
+        <h1 className='text-primary-text flex items-center gap-2 text-2xl font-bold'>
+          <NewspaperIcon className='size-6 shrink-0' /> Blog
         </h1>
-        <div className='min-w-64 border p-4 sm:p-8'>
-          {session ? (
-            <div className='flex items-center justify-center gap-4'>
-              {session.user.avatarUrl && (
-                <Image
-                  src={session.user.avatarUrl}
-                  alt={session.user.username}
-                  width={64}
-                  height={64}
-                  className='size-16'
-                />
-              )}
-              <div className='flex flex-col gap-2'>
-                {session.user.displayName ? (
-                  <p className='font-semibold'>{session.user.displayName}</p>
-                ) : (
-                  <p className='font-semibold'>@{session.user.username}</p>
-                )}
-                <form action='/api/auth/logout' method='POST'>
-                  <Button type='submit' variant='destructive' size='sm'>
-                    Sign Out
-                  </Button>
-                </form>
-              </div>
-            </div>
-          ) : (
-            <div className='flex flex-col items-center justify-center gap-2'>
-              <p>Want to leave a comment?</p>
-              <form action='/api/auth/login' method='GET'>
-                <Button type='submit'>
-                  <SendHorizontalIcon className='shrink-0' />
-                  Log in with Discord
+        {isAdmin && (
+          <Button variant='outline' size='sm' asChild>
+            <Link href={LINKS.dashboardPostNew.url}>
+              {LINKS.dashboardPostNew.label}
+            </Link>
+          </Button>
+        )}
+      </div>
+
+      {/* Auth Section */}
+      <div className='flex w-fit flex-col border p-4'>
+        {session ? (
+          <div className='flex items-center gap-4'>
+            {session.user.avatarUrl && (
+              <Image
+                src={session.user.avatarUrl}
+                alt={session.user.username}
+                width={56}
+                height={56}
+              />
+            )}
+            <div className='flex flex-col'>
+              <p className='font-semibold'>
+                {session.user.displayName || `@${session.user.username}`}
+              </p>
+              <form action='/api/auth/logout' method='POST'>
+                <Button type='submit' variant='destructive' size='sm'>
+                  Sign Out
                 </Button>
               </form>
             </div>
-          )}
-        </div>
-      </div>
-      <div>
-        {posts.map((post) => (
-          <div key={post.id} className='rounded-md border p-4'>
-            <h2 className='text-xl font-semibold'>{post.title}</h2>
-            <p>{post.content}</p>
           </div>
+        ) : (
+          <div className='flex flex-col items-start gap-2'>
+            <p className='text-muted-foreground text-sm'>
+              Join the conversation and leave a comment!
+            </p>
+            <Button asChild size='sm'>
+              <Link href='/api/auth/login'>
+                <SendHorizontalIcon className='mr-2 size-4' />
+                Log in with Discord
+              </Link>
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {/* Posts Grid */}
+      <div className='grid w-full grid-cols-1 gap-4 sm:grid-cols-2'>
+        {posts.map((post) => (
+          <Link
+            href={`/blog/${post.slug}`}
+            key={post.id}
+            className='group hover:border-primary/50 hover:bg-muted/20 flex flex-col justify-between border p-5 transition-colors'
+          >
+            <div className='flex flex-col gap-2'>
+              {!post.published && <Badge>Draft</Badge>}
+              <h2 className='group-hover:text-primary-text truncate text-xl font-bold transition-colors'>
+                {post.title}
+              </h2>
+              {/* Clean up content by stripping common Markdown chars for the preview */}
+              <p className='text-muted-foreground line-clamp-3 text-sm text-ellipsis'>
+                {post.content.replace(/[#*`]/g, '')}
+              </p>
+            </div>
+
+            <div className='text-muted-foreground mt-6 flex items-center gap-4 text-xs'>
+              <div className='flex items-center gap-1'>
+                <CalendarIcon className='size-3' />
+                {new Date(post.createdAt).toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </div>
+              <div className='flex items-center gap-1'>
+                <ClockIcon className='size-3' />
+                {Math.ceil(post.content.split(' ').length / 200)} min read
+              </div>
+            </div>
+          </Link>
         ))}
+
+        {posts.length === 0 && (
+          <div className='text-muted-foreground col-span-full py-20 text-center'>
+            No posts found. Check back later!
+          </div>
+        )}
       </div>
     </div>
   );
