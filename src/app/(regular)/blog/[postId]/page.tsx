@@ -166,7 +166,7 @@ export default async function BlogPostPage({
         </div>
       </header>
 
-      <div className='prose dark:prose-invert catppuccin-macchiato:prose-invert prose-lg min-h-100 max-w-none break-all'>
+      <div className='prose dark:prose-invert catppuccin-macchiato:prose-invert prose-lg min-h-100 max-w-none wrap-break-word'>
         <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
           {post.content}
         </ReactMarkdown>
