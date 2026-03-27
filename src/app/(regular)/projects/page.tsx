@@ -2,7 +2,7 @@ import { PresentationIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
 
-export const metadata = SITE_METADATA.projects;
+export const { projects: metadata } = SITE_METADATA;
 
 export default function Projects() {
   return (

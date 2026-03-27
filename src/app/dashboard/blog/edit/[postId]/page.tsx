@@ -5,6 +5,28 @@ import { PencilLineIcon } from 'lucide-react';
 import prisma from '@/lib/prisma';
 
 import { EditPostForm } from '@/components/dashboard/blog/edit-form';
+import { Metadata } from 'next';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ postId: string }>;
+}): Promise<Metadata> {
+  const { postId } = await params;
+
+  const post = await prisma.post.findFirst({
+    where: {
+      OR: [{ id: postId }, { slug: postId }],
+    },
+  });
+
+  if (!post) return { title: 'Post Not Found' };
+
+  return {
+    title: `niso.moe | ${post.title}`,
+    description: `Edit the blog post titled "${post.title}".`,
+  };
+}
 
 export default async function EditPostPage({
   params,

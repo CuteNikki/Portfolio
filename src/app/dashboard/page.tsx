@@ -1,4 +1,8 @@
+import { SITE_METADATA } from '@/constants/metadata';
+
 import { SidebarInset } from '@/components/ui/sidebar';
+
+export const { dashboard: metadata } = SITE_METADATA;
 
 export default function Page() {
   return (

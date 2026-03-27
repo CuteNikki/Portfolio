@@ -3,12 +3,17 @@ import { redirect } from 'next/navigation';
 import { Role } from '../../../generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
+
+import { SITE_METADATA } from '@/constants/metadata';
+
 import { AuthProvider } from '@/providers/auth';
 
 import { AppSidebar } from '@/components/dashboard/sidebar';
 import { Footer } from '@/components/navigation/footer';
 import { ThemeSwitcher } from '@/components/theme/switcher';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+
+export const { dashboard: metadata } = SITE_METADATA;
 
 export default async function DashboardLayout({
   children,

@@ -6,6 +6,9 @@ import { Button } from '@/components/ui/button';
 import { LINKS } from '@/constants/links';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
+import { SITE_METADATA } from '@/constants/metadata';
+
+export const { dashboardBlog: metadata } = SITE_METADATA;
 
 export default async function BlogPostsPage() {
   const posts = await prisma.post.findMany({

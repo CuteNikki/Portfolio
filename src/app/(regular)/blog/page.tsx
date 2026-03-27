@@ -9,12 +9,16 @@ import Link from 'next/link';
 
 import { Role } from '../../../../generated/prisma/enums';
 
-import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
+
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+
+export const { blog: metadata } = SITE_METADATA;
 
 export default async function BlogPage() {
   const session = await getCurrentSession();

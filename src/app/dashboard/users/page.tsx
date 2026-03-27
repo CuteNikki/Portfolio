@@ -1,6 +1,10 @@
 import { Users2Icon } from 'lucide-react';
 
+import { SITE_METADATA } from '@/constants/metadata';
+
 import { UsersTable } from '@/components/dashboard/user-table';
+
+export const { dashboardUsers: metadata } = SITE_METADATA;
 
 export default async function UsersPage() {
   return (

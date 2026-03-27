@@ -4,7 +4,7 @@ import { HomeButton } from '@/components/common/home-button';
 import { Footer } from '@/components/navigation/footer';
 import { Navbar } from '@/components/navigation/navbar';
 
-export const metadata = SITE_METADATA.notFound;
+export const { notFound: metadata } = SITE_METADATA;
 
 export default function NotFound() {
   return (

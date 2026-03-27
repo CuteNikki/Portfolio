@@ -7,7 +7,7 @@ import { formatDate } from '@/lib/utils';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-export const metadata = SITE_METADATA.home;
+export const { home: metadata } = SITE_METADATA;
 
 export default function Home() {
   return (

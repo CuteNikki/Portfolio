@@ -46,4 +46,29 @@ export const SITE_METADATA: Record<string, Metadata> = {
     description:
       'Erfahre, wie deine Daten auf dieser Portfolio-Website verwaltet und deine Privatsphäre geschützt werden.',
   },
+  dashboard: {
+    title: 'niso.moe - Dashboard',
+    description:
+      'Welcome to the dashboard! Here you can write new blog posts, manage users and more. This area is protected and only accessible to authorized users.',
+  },
+  dashboardUsers: {
+    title: 'niso.moe - Users',
+    description:
+      'Manage users in the dashboard. Here you can view, edit and delete user accounts. This area is protected and only accessible to authorized users.',
+  },
+  dashboardNewPost: {
+    title: 'niso.moe - New Post',
+    description:
+      'Create a new blog post! Use the editor to write content and publish it. This area is protected and only accessible to authorized users.',
+  },
+  dashboardBlog: {
+    title: 'niso.moe - Blog Posts',
+    description:
+      'Manage the blog posts in the dashboard. Here you can view, edit and delete posts. This area is protected and only accessible to authorized users.',
+  },
+  blog: {
+    title: 'niso.moe - Blog',
+    description:
+      'Read my latest blog posts on various topics related to development, technology and more. Stay updated with my insights and experiences.',
+  }
 } as const;

@@ -15,11 +15,15 @@ import {
 
 import { createPost } from '@/actions/post';
 
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { LINKS } from '@/constants/links';
+
+export const { dashboardNewPost: metadata } = SITE_METADATA;
 
 export default function NewPostPage() {
   const [content, setContent] = useState('');

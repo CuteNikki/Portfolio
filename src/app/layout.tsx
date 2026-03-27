@@ -13,7 +13,7 @@ const jetbrainsMono = JetBrains_Mono({
   variable: '--font-mono',
 });
 
-export const metadata = SITE_METADATA.root;
+export const { root: metadata } = SITE_METADATA;
 
 export default function RootLayout({
   children,
