@@ -2,9 +2,6 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
-import remarkGfm from 'remark-gfm';
 import { toast } from 'sonner';
 
 import { LoaderCircleIcon, SaveIcon, SendIcon, Trash2Icon } from 'lucide-react';
@@ -12,6 +9,7 @@ import { LoaderCircleIcon, SaveIcon, SendIcon, Trash2Icon } from 'lucide-react';
 import { deletePost, updatePost } from '@/actions/post';
 import type { Post } from '../../../../generated/prisma/client';
 
+import { MarkdownViewer } from '@/components/dashboard/blog/markdown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -113,9 +111,7 @@ export function EditPostForm({ post }: { post: Post }) {
         <TabsContent value='preview'>
           <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert min-h-100 w-full max-w-none border p-2 text-sm wrap-break-word'>
             {content ? (
-              <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-                {content}
-              </ReactMarkdown>
+              <MarkdownViewer content={content} />
             ) : (
               <p className='text-muted-foreground italic'>
                 Nothing to preview yet...

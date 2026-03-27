@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown';
-import remarkBreaks from 'remark-breaks';
-import remarkGfm from 'remark-gfm';
 
 import {
   CalendarIcon,
@@ -18,6 +15,7 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
+import { MarkdownViewer } from '@/components/dashboard/blog/markdown';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -166,9 +164,7 @@ export default async function BlogPostPage({
       </header>
 
       <div className='prose dark:prose-invert catppuccin-macchiato:prose-invert prose-lg min-h-100 max-w-none wrap-break-word'>
-        <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-          {post.content}
-        </ReactMarkdown>
+        <MarkdownViewer content={post.content} />
       </div>
     </article>
   );
