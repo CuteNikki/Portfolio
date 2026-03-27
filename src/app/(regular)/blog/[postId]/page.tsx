@@ -75,7 +75,6 @@ export default async function BlogPostPage({
       notFound();
     }
   }
-  console.log(session);
 
   return (
     <article className='mx-auto w-full max-w-3xl py-8'>
