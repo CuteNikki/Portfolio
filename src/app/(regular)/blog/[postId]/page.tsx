@@ -89,7 +89,7 @@ export default async function BlogPostPage({
 
       {/* Header Section */}
       <header className='mb-10 flex flex-col gap-4 border-b pb-8'>
-        <h1 className='line-clamp-3 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'>
+        <h1 className='line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'>
           {post.title}
         </h1>
 

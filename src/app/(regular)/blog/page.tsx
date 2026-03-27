@@ -115,7 +115,11 @@ export default async function BlogPage() {
               </div>
               <div className='flex items-center gap-1'>
                 <ClockIcon className='size-3' />
-                {Math.ceil(post.content.split(' ').length / 200)} min read
+                {Math.max(
+                  1,
+                  Math.ceil(post.content.trim().split(/\s+/).length / 200),
+                )}{' '}
+                min read
               </div>
             </div>
           </Link>
