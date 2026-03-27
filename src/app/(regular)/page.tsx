@@ -12,7 +12,7 @@ export const { home: metadata } = SITE_METADATA;
 export default function Home() {
   return (
     <div className='flex flex-col gap-4 border p-4 sm:p-8'>
-      <h1 className='flex items-center gap-2 text-xl font-semibold'>
+      <h1 className='text-xl font-semibold'>
         Hello, I&apos;m{' '}
         <span className='text-primary-text'>{PERSONAL_DETAILS.firstName}</span>!
         👋
