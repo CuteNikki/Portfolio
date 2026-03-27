@@ -9,19 +9,22 @@ import {
   ArrowDownIcon,
   ArrowUpDownIcon,
   ArrowUpIcon,
+  ClipboardCopyIcon,
   LoaderCircleIcon,
   MoreHorizontalIcon,
+  TrashIcon,
 } from 'lucide-react';
 
 import type { Role, User } from '../../../../generated/prisma/client';
 
-import { updateUserRole } from '@/actions/user';
+import { deleteUser, updateUserRole } from '@/actions/user';
 
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -121,7 +124,7 @@ const RoleSelectCell = ({ user }: { user: User }) => {
       onValueChange={handleRoleChange}
       disabled={isPending}
     >
-      <SelectTrigger size='sm' className='w-40'>
+      <SelectTrigger size='sm' className='w-24'>
         <SelectValue placeholder='Role' />
         {isPending && (
           <LoaderCircleIcon className='size-4 shrink-0 animate-spin' />
@@ -183,7 +186,37 @@ const actionsColumn: ColumnDef<User> = {
                 });
             }}
           >
+            <ClipboardCopyIcon />
             Copy ID
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            variant='destructive'
+            onClick={() => {
+              if (
+                confirm(
+                  `Are you sure you want to delete ${row.original.username}? This action cannot be undone.`,
+                )
+              ) {
+                const formData = new FormData();
+                formData.append('userId', row.original.id);
+                deleteUser(formData)
+                  .then(() => {
+                    toast.success('User deleted successfully!');
+                  })
+                  .catch((error) => {
+                    toast.error('Failed to delete user', {
+                      description:
+                        error instanceof Error
+                          ? error.message
+                          : 'An unknown error occurred',
+                    });
+                  });
+              }
+            }}
+          >
+            <TrashIcon />
+            Delete User
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

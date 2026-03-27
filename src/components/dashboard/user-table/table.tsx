@@ -64,7 +64,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className='flex flex-col gap-2'>
-      <div className='flex items-center justify-center text-center md:justify-start md:text-start'>
+      <div className='flex text-center md:justify-start md:text-start'>
         <Input
           placeholder='Filter Users...'
           value={globalFilter ?? ''}
@@ -111,10 +111,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className='h-24 text-center'
-                >
+                <TableCell colSpan={columns.length} className='h-12 text-center'>
                   No results.
                 </TableCell>
               </TableRow>
@@ -122,16 +119,17 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className='flex flex-col items-center justify-between gap-2 md:flex-row'>
+
+      <div className='flex flex-col justify-between gap-4 xl:flex-row xl:items-center'>
         {/* Left Side: Row Count / Selection Info */}
-        <div className='text-muted-foreground flex-1 text-sm'>
+        <div className='text-muted-foreground text-sm'>
           {table.getFilteredRowModel().rows.length} total row(s) found.
         </div>
 
         {/* Right Side: Pagination Controls */}
-        <div className='flex flex-col items-center gap-2 space-x-6 sm:flex-row lg:space-x-8'>
+        <div className='flex flex-col gap-2 space-x-6 lg:flex-row lg:items-center lg:space-x-8'>
           {/* Items Per Page Selector */}
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center gap-2'>
             <p className='text-sm font-medium'>Rows per page</p>
             <Select
               value={`${table.getState().pagination.pageSize}`}
@@ -139,7 +137,7 @@ export function DataTable<TData, TValue>({
                 table.setPageSize(Number(value));
               }}
             >
-              <SelectTrigger className='h-8 w-16'>
+              <SelectTrigger size='sm' className='w-16'>
                 <SelectValue
                   placeholder={table.getState().pagination.pageSize}
                 />
@@ -155,13 +153,13 @@ export function DataTable<TData, TValue>({
           </div>
 
           {/* Page Counter */}
-          <div className='flex w-25 items-center justify-center text-sm font-medium'>
+          <div className='flex items-center text-sm font-medium'>
             Page {table.getState().pagination.pageIndex + 1} of{' '}
             {table.getPageCount() || 1}
           </div>
 
           {/* Previous/Next Buttons */}
-          <div className='flex items-center space-x-2'>
+          <div className='flex items-center gap-2'>
             <Button
               variant='outline'
               size='sm'
