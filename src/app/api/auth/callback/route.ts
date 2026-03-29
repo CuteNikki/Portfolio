@@ -96,18 +96,30 @@ export async function GET(req: NextRequest) {
     );
 
     // 3. Upsert the user in your database (Update if exists, Create if new)
+
+    const discordTokenExpires =
+      Math.floor(Date.now() / 1000) + tokenData.expires_in;
+
     const user = await prisma.user.upsert({
       where: { discordId: userData.id },
       update: {
         displayName: userData.global_name,
         username: userData.username,
         avatarUrl,
+
+        accessToken: tokenData.access_token,
+        refreshToken: tokenData.refresh_token,
+        tokenExpiresAt: discordTokenExpires,
       },
       create: {
         discordId: userData.id,
         displayName: userData.global_name,
         username: userData.username,
         avatarUrl,
+
+        accessToken: tokenData.access_token,
+        refreshToken: tokenData.refresh_token,
+        tokenExpiresAt: discordTokenExpires,
       },
     });
 

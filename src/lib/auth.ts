@@ -23,3 +23,24 @@ export const getCurrentSession = cache(async () => {
 
   return session;
 });
+
+export async function refreshDiscordToken(refreshToken: string) {
+  const response = await fetch('https://discord.com/api/oauth2/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      client_id: process.env.DISCORD_CLIENT_ID!,
+      client_secret: process.env.DISCORD_CLIENT_SECRET!,
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+    }),
+  });
+
+  const data = await response.json();
+  if (!response.ok)
+    throw new Error(data.error_description || 'Failed to refresh token');
+
+  return data;
+}
