@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "bun --bun prisma generate && next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "prisma:generate": "bun --bun prisma generate",
-    "prisma:migrate": "bun --bun prisma migrate dev",
-    "prisma:studio": "bun --bun prisma studio",
-    "prisma:reset": "bun --bun prisma migrate reset"
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset"
   },
   "prettier": {
     "plugins": [
