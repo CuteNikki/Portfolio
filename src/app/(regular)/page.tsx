@@ -5,13 +5,19 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { formatDate } from '@/lib/utils';
 
+import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export const { home: metadata } = SITE_METADATA;
 
 export default function Home() {
   return (
-    <div className='flex flex-col gap-4 border p-4 sm:p-8'>
+    <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
       <h1 className='text-xl font-semibold'>
         Hello, I&apos;m{' '}
         <span className='text-primary-text'>{PERSONAL_DETAILS.firstName}</span>!
@@ -21,7 +27,9 @@ export default function Home() {
         {PERSONAL_DETAILS.age}-year-old {PERSONAL_DETAILS.title} based in{' '}
         {PERSONAL_DETAILS.address.country} {PERSONAL_DETAILS.address.flag}
       </p>
-      <p className='max-w-prose text-pretty'>{PERSONAL_DETAILS.description}</p>
+      <p className='text-pretty xl:text-balance'>
+        {PERSONAL_DETAILS.description}
+      </p>
       <ul className='grid grid-cols-2 justify-items-center gap-4 py-2 sm:grid-cols-4 sm:justify-items-start'>
         {PERSONAL_DETAILS.socials.map(({ platform, icon: Icon, url }) => (
           <li key={platform}>
@@ -37,7 +45,7 @@ export default function Home() {
           </li>
         ))}
       </ul>
-      <Tabs defaultValue='career' className='w-full max-w-2xl'>
+      <Tabs defaultValue='career' className='w-full'>
         <TabsList className='w-full border border-b-0'>
           <TabsTrigger value='career'>Career</TabsTrigger>
           <TabsTrigger value='education'>Education</TabsTrigger>
@@ -86,7 +94,7 @@ export default function Home() {
                         {location}
                       </p>
                     </div>
-                    <p className='text-foreground/80 mt-2 leading-relaxed'>
+                    <p className='text-foreground/80 mt-2 leading-relaxed text-pretty'>
                       {description}
                     </p>
                   </div>
@@ -123,7 +131,7 @@ export default function Home() {
                         {location}
                       </p>
                     </div>
-                    <p className='text-foreground/80 mt-2 leading-relaxed'>
+                    <p className='text-foreground/80 mt-2 leading-relaxed text-pretty'>
                       {description}
                     </p>
                   </div>
@@ -133,6 +141,30 @@ export default function Home() {
           </div>
         </TabsContent>
       </Tabs>
+      <div className='xs:grid-cols-2 grid grid-cols-1 gap-4 pt-2 md:grid-cols-3 xl:grid-cols-6'>
+        {Object.keys(PERSONAL_DETAILS.skillsTechnologies).map((category) => (
+          <div key={category} className='flex flex-col gap-2'>
+            <span className='capitalize'>{category}</span>
+            <ul>
+              {PERSONAL_DETAILS.skillsTechnologies[category].map(
+                ({ name, icon, description }) => (
+                  <li key={name}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Badge variant='secondary'>
+                          {icon}
+                          {name}
+                        </Badge>
+                      </TooltipTrigger>
+                      <TooltipContent>{description}</TooltipContent>
+                    </Tooltip>
+                  </li>
+                ),
+              )}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
