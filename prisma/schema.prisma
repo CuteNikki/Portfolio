@@ -26,6 +26,10 @@ model User {
   avatarUrl   String
   role        Role    @default(USER)
 
+  accessToken    String? @db.Text
+  refreshToken   String? @db.Text
+  tokenExpiresAt Int?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -59,14 +63,18 @@ model Post {
 }
 
 model Comment {
-  id       String @id @default(cuid())
+  id       String  @id @default(cuid())
   postId   String
+  parentId String? // For nested comments
   authorId String
-  content  String @db.Text
+  content  String  @db.Text
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   author User @relation(fields: [authorId], references: [id])
   post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  parent  Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentToComment")
 }
