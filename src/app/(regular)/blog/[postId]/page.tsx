@@ -77,7 +77,7 @@ export default async function BlogPostPage({
   return (
     <article className='mx-auto w-full max-w-3xl py-8'>
       {/* Back Button */}
-      <Button variant='ghost' size='lg' asChild className='mb-8'>
+      <Button variant='ghost' size='lg' asChild className='mb-4'>
         <Link href='/blog'>
           <ChevronLeftIcon />
           Back to Overview
