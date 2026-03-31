@@ -84,6 +84,7 @@ model Project {
   title       String
   slug        String? @unique
   description String  @db.Text
+  published   Boolean @default(false)
 
   tags         String[]
   technologies String[]
