@@ -8,7 +8,7 @@ import {
   LoaderCircleIcon,
   NewspaperIcon,
   SaveIcon,
-  SendIcon,
+  SendHorizonalIcon,
 } from 'lucide-react';
 
 import { createPost } from '@/actions/post';
@@ -162,7 +162,7 @@ export function NewPostContent() {
             {isPending && submitAction === 'publish' ? (
               <LoaderCircleIcon className='animate-spin' />
             ) : (
-              <SendIcon />
+              <SendHorizonalIcon />
             )}
             Publish Post
           </Button>

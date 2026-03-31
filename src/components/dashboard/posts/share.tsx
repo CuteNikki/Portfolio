@@ -1,6 +1,6 @@
 'use client';
 
-import { LinkIcon } from 'lucide-react';
+import { SendIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 
@@ -25,7 +25,7 @@ export function ShareButton({ postId }: { postId: string }) {
           })
       }
     >
-      <LinkIcon />
+      <SendIcon />
       Share
     </Button>
   );
