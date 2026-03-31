@@ -122,12 +122,14 @@ export async function updatePost(formData: FormData) {
   revalidatePostPaths(id, slug);
 }
 
-function revalidatePostPaths(postId: string, slug: string) {
+function revalidatePostPaths(postId: string, slug: string | null) {
   revalidatePath('/dashboard/posts');
   revalidatePath('/dashboard/posts/new');
   revalidatePath(`/dashboard/posts/edit/${postId}`);
-  revalidatePath(`/dashboard/posts/edit/${slug}`);
   revalidatePath('/posts');
   revalidatePath(`/posts/${postId}`);
-  revalidatePath(`/posts/${slug}`);
+  if (slug) {
+    revalidatePath(`/dashboard/posts/edit/${slug}`);
+    revalidatePath(`/posts/${slug}`);
+  }
 }
