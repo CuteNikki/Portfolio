@@ -1,16 +1,16 @@
 import { NewspaperIcon, PlusIcon } from 'lucide-react';
 
-import { columns } from '@/components/dashboard/blog/columns';
-import { DataTable } from '@/components/dashboard/blog/table';
+import { columns } from '@/components/dashboard/posts/columns';
+import { DataTable } from '@/components/dashboard/posts/table';
 import { Button } from '@/components/ui/button';
 import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
-import { SITE_METADATA } from '@/constants/metadata';
 
-export const { dashboardBlog: metadata } = SITE_METADATA;
+export const { dashboardPosts: metadata } = SITE_METADATA;
 
-export default async function BlogPostsPage() {
+export default async function PostsPage() {
   const posts = await prisma.post.findMany({
     orderBy: { createdAt: 'desc' },
     include: { author: true },
@@ -23,7 +23,7 @@ export default async function BlogPostsPage() {
           <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
             <NewspaperIcon className='shrink-0' /> Posts
           </h1>
-          <p className='text-muted-foreground'>Manage blog posts and drafts.</p>
+          <p className='text-muted-foreground'>Manage posts and drafts.</p>
         </div>
         <Button asChild>
           <Link href={LINKS.dashboardPostNew.url}>

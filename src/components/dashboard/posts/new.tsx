@@ -15,7 +15,7 @@ import { createPost } from '@/actions/post';
 
 import { LINKS } from '@/constants/links';
 
-import { MarkdownViewer } from '@/components/dashboard/blog/markdown';
+import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -65,9 +65,7 @@ export function NewPostContent() {
           <NewspaperIcon className='shrink-0' />
           Create New Post
         </h1>
-        <p className='text-muted-foreground'>
-          Draft and publish a new blog post.
-        </p>
+        <p className='text-muted-foreground'>Draft and publish a new post.</p>
       </div>
 
       <form onSubmit={handleSubmit} className='flex flex-col gap-6'>

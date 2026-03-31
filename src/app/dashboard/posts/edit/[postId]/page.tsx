@@ -4,7 +4,7 @@ import { PencilLineIcon } from 'lucide-react';
 
 import prisma from '@/lib/prisma';
 
-import { EditPostForm } from '@/components/dashboard/blog/edit-form';
+import { EditPostForm } from '@/components/dashboard/posts/edit-form';
 import { Metadata } from 'next';
 
 export async function generateMetadata({
@@ -24,7 +24,7 @@ export async function generateMetadata({
 
   return {
     title: `niso.moe | ${post.title}`,
-    description: `Edit the blog post titled "${post.title}".`,
+    description: `Edit the post titled "${post.title}".`,
   };
 }
 
@@ -54,7 +54,7 @@ export default async function EditPostPage({
             Edit Post
           </h1>
           <p className='text-muted-foreground'>
-            Make changes to a blog post or update its publication status.
+            Make changes to a post or update its publication status.
           </p>
         </div>
         <EditPostForm post={post} />

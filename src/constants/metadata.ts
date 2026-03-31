@@ -49,7 +49,7 @@ export const SITE_METADATA: Record<string, Metadata> = {
   dashboard: {
     title: 'niso.moe - Dashboard',
     description:
-      'Welcome to the dashboard! Here you can write new blog posts, manage users and more. This area is protected and only accessible to authorized users.',
+      'Welcome to the dashboard! Here you can write new posts, manage users and more. This area is protected and only accessible to authorized users.',
   },
   dashboardUsers: {
     title: 'niso.moe - Users',
@@ -59,16 +59,16 @@ export const SITE_METADATA: Record<string, Metadata> = {
   dashboardNewPost: {
     title: 'niso.moe - New Post',
     description:
-      'Create a new blog post! Use the editor to write content and publish it. This area is protected and only accessible to authorized users.',
+      'Create a new post! Use the editor to write content and publish it. This area is protected and only accessible to authorized users.',
   },
-  dashboardBlog: {
-    title: 'niso.moe - Blog Posts',
+  dashboardPosts: {
+    title: 'niso.moe - Posts',
     description:
-      'Manage the blog posts in the dashboard. Here you can view, edit and delete posts. This area is protected and only accessible to authorized users.',
+      'Manage the posts in the dashboard. Here you can view, edit and delete posts. This area is protected and only accessible to authorized users.',
   },
-  blog: {
-    title: 'niso.moe - Blog',
+  posts: {
+    title: 'niso.moe - Posts',
     description:
-      'Read my latest blog posts on various topics related to development, technology and more. Stay updated with my insights and experiences.',
-  }
+      'Read my latest posts on various topics related to development, technology and more. Stay updated with my insights and experiences.',
+  },
 } as const;

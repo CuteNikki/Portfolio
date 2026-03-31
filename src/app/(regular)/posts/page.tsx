@@ -18,9 +18,9 @@ import { SITE_METADATA } from '@/constants/metadata';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
-export const { blog: metadata } = SITE_METADATA;
+export const { posts: metadata } = SITE_METADATA;
 
-export default async function BlogPage() {
+export default async function PostsPage() {
   const session = await getCurrentSession();
   const isAdmin =
     session?.user.role === Role.ADMIN || session?.user.role === Role.AUTHOR;
@@ -36,7 +36,7 @@ export default async function BlogPage() {
       {/* Header */}
       <div className='flex items-center justify-between'>
         <h1 className='text-primary-text flex items-center gap-2 text-2xl font-bold'>
-          <NewspaperIcon className='size-6 shrink-0' /> Blog
+          <NewspaperIcon className='size-6 shrink-0' /> Posts
         </h1>
         {isAdmin && (
           <Button variant='outline' size='sm' asChild>
@@ -89,7 +89,7 @@ export default async function BlogPage() {
       <div className='grid w-full grid-cols-1 gap-4 sm:grid-cols-2'>
         {posts.map((post) => (
           <Link
-            href={`/blog/${post.slug}`}
+            href={LINKS.postWithSlugOrId(post.slug).url}
             key={post.id}
             className='group hover:border-primary/50 hover:bg-muted/20 flex flex-col justify-between border p-5 transition-colors'
           >

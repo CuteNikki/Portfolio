@@ -9,11 +9,12 @@ import { LoaderCircleIcon, SaveIcon, SendIcon, Trash2Icon } from 'lucide-react';
 import { deletePost, updatePost } from '@/actions/post';
 import type { Post } from '../../../../generated/prisma/client';
 
-import { MarkdownViewer } from '@/components/dashboard/blog/markdown';
+import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
+import { LINKS } from '@/constants/links';
 
 export function EditPostForm({ post }: { post: Post }) {
   const router = useRouter();
@@ -42,7 +43,7 @@ export function EditPostForm({ post }: { post: Post }) {
             return;
           await deletePost(formData);
           toast.success('Post deleted successfully');
-          router.push('/dashboard/blog');
+          router.push(LINKS.dashboardPosts.url);
           return;
         }
 

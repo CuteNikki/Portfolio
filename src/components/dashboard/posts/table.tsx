@@ -66,7 +66,7 @@ export function DataTable<TData, TValue>({
     <div className='flex flex-col gap-2'>
       <div className='flex text-center md:justify-start md:text-start'>
         <Input
-          placeholder='Filter Blog Posts...'
+          placeholder='Filter Posts...'
           value={globalFilter ?? ''}
           onChange={(event) => setGlobalFilter(event.target.value)}
           className='max-w-sm'
@@ -111,7 +111,10 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className='h-12 text-center'>
+                <TableCell
+                  colSpan={columns.length}
+                  className='h-12 text-center'
+                >
                   No results.
                 </TableCell>
               </TableRow>

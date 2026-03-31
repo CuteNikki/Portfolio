@@ -49,7 +49,7 @@ export async function createPost(formData: FormData) {
     },
   });
 
-  revalidateBlogPaths(createdPost.id, createdPost.slug);
+  revalidatePostPaths(createdPost.id, createdPost.slug);
   return createdPost;
 }
 
@@ -69,7 +69,7 @@ export async function deletePost(formData: FormData) {
     where: { id: postId },
   });
 
-  revalidateBlogPaths(deletedPost.id, deletedPost.slug);
+  revalidatePostPaths(deletedPost.id, deletedPost.slug);
 }
 
 // Add this to app/actions/post.ts
@@ -115,15 +115,15 @@ export async function updatePost(formData: FormData) {
     },
   });
 
-  revalidateBlogPaths(id, slug);
+  revalidatePostPaths(id, slug);
 }
 
-function revalidateBlogPaths(postId: string, slug: string) {
-  revalidatePath('/dashboard/blog');
-  revalidatePath('/dashboard/blog/new');
-  revalidatePath(`/dashboard/blog/edit/${postId}`);
-  revalidatePath(`/dashboard/blog/edit/${slug}`);
-  revalidatePath('/blog');
-  revalidatePath(`/blog/${postId}`);
-  revalidatePath(`/blog/${slug}`);
+function revalidatePostPaths(postId: string, slug: string) {
+  revalidatePath('/dashboard/posts');
+  revalidatePath('/dashboard/posts/new');
+  revalidatePath(`/dashboard/posts/edit/${postId}`);
+  revalidatePath(`/dashboard/posts/edit/${slug}`);
+  revalidatePath('/posts');
+  revalidatePath(`/posts/${postId}`);
+  revalidatePath(`/posts/${slug}`);
 }

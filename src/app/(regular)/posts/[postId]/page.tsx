@@ -15,7 +15,8 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-import { MarkdownViewer } from '@/components/dashboard/blog/markdown';
+import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
+import { ShareButton } from '@/components/dashboard/posts/share';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -46,7 +47,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPostPage({
+export default async function PostsPage({
   params,
 }: {
   params: Promise<{ postId: string }>;
@@ -78,7 +79,7 @@ export default async function BlogPostPage({
     <article className='mx-auto w-full max-w-3xl py-8'>
       {/* Back Button */}
       <Button variant='ghost' size='lg' asChild className='mb-4'>
-        <Link href='/blog'>
+        <Link href={LINKS.posts.url}>
           <ChevronLeftIcon />
           Back to Overview
         </Link>
@@ -145,6 +146,7 @@ export default async function BlogPostPage({
           </div>
 
           <div className='ml-auto flex items-center gap-2'>
+            <ShareButton postId={post.id} />
             {(session?.user.role === Role.ADMIN ||
               session?.user.role === Role.AUTHOR) && (
               <Button variant='outline' size='xs' asChild>

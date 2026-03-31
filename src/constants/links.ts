@@ -64,14 +64,14 @@ export const LINKS = {
     url: '/contact#top',
     icon: MailIcon,
   },
-  blog: {
+  posts: {
     label: 'Blog',
-    url: '/blog#top',
+    url: '/posts#top',
     icon: NewspaperIcon,
   },
-  blogWithSlug: (slug: string) => ({
-    label: 'Blog Post',
-    url: `/blog/${slug}#top`,
+  postWithSlugOrId: (id: string) => ({
+    label: 'Post',
+    url: `/posts/${id}`,
     icon: NewspaperIcon,
   }),
   dashboard: {
@@ -94,25 +94,25 @@ export const LINKS = {
   },
   dashboardPosts: {
     label: 'Posts',
-    url: '/dashboard/blog#top',
+    url: '/dashboard/posts#top',
     icon: NewspaperIcon,
     requiresAuth: true,
   },
   dashboardPostNew: {
     label: 'New Post',
-    url: '/dashboard/blog/new#top',
+    url: '/dashboard/posts/new#top',
     icon: NewspaperIcon,
     requiresAuth: true,
   },
   dashboardPostEdit: {
     label: 'Edit Post',
-    url: '/dashboard/blog/edit#top',
+    url: '/dashboard/posts/edit#top',
     icon: NewspaperIcon,
     requiresAuth: true,
   },
   dashboardPostEditWithId: (id: string) => ({
     label: 'Edit Post',
-    url: `/dashboard/blog/edit/${id}#top`,
+    url: `/dashboard/posts/edit/${id}#top`,
     icon: NewspaperIcon,
     requiresAuth: true,
   }),
@@ -123,7 +123,7 @@ export const FOOTER_LINKS: Link[] = [LINKS.privacyShort, LINKS.imprint];
 export const NAVBAR_LINKS: Link[] = [
   LINKS.about,
   LINKS.projects,
-  LINKS.blog,
+  LINKS.posts,
   LINKS.contact,
   LINKS.dashboard,
 ];
@@ -131,7 +131,7 @@ export const NAVBAR_LINKS: Link[] = [
 export const SIDEBAR_LINKS: Link[] = [
   LINKS.home,
   LINKS.projects,
-  LINKS.blog,
+  LINKS.posts,
   LINKS.contact,
 ];
 

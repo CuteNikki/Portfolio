@@ -26,6 +26,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { LINKS } from '@/constants/links';
 import { toast } from 'sonner';
 
 type PostWithAuthor = Post & { author: User };
@@ -48,7 +49,9 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
         )}
       </Button>
     ),
-    cell: ({ row }) => <div className='truncate max-w-80'>{row.original.title}</div>,
+    cell: ({ row }) => (
+      <div className='max-w-80 truncate'>{row.original.title}</div>
+    ),
   },
   {
     accessorKey: 'published',
@@ -137,7 +140,9 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
               <DropdownMenuItem
                 onClick={() => {
                   navigator.clipboard
-                    .writeText(`${window.location.origin}/blog/${post.slug}`)
+                    .writeText(
+                      `${window.location.origin}${LINKS.postWithSlugOrId(post.id).url}`,
+                    )
                     .then(() => {
                       toast.success('Post URL copied to clipboard!');
                     });
@@ -149,7 +154,7 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
 
               {post.published && (
                 <DropdownMenuItem asChild>
-                  <Link href={`/blog/${post.slug}`} target='_blank'>
+                  <Link href={LINKS.postWithSlugOrId(post.id).url} target='_blank'>
                     <ExternalLinkIcon />
                     View Post
                   </Link>
@@ -157,7 +162,7 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
               )}
 
               <DropdownMenuItem asChild>
-                <Link href={`/dashboard/blog/edit/${post.id}`}>
+                <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
                   <EditIcon />
                   Edit Post
                 </Link>
