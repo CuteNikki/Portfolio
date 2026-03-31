@@ -2,6 +2,7 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 import {
   ArrowDownIcon,
@@ -14,9 +15,11 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 
-import type { Post, User } from '../../../../generated/prisma/client';
+import { Project } from '../../../../generated/prisma/browser';
 
-import { deletePost } from '@/actions/post';
+import { LINKS } from '@/constants/links';
+
+import { deleteProject } from '@/actions/project';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,12 +29,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LINKS } from '@/constants/links';
-import { toast } from 'sonner';
 
-type PostWithAuthor = Post & { author: User };
-
-export const columns: ColumnDef<PostWithAuthor>[] = [
+export const columns: ColumnDef<Project>[] = [
   {
     accessorKey: 'title',
     header: ({ column }) => (
@@ -80,26 +79,6 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
     },
   },
   {
-    accessorKey: 'author.username',
-    id: 'author',
-    header: ({ column }) => (
-      <Button
-        variant='ghost'
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Author
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowUpIcon className='h-4 w-4' />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDownIcon className='h-4 w-4' />
-        ) : (
-          <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
-        )}
-      </Button>
-    ),
-    cell: ({ row }) => row.original.author.username,
-  },
-  {
     accessorKey: 'createdAt',
     header: ({ column }) => (
       <Button
@@ -125,7 +104,7 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
     id: 'actions',
     header: () => '',
     cell: ({ row }) => {
-      const post = row.original;
+      const project = row.original;
 
       return (
         <div className='flex justify-end'>
@@ -141,10 +120,10 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
                 onClick={() => {
                   navigator.clipboard
                     .writeText(
-                      `${window.location.origin}${LINKS.postWithSlugOrId(post.id).url}`,
+                      `${window.location.origin}${LINKS.projectWithSlugOrId(project.id).url}`,
                     )
                     .then(() => {
-                      toast.success('Post URL copied to clipboard!');
+                      toast.success('Project URL copied to clipboard!');
                     });
                 }}
               >
@@ -152,12 +131,9 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
                 Copy URL
               </DropdownMenuItem>
 
-              {post.published && (
+              {project.published && (
                 <DropdownMenuItem asChild>
-                  <Link
-                    href={LINKS.postWithSlugOrId(post.id).url}
-                    target='_blank'
-                  >
+                  <Link href={LINKS.projectWithSlugOrId(project.id).url}>
                     <ExternalLinkIcon />
                     View
                   </Link>
@@ -165,7 +141,7 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
               )}
 
               <DropdownMenuItem asChild>
-                <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
+                <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
                   <EditIcon />
                   Edit
                 </Link>
@@ -178,17 +154,17 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
                 onClick={() => {
                   if (
                     confirm(
-                      'Are you sure you want to delete this post? This action cannot be undone.',
+                      'Are you sure you want to delete this project? This action cannot be undone.',
                     )
                   ) {
                     const formData = new FormData();
-                    formData.append('postId', post.id);
-                    deletePost(formData)
+                    formData.append('projectId', project.id);
+                    deleteProject(formData)
                       .then(() => {
-                        toast.success('Post deleted successfully!');
+                        toast.success('Project deleted successfully!');
                       })
                       .catch((error) => {
-                        toast.error('Failed to delete post', {
+                        toast.error('Failed to delete project', {
                           description:
                             error instanceof Error
                               ? error.message

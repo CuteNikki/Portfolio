@@ -74,8 +74,6 @@ export async function deletePost(formData: FormData) {
   revalidatePostPaths(deletedPost.id, deletedPost.slug);
 }
 
-// Add this to app/actions/post.ts
-
 export async function updatePost(formData: FormData) {
   const session = await getCurrentSession();
 

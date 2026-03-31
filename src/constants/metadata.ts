@@ -71,4 +71,14 @@ export const SITE_METADATA: Record<string, Metadata> = {
     description:
       'Read my latest posts on various topics related to development, technology and more. Stay updated with my insights and experiences.',
   },
+  dashboardProjects: {
+    title: 'niso.moe - Projects',
+    description:
+      'Manage the projects in the dashboard. Here you can view, edit and delete projects. This area is protected and only accessible to authorized users.',
+  },
+  dashboardNewProject: {
+    title: 'niso.moe - New Project',
+    description:
+      'Create a new project! Use the editor to write content. This area is protected and only accessible to authorized users.',
+  },
 } as const;

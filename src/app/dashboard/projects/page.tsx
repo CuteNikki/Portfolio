@@ -1,44 +1,42 @@
 import Link from 'next/link';
 
-import { NewspaperIcon, PlusIcon } from 'lucide-react';
+import { PlusIcon, PresentationIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
 import prisma from '@/lib/prisma';
 
-import { columns } from '@/components/dashboard/posts/columns';
+import { columns } from '@/components/dashboard/projects/columns';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { TableWrapper } from '@/components/dashboard/shared/table-wrapper';
 import { Button } from '@/components/ui/button';
 
-export const { dashboardPosts: metadata } = SITE_METADATA;
+export const { dashboardProjects: metadata } = SITE_METADATA;
 
-export default async function PostsPage() {
-  const posts = await prisma.post.findMany({
+export default async function ProjectsPage() {
+  const projects = await prisma.project.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { author: true },
   });
 
   return (
     <div className='flex w-full flex-col gap-4 border p-4 sm:p-8'>
       <div className='flex flex-col items-start justify-between gap-2 lg:flex-row lg:items-center'>
         <DashboardHeader
-          icon={NewspaperIcon}
-          title={'Posts'}
-          description={'Manage posts and drafts.'}
+          icon={PresentationIcon}
+          title={'Projects'}
+          description={'Manage projects and drafts.'}
         />
         <Button asChild>
-          <Link href={LINKS.dashboardPostNew.url}>
+          <Link href={LINKS.dashboardProjectNew.url}>
             <PlusIcon />
-            {LINKS.dashboardPostNew.label}
+            {LINKS.dashboardProjectNew.label}
           </Link>
         </Button>
       </div>
-
       <TableWrapper
         columns={columns}
-        data={posts}
-        filterPlaceholder='Filter Posts...'
+        data={projects}
+        filterPlaceholder='Filter Projects...'
       />
     </div>
   );

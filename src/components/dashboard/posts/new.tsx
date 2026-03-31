@@ -4,24 +4,17 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
-import {
-  LoaderCircleIcon,
-  NewspaperIcon,
-  SaveIcon,
-  SendHorizonalIcon,
-} from 'lucide-react';
-
 import { createPost } from '@/actions/post';
 
 import { LINKS } from '@/constants/links';
 
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
-import { Button } from '@/components/ui/button';
+import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
-export function NewPostContent() {
+export function NewPostForm() {
   const [content, setContent] = useState('');
   const [isPending, startTransition] = useTransition();
 
@@ -59,115 +52,66 @@ export function NewPostContent() {
   };
 
   return (
-    <div className='flex w-full max-w-5xl flex-col gap-4 justify-self-center border p-4 sm:p-8'>
-      <div className='flex flex-col gap-2'>
-        <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
-          <NewspaperIcon className='shrink-0' />
-          Create New Post
-        </h1>
-        <p className='text-muted-foreground'>Draft and publish a new post.</p>
+    <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+      {/* Title & Slug */}
+      <div className='grid gap-4 sm:grid-cols-2'>
+        <div className='flex flex-col gap-2'>
+          <label htmlFor='title' className='text-sm font-medium'>
+            Title
+          </label>
+          <Input
+            id='title'
+            name='title'
+            placeholder='Why I switched to Linux...'
+            required
+          />
+        </div>
+
+        <div className='flex flex-col gap-2'>
+          <label htmlFor='slug' className='text-sm font-medium'>
+            URL Slug
+          </label>
+          <Input id='slug' name='slug' placeholder='why-i-switched-to-linux' />
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
-        {/* Title & Slug */}
-        <div className='grid gap-4 sm:grid-cols-2'>
-          <div className='flex flex-col gap-2'>
-            <label htmlFor='title' className='text-sm font-medium'>
-              Title
-            </label>
-            <Input
-              id='title'
-              name='title'
-              placeholder='Why I switched to Linux...'
-              required
-            />
-          </div>
+      {/* The Editor */}
+      <Tabs defaultValue='write' className='w-full'>
+        <TabsList className='mb-1 grid w-full max-w-50 grid-cols-2'>
+          <TabsTrigger value='write'>Write</TabsTrigger>
+          <TabsTrigger value='preview'>Preview</TabsTrigger>
+        </TabsList>
 
-          <div className='flex flex-col gap-2'>
-            <label htmlFor='slug' className='text-sm font-medium'>
-              URL Slug
-            </label>
-            <Input
-              id='slug'
-              name='slug'
-              placeholder='why-i-switched-to-linux'
-            />
-          </div>
-        </div>
+        <TabsContent value='write'>
+          <Textarea
+            name='content'
+            placeholder='Write your post content here using Markdown...'
+            className='min-h-100 resize-y font-mono'
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            required
+          />
+        </TabsContent>
 
-        {/* The Editor */}
-        <Tabs defaultValue='write' className='w-full'>
-          <TabsList className='mb-1 grid w-full max-w-50 grid-cols-2'>
-            <TabsTrigger value='write'>Write</TabsTrigger>
-            <TabsTrigger value='preview'>Preview</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value='write'>
-            <Textarea
-              name='content'
-              placeholder='Write your post content here using Markdown...'
-              className='min-h-100 resize-y font-mono'
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              required
-            />
-          </TabsContent>
-
-          <TabsContent value='preview'>
-            <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert min-h-100 w-full max-w-none border p-2 text-sm wrap-break-word'>
-              {content ? (
-                <MarkdownViewer content={content} />
-              ) : (
-                <p className='text-muted-foreground italic'>
-                  Nothing to preview yet...
-                </p>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-
-        {/* Action Buttons */}
-        <div className='flex items-center justify-end gap-4'>
-          {/* Cancel Button */}
-          <Button
-            type='button'
-            variant='ghost'
-            onClick={() => window.history.back()}
-            disabled={isPending}
-          >
-            Cancel
-          </Button>
-
-          {/* Save Draft Button */}
-          <Button
-            type='submit'
-            variant='secondary'
-            onClick={() => setSubmitAction('draft')}
-            disabled={isPending || !content.trim()}
-          >
-            {isPending && submitAction === 'draft' ? (
-              <LoaderCircleIcon className='animate-spin' />
+        <TabsContent value='preview'>
+          <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert min-h-100 w-full max-w-none border p-2 text-sm wrap-break-word'>
+            {content ? (
+              <MarkdownViewer content={content} />
             ) : (
-              <SaveIcon />
+              <p className='text-muted-foreground italic'>
+                Nothing to preview yet...
+              </p>
             )}
-            Save Draft
-          </Button>
+          </div>
+        </TabsContent>
+      </Tabs>
 
-          {/* Publish Button */}
-          <Button
-            type='submit'
-            onClick={() => setSubmitAction('publish')}
-            disabled={isPending || !content.trim()}
-          >
-            {isPending && submitAction === 'publish' ? (
-              <LoaderCircleIcon className='animate-spin' />
-            ) : (
-              <SendHorizonalIcon />
-            )}
-            Publish Post
-          </Button>
-        </div>
-      </form>
-    </div>
+      <NewActionButtons
+        isPending={isPending}
+        isMissingRequiredFields={!content.trim()}
+        action={submitAction}
+        setAction={setSubmitAction}
+      />
+    </form>
   );
 }

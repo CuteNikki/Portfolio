@@ -4,31 +4,27 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
-import { LoaderCircleIcon, SaveIcon, SendIcon, Trash2Icon } from 'lucide-react';
-
-import { deletePost, updatePost } from '@/actions/post';
 import type { Post } from '../../../../generated/prisma/client';
 
+import { deletePost, updatePost } from '@/actions/post';
+import { LINKS } from '@/constants/links';
+
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
-import { Button } from '@/components/ui/button';
+import { EditActionButtons } from '@/components/dashboard/shared/actions-edit';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { LINKS } from '@/constants/links';
 
 export function EditPostForm({ post }: { post: Post }) {
-  const router = useRouter();
   const [content, setContent] = useState(post.content);
-  const [isPending, startTransition] = useTransition();
-
-  // Track the intent of the form submission
   const [action, setAction] = useState<'save' | 'publish' | 'delete'>('save');
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    // Add metadata for the server actions
     formData.append('postId', post.id);
     formData.append('isPublished', action === 'publish' ? 'true' : 'false');
 
@@ -51,7 +47,7 @@ export function EditPostForm({ post }: { post: Post }) {
         toast.success(
           action === 'publish' ? 'Post published!' : 'Draft saved!',
         );
-        router.refresh(); // Update the server data without a full reload
+        router.refresh();
       } catch (error) {
         toast.error('Something went wrong', {
           description: error instanceof Error ? error.message : 'Unknown error',
@@ -61,7 +57,7 @@ export function EditPostForm({ post }: { post: Post }) {
   };
 
   return (
-    <form onSubmit={onSubmit} className='flex flex-col gap-6'>
+    <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
       {/* Title & Slug */}
       <div className='grid gap-4 sm:grid-cols-2'>
         <div className='flex flex-col gap-2'>
@@ -121,65 +117,13 @@ export function EditPostForm({ post }: { post: Post }) {
         </TabsContent>
       </Tabs>
 
-      {/* Action Buttons */}
-      <div className='flex flex-col-reverse items-center gap-2 sm:flex-row sm:justify-between'>
-        {/* Delete Button */}
-        <Button
-          type='submit'
-          variant='destructive'
-          onClick={() => setAction('delete')}
-          disabled={isPending}
-        >
-          {isPending && action === 'delete' ? (
-            <LoaderCircleIcon className='animate-spin' />
-          ) : (
-            <Trash2Icon />
-          )}
-          Delete Post
-        </Button>
-
-        {/* Other Action Buttons */}
-        <div className='xs:flex-row flex flex-col items-center gap-2'>
-          {/* Cancel Button */}
-          <Button
-            type='button'
-            variant='ghost'
-            onClick={() => router.back()}
-            disabled={isPending}
-          >
-            Cancel
-          </Button>
-
-          {/* Save Draft Button */}
-          <Button
-            type='submit'
-            variant='secondary'
-            onClick={() => setAction('save')}
-            disabled={isPending || !content.trim()}
-          >
-            {isPending && action === 'save' ? (
-              <LoaderCircleIcon className='animate-spin' />
-            ) : (
-              <SaveIcon />
-            )}
-            {post.published ? 'Revert to Draft' : 'Save Draft'}
-          </Button>
-
-          {/* Publish Button */}
-          <Button
-            type='submit'
-            onClick={() => setAction('publish')}
-            disabled={isPending || !content.trim()}
-          >
-            {isPending && action === 'publish' ? (
-              <LoaderCircleIcon className='animate-spin' />
-            ) : (
-              <SendIcon />
-            )}
-            {post.published ? 'Update Published' : 'Publish Post'}
-          </Button>
-        </div>
-      </div>
+      <EditActionButtons
+        isPublished={post.published}
+        isPending={isPending}
+        isMissingRequiredFields={!content.trim()}
+        action={action}
+        setAction={setAction}
+      />
     </form>
   );
 }

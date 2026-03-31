@@ -59,6 +59,11 @@ export const LINKS = {
     url: '/projects#top',
     icon: PresentationIcon,
   },
+  projectWithSlugOrId: (id: string) => ({
+    label: 'Project',
+    url: `/projects/${id}`,
+    icon: PresentationIcon,
+  }),
   contact: {
     label: 'Contact',
     url: '/contact#top',
@@ -116,6 +121,30 @@ export const LINKS = {
     icon: NewspaperIcon,
     requiresAuth: true,
   }),
+  dashboardProjects: {
+    label: 'Projects',
+    url: '/dashboard/projects#top',
+    icon: PresentationIcon,
+    requiresAuth: true,
+  },
+  dashboardProjectNew: {
+    label: 'New Project',
+    url: '/dashboard/projects/new#top',
+    icon: PresentationIcon,
+    requiresAuth: true,
+  },
+  dashboardProjectEdit: {
+    label: 'Edit Project',
+    url: '/dashboard/projects/edit#top',
+    icon: PresentationIcon,
+    requiresAuth: true,
+  },
+  dashboardProjectEditWithId: (id: string) => ({
+    label: 'Edit Project',
+    url: `/dashboard/projects/edit/${id}#top`,
+    icon: PresentationIcon,
+    requiresAuth: true,
+  }),
 };
 
 export const FOOTER_LINKS: Link[] = [LINKS.privacyShort, LINKS.imprint];
@@ -139,4 +168,5 @@ export const DASHBOARD_LINKS: Link[] = [
   LINKS.dashboardOverview,
   LINKS.dashboardUsers,
   LINKS.dashboardPosts,
+  LINKS.dashboardProjects,
 ];

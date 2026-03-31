@@ -1,11 +1,12 @@
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { PencilLineIcon } from 'lucide-react';
 
 import prisma from '@/lib/prisma';
 
-import { EditPostForm } from '@/components/dashboard/posts/edit-form';
-import { Metadata } from 'next';
+import { EditPostForm } from '@/components/dashboard/posts/edit';
+import { DashboardHeader } from '@/components/dashboard/shared/header';
 
 export async function generateMetadata({
   params,
@@ -46,19 +47,13 @@ export default async function EditPostPage({
   }
 
   return (
-    <div>
-      <div className='flex w-full max-w-5xl flex-col gap-4 justify-self-center border p-4 sm:p-8'>
-        <div className='flex flex-col gap-2'>
-          <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
-            <PencilLineIcon className='shrink-0' />
-            Edit Post
-          </h1>
-          <p className='text-muted-foreground'>
-            Make changes to a post or update its publication status.
-          </p>
-        </div>
-        <EditPostForm post={post} />
-      </div>
+    <div className='flex w-full max-w-5xl flex-col gap-4 justify-self-center border p-4 sm:p-8'>
+      <DashboardHeader
+        icon={PencilLineIcon}
+        title={'Edit Post'}
+        description={'Make changes to a post or update its publication status.'}
+      />
+      <EditPostForm post={post} />
     </div>
   );
 }
