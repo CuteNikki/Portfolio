@@ -9,7 +9,7 @@ import {
   UserIcon,
 } from 'lucide-react';
 
-import { Role } from '../../../../../generated/prisma/enums';
+import { Role } from '@/generated/prisma/enums';
 
 import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';

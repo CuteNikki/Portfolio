@@ -7,7 +7,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { Role } from '../../../../generated/prisma/enums';
+import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';

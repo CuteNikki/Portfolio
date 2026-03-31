@@ -15,7 +15,7 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 
-import { Project } from '../../../../generated/prisma/browser';
+import { Project } from '@/generated/prisma/browser';
 
 import { LINKS } from '@/constants/links';
 

@@ -15,7 +15,7 @@ import {
   TrashIcon,
 } from 'lucide-react';
 
-import type { Role, User } from '../../../../generated/prisma/client';
+import type { Role, User } from '@/generated/prisma/client';
 
 import { deleteUser, updateUserRole } from '@/actions/user';
 

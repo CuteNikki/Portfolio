@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 
-import { Role } from '../../generated/prisma/enums';
+import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';

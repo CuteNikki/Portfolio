@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-import { Role } from '../../../generated/prisma/enums';
+import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 

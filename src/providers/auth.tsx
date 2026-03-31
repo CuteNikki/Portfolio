@@ -2,7 +2,7 @@
 
 import { createContext, ReactNode, useContext } from 'react';
 
-import type { Session, User } from '../../generated/prisma/browser';
+import type { Session, User } from '@/generated/prisma/browser';
 
 const AuthContext = createContext<(Session & { user: User }) | null>(null);
 

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
-import type { Post } from '../../../../generated/prisma/client';
+import type { Post } from '@/generated/prisma/client';
 
 import { deletePost, updatePost } from '@/actions/post';
 import { LINKS } from '@/constants/links';

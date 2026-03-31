@@ -14,7 +14,7 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 
-import type { Post, User } from '../../../../generated/prisma/client';
+import type { Post, User } from '@/generated/prisma/client';
 
 import { deletePost } from '@/actions/post';
 import { Badge } from '@/components/ui/badge';

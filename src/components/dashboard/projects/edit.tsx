@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
-import { Project } from '../../../../generated/prisma/browser';
+import { Project } from '@/generated/prisma/browser';
 
 import { deleteProject, updateProject } from '@/actions/project';
 
