@@ -51,7 +51,7 @@ model Post {
   id        String  @id @default(cuid())
   authorId  String
   title     String
-  slug      String  @unique
+  slug      String? @unique
   content   String  @db.Text
   published Boolean @default(false)
 
@@ -77,4 +77,21 @@ model Comment {
 
   parent  Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
   replies Comment[] @relation("CommentToComment")
+}
+
+model Project {
+  id          String  @id @default(cuid())
+  title       String
+  slug        String? @unique
+  description String  @db.Text
+
+  tags         String[]
+  technologies String[]
+
+  // Optional links related to the project
+  repository String?
+  website    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

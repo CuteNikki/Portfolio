@@ -91,7 +91,6 @@ export function NewPostContent() {
               id='slug'
               name='slug'
               placeholder='why-i-switched-to-linux'
-              required
             />
           </div>
         </div>

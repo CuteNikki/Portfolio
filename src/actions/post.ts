@@ -25,18 +25,20 @@ export async function createPost(formData: FormData) {
 
   const isPublished = formData.get('isPublished') === 'true';
 
-  if (!title || !content || !slug) {
-    throw new Error('Title, content, and slug are required.');
+  if (!title || !content) {
+    throw new Error('Title and content are required.');
   }
 
-  const existingPost = await prisma.post.findUnique({
-    where: { slug },
-  });
+  if (slug) {
+    const existingPost = await prisma.post.findUnique({
+      where: { slug },
+    });
 
-  if (existingPost) {
-    throw new Error(
-      'A post with this URL slug already exists. Please choose a different one.',
-    );
+    if (existingPost) {
+      throw new Error(
+        'A post with this URL slug already exists. Please choose a different one.',
+      );
+    }
   }
 
   const createdPost = await prisma.post.create({
@@ -90,19 +92,21 @@ export async function updatePost(formData: FormData) {
   const content = formData.get('content') as string;
   const isPublished = formData.get('isPublished') === 'true';
 
-  if (!id || !title || !slug || !content) {
+  if (!id || !title || !content) {
     throw new Error('All fields are required.');
   }
 
-  const existingPost = await prisma.post.findFirst({
-    where: {
-      slug,
-      NOT: { id },
-    },
-  });
+  if (slug) {
+    const existingPost = await prisma.post.findFirst({
+      where: {
+        slug,
+        NOT: { id },
+      },
+    });
 
-  if (existingPost) {
-    throw new Error('Another post is already using this URL slug.');
+    if (existingPost) {
+      throw new Error('Another post is already using this URL slug.');
+    }
   }
 
   await prisma.post.update({

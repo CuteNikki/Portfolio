@@ -85,7 +85,6 @@ export function EditPostForm({ post }: { post: Post }) {
             name='slug'
             placeholder='why-i-switched-to-linux'
             defaultValue={post.slug}
-            required
           />
         </div>
       </div>

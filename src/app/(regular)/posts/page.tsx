@@ -89,7 +89,7 @@ export default async function PostsPage() {
       <div className='grid w-full grid-cols-1 gap-4 sm:grid-cols-2'>
         {posts.map((post) => (
           <Link
-            href={LINKS.postWithSlugOrId(post.slug).url}
+            href={LINKS.postWithSlugOrId(post.slug ?? post.id).url}
             key={post.id}
             className='group hover:border-primary/50 hover:bg-muted/20 flex flex-col justify-between border p-5 transition-colors'
           >
