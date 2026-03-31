@@ -59,7 +59,7 @@ const CodeBlock = ({ children, className, ...rest }: CodeBlockProps) => {
     return (
       <code
         {...rest}
-        className='text-foreground dark:bg-muted/80 catppuccin-macchiato:bg-muted/80 bg-zinc-200 px-1.5 py-0.5 font-mono text-sm font-medium before:content-none after:content-none'
+        className='text-foreground dark:bg-muted/80 catppuccin-macchiato:bg-muted/80 bg-zinc-200 px-1.5 py-0.5 text-sm font-medium before:content-none after:content-none'
       >
         {children}
       </code>

@@ -86,7 +86,7 @@ export function NewPostForm() {
           <Textarea
             name='content'
             placeholder='Write your post content here using Markdown...'
-            className='min-h-100 resize-y font-mono'
+            className='min-h-100 resize-y'
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required

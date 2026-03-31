@@ -97,7 +97,7 @@ export function EditPostForm({ post }: { post: Post }) {
         <TabsContent value='write'>
           <Textarea
             name='content'
-            className='min-h-100 resize-y font-mono'
+            className='min-h-100 resize-y'
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
