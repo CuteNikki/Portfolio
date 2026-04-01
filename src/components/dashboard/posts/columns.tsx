@@ -2,6 +2,8 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 import {
   ArrowDownIcon,
@@ -17,6 +19,18 @@ import {
 import type { Post, User } from '@/generated/prisma/client';
 
 import { deletePost } from '@/actions/post';
+import { LINKS } from '@/constants/links';
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,10 +40,106 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { LINKS } from '@/constants/links';
-import { toast } from 'sonner';
 
 type PostWithAuthor = Post & { author: User };
+
+const PostActions = ({ post }: { post: PostWithAuthor }) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const handleDelete = () => {
+    const formData = new FormData();
+    formData.append('postId', post.id);
+
+    deletePost(formData)
+      .then(() => {
+        toast.success('Post deleted successfully!');
+        setShowDeleteDialog(false);
+      })
+      .catch((error) => {
+        toast.error('Failed to delete post', {
+          description:
+            error instanceof Error
+              ? error.message
+              : 'An unknown error occurred',
+        });
+        setShowDeleteDialog(false);
+      });
+  };
+
+  return (
+    <div className='flex justify-end'>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' size='sm'>
+            <span className='sr-only'>Open menu</span>
+            <MoreHorizontalIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          <DropdownMenuItem
+            onClick={() => {
+              navigator.clipboard
+                .writeText(
+                  `${window.location.origin}${LINKS.postWithSlugOrId(post.id).url}`,
+                )
+                .then(() => {
+                  toast.success('Post URL copied to clipboard!');
+                });
+            }}
+          >
+            <ClipboardCopyIcon />
+            Copy URL
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link href={LINKS.postWithSlugOrId(post.id).url} target='_blank'>
+              <ExternalLinkIcon />
+              View
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem asChild>
+            <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
+              <EditIcon />
+              Edit
+            </Link>
+          </DropdownMenuItem>
+
+          <DropdownMenuSeparator />
+
+          <DropdownMenuItem
+            variant='destructive'
+            onSelect={(e) => {
+              e.preventDefault();
+              setShowDeleteDialog(true);
+            }}
+          >
+            <Trash2Icon />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              post &quot;{post.title}&quot;.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant='destructive' onClick={handleDelete}>
+              Delete Post
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+};
 
 export const columns: ColumnDef<PostWithAuthor>[] = [
   {
@@ -41,11 +151,11 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
       >
         Title
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUpIcon className='h-4 w-4' />
+          <ArrowUpIcon />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDownIcon className='h-4 w-4' />
+          <ArrowDownIcon />
         ) : (
-          <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+          <ArrowUpDownIcon className='opacity-50' />
         )}
       </Button>
     ),
@@ -62,11 +172,11 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
       >
         Status
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUpIcon className='h-4 w-4' />
+          <ArrowUpIcon />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDownIcon className='h-4 w-4' />
+          <ArrowDownIcon />
         ) : (
-          <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+          <ArrowUpDownIcon className='opacity-50' />
         )}
       </Button>
     ),
@@ -89,11 +199,11 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
       >
         Author
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUpIcon className='h-4 w-4' />
+          <ArrowUpIcon />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDownIcon className='h-4 w-4' />
+          <ArrowDownIcon />
         ) : (
-          <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+          <ArrowUpDownIcon className='opacity-50' />
         )}
       </Button>
     ),
@@ -108,11 +218,11 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
       >
         Created
         {column.getIsSorted() === 'asc' ? (
-          <ArrowUpIcon className='h-4 w-4' />
+          <ArrowUpIcon />
         ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDownIcon className='h-4 w-4' />
+          <ArrowDownIcon />
         ) : (
-          <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+          <ArrowUpDownIcon className='opacity-50' />
         )}
       </Button>
     ),
@@ -124,85 +234,6 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
   {
     id: 'actions',
     header: () => '',
-    cell: ({ row }) => {
-      const post = row.original;
-
-      return (
-        <div className='flex justify-end'>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='ghost' size='sm'>
-                <span className='sr-only'>Open menu</span>
-                <MoreHorizontalIcon className='h-4 w-4 shrink-0' />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='end'>
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard
-                    .writeText(
-                      `${window.location.origin}${LINKS.postWithSlugOrId(post.id).url}`,
-                    )
-                    .then(() => {
-                      toast.success('Post URL copied to clipboard!');
-                    });
-                }}
-              >
-                <ClipboardCopyIcon />
-                Copy URL
-              </DropdownMenuItem>
-
-              <DropdownMenuItem asChild>
-                <Link
-                  href={LINKS.postWithSlugOrId(post.id).url}
-                  target='_blank'
-                >
-                  <ExternalLinkIcon />
-                  View
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem asChild>
-                <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
-                  <EditIcon />
-                  Edit
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                variant='destructive'
-                onClick={() => {
-                  if (
-                    confirm(
-                      'Are you sure you want to delete this post? This action cannot be undone.',
-                    )
-                  ) {
-                    const formData = new FormData();
-                    formData.append('postId', post.id);
-                    deletePost(formData)
-                      .then(() => {
-                        toast.success('Post deleted successfully!');
-                      })
-                      .catch((error) => {
-                        toast.error('Failed to delete post', {
-                          description:
-                            error instanceof Error
-                              ? error.message
-                              : 'An unknown error occurred',
-                        });
-                      });
-                  }
-                }}
-              >
-                <Trash2Icon />
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
+    cell: ({ row }) => <PostActions post={row.original} />,
   },
 ];

@@ -19,6 +19,16 @@ import type { Role, User } from '@/generated/prisma/client';
 
 import { deleteUser, updateUserRole } from '@/actions/user';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -45,11 +55,11 @@ const userColumn: ColumnDef<User> = {
     >
       User
       {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon className='h-4 w-4' />
+        <ArrowUpIcon />
       ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon className='h-4 w-4' />
+        <ArrowDownIcon />
       ) : (
-        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+        <ArrowUpDownIcon className='opacity-50' />
       )}
     </Button>
   ),
@@ -77,11 +87,11 @@ const nameColumn: ColumnDef<User> = {
     >
       Name
       {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon className='h-4 w-4' />
+        <ArrowUpIcon />
       ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon className='h-4 w-4' />
+        <ArrowDownIcon />
       ) : (
-        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+        <ArrowUpDownIcon className='opacity-50' />
       )}
     </Button>
   ),
@@ -150,34 +160,54 @@ const roleColumn: ColumnDef<User> = {
     >
       Role
       {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon className='h-4 w-4' />
+        <ArrowUpIcon />
       ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon className='h-4 w-4' />
+        <ArrowDownIcon />
       ) : (
-        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+        <ArrowUpDownIcon className='opacity-50' />
       )}
     </Button>
   ),
   cell: ({ row }) => <RoleSelectCell user={row.original} />,
 };
 
-const actionsColumn: ColumnDef<User> = {
-  id: 'actions',
-  header: '',
-  cell: ({ row }) => (
+const UserActions = ({ user }: { user: User }) => {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+
+  const handleDelete = () => {
+    const formData = new FormData();
+    formData.append('userId', user.id);
+
+    deleteUser(formData)
+      .then(() => {
+        toast.success('User deleted successfully!');
+        setShowDeleteDialog(false);
+      })
+      .catch((error) => {
+        toast.error('Failed to delete user', {
+          description:
+            error instanceof Error
+              ? error.message
+              : 'An unknown error occurred',
+        });
+        setShowDeleteDialog(false);
+      });
+  };
+
+  return (
     <div className='flex justify-end'>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' size='sm'>
             <span className='sr-only'>Open menu</span>
-            <MoreHorizontalIcon className='h-4 w-4 shrink-0' />
+            <MoreHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
           <DropdownMenuItem
             onClick={() => {
               navigator.clipboard
-                .writeText(row.original.discordId)
+                .writeText(user.discordId)
                 .then(() => {
                   toast.success('User ID copied to clipboard');
                 })
@@ -189,30 +219,14 @@ const actionsColumn: ColumnDef<User> = {
             <ClipboardCopyIcon />
             Copy ID
           </DropdownMenuItem>
+
           <DropdownMenuSeparator />
+
           <DropdownMenuItem
             variant='destructive'
-            onClick={() => {
-              if (
-                confirm(
-                  `Are you sure you want to delete ${row.original.username}? This action cannot be undone.`,
-                )
-              ) {
-                const formData = new FormData();
-                formData.append('userId', row.original.id);
-                deleteUser(formData)
-                  .then(() => {
-                    toast.success('User deleted successfully!');
-                  })
-                  .catch((error) => {
-                    toast.error('Failed to delete user', {
-                      description:
-                        error instanceof Error
-                          ? error.message
-                          : 'An unknown error occurred',
-                    });
-                  });
-              }
+            onSelect={(e) => {
+              e.preventDefault();
+              setShowDeleteDialog(true);
             }}
           >
             <TrashIcon />
@@ -220,8 +234,36 @@ const actionsColumn: ColumnDef<User> = {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              user{' '}
+              <span className='text-foreground font-semibold'>
+                {user.username}
+              </span>{' '}
+              and remove their access to the system.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant='destructive' onClick={handleDelete}>
+              Delete User
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
-  ),
+  );
+};
+
+const actionsColumn: ColumnDef<User> = {
+  id: 'actions',
+  header: () => '',
+  cell: ({ row }) => <UserActions user={row.original} />,
 };
 
 const idColumn: ColumnDef<User> = {
@@ -233,11 +275,11 @@ const idColumn: ColumnDef<User> = {
     >
       ID
       {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon className='h-4 w-4' />
+        <ArrowUpIcon />
       ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon className='h-4 w-4' />
+        <ArrowDownIcon />
       ) : (
-        <ArrowUpDownIcon className='h-4 w-4 opacity-50' />
+        <ArrowUpDownIcon className='opacity-50' />
       )}
     </Button>
   ),
