@@ -14,9 +14,15 @@ import { Button } from '@/components/ui/button';
 export const { dashboardProjects: metadata } = SITE_METADATA;
 
 export default async function ProjectsPage() {
-  const projects = await prisma.project.findMany({
-    orderBy: { createdAt: 'desc' },
-  });
+  const { projects, hasError } = await prisma.project
+    .findMany({
+      orderBy: { createdAt: 'desc' },
+    })
+    .then((projects) => ({ projects, hasError: false }))
+    .catch((error) => {
+      console.error('Error fetching projects:', error);
+      return { projects: [], hasError: true };
+    });
 
   return (
     <div className='flex w-full flex-col gap-4 border p-4 sm:p-8'>
@@ -37,6 +43,7 @@ export default async function ProjectsPage() {
         columns={columns}
         data={projects}
         filterPlaceholder='Filter Projects...'
+        hasError={hasError}
       />
     </div>
   );

@@ -1,5 +1,6 @@
 import { flexRender, Table as TableType } from '@tanstack/react-table';
 
+import { ErrorToast } from '@/components/common/error-toast';
 import {
   Table,
   TableBody,
@@ -12,9 +13,11 @@ import {
 export function BaseTable<TData>({
   table,
   columns,
+  hasError = false,
 }: {
   table: TableType<TData>;
   columns: number;
+  hasError?: boolean;
 }) {
   return (
     <div className='w-full overflow-hidden border'>
@@ -54,6 +57,12 @@ export function BaseTable<TData>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns} className='h-12 text-center'>
+                {hasError && (
+                  <ErrorToast
+                    title='Failed to load data.'
+                    description='Please try again later.'
+                  />
+                )}
                 No results.
               </TableCell>
             </TableRow>

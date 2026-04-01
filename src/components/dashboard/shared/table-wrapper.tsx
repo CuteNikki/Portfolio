@@ -24,8 +24,9 @@ interface DataTableProps<TData, TValue> {
 export function TableWrapper<TData, TValue>({
   columns,
   data,
+  hasError = false,
   filterPlaceholder = 'Filter...',
-}: DataTableProps<TData, TValue> & { filterPlaceholder?: string }) {
+}: DataTableProps<TData, TValue> & { filterPlaceholder?: string; hasError?: boolean }) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
@@ -59,7 +60,7 @@ export function TableWrapper<TData, TValue>({
         />
       </div>
 
-      <BaseTable table={table} columns={columns.length} />
+      <BaseTable table={table} columns={columns.length} hasError={hasError} />
 
       <Pagination table={table} />
     </div>

@@ -14,10 +14,16 @@ import { Button } from '@/components/ui/button';
 export const { dashboardPosts: metadata } = SITE_METADATA;
 
 export default async function PostsPage() {
-  const posts = await prisma.post.findMany({
-    orderBy: { createdAt: 'desc' },
-    include: { author: true },
-  });
+  const { posts, hasError } = await prisma.post
+    .findMany({
+      orderBy: { createdAt: 'desc' },
+      include: { author: true },
+    })
+    .then((posts) => ({ posts, hasError: false }))
+    .catch((error) => {
+      console.error('Error fetching posts:', error);
+      return { posts: [], hasError: true };
+    });
 
   return (
     <div className='flex w-full flex-col gap-4 border p-4 sm:p-8'>
@@ -34,11 +40,11 @@ export default async function PostsPage() {
           </Link>
         </Button>
       </div>
-
       <TableWrapper
         columns={columns}
         data={posts}
         filterPlaceholder='Filter Posts...'
+        hasError={hasError}
       />
     </div>
   );

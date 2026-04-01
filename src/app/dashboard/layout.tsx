@@ -23,7 +23,7 @@ export default async function DashboardLayout({
   const session = await getCurrentSession();
 
   if (!session || session.user.role !== Role.ADMIN) {
-    redirect('/unauthorized');
+    redirect('/');
   }
 
   return (
