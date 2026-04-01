@@ -159,7 +159,7 @@ export function ImprintContent({
         </div>
         <Button size='lg' asChild>
           <Link
-            href={language === 'en' ? LINKS.imprint.url : LINKS.impressum.url}
+            href={language === 'en' ? LINKS.impressum.url : LINKS.imprint.url}
           >
             {content.languageToggleIcon}
             {content.languageToggle}
