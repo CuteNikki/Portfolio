@@ -120,7 +120,7 @@ export async function updatePost(formData: FormData) {
   revalidatePostPaths(id, slug);
 }
 
-export async function commentOnPost(formData: FormData) {
+export async function createComment(formData: FormData) {
   const session = await getCurrentSession();
 
   if (!session) {
@@ -129,7 +129,8 @@ export async function commentOnPost(formData: FormData) {
 
   const postId = formData.get('postId') as string;
   const rawContent = formData.get('content') as string;
-  const postSlug = formData.get('postSlug') as string | null;
+  const postSlug = (formData.get('postSlug') || null) as string | null;
+  const parentId = (formData.get('parentId') || null) as string | null;
 
   const content = rawContent.trim().replace(/(?:\r?\n){3,}/g, '\n\n');
 
@@ -145,6 +146,7 @@ export async function commentOnPost(formData: FormData) {
     data: {
       content,
       postId,
+      parentId,
       authorId: session.user.id,
     },
   });

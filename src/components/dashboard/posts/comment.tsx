@@ -5,6 +5,7 @@ import type { Comment, User } from '@/generated/prisma/browser';
 import { editComment } from '@/actions/post';
 import { UserHover } from '@/components/common/user-hover';
 import { CommentActions } from '@/components/dashboard/posts/comment-actions';
+import { CommentForm } from '@/components/dashboard/posts/comment-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
@@ -20,7 +21,7 @@ export function Comment({
   editingCommentId,
   setEditingCommentIdAction,
 }: {
-  comment: Comment & { author: User };
+  comment: Comment & { author: User; replies?: (Comment & { author: User })[] };
   isAdmin: boolean;
   userId: string;
   postSlug: string;
@@ -28,6 +29,7 @@ export function Comment({
   setEditingCommentIdAction: (commentId: string | null) => void;
 }) {
   const [content, setContent] = useState(comment.content);
+  const [showReplyForm, setShowReplyForm] = useState(false);
 
   return (
     <li key={comment.id} className='flex items-start gap-4'>
@@ -129,6 +131,39 @@ export function Comment({
           <p className='text-sm wrap-break-word whitespace-pre-wrap'>
             {comment.content}
           </p>
+        )}
+        <Button
+          className='mt-2 self-start'
+          size='xs'
+          variant='outline'
+          onClick={() => setShowReplyForm((prev) => !prev)}
+        >
+          Reply
+        </Button>
+        {showReplyForm && (
+          <div className='mt-2'>
+            <CommentForm
+              postId={comment.postId}
+              parentId={comment.id}
+              slug={postSlug}
+              setShowReplyFormAction={setShowReplyForm}
+            />
+          </div>
+        )}
+        {(comment.replies?.length ?? 0) > 0 && (
+          <div className='pt-2 pl-4'>
+            {comment.replies?.map((reply) => (
+              <Comment
+                key={reply.id}
+                comment={reply}
+                postSlug={postSlug}
+                userId={userId}
+                isAdmin={isAdmin}
+                editingCommentId={editingCommentId}
+                setEditingCommentIdAction={setEditingCommentIdAction}
+              />
+            ))}
+          </div>
         )}
       </div>
     </li>

@@ -3,7 +3,7 @@
 import React from 'react';
 import { toast } from 'sonner';
 
-import { commentOnPost } from '@/actions/post';
+import { createComment } from '@/actions/post';
 
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
@@ -12,9 +12,13 @@ import { Textarea } from '@/components/ui/textarea';
 export function CommentForm({
   postId,
   slug,
+  parentId,
+  setShowReplyFormAction,
 }: {
   postId: string;
   slug: string;
+  parentId?: string;
+  setShowReplyFormAction?: (show: boolean) => void;
 }) {
   const [content, setContent] = React.useState('');
 
@@ -26,8 +30,11 @@ export function CommentForm({
         const formData = new FormData(event.currentTarget);
         formData.append('postId', postId);
         formData.append('postSlug', slug);
+        if (parentId) {
+          formData.append('parentId', parentId);
+        }
 
-        commentOnPost(formData)
+        createComment(formData)
           .then(() => {
             setContent('');
             toast.success('Comment posted successfully!');
@@ -57,8 +64,17 @@ export function CommentForm({
         </FieldDescription>
       </Field>
       <div className='flex justify-end gap-2'>
-        {content.trim().length > 0 && (
-          <Button variant='outline' size='sm' onClick={() => setContent('')}>
+        {(content.trim().length > 0 || setShowReplyFormAction) && (
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => {
+              setContent('');
+              if (setShowReplyFormAction) {
+                setShowReplyFormAction(false);
+              }
+            }}
+          >
             Cancel
           </Button>
         )}

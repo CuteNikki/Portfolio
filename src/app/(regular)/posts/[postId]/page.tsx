@@ -60,7 +60,7 @@ export default async function PostsPage({
     include: {
       author: true,
       comments: {
-        include: { author: true },
+        include: { author: true, replies: { include: { author: true } } },
         orderBy: { createdAt: 'desc' },
       },
     },

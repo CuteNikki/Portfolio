@@ -16,7 +16,10 @@ export function CommentWrapper({
   session,
 }: {
   post: Post & {
-    comments: (CommentType & { author: User })[];
+    comments: (CommentType & {
+      author: User;
+      replies: (CommentType & { author: User })[];
+    })[];
   };
   session: (Session & { user: User }) | null;
 }) {
@@ -31,17 +34,20 @@ export function CommentWrapper({
         <p className='text-muted-foreground'>There are no comments yet.</p>
       ) : (
         <ul className='flex flex-col gap-4'>
-          {post.comments.map((comment) => (
-            <Comment
-              key={comment.id}
-              comment={comment}
-              postSlug={post.slug || ''}
-              userId={session?.user.id || ''}
-              isAdmin={session?.user.role === 'ADMIN'}
-              editingCommentId={editingCommentId}
-              setEditingCommentIdAction={setEditingCommentId}
-            />
-          ))}
+          {post.comments
+            .filter((comment) => !comment.parentId)
+            .map((comment) => (
+              <div key={comment.id}>
+                <Comment
+                  comment={comment}
+                  postSlug={post.slug || ''}
+                  userId={session?.user.id || ''}
+                  isAdmin={session?.user.role === 'ADMIN'}
+                  editingCommentId={editingCommentId}
+                  setEditingCommentIdAction={setEditingCommentId}
+                />
+              </div>
+            ))}
         </ul>
       )}
     </div>
