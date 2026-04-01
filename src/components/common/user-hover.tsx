@@ -7,13 +7,17 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 
-export function UserHover({ user, children }: { user: User; children: React.ReactNode }) {
+export function UserHover({
+  user,
+  children,
+}: {
+  user: User;
+  children: React.ReactNode;
+}) {
   return (
     <HoverCard>
-      <HoverCardTrigger>
-        {children}
-      </HoverCardTrigger>
-      <HoverCardContent className='flex items-center gap-2'>
+      <HoverCardTrigger>{children}</HoverCardTrigger>
+      <HoverCardContent className='flex items-center justify-center gap-2 min-w-80 p-4'>
         <Avatar>
           <AvatarImage src={user.avatarUrl} alt={user.username} />
           <AvatarFallback>
