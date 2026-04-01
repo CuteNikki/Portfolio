@@ -16,7 +16,7 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-import { CommentActions } from '@/components/common/comment-actions';
+import { CommentActions } from '@/components/dashboard/posts/comment-actions';
 import { UserHover } from '@/components/common/user-hover';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';

@@ -39,6 +39,7 @@ export function CommentActions({
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' size='icon-sm'>
           <EllipsisVerticalIcon />
+          <span className='sr-only'>Open comment actions menu</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end'>

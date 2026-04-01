@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { commentOnPost } from '@/actions/post';
 
 import { Button } from '@/components/ui/button';
-import { Field, FieldDescription } from '@/components/ui/field';
+import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
 
 export function CommentForm({
@@ -41,6 +41,9 @@ export function CommentForm({
       className='flex flex-col gap-2'
     >
       <Field>
+        <FieldLabel htmlFor='content' className='sr-only'>
+          Your Comment
+        </FieldLabel>
         <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
