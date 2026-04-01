@@ -22,11 +22,15 @@ export async function createProject(formData: FormData) {
   const repository = formData.get('repository') as string;
   const website = formData.get('website') as string;
   const tags =
-    (formData.get('tags') as string)?.split(',').map((tag) => tag.trim()) || [];
+    (formData.get('tags') as string)
+      ?.split(',')
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0) || [];
   const technologies =
     (formData.get('technologies') as string)
       ?.split(',')
-      .map((tech) => tech.trim()) || [];
+      .map((tech) => tech.trim())
+      .filter((tech) => tech.length > 0) || [];
 
   const isPublished = formData.get('isPublished') === 'true';
   if (!title || !description) {
@@ -92,11 +96,15 @@ export async function updateProject(formData: FormData) {
   const repository = formData.get('repository') as string;
   const website = formData.get('website') as string;
   const tags =
-    (formData.get('tags') as string)?.split(',').map((tag) => tag.trim()) || [];
+    (formData.get('tags') as string)
+      ?.split(',')
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0) || [];
   const technologies =
     (formData.get('technologies') as string)
       ?.split(',')
-      .map((tech) => tech.trim()) || [];
+      .map((tech) => tech.trim())
+      .filter((tech) => tech.length > 0) || [];
 
   const isPublished = formData.get('isPublished') === 'true';
 
