@@ -48,13 +48,16 @@ export default async function ProjectsPage({
 }) {
   const { projectId } = await params;
 
-  const project = await prisma.project.findFirst({
-    where: {
-      OR: [{ id: projectId }, { slug: projectId }],
-    },
-  });
+  const { project, hasError } = await prisma.project
+    .findFirst({
+      where: {
+        OR: [{ id: projectId }, { slug: projectId }],
+      },
+    })
+    .then((project) => ({ project, hasError: false }))
+    .catch(() => ({ project: null, hasError: true }));
 
-  if (!project) {
+  if (!project || hasError) {
     notFound();
   }
 

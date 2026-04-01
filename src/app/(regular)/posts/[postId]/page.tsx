@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import {
   CalendarIcon,
@@ -53,21 +53,24 @@ export default async function PostsPage({
 }) {
   const { postId } = await params;
 
-  const post = await prisma.post.findFirst({
-    where: {
-      OR: [{ id: postId }, { slug: postId }],
-    },
-    include: {
-      author: true,
-      comments: {
-        include: { author: true, replies: { include: { author: true } } },
-        orderBy: { createdAt: 'desc' },
+  const { post, hasError } = await prisma.post
+    .findFirst({
+      where: {
+        OR: [{ id: postId }, { slug: postId }],
       },
-    },
-  });
+      include: {
+        author: true,
+        comments: {
+          include: { author: true, replies: { include: { author: true } } },
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    })
+    .then((post) => ({ post, hasError: false }))
+    .catch(() => ({ post: null, hasError: true }));
 
-  if (!post) {
-    notFound();
+  if (!post || hasError) {
+    redirect('/404');
   }
 
   const session = await getCurrentSession();
