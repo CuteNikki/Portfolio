@@ -190,7 +190,7 @@ export default async function PostsPage({
 
         {/* Comments List */}
         <div className='flex flex-col gap-4'>
-          <h2 className='text-2xl font-bold' id='comments'>
+          <h2 className='scroll-mt-20 text-2xl font-bold' id='comments'>
             Comments
           </h2>
           {post.comments.length === 0 ? (
