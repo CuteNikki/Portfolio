@@ -18,7 +18,7 @@ export async function createProject(formData: FormData) {
 
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
-  const slug = formData.get('slug') as string;
+  const slug = (formData.get('slug') || null) as string | null;
   const repository = formData.get('repository') as string;
   const website = formData.get('website') as string;
   const tags =

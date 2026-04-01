@@ -21,7 +21,7 @@ export async function createPost(formData: FormData) {
 
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
-  const slug = formData.get('slug') as string;
+  const slug = (formData.get('slug') || null) as string | null;
 
   const isPublished = formData.get('isPublished') === 'true';
 
