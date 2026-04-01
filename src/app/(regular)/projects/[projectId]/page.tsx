@@ -1,0 +1,164 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+
+import {
+  CalendarIcon,
+  ChevronLeftIcon,
+  GlobeIcon,
+  PencilLineIcon,
+} from 'lucide-react';
+
+import { Role } from '@/generated/prisma/enums';
+
+import { LINKS } from '@/constants/links';
+import { getCurrentSession } from '@/lib/auth';
+import prisma from '@/lib/prisma';
+
+import { ShareButton } from '@/components/dashboard/posts/share';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { SiGit } from '@icons-pack/react-simple-icons';
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}): Promise<Metadata> {
+  const { projectId } = await params;
+
+  const project = await prisma.project.findFirst({
+    where: {
+      OR: [{ id: projectId }, { slug: projectId }],
+    },
+  });
+
+  if (!project) return { title: 'Project Not Found' };
+
+  return {
+    title: `niso.moe | ${project.title}`,
+    description: project.description.substring(0, 160).concat('...'),
+  };
+}
+
+export default async function ProjectsPage({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) {
+  const { projectId } = await params;
+
+  const project = await prisma.project.findFirst({
+    where: {
+      OR: [{ id: projectId }, { slug: projectId }],
+    },
+  });
+
+  if (!project) {
+    notFound();
+  }
+
+  const session = await getCurrentSession();
+  if (!project.published) {
+    if (
+      !session ||
+      (session.user.role !== Role.ADMIN && session.user.role !== Role.AUTHOR)
+    ) {
+      notFound();
+    }
+  }
+
+  return (
+    <article className='mx-auto w-full max-w-3xl py-8'>
+      {/* Back Button */}
+      <Button variant='ghost' size='lg' asChild className='mb-4'>
+        <Link href={LINKS.projects.url}>
+          <ChevronLeftIcon />
+          Back to Overview
+        </Link>
+      </Button>
+
+      {/* Header Section */}
+      <header className='mb-10 flex flex-col gap-4 border-b pb-8'>
+        <h1 className='line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'>
+          {project.title}
+        </h1>
+
+        <div className='text-muted-foreground flex flex-wrap items-center gap-4'>
+          <div className='flex items-center gap-2'>
+            <CalendarIcon className='size-4' />
+            <time dateTime={project.createdAt.toISOString()}>
+              {new Date(project.createdAt).toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+            </time>
+          </div>
+
+          <div className='ml-auto flex items-center gap-2'>
+            <ShareButton postId={project.id} />
+            {(session?.user.role === Role.ADMIN ||
+              session?.user.role === Role.AUTHOR) && (
+              <Button variant='outline' size='xs' asChild>
+                <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
+                  <PencilLineIcon />
+                  Edit Project
+                </Link>
+              </Button>
+            )}
+            {!project.published && (
+              <Badge variant='destructive' size='lg'>
+                Unpublished
+              </Badge>
+            )}
+          </div>
+        </div>
+
+        <div className='flex flex-wrap items-center gap-2'>
+          <span>Tags:</span>
+          {project.tags.map((tag) => (
+            <Badge key={tag} variant='secondary'>
+              {tag}
+            </Badge>
+          ))}
+        </div>
+        <div className='flex flex-wrap items-center gap-2'>
+          <span>Technologies:</span>
+          {project.technologies.map((tech) => (
+            <Badge key={tech} variant='secondary'>
+              {tech}
+            </Badge>
+          ))}
+        </div>
+      </header>
+      <div>{project.description}</div>
+      <div className='flex items-center gap-4 py-8'>
+        {project.website && (
+          <Button asChild>
+            <Link
+              href={project.website}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <GlobeIcon />
+              Visit Website
+            </Link>
+          </Button>
+        )}
+        {project.repository && (
+          <Button asChild>
+            <Link
+              href={project.repository}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <SiGit />
+              View Repository
+            </Link>
+          </Button>
+        )}
+      </div>
+    </article>
+  );
+}
