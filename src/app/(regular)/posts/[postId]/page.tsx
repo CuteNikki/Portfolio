@@ -16,9 +16,9 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-import { CommentActions } from '@/components/dashboard/posts/comment-actions';
 import { UserHover } from '@/components/common/user-hover';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
+import { CommentWrapper } from '@/components/dashboard/posts/comment-wrapper';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { ShareButton } from '@/components/dashboard/posts/share';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -189,62 +189,7 @@ export default async function PostsPage({
         )}
 
         {/* Comments List */}
-        <div className='flex flex-col gap-4'>
-          <h2 className='scroll-mt-20 text-2xl font-bold' id='comments'>
-            Comments
-          </h2>
-          {post.comments.length === 0 ? (
-            <p className='text-muted-foreground'>There are no comments yet.</p>
-          ) : (
-            <ul className='flex flex-col gap-4'>
-              {post.comments.map((comment) => (
-                <li key={comment.id} className='flex items-start gap-4'>
-                  <Avatar className='h-12 w-12'>
-                    <AvatarImage
-                      src={comment.author.avatarUrl}
-                      alt={comment.author.username}
-                    />
-                    <AvatarFallback>
-                      {comment.author.username.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className='flex w-full min-w-0 flex-col'>
-                    <div className='xs:gap-2 xs:flex-row xs:items-center flex flex-col justify-between'>
-                      <UserHover user={comment.author}>
-                        <span className='truncate text-lg font-medium'>
-                          {comment.author.displayName ||
-                            `@${comment.author.username}`}
-                        </span>
-                      </UserHover>
-                      <div className='flex items-center gap-2'>
-                        <span className='text-muted-foreground text-sm'>
-                          {new Date(comment.createdAt).toLocaleDateString(
-                            undefined,
-                            {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            },
-                          )}
-                        </span>
-                        <CommentActions
-                          commentId={comment.id}
-                          commentAuthorId={comment.authorId}
-                          commentAuthorDiscordId={comment.author.discordId}
-                          postSlug={post.slug || ''}
-                          userId={session?.user.id || ''}
-                          isAdmin={session?.user.role === Role.ADMIN}
-                        />
-                      </div>
-                    </div>
-                    <p className='text-sm wrap-break-word whitespace-pre-wrap'>
-                      {comment.content}
-                    </p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <CommentWrapper post={post} session={session} />
       </div>
     </article>
   );

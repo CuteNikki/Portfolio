@@ -38,6 +38,7 @@ export function CommentActions({
   postSlug,
   userId,
   isAdmin,
+  setEditingCommentIdAction,
 }: {
   commentId: string;
   commentAuthorId: string;
@@ -45,6 +46,7 @@ export function CommentActions({
   postSlug: string;
   userId: string;
   isAdmin: boolean;
+  setEditingCommentIdAction: (commentId: string | null) => void;
 }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -95,10 +97,7 @@ export function CommentActions({
           {userId === commentAuthorId && (
             <DropdownMenuItem
               onClick={() => {
-                // @todo: Implement edit comment functionality
-                toast.warning(
-                  'Edit comment functionality is not implemented yet',
-                );
+                setEditingCommentIdAction(commentId);
               }}
             >
               <EditIcon />

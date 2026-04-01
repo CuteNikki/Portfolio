@@ -191,6 +191,49 @@ export async function deleteComment(formData: FormData) {
   revalidatePostPaths(comment.postId, postSlug);
 }
 
+export async function editComment(formData: FormData) {
+  const session = await getCurrentSession();
+
+  if (!session) {
+    throw new Error('Unauthorized: You must be logged in to edit a comment.');
+  }
+
+  const commentId = formData.get('commentId') as string;
+  const postSlug = formData.get('postSlug') as string | null;
+  const rawContent = formData.get('content') as string;
+
+  const content = rawContent.trim().replace(/(?:\r?\n){3,}/g, '\n\n');
+
+  if (!commentId || !content) {
+    throw new Error('Comment ID and content are required.');
+  }
+
+  if (content.length > 1000) {
+    throw new Error('Comment content cannot exceed 1000 characters.');
+  }
+
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId },
+  });
+
+  if (!comment) {
+    throw new Error('Comment not found.');
+  }
+
+  if (comment.authorId !== session.user.id) {
+    throw new Error(
+      'Unauthorized: You do not have permission to edit this comment.',
+    );
+  }
+
+  await prisma.comment.update({
+    where: { id: commentId },
+    data: { content },
+  });
+
+  revalidatePostPaths(comment.postId, postSlug);
+}
+
 function revalidatePostPaths(postId: string, slug: string | null) {
   revalidatePath('/dashboard/posts');
   revalidatePath('/dashboard/posts/new');
