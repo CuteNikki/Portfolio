@@ -115,21 +115,23 @@ export default async function ProjectsPage({
           </div>
         </div>
 
-        <div className='flex flex-wrap items-center gap-2'>
-          <span>Tags:</span>
-          {project.tags.map((tag) => (
-            <Badge key={tag} variant='secondary'>
-              {tag}
-            </Badge>
-          ))}
-        </div>
-        <div className='flex flex-wrap items-center gap-2'>
-          <span>Technologies:</span>
-          {project.technologies.map((tech) => (
-            <Badge key={tech} variant='secondary'>
-              {tech}
-            </Badge>
-          ))}
+        <div className='flex flex-col gap-2'>
+          <div className='flex flex-wrap items-center gap-2'>
+            <span>Tags:</span>
+            {project.tags.map((tag) => (
+              <Badge key={tag} variant='secondary'>
+                {tag}
+              </Badge>
+            ))}
+          </div>
+          <div className='flex flex-wrap items-center gap-2'>
+            <span>Technologies:</span>
+            {project.technologies.map((tech) => (
+              <Badge key={tech} variant='secondary'>
+                {tech}
+              </Badge>
+            ))}
+          </div>
         </div>
       </header>
       <div>{project.description}</div>
