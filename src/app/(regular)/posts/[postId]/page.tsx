@@ -6,6 +6,7 @@ import {
   CalendarIcon,
   ChevronLeftIcon,
   PencilLineIcon,
+  SendHorizontalIcon,
   UserIcon,
 } from 'lucide-react';
 
@@ -15,16 +16,15 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
+import { commentOnPost } from '@/actions/post';
+import { CommentActions } from '@/components/common/comment-actions';
+import { UserHover } from '@/components/common/user-hover';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { ShareButton } from '@/components/dashboard/posts/share';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
+import { Textarea } from '@/components/ui/textarea';
 
 export async function generateMetadata({
   params,
@@ -58,7 +58,13 @@ export default async function PostsPage({
     where: {
       OR: [{ id: postId }, { slug: postId }],
     },
-    include: { author: true },
+    include: {
+      author: true,
+      comments: {
+        include: { author: true },
+        orderBy: { createdAt: 'desc' },
+      },
+    },
   });
 
   if (!post) {
@@ -92,48 +98,14 @@ export default async function PostsPage({
         </h1>
 
         <div className='text-muted-foreground flex flex-wrap items-center gap-4'>
-          <HoverCard>
-            <HoverCardTrigger>
-              <div className='flex items-center gap-2'>
-                <UserIcon className='size-4' />
-                <span className='text-foreground font-medium'>
-                  {post.author.displayName || `@${post.author.username}`}
-                </span>
-              </div>
-            </HoverCardTrigger>
-            <HoverCardContent className='flex items-center gap-2'>
-              <Avatar>
-                <AvatarImage
-                  src={post.author.avatarUrl}
-                  alt={post.author.username}
-                />
-                <AvatarFallback>
-                  {post.author.username.charAt(0).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className='flex flex-col'>
-                <p className='font-medium'>
-                  {post.author.displayName
-                    ? `${post.author.displayName} (@${post.author.username})`
-                    : `@${post.author.username}`}
-                </p>
-                <div className='flex items-center gap-2'>
-                  <p className='capitalize'>{post.author.role.toLowerCase()}</p>
-                  -
-                  <p>
-                    Joined{' '}
-                    {new Date(post.author.createdAt).toLocaleDateString(
-                      'en-US',
-                      {
-                        month: 'long',
-                        year: 'numeric',
-                      },
-                    )}
-                  </p>
-                </div>
-              </div>
-            </HoverCardContent>
-          </HoverCard>
+          <UserHover user={post.author}>
+            <div className='flex items-center gap-2'>
+              <UserIcon className='size-4' />
+              <span className='text-foreground font-medium'>
+                {post.author.displayName || `@${post.author.username}`}
+              </span>
+            </div>
+          </UserHover>
           <div className='flex items-center gap-2'>
             <CalendarIcon className='size-4' />
             <time dateTime={post.createdAt.toISOString()}>
@@ -165,8 +137,131 @@ export default async function PostsPage({
         </div>
       </header>
 
+      {/* Post Content */}
       <div className='prose dark:prose-invert catppuccin-macchiato:prose-invert prose-lg min-h-100 max-w-none wrap-break-word'>
         <MarkdownViewer content={post.content} />
+      </div>
+
+      {/* Comments Section */}
+      <div className='mt-8 flex flex-col gap-8 border-t pt-10'>
+        {session?.user ? (
+          <div className='flex flex-col gap-2'>
+            <h2 className='text-2xl font-bold'>Write a comment</h2>
+            <div className='flex items-center gap-2'>
+              <Avatar className='h-6 w-6'>
+                <AvatarImage
+                  src={session.user.avatarUrl}
+                  alt={session.user.username}
+                />
+                <AvatarFallback>
+                  {session.user.username.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+              <div className='flex items-center gap-4'>
+                <span className='text-sm'>
+                  Signed in as{' '}
+                  {session.user.displayName || `@${session.user.username}`}
+                </span>
+                <form action='/api/auth/logout' method='POST'>
+                  <Button type='submit' variant='destructive' size='xs'>
+                    Sign Out
+                  </Button>
+                </form>
+              </div>
+            </div>
+            <form
+              action={async (formData: FormData) => {
+                'use server';
+
+                formData.append('postId', post.id);
+                formData.append('postSlug', post.slug || '');
+
+                await commentOnPost(formData);
+              }}
+              className='flex flex-col gap-2'
+            >
+              <Textarea id='content' name='content' />
+              <div className='flex justify-end gap-2'>
+                <Button type='reset' variant='outline' size='sm'>
+                  Cancel
+                </Button>
+                <Button type='submit' size='sm'>
+                  Post Comment
+                </Button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          <div>
+            <h2 className='text-2xl font-bold'>Write a comment</h2>
+            <div className='flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center'>
+              <p className='text-muted-foreground'>
+                You must be logged in to post a comment.
+              </p>
+              <Button asChild>
+                <Link href='/api/auth/login'>
+                  <SendHorizontalIcon className='mr-2 size-4' />
+                  Log In
+                </Link>
+              </Button>
+            </div>
+          </div>
+        )}
+
+        <div className='flex flex-col gap-4'>
+          <h2 className='text-2xl font-bold'>Comments</h2>
+          {post.comments.length === 0 ? (
+            <p className='text-muted-foreground'>There are no comments yet.</p>
+          ) : (
+            <ul className='flex flex-col gap-4'>
+              {post.comments.map((comment) => (
+                <li key={comment.id} className='flex items-start gap-4'>
+                  <Avatar className='h-12 w-12'>
+                    <AvatarImage
+                      src={comment.author.avatarUrl}
+                      alt={comment.author.username}
+                    />
+                    <AvatarFallback>
+                      {comment.author.username.charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className='flex w-full min-w-0 flex-col'>
+                    <div className='xs:gap-2 xs:flex-row xs:items-center flex flex-col justify-between'>
+                      <UserHover user={comment.author}>
+                        <span className='truncate text-lg font-medium'>
+                          {comment.author.displayName ||
+                            `@${comment.author.username}`}
+                        </span>
+                      </UserHover>
+                      <div className='flex items-center gap-2'>
+                        <span className='text-muted-foreground text-sm'>
+                          {new Date(comment.createdAt).toLocaleDateString(
+                            undefined,
+                            {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            },
+                          )}
+                        </span>
+                        <CommentActions
+                          commentId={comment.id}
+                          commentAuthorId={comment.authorId}
+                          commentAuthorDiscordId={comment.author.discordId}
+                          postSlug={post.slug || ''}
+                          userId={session?.user.id || ''}
+                          isAdmin={session?.user.role === Role.ADMIN}
+                        />
+                      </div>
+                    </div>
+                    <p className='text-sm wrap-break-word whitespace-pre-wrap'>
+                      {comment.content}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </article>
   );
