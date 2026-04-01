@@ -9,19 +9,24 @@ export const getCurrentSession = cache(async () => {
 
   if (!sessionToken) return null;
 
-  const session = await prisma.session.findUnique({
-    where: { sessionToken },
-    include: { user: true },
-  });
+  try {
+    const session = await prisma.session.findUnique({
+      where: { sessionToken },
+      include: { user: true },
+    });
 
-  if (!session) return null;
+    if (!session) return null;
 
-  if (session.expiresAt < new Date()) {
-    await prisma.session.delete({ where: { id: session.id } });
+    if (session.expiresAt < new Date()) {
+      await prisma.session.delete({ where: { id: session.id } });
+      return null;
+    }
+
+    return session;
+  } catch (error) {
+    console.error('Error fetching session:', error);
     return null;
   }
-
-  return session;
 });
 
 export async function refreshDiscordToken(refreshToken: string) {
