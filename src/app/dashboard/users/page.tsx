@@ -4,7 +4,7 @@ import { SITE_METADATA } from '@/constants/metadata';
 import prisma from '@/lib/prisma';
 
 import { DashboardHeader } from '@/components/dashboard/shared/header';
-import { TableWrapper } from '@/components/dashboard/shared/table-wrapper';
+import { DataTable } from '@/components/dashboard/shared/table';
 import { columns } from '@/components/dashboard/users/columns';
 
 export const { dashboardUsers: metadata } = SITE_METADATA;
@@ -25,7 +25,7 @@ export default async function UsersPage() {
         title={'Users'}
         description={'Manage users and their permissions.'}
       />
-      <TableWrapper
+      <DataTable
         columns={columns}
         data={users}
         hasError={hasError}

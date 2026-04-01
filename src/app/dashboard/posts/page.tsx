@@ -8,7 +8,7 @@ import prisma from '@/lib/prisma';
 
 import { columns } from '@/components/dashboard/posts/columns';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
-import { TableWrapper } from '@/components/dashboard/shared/table-wrapper';
+import { DataTable } from '@/components/dashboard/shared/table';
 import { Button } from '@/components/ui/button';
 
 export const { dashboardPosts: metadata } = SITE_METADATA;
@@ -40,7 +40,7 @@ export default async function PostsPage() {
           </Link>
         </Button>
       </div>
-      <TableWrapper
+      <DataTable
         columns={columns}
         data={posts}
         filterPlaceholder='Filter Posts...'
