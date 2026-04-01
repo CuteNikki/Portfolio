@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 
 import { PERSONAL_DETAILS } from '@/constants/personal';
+import { LINKS } from '@/constants/links';
 
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
@@ -579,7 +580,9 @@ export function PrivacyContent({
           </p>
         </div>
         <Button size='lg' asChild>
-          <Link href={language === 'en' ? '/datenschutz' : '/privacy'}>
+          <Link
+            href={language === 'en' ? LINKS.datenschutz.url : LINKS.privacy.url}
+          >
             {content.languageToggleIcon}
             {content.languageToggle}
           </Link>
