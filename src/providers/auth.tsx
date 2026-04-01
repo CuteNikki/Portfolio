@@ -8,7 +8,6 @@ const AuthContext = createContext<(Session & { user: User }) | null>(null);
 
 export function AuthProvider({
   children,
-
   session,
 }: {
   children: ReactNode;
