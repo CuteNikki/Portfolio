@@ -131,14 +131,12 @@ export const columns: ColumnDef<Project>[] = [
                 Copy URL
               </DropdownMenuItem>
 
-              {project.published && (
-                <DropdownMenuItem asChild>
-                  <Link href={LINKS.projectWithSlugOrId(project.id).url}>
-                    <ExternalLinkIcon />
-                    View
-                  </Link>
-                </DropdownMenuItem>
-              )}
+              <DropdownMenuItem asChild>
+                <Link href={LINKS.projectWithSlugOrId(project.id).url}>
+                  <ExternalLinkIcon />
+                  View
+                </Link>
+              </DropdownMenuItem>
 
               <DropdownMenuItem asChild>
                 <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
