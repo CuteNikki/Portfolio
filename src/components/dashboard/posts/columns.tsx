@@ -152,17 +152,15 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
                 Copy URL
               </DropdownMenuItem>
 
-              {post.published && (
-                <DropdownMenuItem asChild>
-                  <Link
-                    href={LINKS.postWithSlugOrId(post.id).url}
-                    target='_blank'
-                  >
-                    <ExternalLinkIcon />
-                    View
-                  </Link>
-                </DropdownMenuItem>
-              )}
+              <DropdownMenuItem asChild>
+                <Link
+                  href={LINKS.postWithSlugOrId(post.id).url}
+                  target='_blank'
+                >
+                  <ExternalLinkIcon />
+                  View
+                </Link>
+              </DropdownMenuItem>
 
               <DropdownMenuItem asChild>
                 <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
