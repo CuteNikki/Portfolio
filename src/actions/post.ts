@@ -128,11 +128,17 @@ export async function commentOnPost(formData: FormData) {
   }
 
   const postId = formData.get('postId') as string;
-  const content = (formData.get('content') as string)?.trim();
+  const rawContent = formData.get('content') as string;
   const postSlug = formData.get('postSlug') as string | null;
+
+  const content = rawContent.trim().replace(/(?:\r?\n){3,}/g, '\n\n');
 
   if (!postId || !content) {
     throw new Error('Post ID and comment content are required.');
+  }
+
+  if (content.length > 1000) {
+    throw new Error('Comment content cannot exceed 1000 characters.');
   }
 
   await prisma.comment.create({

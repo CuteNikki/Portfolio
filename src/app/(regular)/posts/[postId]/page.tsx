@@ -16,15 +16,14 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-import { commentOnPost } from '@/actions/post';
 import { CommentActions } from '@/components/common/comment-actions';
 import { UserHover } from '@/components/common/user-hover';
+import { CommentForm } from '@/components/dashboard/posts/comment-form';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { ShareButton } from '@/components/dashboard/posts/share';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 
 export async function generateMetadata({
   params,
@@ -143,7 +142,8 @@ export default async function PostsPage({
       </div>
 
       {/* Comments Section */}
-      <div className='mt-8 flex flex-col gap-8 border-t pt-10'>
+      <div className='mt-8 flex flex-col gap-4 border-t pt-10'>
+        {/* Write a Comment */}
         {session?.user ? (
           <div className='flex flex-col gap-2'>
             <h2 className='text-2xl font-bold'>Write a comment</h2>
@@ -169,27 +169,7 @@ export default async function PostsPage({
                 </form>
               </div>
             </div>
-            <form
-              action={async (formData: FormData) => {
-                'use server';
-
-                formData.append('postId', post.id);
-                formData.append('postSlug', post.slug || '');
-
-                await commentOnPost(formData);
-              }}
-              className='flex flex-col gap-2'
-            >
-              <Textarea id='content' name='content' />
-              <div className='flex justify-end gap-2'>
-                <Button type='reset' variant='outline' size='sm'>
-                  Cancel
-                </Button>
-                <Button type='submit' size='sm'>
-                  Post Comment
-                </Button>
-              </div>
-            </form>
+            <CommentForm postId={post.id} slug={post.slug || ''} />
           </div>
         ) : (
           <div>
@@ -208,6 +188,7 @@ export default async function PostsPage({
           </div>
         )}
 
+        {/* Comments List */}
         <div className='flex flex-col gap-4'>
           <h2 className='text-2xl font-bold'>Comments</h2>
           {post.comments.length === 0 ? (
