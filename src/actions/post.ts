@@ -120,6 +120,71 @@ export async function updatePost(formData: FormData) {
   revalidatePostPaths(id, slug);
 }
 
+export async function commentOnPost(formData: FormData) {
+  const session = await getCurrentSession();
+
+  if (!session) {
+    throw new Error('Unauthorized: You must be logged in to comment.');
+  }
+
+  const postId = formData.get('postId') as string;
+  const content = (formData.get('content') as string)?.trim();
+  const postSlug = formData.get('postSlug') as string | null;
+
+  if (!postId || !content) {
+    throw new Error('Post ID and comment content are required.');
+  }
+
+  await prisma.comment.create({
+    data: {
+      content,
+      postId,
+      authorId: session.user.id,
+    },
+  });
+
+  revalidatePostPaths(postId, postSlug);
+}
+
+export async function deleteComment(formData: FormData) {
+  const session = await getCurrentSession();
+
+  if (!session) {
+    throw new Error('Unauthorized: You must be logged in to delete a comment.');
+  }
+
+  const commentId = formData.get('commentId') as string;
+  const postSlug = formData.get('postSlug') as string | null;
+
+  if (!commentId) {
+    throw new Error('Comment ID is required.');
+  }
+
+  const comment = await prisma.comment.findUnique({
+    where: { id: commentId },
+  });
+
+  if (!comment) {
+    throw new Error('Comment not found.');
+  }
+
+  // Only allow deletion if the user is the comment author or an admin
+  if (
+    comment.authorId !== session.user.id &&
+    session.user.role !== Role.ADMIN
+  ) {
+    throw new Error(
+      'Unauthorized: You do not have permission to delete this comment.',
+    );
+  }
+
+  await prisma.comment.delete({
+    where: { id: commentId },
+  });
+
+  revalidatePostPaths(comment.postId, postSlug);
+}
+
 function revalidatePostPaths(postId: string, slug: string | null) {
   revalidatePath('/dashboard/posts');
   revalidatePath('/dashboard/posts/new');
