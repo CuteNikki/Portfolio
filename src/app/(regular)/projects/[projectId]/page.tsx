@@ -99,7 +99,7 @@ export default async function ProjectsPage({
             </time>
           </div>
 
-          <div className='ml-auto flex items-center gap-2'>
+          <div className='ml-auto flex flex-wrap items-center gap-2'>
             <ShareButton postId={project.id} />
             {(session?.user.role === Role.ADMIN ||
               session?.user.role === Role.WRITER) && (
@@ -144,7 +144,7 @@ export default async function ProjectsPage({
         ) : null}
       </header>
       <div>{project.description}</div>
-      <div className='flex items-center gap-4 py-8'>
+      <div className='flex flex-wrap items-center gap-2 py-8'>
         {project.website && (
           <Button asChild>
             <Link
