@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { PresentationIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
@@ -6,23 +8,24 @@ import {
   ProjectList,
   ProjectListSkeleton,
 } from '@/components/dashboard/projects/view';
-import { Suspense } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const { projects: metadata } = SITE_METADATA;
 
 export default function ProjectsPage() {
   return (
-    <div className='flex w-full max-w-5xl flex-col gap-6 border p-4 sm:p-8'>
-      {/* Header */}
-      <div className='flex items-center justify-between'>
-        <h1 className='text-primary-text flex items-center gap-2 text-2xl font-bold'>
+    <Card className='w-full max-w-5xl'>
+      <CardHeader>
+        <CardTitle className='text-primary-text flex items-center gap-2'>
           <PresentationIcon className='size-6 shrink-0' /> Projects
-        </h1>
-      </div>
+        </CardTitle>
+      </CardHeader>
 
-      <Suspense fallback={<ProjectListSkeleton />}>
-        <ProjectList />
-      </Suspense>
-    </div>
+      <CardContent>
+        <Suspense fallback={<ProjectListSkeleton />}>
+          <ProjectList />
+        </Suspense>
+      </CardContent>
+    </Card>
   );
 }
