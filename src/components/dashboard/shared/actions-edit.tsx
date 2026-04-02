@@ -28,7 +28,7 @@ export function EditActionButtons({
   const router = useRouter();
 
   return (
-    <div className='flex flex-col-reverse items-center gap-2 sm:flex-row sm:justify-between'>
+    <div className='flex flex-col-reverse items-center gap-1 lg:flex-row lg:justify-between'>
       {/* Delete Button */}
       <Button
         type='submit'
@@ -45,7 +45,7 @@ export function EditActionButtons({
       </Button>
 
       {/* Other Action Buttons */}
-      <div className='xs:flex-row flex flex-col items-center gap-2'>
+      <div className='flex flex-col-reverse items-center justify-end gap-1 sm:flex-row'>
         {/* Cancel Button */}
         <Button
           type='button'
