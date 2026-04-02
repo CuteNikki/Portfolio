@@ -20,6 +20,7 @@ import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
 import { ScrollToTopButton } from '@/components/common/scroll-top-buttont';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const CONTENT = {
   en: {
@@ -126,13 +127,15 @@ function SectionCard({
   children: ReactNode;
 }) {
   return (
-    <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
-      <h2 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
-        {icon}
-        {title}
-      </h2>
-      {children}
-    </div>
+    <Card className='w-full max-w-5xl'>
+      <CardHeader>
+        <CardTitle className='text-primary-text flex items-center gap-2'>
+          {icon}
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className='flex flex-col gap-4'>{children}</CardContent>
+    </Card>
   );
 }
 
