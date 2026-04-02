@@ -16,6 +16,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart';
+import { EyeIcon } from 'lucide-react';
 
 export const description = 'A donut chart with text';
 
@@ -33,7 +34,10 @@ export function PostChartPie({
   return (
     <Card className='w-full max-w-sm'>
       <CardHeader className='items-center pb-0'>
-        <CardTitle>Post Views</CardTitle>
+        <CardTitle className='text-primary-text flex items-center gap-2'>
+          <EyeIcon />
+          Post Views
+        </CardTitle>
         <CardDescription>Alltime post view count</CardDescription>
       </CardHeader>
       <CardContent className='flex-1 pb-0'>
