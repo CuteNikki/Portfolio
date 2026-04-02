@@ -11,6 +11,8 @@ import { SidebarInset } from '@/components/ui/sidebar';
 
 export const { dashboard: metadata } = SITE_METADATA;
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const { posts, hasPostsError } = await prisma.post
     .findMany({ orderBy: { views: 'desc' }, take: 5 })

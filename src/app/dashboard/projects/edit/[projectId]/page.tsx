@@ -9,6 +9,8 @@ import { EditProjectForm } from '@/components/dashboard/projects/edit';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({
   params,
 }: {
@@ -16,11 +18,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { projectId } = await params;
 
-  const project = await prisma.project.findFirst({
-    where: {
-      OR: [{ id: projectId }, { slug: projectId }],
-    },
-  });
+  const project = await prisma.project
+    .findFirst({
+      where: {
+        OR: [{ id: projectId }, { slug: projectId }],
+      },
+    })
+    .then((project) => project)
+    .catch(() => null);
 
   if (!project) return { title: 'Project Not Found' };
 
@@ -37,11 +42,14 @@ export default async function EditProjectPage({
 }) {
   const { projectId } = await params;
 
-  const project = await prisma.project.findFirst({
-    where: {
-      OR: [{ id: projectId }, { slug: projectId }],
-    },
-  });
+  const project = await prisma.project
+    .findFirst({
+      where: {
+        OR: [{ id: projectId }, { slug: projectId }],
+      },
+    })
+    .then((project) => project)
+    .catch(() => null);
 
   if (!project) {
     notFound();

@@ -9,6 +9,8 @@ import { EditPostForm } from '@/components/dashboard/posts/edit';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({
   params,
 }: {
@@ -16,11 +18,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { postId } = await params;
 
-  const post = await prisma.post.findFirst({
-    where: {
-      OR: [{ id: postId }, { slug: postId }],
-    },
-  });
+  const post = await prisma.post
+    .findFirst({
+      where: {
+        OR: [{ id: postId }, { slug: postId }],
+      },
+    })
+    .then((post) => post)
+    .catch(() => null);
 
   if (!post) return { title: 'Post Not Found' };
 
@@ -37,11 +42,14 @@ export default async function EditPostPage({
 }) {
   const { postId } = await params;
 
-  const post = await prisma.post.findFirst({
-    where: {
-      OR: [{ id: postId }, { slug: postId }],
-    },
-  });
+  const post = await prisma.post
+    .findFirst({
+      where: {
+        OR: [{ id: postId }, { slug: postId }],
+      },
+    })
+    .then((post) => post)
+    .catch(() => null);
 
   if (!post) {
     notFound();

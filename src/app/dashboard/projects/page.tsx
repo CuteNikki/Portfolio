@@ -19,6 +19,8 @@ import {
 
 export const { dashboardProjects: metadata } = SITE_METADATA;
 
+export const dynamic = 'force-dynamic';
+
 export default async function ProjectsPage() {
   const { projects, hasError } = await prisma.project
     .findMany({

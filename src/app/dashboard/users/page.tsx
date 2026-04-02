@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export const { dashboardUsers: metadata } = SITE_METADATA;
 
+export const dynamic = 'force-dynamic';
+
 export default async function UsersPage() {
   const { users, hasError } = await prisma.user
     .findMany()
