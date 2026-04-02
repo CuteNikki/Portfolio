@@ -10,6 +10,12 @@ import { columns } from '@/components/dashboard/posts/columns';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { DataTable } from '@/components/dashboard/shared/table';
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+} from '@/components/ui/card';
 
 export const { dashboardPosts: metadata } = SITE_METADATA;
 
@@ -26,26 +32,30 @@ export default async function PostsPage() {
     });
 
   return (
-    <div className='flex w-full flex-col gap-4 border p-4 sm:p-8'>
-      <div className='flex flex-col items-start justify-between gap-2 lg:flex-row lg:items-center'>
+    <Card className='w-full'>
+      <CardHeader>
         <DashboardHeader
           icon={NewspaperIcon}
           title={'Posts'}
           description={'Manage posts and drafts.'}
         />
-        <Button asChild>
-          <Link href={LINKS.dashboardPostNew.url}>
-            <PlusIcon />
-            {LINKS.dashboardPostNew.label}
-          </Link>
-        </Button>
-      </div>
-      <DataTable
-        columns={columns}
-        data={posts}
-        filterPlaceholder='Filter Posts...'
-        hasError={hasError}
-      />
-    </div>
+        <CardAction>
+          <Button asChild>
+            <Link href={LINKS.dashboardPostNew.url}>
+              <PlusIcon />
+              {LINKS.dashboardPostNew.label}
+            </Link>
+          </Button>
+        </CardAction>
+      </CardHeader>
+      <CardContent>
+        <DataTable
+          columns={columns}
+          data={posts}
+          filterPlaceholder='Filter Posts...'
+          hasError={hasError}
+        />
+      </CardContent>
+    </Card>
   );
 }
