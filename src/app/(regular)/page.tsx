@@ -77,7 +77,7 @@ export default function Home() {
                 }) => (
                   <div
                     key={`${title}-${company}`}
-                    className='relative mb-10 last:mb-0'
+                    className='relative mb-4 last:mb-0'
                   >
                     {/* The Dot */}
                     <span
@@ -86,7 +86,7 @@ export default function Home() {
                     />
 
                     {/* Content */}
-                    <div className='flex flex-col gap-1'>
+                    <div className='flex flex-col'>
                       <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
                         <h2 className='text-xl font-bold'>{company}</h2>
                         <time className='text-muted-foreground text-sm'>
@@ -122,7 +122,7 @@ export default function Home() {
                 ({ from, to, title, school, location, description }) => (
                   <div
                     key={`${title}-${school}`}
-                    className='relative mb-10 last:mb-0'
+                    className='relative mb-4 last:mb-0'
                   >
                     {/* The Dot */}
                     <span
@@ -131,7 +131,7 @@ export default function Home() {
                     />
 
                     {/* Content */}
-                    <div className='flex flex-col gap-1'>
+                    <div className='flex flex-col'>
                       <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
                         <h2 className='text-xl font-bold'>{school}</h2>
                         <time className='text-muted-foreground text-sm'>
