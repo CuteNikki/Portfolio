@@ -83,13 +83,24 @@ const ProjectActions = ({ project }: { project: ProjectWithWriter }) => {
                 .writeText(
                   `${window.location.origin}${LINKS.projectWithSlugOrId(project.id).url}`,
                 )
-                .then(() => {
-                  toast.success('Project URL copied to clipboard!');
-                });
+                .then(() => toast.success('Project URL copied to clipboard!'))
+                .catch(() => toast.error('Failed to copy Project URL'));
             }}
           >
             <ClipboardCopyIcon />
             Copy URL
+          </DropdownMenuItem>
+
+          <DropdownMenuItem
+            onClick={() => {
+              navigator.clipboard
+                .writeText(project.writer.id)
+                .then(() => toast.success('Writer ID copied to clipboard!'))
+                .catch(() => toast.error('Failed to copy Writer ID'));
+            }}
+          >
+            <ClipboardCopyIcon />
+            Copy Writer
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>

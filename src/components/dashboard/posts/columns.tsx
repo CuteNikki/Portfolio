@@ -83,13 +83,23 @@ const PostActions = ({ post }: { post: PostWithWriter }) => {
                 .writeText(
                   `${window.location.origin}${LINKS.postWithSlugOrId(post.id).url}`,
                 )
-                .then(() => {
-                  toast.success('Post URL copied to clipboard!');
-                });
+                .then(() => toast.success('Post URL copied to clipboard!'))
+                .catch(() => toast.error('Failed to copy Post URL'));
             }}
           >
             <ClipboardCopyIcon />
             Copy URL
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => {
+              navigator.clipboard
+                .writeText(post.writerId)
+                .then(() => toast.success('Writer ID copied to clipboard!'))
+                .catch(() => toast.error('Failed to copy Writer ID'));
+            }}
+          >
+            <ClipboardCopyIcon />
+            Copy Writer
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
