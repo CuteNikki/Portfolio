@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import {
   ClipboardCopyIcon,
+  CornerDownRightIcon,
   EditIcon,
   MoreHorizontalIcon,
   Trash2Icon,
@@ -39,6 +40,7 @@ export function CommentActions({
   userId,
   isAdmin,
   setEditingCommentIdAction,
+  setShowReplyFormAction,
 }: {
   commentId: string;
   commentAuthorId: string;
@@ -47,6 +49,7 @@ export function CommentActions({
   userId: string;
   isAdmin: boolean;
   setEditingCommentIdAction: (commentId: string | null) => void;
+  setShowReplyFormAction: (show: boolean) => void;
 }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -77,6 +80,11 @@ export function CommentActions({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
+          <DropdownMenuItem onClick={() => setShowReplyFormAction(true)}>
+            <CornerDownRightIcon />
+            Reply
+          </DropdownMenuItem>
+
           <DropdownMenuItem
             onClick={() =>
               navigator.clipboard
