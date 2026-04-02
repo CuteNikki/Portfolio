@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { DataTable } from '@/components/dashboard/shared/table';
 import { columns } from '@/components/dashboard/users/columns';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export const { dashboardUsers: metadata } = SITE_METADATA;
 
@@ -19,18 +20,22 @@ export default async function UsersPage() {
     });
 
   return (
-    <div className='flex w-full flex-col gap-4 border p-4 sm:p-8'>
-      <DashboardHeader
-        icon={Users2Icon}
-        title={'Users'}
-        description={'Manage users and their permissions.'}
-      />
-      <DataTable
-        columns={columns}
-        data={users}
-        hasError={hasError}
-        filterPlaceholder='Filter Users...'
-      />
-    </div>
+    <Card>
+      <CardHeader>
+        <DashboardHeader
+          icon={Users2Icon}
+          title={'Users'}
+          description={'Manage users and their permissions.'}
+        />
+      </CardHeader>
+      <CardContent>
+        <DataTable
+          columns={columns}
+          data={users}
+          hasError={hasError}
+          filterPlaceholder='Filter Users...'
+        />
+      </CardContent>
+    </Card>
   );
 }
