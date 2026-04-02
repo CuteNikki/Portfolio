@@ -7,6 +7,7 @@ import prisma from '@/lib/prisma';
 
 import { EditPostForm } from '@/components/dashboard/posts/edit';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export async function generateMetadata({
   params,
@@ -47,13 +48,19 @@ export default async function EditPostPage({
   }
 
   return (
-    <div className='flex w-full max-w-5xl flex-col gap-4 justify-self-center border p-4 sm:p-8'>
-      <DashboardHeader
-        icon={PencilLineIcon}
-        title={'Edit Post'}
-        description={'Make changes to a post or update its publication status.'}
-      />
-      <EditPostForm post={post} />
-    </div>
+    <Card className='w-full max-w-5xl'>
+      <CardHeader>
+        <DashboardHeader
+          icon={PencilLineIcon}
+          title={'Edit Post'}
+          description={
+            'Make changes to a post or update its publication status.'
+          }
+        />
+      </CardHeader>
+      <CardContent>
+        <EditPostForm post={post} />
+      </CardContent>
+    </Card>
   );
 }
