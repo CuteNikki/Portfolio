@@ -62,10 +62,10 @@ export default async function ProjectsPage({
   }
 
   const session = await getCurrentSession();
-  if (!project.published) {
+  if (!project.publishedAt) {
     if (
       !session ||
-      (session.user.role !== Role.ADMIN && session.user.role !== Role.AUTHOR)
+      (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
     ) {
       notFound();
     }
@@ -102,7 +102,7 @@ export default async function ProjectsPage({
           <div className='ml-auto flex items-center gap-2'>
             <ShareButton postId={project.id} />
             {(session?.user.role === Role.ADMIN ||
-              session?.user.role === Role.AUTHOR) && (
+              session?.user.role === Role.WRITER) && (
               <Button variant='outline' size='xs' asChild>
                 <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
                   <PencilLineIcon />
@@ -110,7 +110,7 @@ export default async function ProjectsPage({
                 </Link>
               </Button>
             )}
-            {!project.published && (
+            {!project.publishedAt && (
               <Badge variant='destructive' size='lg'>
                 Unpublished
               </Badge>

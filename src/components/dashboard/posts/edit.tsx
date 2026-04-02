@@ -118,7 +118,7 @@ export function EditPostForm({ post }: { post: Post }) {
       </Tabs>
 
       <EditActionButtons
-        isPublished={post.published}
+        publishedAt={post.publishedAt}
         isPending={isPending}
         isMissingRequiredFields={!content.trim()}
         action={action}

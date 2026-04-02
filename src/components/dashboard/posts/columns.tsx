@@ -1,6 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -41,9 +42,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-type PostWithAuthor = Post & { author: User };
+type PostWithWriter = Post & { writer: User };
 
-const PostActions = ({ post }: { post: PostWithAuthor }) => {
+const PostActions = ({ post }: { post: PostWithWriter }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const handleDelete = () => {
@@ -141,7 +142,7 @@ const PostActions = ({ post }: { post: PostWithAuthor }) => {
   );
 };
 
-export const columns: ColumnDef<PostWithAuthor>[] = [
+export const columns: ColumnDef<PostWithWriter>[] = [
   {
     accessorKey: 'title',
     header: ({ column }) => (
@@ -190,14 +191,14 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
     },
   },
   {
-    accessorKey: 'author.username',
-    id: 'author',
+    accessorKey: 'writer.username',
+    id: 'writer',
     header: ({ column }) => (
       <Button
         variant='ghost'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Author
+        Writer
         {column.getIsSorted() === 'asc' ? (
           <ArrowUpIcon />
         ) : column.getIsSorted() === 'desc' ? (
@@ -207,7 +208,19 @@ export const columns: ColumnDef<PostWithAuthor>[] = [
         )}
       </Button>
     ),
-    cell: ({ row }) => row.original.author.username,
+    cell: ({ row }) => (
+      <div className='flex flex-row items-center gap-2'>
+        <Image
+          unoptimized
+          src={row.original.writer.avatarUrl}
+          alt='Avatar'
+          className='min-h-6 min-w-6 shrink-0 rounded-full'
+          width={24}
+          height={24}
+        />
+        <span>{row.original.writer.username}</span>
+      </div>
+    ),
   },
   {
     accessorKey: 'createdAt',

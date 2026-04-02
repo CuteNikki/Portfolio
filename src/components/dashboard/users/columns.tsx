@@ -143,7 +143,7 @@ const RoleSelectCell = ({ user }: { user: User }) => {
       <SelectContent>
         <SelectGroup>
           <SelectItem value={'USER'}>User</SelectItem>
-          <SelectItem value={'AUTHOR'}>Author</SelectItem>
+          <SelectItem value={'WRITER'}>Writer</SelectItem>
           <SelectItem value={'ADMIN'}>Admin</SelectItem>
         </SelectGroup>
       </SelectContent>

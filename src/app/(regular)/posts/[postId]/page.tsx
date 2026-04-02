@@ -59,7 +59,7 @@ export default async function PostsPage({
         OR: [{ id: postId }, { slug: postId }],
       },
       include: {
-        author: true,
+        writer: true,
         comments: {
           include: { author: true, replies: { include: { author: true } } },
           orderBy: { createdAt: 'desc' },
@@ -74,10 +74,10 @@ export default async function PostsPage({
   }
 
   const session = await getCurrentSession();
-  if (!post.published) {
+  if (!post.publishedAt) {
     if (
       !session ||
-      (session.user.role !== Role.ADMIN && session.user.role !== Role.AUTHOR)
+      (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
     ) {
       notFound();
     }
@@ -100,11 +100,11 @@ export default async function PostsPage({
         </h1>
 
         <div className='text-muted-foreground flex flex-wrap items-center gap-4'>
-          <UserHover user={post.author}>
+          <UserHover user={post.writer}>
             <div className='flex items-center gap-2'>
               <UserIcon className='size-4' />
               <span className='text-foreground font-medium'>
-                {post.author.displayName || `@${post.author.username}`}
+                {post.writer.displayName || `@${post.writer.username}`}
               </span>
             </div>
           </UserHover>
@@ -122,7 +122,7 @@ export default async function PostsPage({
           <div className='ml-auto flex items-center gap-2'>
             <ShareButton postId={post.id} />
             {(session?.user.role === Role.ADMIN ||
-              session?.user.role === Role.AUTHOR) && (
+              session?.user.role === Role.WRITER) && (
               <Button variant='outline' size='xs' asChild>
                 <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
                   <PencilLineIcon />
@@ -130,7 +130,7 @@ export default async function PostsPage({
                 </Link>
               </Button>
             )}
-            {!post.published && (
+            {!post.publishedAt && (
               <Badge variant='destructive' size='lg'>
                 Unpublished
               </Badge>

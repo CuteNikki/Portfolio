@@ -1,6 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -16,7 +17,7 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 
-import { Project } from '@/generated/prisma/browser';
+import { Project, User } from '@/generated/prisma/browser';
 
 import { deleteProject } from '@/actions/project';
 import { LINKS } from '@/constants/links';
@@ -41,7 +42,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-const ProjectActions = ({ project }: { project: Project }) => {
+type ProjectWithWriter = Project & { writer: User };
+
+const ProjectActions = ({ project }: { project: ProjectWithWriter }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   const handleDelete = () => {
@@ -139,7 +142,7 @@ const ProjectActions = ({ project }: { project: Project }) => {
   );
 };
 
-export const columns: ColumnDef<Project>[] = [
+export const columns: ColumnDef<ProjectWithWriter>[] = [
   {
     accessorKey: 'title',
     header: ({ column }) => (
@@ -186,6 +189,38 @@ export const columns: ColumnDef<Project>[] = [
         </Badge>
       );
     },
+  },
+  {
+    accessorKey: 'writer.username',
+    id: 'writer',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Writer
+        {column.getIsSorted() === 'asc' ? (
+          <ArrowUpIcon />
+        ) : column.getIsSorted() === 'desc' ? (
+          <ArrowDownIcon />
+        ) : (
+          <ArrowUpDownIcon className='opacity-50' />
+        )}
+      </Button>
+    ),
+    cell: ({ row }) => (
+      <div className='flex flex-row items-center gap-2'>
+        <Image
+          unoptimized
+          src={row.original.writer.avatarUrl}
+          alt='Avatar'
+          className='min-h-6 min-w-6 shrink-0 rounded-full'
+          width={24}
+          height={24}
+        />
+        <span>{row.original.writer.username}</span>
+      </div>
+    ),
   },
   {
     accessorKey: 'createdAt',

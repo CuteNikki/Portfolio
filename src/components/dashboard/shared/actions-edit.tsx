@@ -11,13 +11,13 @@ import {
 import { Button } from '@/components/ui/button';
 
 export function EditActionButtons({
-  isPublished,
+  publishedAt,
   isPending,
   isMissingRequiredFields,
   action,
   setAction,
 }: {
-  isPublished: boolean;
+  publishedAt: Date | null;
   isPending: boolean;
   isMissingRequiredFields: boolean;
   action: 'save' | 'publish' | 'delete';
@@ -69,7 +69,7 @@ export function EditActionButtons({
           ) : (
             <SaveIcon />
           )}
-          {isPublished ? 'Revert to Draft' : 'Save Draft'}
+          {publishedAt ? 'Revert to Draft' : 'Save Draft'}
         </Button>
 
         {/* Publish Button */}
@@ -83,7 +83,7 @@ export function EditActionButtons({
           ) : (
             <SendHorizonalIcon />
           )}
-          {isPublished ? 'Update' : 'Publish'}
+          {publishedAt ? 'Update' : 'Publish'}
         </Button>
       </div>
     </div>

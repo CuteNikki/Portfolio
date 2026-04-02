@@ -14,7 +14,7 @@ datasource db {
 
 enum Role {
   USER // Can only read and comment
-  AUTHOR // Can read, comment and create posts
+  WRITER // Can read, comment and create posts
   ADMIN // Can do everything, including managing other users
 }
 
@@ -36,6 +36,7 @@ model User {
   sessions Session[]
   comments Comment[]
   posts    Post[]
+  projects Project[]
 }
 
 model Session {
@@ -48,17 +49,17 @@ model Session {
 }
 
 model Post {
-  id        String  @id @default(cuid())
-  authorId  String
-  title     String
-  slug      String? @unique
-  content   String  @db.Text
-  published Boolean @default(false)
+  id       String  @id @default(cuid())
+  writerId String
+  title    String
+  slug     String? @unique
+  content  String  @db.Text
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  author   User      @relation(fields: [authorId], references: [id])
+  writer   User      @relation(fields: [writerId], references: [id])
   comments Comment[]
 }
 
@@ -81,10 +82,10 @@ model Comment {
 
 model Project {
   id          String  @id @default(cuid())
+  writerId    String
   title       String
   slug        String? @unique
   description String  @db.Text
-  published   Boolean @default(false)
 
   tags         String[]
   technologies String[]
@@ -93,6 +94,9 @@ model Project {
   repository String?
   website    String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  writer User @relation(fields: [writerId], references: [id])
 }

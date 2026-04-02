@@ -14,12 +14,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 export async function ProjectList() {
   const session = await getCurrentSession();
   const isAdmin =
-    session?.user.role === Role.ADMIN || session?.user.role === Role.AUTHOR;
+    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER;
 
   const { projects, hasError } = await prisma.project
     .findMany({
-      where: isAdmin ? {} : { published: true },
+      where: isAdmin ? {} : { publishedAt: { not: null } },
       orderBy: { createdAt: 'desc' },
+      include: { writer: true },
     })
     .then((projects) => ({ projects, hasError: false }))
     .catch((error) => {
@@ -42,7 +43,7 @@ export async function ProjectList() {
           className='group hover:border-primary/50 hover:bg-muted/20 flex flex-col justify-between border p-5 transition-colors'
         >
           <div className='flex flex-col gap-2'>
-            {!project.published && <Badge>Draft</Badge>}
+            {!project.publishedAt && <Badge>Draft</Badge>}
             <h2 className='group-hover:text-primary-text truncate text-xl font-bold transition-colors'>
               {project.title}
             </h2>

@@ -79,5 +79,5 @@ export async function checkNavPermissions() {
   const session = await getCurrentSession();
 
   if (!session) return false;
-  return session.user.role === Role.ADMIN || session.user.role === Role.AUTHOR;
+  return session.user.role === Role.ADMIN || session.user.role === Role.WRITER;
 }

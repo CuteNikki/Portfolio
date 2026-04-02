@@ -12,7 +12,7 @@ export async function createPost(formData: FormData) {
 
   if (
     !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.AUTHOR)
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
   ) {
     throw new Error(
       'Unauthorized: You do not have permission to publish posts.',
@@ -46,8 +46,8 @@ export async function createPost(formData: FormData) {
       title,
       content,
       slug,
-      published: isPublished,
-      authorId: session.user.id,
+      publishedAt: isPublished ? new Date() : null,
+      writerId: session.user.id,
     },
   });
 
@@ -60,7 +60,7 @@ export async function deletePost(formData: FormData) {
 
   if (
     !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.AUTHOR)
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
   ) {
     throw new Error('Unauthorized');
   }
@@ -79,7 +79,7 @@ export async function updatePost(formData: FormData) {
 
   if (
     !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.AUTHOR)
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
   ) {
     throw new Error('Unauthorized');
   }
@@ -113,7 +113,7 @@ export async function updatePost(formData: FormData) {
       title,
       slug,
       content,
-      published: isPublished,
+      publishedAt: isPublished ? new Date() : null,
     },
   });
 

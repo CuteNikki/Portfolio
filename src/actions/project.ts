@@ -58,7 +58,8 @@ export async function createProject(formData: FormData) {
       website,
       technologies,
       tags,
-      published: isPublished,
+      writerId: session.user.id,
+      publishedAt: isPublished ? new Date() : null,
     },
   });
 
@@ -135,7 +136,7 @@ export async function updateProject(formData: FormData) {
       website,
       technologies,
       tags,
-      published: isPublished,
+      publishedAt: isPublished ? new Date() : null,
     },
   });
 

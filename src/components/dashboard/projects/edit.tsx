@@ -156,7 +156,7 @@ export function EditProjectForm({ project }: { project: Project }) {
       </div>
 
       <EditActionButtons
-        isPublished={project.published}
+        publishedAt={project.publishedAt}
         isPending={isPending}
         isMissingRequiredFields={!description.trim()}
         action={action}

@@ -14,13 +14,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 export async function PostList() {
   const session = await getCurrentSession();
   const isAdmin =
-    session?.user.role === Role.ADMIN || session?.user.role === Role.AUTHOR;
+    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER;
 
   const { posts, hasError } = await prisma.post
     .findMany({
-      where: isAdmin ? {} : { published: true },
+      where: isAdmin ? {} : { publishedAt: { not: null } },
       orderBy: { createdAt: 'desc' },
-      include: { author: true },
+      include: { writer: true },
     })
     .then((posts) => ({ posts, hasError: false }))
     .catch((error) => {
@@ -43,7 +43,7 @@ export async function PostList() {
           className='group hover:border-primary/50 hover:bg-muted/20 flex flex-col justify-between border p-5 transition-colors'
         >
           <div className='flex flex-col gap-2'>
-            {!post.published && <Badge>Draft</Badge>}
+            {!post.publishedAt && <Badge>Draft</Badge>}
             <h2 className='group-hover:text-primary-text truncate text-xl font-bold transition-colors'>
               {post.title}
             </h2>
