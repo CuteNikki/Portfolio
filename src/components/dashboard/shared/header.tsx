@@ -1,5 +1,7 @@
 import { LucideIcon } from 'lucide-react';
 
+import { CardDescription, CardTitle } from '@/components/ui/card';
+
 export function DashboardHeader({
   title,
   description,
@@ -11,11 +13,11 @@ export function DashboardHeader({
 }) {
   return (
     <div className='flex flex-col gap-2'>
-      <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
+      <CardTitle className='text-primary-text flex items-center gap-2'>
         <Icon className='shrink-0' />
         {title}
-      </h1>
-      <p className='text-muted-foreground'>{description}</p>
+      </CardTitle>
+      <CardDescription>{description}</CardDescription>
     </div>
   );
 }
