@@ -149,7 +149,6 @@ export function Comment({
                 parentId={comment.id}
                 slug={postSlug}
                 setShowReplyFormAction={setShowReplyForm}
-                isReplying={true}
               />
             </div>
           )}

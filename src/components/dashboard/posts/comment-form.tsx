@@ -14,13 +14,11 @@ export function CommentForm({
   slug,
   parentId,
   setShowReplyFormAction,
-  isReplying = false,
 }: {
   postId: string;
   slug: string;
   parentId?: string;
   setShowReplyFormAction?: (show: boolean) => void;
-  isReplying?: boolean;
 }) {
   const [content, setContent] = React.useState('');
 
@@ -84,7 +82,7 @@ export function CommentForm({
           </Button>
         )}
         <Button type='submit' size='sm' disabled={content.trim().length === 0}>
-          {isReplying ? 'Post Reply' : 'Post Comment'}
+          {setShowReplyFormAction ? 'Post Reply' : 'Post Comment'}
         </Button>
       </div>
     </form>
