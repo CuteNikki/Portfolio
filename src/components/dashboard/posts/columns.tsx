@@ -175,7 +175,7 @@ export const columns: ColumnDef<PostWithWriter>[] = [
     ),
   },
   {
-    accessorKey: 'published',
+    accessorKey: 'publishedAt',
     header: ({ column }) => (
       <Button
         variant='ghost'
@@ -192,7 +192,7 @@ export const columns: ColumnDef<PostWithWriter>[] = [
       </Button>
     ),
     cell: ({ row }) => {
-      const isPublished = row.getValue('published') as boolean;
+      const isPublished = row.getValue('publishedAt') !== null;
       return (
         <Badge variant={isPublished ? 'default' : 'secondary'}>
           {isPublished ? 'Published' : 'Draft'}
