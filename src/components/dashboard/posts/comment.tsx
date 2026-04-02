@@ -1,8 +1,12 @@
 'use client';
 
-import type { Comment, User } from '@/generated/prisma/browser';
+import { useState } from 'react';
+import { toast } from 'sonner';
+
+import type { Comment as CommentType, User } from '@/generated/prisma/browser';
 
 import { editComment } from '@/actions/post';
+
 import { UserHover } from '@/components/common/user-hover';
 import { CommentActions } from '@/components/dashboard/posts/comment-actions';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
@@ -10,8 +14,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
-import { toast } from 'sonner';
 
 const MAX_DEPTH = 3;
 
@@ -26,8 +28,8 @@ export function Comment({
   setEditingCommentIdAction,
 }: {
   depth: number;
-  allComments: (Comment & { author: User })[];
-  comment: Comment & { author: User };
+  allComments: (CommentType & { author: User })[];
+  comment: CommentType & { author: User };
   isAdmin: boolean;
   userId: string;
   postSlug: string;
@@ -40,9 +42,13 @@ export function Comment({
   const replies = allComments.filter((c) => c.parentId === comment.id);
 
   return (
-    <div key={comment.id}>
-      <div className='flex items-start gap-4'>
-        <Avatar className='h-12 w-12'>
+    <div className='flex flex-col'>
+      <div className='relative flex items-start gap-4'>
+        {(replies?.length ?? 0) > 0 && (
+          <div className='border-border absolute top-10 bottom-0 left-2 sm:left-6 border-l-2' />
+        )}
+
+        <Avatar className='z-10 h-12 w-12'>
           <AvatarImage
             src={comment.author.avatarUrl}
             alt={comment.author.username}
@@ -51,6 +57,7 @@ export function Comment({
             {comment.author.username.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
+
         <div className='flex w-full min-w-0 flex-col'>
           <div className='xs:gap-2 xs:flex-row xs:items-center flex flex-col justify-between'>
             <UserHover user={comment.author}>
@@ -154,21 +161,37 @@ export function Comment({
           )}
         </div>
       </div>
+
       {(replies?.length ?? 0) > 0 && (
-        <div className='flex flex-col gap-4 pt-4 pl-2 border-l ml-2'>
-          {replies?.map((reply) => (
-            <Comment
-              depth={depth + 1}
-              key={reply.id}
-              comment={reply}
-              allComments={allComments}
-              postSlug={postSlug}
-              userId={userId}
-              isAdmin={isAdmin}
-              editingCommentId={editingCommentId}
-              setEditingCommentIdAction={setEditingCommentIdAction}
-            />
-          ))}
+        <div className='ml-2 sm:ml-6 flex flex-col'>
+          {replies?.map((reply, index) => {
+            const isLast = index === replies.length - 1;
+            return (
+              <div key={reply.id} className='relative pt-4 pl-3 sm:pl-6'>
+                {!isLast && (
+                  <>
+                    <div className='border-border absolute top-0 bottom-0 left-0 border-l-2' />
+                    <div className='border-border absolute top-0 left-0 h-10 w-6 border-b-2' />
+                  </>
+                )}
+
+                {isLast && (
+                  <div className='border-border absolute top-0 left-0 h-10 w-6 rounded-bl-xl border-b-2 border-l-2' />
+                )}
+
+                <Comment
+                  depth={depth + 1}
+                  comment={reply}
+                  allComments={allComments}
+                  postSlug={postSlug}
+                  userId={userId}
+                  isAdmin={isAdmin}
+                  editingCommentId={editingCommentId}
+                  setEditingCommentIdAction={setEditingCommentIdAction}
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
