@@ -223,6 +223,24 @@ export const columns: ColumnDef<PostWithWriter>[] = [
     ),
   },
   {
+    accessorKey: 'views',
+    header: ({ column }) => (
+      <Button
+        variant='ghost'
+        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+      >
+        Views
+        {column.getIsSorted() === 'asc' ? (
+          <ArrowUpIcon />
+        ) : column.getIsSorted() === 'desc' ? (
+          <ArrowDownIcon />
+        ) : (
+          <ArrowUpDownIcon className='opacity-50' />
+        )}
+      </Button>
+    ),
+  },
+  {
     accessorKey: 'createdAt',
     header: ({ column }) => (
       <Button

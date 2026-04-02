@@ -54,6 +54,7 @@ model Post {
   title    String
   slug     String? @unique
   content  String  @db.Text
+  views    Int     @default(0)
 
   publishedAt DateTime?
   createdAt   DateTime  @default(now())

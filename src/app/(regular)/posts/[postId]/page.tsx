@@ -16,6 +16,7 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
+import { addView } from '@/actions/post';
 import { UserHover } from '@/components/common/user-hover';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
 import { CommentWrapper } from '@/components/dashboard/posts/comment-wrapper';
@@ -82,6 +83,10 @@ export default async function PostsPage({
       notFound();
     }
   }
+
+  const formData = new FormData();
+  await formData.append('postId', post.id);
+  await addView(formData);
 
   return (
     <article className='mx-auto w-full max-w-3xl py-8'>

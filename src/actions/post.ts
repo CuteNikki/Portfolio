@@ -236,6 +236,19 @@ export async function editComment(formData: FormData) {
   revalidatePostPaths(comment.postId, postSlug);
 }
 
+export async function addView(formData: FormData) {
+  const postId = formData.get('postId') as string;
+
+  if (!postId) {
+    throw new Error('Post ID is required.');
+  }
+
+  await prisma.post.update({
+    where: { id: postId },
+    data: { views: { increment: 1 } },
+  });
+}
+
 function revalidatePostPaths(postId: string, slug: string | null) {
   revalidatePath('/dashboard/posts');
   revalidatePath('/dashboard/posts/new');

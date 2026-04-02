@@ -1,4 +1,4 @@
-import { CalendarIcon, ClockIcon } from 'lucide-react';
+import { CalendarIcon, ClockIcon, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import { Role } from '@/generated/prisma/enums';
@@ -69,6 +69,10 @@ export async function PostList() {
                 Math.ceil(post.content.trim().split(/\s+/).length / 200),
               )}{' '}
               min read
+            </div>
+            <div className='flex items-center gap-1'>
+              <EyeIcon className='size-3' />
+              {post.views || 0} views
             </div>
           </div>
         </Link>
