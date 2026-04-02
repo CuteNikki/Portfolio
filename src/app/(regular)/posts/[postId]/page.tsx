@@ -33,11 +33,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { postId } = await params;
 
-  const post = await prisma.post.findFirst({
-    where: {
-      OR: [{ id: postId }, { slug: postId }],
-    },
-  });
+  const post = await prisma.post
+    .findFirst({
+      where: {
+        OR: [{ id: postId }, { slug: postId }],
+      },
+    })
+    .then((post) => post)
+    .catch(() => null);
 
   if (!post) return { title: 'Post Not Found' };
 

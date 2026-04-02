@@ -27,11 +27,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { projectId } = await params;
 
-  const project = await prisma.project.findFirst({
-    where: {
-      OR: [{ id: projectId }, { slug: projectId }],
-    },
-  });
+  const project = await prisma.project
+    .findFirst({
+      where: {
+        OR: [{ id: projectId }, { slug: projectId }],
+      },
+    })
+    .then((project) => project)
+    .catch(() => null);
 
   if (!project) return { title: 'Project Not Found' };
 
