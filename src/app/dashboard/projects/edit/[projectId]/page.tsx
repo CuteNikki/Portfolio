@@ -7,6 +7,7 @@ import prisma from '@/lib/prisma';
 
 import { EditProjectForm } from '@/components/dashboard/projects/edit';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export async function generateMetadata({
   params,
@@ -47,15 +48,19 @@ export default async function EditProjectPage({
   }
 
   return (
-    <div className='flex w-full max-w-5xl flex-col gap-4 justify-self-center border p-4 sm:p-8'>
-      <DashboardHeader
-        icon={PencilLineIcon}
-        title={'Edit Project'}
-        description={
-          'Make changes to a project or update its publication status.'
-        }
-      />
-      <EditProjectForm project={project} />
-    </div>
+    <Card className='w-full max-w-5xl'>
+      <CardHeader>
+        <DashboardHeader
+          icon={PencilLineIcon}
+          title={'Edit Project'}
+          description={
+            'Make changes to a project or update its publication status.'
+          }
+        />
+      </CardHeader>
+      <CardContent>
+        <EditProjectForm project={project} />
+      </CardContent>
+    </Card>
   );
 }
