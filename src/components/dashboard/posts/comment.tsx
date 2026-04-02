@@ -156,7 +156,7 @@ export function Comment({
         </div>
       </div>
       {(replies?.length ?? 0) > 0 && (
-        <div className='flex flex-col gap-4 pt-4 pl-4'>
+        <div className='flex flex-col gap-4 pt-4 pl-2 border-l ml-2'>
           {replies?.map((reply) => (
             <Comment
               depth={depth + 1}
