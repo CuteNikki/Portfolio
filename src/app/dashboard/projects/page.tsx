@@ -17,6 +17,7 @@ export default async function ProjectsPage() {
   const { projects, hasError } = await prisma.project
     .findMany({
       orderBy: { createdAt: 'desc' },
+      include: { writer: true },
     })
     .then((projects) => ({ projects, hasError: false }))
     .catch((error) => {
