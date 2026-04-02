@@ -19,6 +19,13 @@ import {
 
 import { Button } from '@/components/ui/button';
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
   Field,
   FieldDescription,
   FieldError,
@@ -63,18 +70,20 @@ export function ContactContent() {
   }
 
   return (
-    <div className='flex w-full max-w-5xl flex-col gap-4 border p-4 sm:p-8'>
-      <h1 className='text-primary-text flex items-center gap-2 text-xl font-semibold'>
-        <MailIcon className='shrink-0' /> Get in Touch
-      </h1>
-      <p>
-        I would love to hear from you! Whether you have a question, want to
-        collaborate, or just want to say hello, feel free to reach out using the
-        form below.
-      </p>
-      <div>
-        <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup>
+    <Card className='w-full max-w-5xl'>
+      <CardHeader>
+        <CardTitle className='text-primary-text flex items-center gap-2'>
+          <MailIcon className='shrink-0' /> Get in Touch
+        </CardTitle>
+        <CardDescription className='text-balance'>
+          I would love to hear from you! Whether you have a question, want to
+          collaborate, or just want to say hello, feel free to reach out using
+          the form below.
+        </CardDescription>
+      </CardHeader>
+      <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
+        <CardContent>
+          <FieldGroup className='gap-4'>
             <FieldGroup className='md:flex-row'>
               <Controller
                 name='name'
@@ -168,25 +177,23 @@ export function ContactContent() {
                 </Field>
               )}
             />
-            <FieldDescription>
-              By submitting this form, you agree to the{' '}
-              <Link href={LINKS.privacy.url}>{LINKS.privacy.label}</Link>.
-            </FieldDescription>
-            <div>
-              <Field orientation='horizontal'>
-                <Button
-                  type='submit'
-                  form='contact'
-                  disabled={form.formState.isSubmitting}
-                >
-                  <SendHorizontalIcon />
-                  Submit
-                </Button>
-              </Field>
+            <div className='flex items-center flex-col sm:flex-row gap-4 justify-between'>
+              <FieldDescription>
+                By submitting this form, you agree to the{' '}
+                <Link href={LINKS.privacy.url}>{LINKS.privacy.label}</Link>.
+              </FieldDescription>
+              <Button
+                type='submit'
+                form='contact'
+                disabled={form.formState.isSubmitting}
+              >
+                <SendHorizontalIcon />
+                Submit
+              </Button>
             </div>
           </FieldGroup>
-        </form>
-      </div>
-    </div>
+        </CardContent>
+      </form>
+    </Card>
   );
 }
