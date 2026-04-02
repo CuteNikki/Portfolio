@@ -60,31 +60,37 @@ export function CommentForm({
           id='content'
           name='content'
         />
-        <FieldDescription
-          className={content.length >= 1000 ? 'text-destructive' : ''}
-        >
-          {content.trim().length}/1000 characters
-        </FieldDescription>
-      </Field>
-      <div className='flex justify-end gap-2'>
-        {(content.trim().length > 0 || setShowReplyFormAction) && (
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => {
-              setContent('');
-              if (setShowReplyFormAction) {
-                setShowReplyFormAction(false);
-              }
-            }}
+        <div className='flex items-center justify-between gap-2'>
+          <FieldDescription
+            className={content.length >= 1000 ? 'text-destructive' : ''}
           >
-            Cancel
-          </Button>
-        )}
-        <Button type='submit' size='sm' disabled={content.trim().length === 0}>
-          {setShowReplyFormAction ? 'Post Reply' : 'Post Comment'}
-        </Button>
-      </div>
+            {content.trim().length}/1000
+          </FieldDescription>
+          <div className='flex justify-end gap-2'>
+            {(content.trim().length > 0 || setShowReplyFormAction) && (
+              <Button
+                variant='outline'
+                size='xs'
+                onClick={() => {
+                  setContent('');
+                  if (setShowReplyFormAction) {
+                    setShowReplyFormAction(false);
+                  }
+                }}
+              >
+                Cancel
+              </Button>
+            )}
+            <Button
+              type='submit'
+              size='xs'
+              disabled={content.trim().length === 0}
+            >
+              {setShowReplyFormAction ? 'Post Reply' : 'Post Comment'}
+            </Button>
+          </div>
+        </div>
+      </Field>
     </form>
   );
 }
