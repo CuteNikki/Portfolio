@@ -8,6 +8,7 @@ import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { ErrorToast } from '@/components/common/error-toast';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -29,7 +30,7 @@ export async function ProjectList() {
     });
 
   return (
-    <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
+    <ScrollReveal className='scroll-reveal grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
       {hasError && (
         <ErrorToast
           title='Failed to load latest projects.'
