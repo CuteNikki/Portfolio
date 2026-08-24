@@ -12,7 +12,7 @@ export default function NotFound() {
     <div className='flex min-h-screen flex-col'>
       <Navbar />
       <main className='container mx-auto flex w-full flex-1 items-center px-4 py-16 sm:px-6 lg:px-8'>
-        <section className='w-full max-w-3xl border-t border-border pt-8'>
+        <section className='w-full max-w-3xl'>
           <div className='flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary-text'>
             <AlertCircleIcon className='size-4' /> Error 404
           </div>

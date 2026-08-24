@@ -72,7 +72,7 @@ export function ContactContent() {
   return (
     <Card className='animate-rise-in w-full max-w-5xl overflow-hidden'>
       <CardHeader className='gap-4 border-b pb-8'>
-        <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Contact / Start a conversation</p>
+        <p className='text-muted-foreground text-sm font-semibold uppercase tracking-[0.2em]'>Contact / Start a conversation</p>
         <CardTitle className='flex items-center gap-3 text-4xl tracking-tight sm:text-5xl'>
           Let&apos;s make something <span className='text-primary-text'>useful.</span>
         </CardTitle>
