@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <div className='flex w-full flex-col gap-12'>
       <section className='animate-rise-in flex flex-col gap-6'>
-        <p className='text-muted-foreground text-sm font-semibold uppercase tracking-[0.2em]'>Portfolio / 2026</p>
+        <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Portfolio / 2026</p>
         <h1 className='max-w-5xl text-balance text-5xl font-bold tracking-[-0.06em] sm:text-7xl lg:text-8xl'>
           Building useful things for the web.
         </h1>
