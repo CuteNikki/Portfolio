@@ -10,8 +10,10 @@ import { deleteProject, updateProject } from '@/actions/project';
 
 import { LINKS } from '@/constants/links';
 
+import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { EditActionButtons } from '@/components/dashboard/shared/actions-edit';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
 export function EditProjectForm({ project }: { project: Project }) {
@@ -87,20 +89,43 @@ export function EditProjectForm({ project }: { project: Project }) {
         </div>
       </div>
 
-      {/* Description */}
+      {/* Description Editor & Preview */}
       <div className='flex flex-col gap-2'>
         <label htmlFor='description' className='text-sm font-medium'>
           Description
         </label>
-        <Textarea
-          id='description'
-          name='description'
-          placeholder='Write your project description here'
-          className='min-h-20 resize-y'
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
+        <Tabs defaultValue='write' className='w-full'>
+          <div className='mb-1 flex items-center justify-between'>
+            <TabsList className='grid w-full max-w-50 grid-cols-2'>
+              <TabsTrigger value='write'>Write</TabsTrigger>
+              <TabsTrigger value='preview'>Preview</TabsTrigger>
+            </TabsList>
+          </div>
+
+          <TabsContent value='write'>
+            <Textarea
+              id='description'
+              name='description'
+              placeholder='Write your project description here'
+              className='min-h-100 resize-y'
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </TabsContent>
+
+          <TabsContent value='preview'>
+            <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert border-input min-h-100 w-full max-w-none rounded-md border p-3 text-sm wrap-break-word'>
+              {description ? (
+                <MarkdownViewer content={description} />
+              ) : (
+                <p className='text-muted-foreground italic'>
+                  Nothing to preview yet...
+                </p>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {/* Tags & Technologies */}

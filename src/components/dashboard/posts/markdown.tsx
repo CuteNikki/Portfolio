@@ -97,29 +97,33 @@ const CodeBlock = ({ children, className, ...rest }: CodeBlockProps) => {
 
 export function MarkdownViewer({ content }: { content: string }) {
   return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm, remarkBreaks, remarkGemoji]}
-      rehypePlugins={[
-        rehypeSlug,
-        [
-          rehypeExternalLinks,
-          { target: '_blank', rel: ['noopener', 'noreferrer'] },
-        ],
-      ]}
-      components={{
-        h1: createHeading(1),
-        h2: createHeading(2),
-        h3: createHeading(3),
-        h4: createHeading(4),
-        h5: createHeading(5),
-        h6: createHeading(6),
+    <div className='prose prose-zinc dark:prose-invert max-w-none'>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm, remarkBreaks, remarkGemoji]}
+        rehypePlugins={[
+          rehypeSlug,
+          [
+            rehypeExternalLinks,
+            { target: '_blank', rel: ['noopener', 'noreferrer'] },
+          ],
+        ]}
+        components={{
+          h1: createHeading(1),
+          h2: createHeading(2),
+          h3: createHeading(3),
+          h4: createHeading(4),
+          h5: createHeading(5),
+          h6: createHeading(6),
 
-        pre: ({ children }) => <div className='not-prose my-6'>{children}</div>,
+          pre: ({ children }) => (
+            <div className='not-prose my-6'>{children}</div>
+          ),
 
-        code: CodeBlock,
-      }}
-    >
-      {content}
-    </ReactMarkdown>
+          code: CodeBlock,
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
   );
 }
