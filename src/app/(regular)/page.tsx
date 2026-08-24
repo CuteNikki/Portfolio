@@ -36,7 +36,7 @@ export default function Home() {
 
       <ScrollReveal className='scroll-reveal grid gap-8 border-y border-border py-8 lg:grid-cols-2 lg:gap-16'>
         <div className='flex flex-col gap-5'>
-          <div className='flex items-center gap-2 text-sm'><MapPinIcon className='text-primary-text size-4' /> {PERSONAL_DETAILS.address.city}, {PERSONAL_DETAILS.address.country}</div>
+          <div className='flex items-center gap-2 text-sm'><MapPinIcon className='text-primary-text size-4' /> {PERSONAL_DETAILS.address.country}</div>
           <p className='text-muted-foreground max-w-sm text-sm leading-relaxed'>Currently open to thoughtful collaborations, product work, and interesting problems.</p>
           <ul className='flex flex-wrap gap-x-5 gap-y-3'>
             {PERSONAL_DETAILS.socials.filter(({ platform }) => platform !== 'Discord').map(({ platform, icon: Icon, url }) => <li key={platform}><Link href={url} target='_blank' rel='noopener noreferrer' className='text-muted-foreground hover:text-primary-text flex items-center gap-2 text-sm transition-colors'><Icon className='size-4' />{platform}</Link></li>)}
