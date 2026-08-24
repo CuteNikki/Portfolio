@@ -7,9 +7,11 @@ import { toast } from 'sonner';
 
 import { MailIcon, SendHorizontalIcon } from 'lucide-react';
 
+import { DiscordMenu } from '@/components/navigation/discord-menu';
 import { sendMail } from '@/actions/mail';
 
 import { LINKS } from '@/constants/links';
+import { PERSONAL_DETAILS } from '@/constants/personal';
 import { cn } from '@/lib/utils';
 import {
   MailSubmitData,
@@ -64,16 +66,27 @@ export function ContactContent() {
 
   return (
     <section className='animate-rise-in w-full max-w-6xl'>
-      <div className='grid border-y md:grid-cols-[0.8fr_1.2fr]'>
+      <div className='grid md:grid-cols-[0.8fr_1.2fr]'>
         <div className='flex flex-col gap-5 border-b p-6 sm:p-8 md:border-b-0 md:border-r md:p-10'>
           <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Contact / Start a conversation</p>
           <h1 className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</h1>
           <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
             Have a question, an idea, or a project in mind? Send a note and I&apos;ll get back to you soon.
           </p>
-          <div className='mt-auto flex flex-col gap-2 border-t pt-5 text-sm'>
-            <span className='text-muted-foreground'>Prefer email?</span>
-            <a className='hover:text-primary-text font-medium transition-colors' href='mailto:contact@niso.moe'>contact@niso.moe</a>
+          <div className='mt-auto flex flex-col gap-4 border-t pt-5 text-sm'>
+            <div className='flex flex-col gap-2'>
+              <span className='text-muted-foreground'>Prefer email?</span>
+              <a className='hover:text-primary-text font-medium transition-colors' href={PERSONAL_DETAILS.emailLink}>{PERSONAL_DETAILS.email}</a>
+            </div>
+            <div className='flex flex-wrap items-center gap-x-5 gap-y-3'>
+              {PERSONAL_DETAILS.socials.filter(({ platform }) => platform !== 'Mail' && platform !== 'Discord').map(({ platform, icon: Icon, url }) => (
+                <Link key={platform} href={url} target='_blank' rel='noopener noreferrer' className='text-muted-foreground hover:text-primary-text flex items-center gap-2 transition-colors'>
+                  <Icon className='size-4' />
+                  {platform}
+                </Link>
+              ))}
+              <DiscordMenu />
+            </div>
           </div>
                 </div>
         <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
