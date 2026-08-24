@@ -67,7 +67,7 @@ export function ContactContent() {
   return (
     <section className='animate-rise-in w-full max-w-6xl'>
       <div className='grid lg:grid-cols-[0.8fr_1.2fr]'>
-        <div className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
+        <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
           <p className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'><MailIcon className='size-4' /> Contact</p>
           <h1 className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</h1>
           <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
@@ -90,7 +90,7 @@ export function ContactContent() {
           </div>
                 </div>
         <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
-        <div className='p-6 sm:p-8 md:p-10'>
+        <div data-reveal-item style={{ '--reveal-index': 1 } as React.CSSProperties} className='p-6 sm:p-8 md:p-10'>
           <FieldGroup className='gap-4'>
             <FieldGroup className='lg:flex-row'>
               <Controller

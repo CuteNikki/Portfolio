@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { ArrowUpRightIcon, NewspaperIcon } from 'lucide-react';
 import { SITE_METADATA } from '@/constants/metadata';
 import { PostList, PostListSkeleton } from '@/components/dashboard/posts/view';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 
 export const { posts: metadata } = SITE_METADATA;
 
@@ -11,6 +12,6 @@ export default function PostsPage() {
       <div className='flex flex-col gap-3'><p className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'><NewspaperIcon className='size-4' /> Notes & thinking</p><h1 className='text-5xl font-bold tracking-[-0.05em] sm:text-7xl'>Writing<span className='text-primary-text'>.</span></h1><p className='text-muted-foreground max-w-xl text-pretty leading-relaxed'>Notes on building products, learning in public, and the details that make the work better.</p></div>
       <ArrowUpRightIcon className='text-muted-foreground hidden size-8 sm:block' />
     </header>
-    <Suspense fallback={<PostListSkeleton />}><PostList /></Suspense>
+    <ScrollReveal className='scroll-reveal'><Suspense fallback={<PostListSkeleton />}><PostList /></Suspense></ScrollReveal>
   </section>;
 }

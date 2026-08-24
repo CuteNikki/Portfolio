@@ -36,10 +36,12 @@ export async function PostList() {
           description='The database is currently unreachable. Please try again later.'
         />
       )}
-      {posts.map((post) => (
+      {posts.map((post, index) => (
         <Link
           href={LINKS.postWithSlugOrId(post.slug ?? post.id).url}
           key={post.id}
+          data-reveal-item
+          style={{ '--reveal-index': index } as React.CSSProperties}
           className='group hover:border-primary/50 hover:bg-muted/20 flex flex-col justify-between border p-5 transition-colors'
         >
           <div className='flex flex-col gap-2'>
