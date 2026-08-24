@@ -70,20 +70,21 @@ export function ContactContent() {
   }
 
   return (
-    <Card className='animate-rise-in w-full max-w-5xl overflow-hidden'>
-      <CardHeader className='gap-4 border-b pb-8'>
-        <p className='text-muted-foreground text-sm font-semibold uppercase tracking-[0.2em]'>Contact / Start a conversation</p>
-        <CardTitle className='flex items-center gap-3 text-4xl tracking-tight sm:text-5xl'>
-          Let&apos;s make something <span className='text-primary-text'>useful.</span>
-        </CardTitle>
-        <CardDescription className='text-balance'>
-          I would love to hear from you! Whether you have a question, want to
-          collaborate, or just want to say hello, feel free to reach out using
-          the form below.
-        </CardDescription>
-      </CardHeader>
-      <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
-        <CardContent>
+    <Card className='animate-rise-in w-full max-w-6xl overflow-hidden'>
+      <div className='grid md:grid-cols-[0.8fr_1.2fr]'>
+        <CardHeader className='gap-5 border-b p-6 sm:p-8 md:border-b-0 md:border-r md:p-10'>
+          <p className='text-muted-foreground text-sm font-semibold uppercase tracking-[0.2em]'>Contact / Start a conversation</p>
+          <CardTitle className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</CardTitle>
+          <CardDescription className='max-w-sm text-balance leading-relaxed'>
+            Have a question, an idea, or a project in mind? Send a note and I&apos;ll get back to you soon.
+          </CardDescription>
+          <div className='mt-auto flex flex-col gap-2 border-t pt-5 text-sm'>
+            <span className='text-muted-foreground'>Prefer email?</span>
+            <a className='hover:text-primary-text font-medium transition-colors' href='mailto:contact@niso.moe'>contact@niso.moe</a>
+          </div>
+        </CardHeader>
+        <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
+        <CardContent className='p-6 sm:p-8 md:p-10'>
           <FieldGroup className='gap-4'>
             <FieldGroup className='md:flex-row'>
               <Controller
@@ -195,6 +196,7 @@ export function ContactContent() {
           </FieldGroup>
         </CardContent>
       </form>
+      </div>
     </Card>
   );
 }
