@@ -15,6 +15,7 @@ import { LINKS } from '@/constants/links';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { ShareButton } from '@/components/dashboard/posts/share';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -84,8 +85,13 @@ export default async function ProjectsPage({
         </Link>
       </Button>
 
+      <ScrollReveal className='scroll-reveal'>
       {/* Header Section */}
-      <header className='mb-10 flex flex-col gap-4 border-b pb-8'>
+      <header
+        data-reveal-item
+        style={{ '--reveal-index': 0 } as React.CSSProperties}
+        className='mb-10 flex flex-col gap-4 border-b pb-8'
+      >
         <h1 className='line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'>
           {project.title}
         </h1>
@@ -146,8 +152,14 @@ export default async function ProjectsPage({
           </div>
         ) : null}
       </header>
-      <div>{project.description}</div>
-      <div className='flex flex-wrap items-center gap-2 py-8'>
+      <div data-reveal-item style={{ '--reveal-index': 1 } as React.CSSProperties}>
+        {project.description}
+      </div>
+      <div
+        data-reveal-item
+        style={{ '--reveal-index': 2 } as React.CSSProperties}
+        className='flex flex-wrap items-center gap-2 py-8'
+      >
         {project.website && (
           <Button asChild>
             <Link
@@ -173,6 +185,7 @@ export default async function ProjectsPage({
           </Button>
         )}
       </div>
+      </ScrollReveal>
     </article>
   );
 }
