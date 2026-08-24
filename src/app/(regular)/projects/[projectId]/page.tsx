@@ -86,18 +86,22 @@ export default async function ProjectsPage({
         </Link>
       </Button>
 
+      {/* Unified ScrollReveal for Title, Meta, and Body */}
       <ScrollReveal className='scroll-reveal'>
-        {/* Header Section */}
-        <header
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='mb-10 flex flex-col gap-4 border-b pb-8'
-        >
-          <h1 className='line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'>
+        <header className='mb-10 flex flex-col gap-4 border-b pb-8'>
+          <h1
+            data-reveal-item
+            style={{ '--reveal-index': 0 } as React.CSSProperties}
+            className='line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'
+          >
             {project.title}
           </h1>
 
-          <div className='text-muted-foreground flex flex-wrap items-center gap-4'>
+          <div
+            data-reveal-item
+            style={{ '--reveal-index': 1 } as React.CSSProperties}
+            className='text-muted-foreground flex flex-wrap items-center gap-4'
+          >
             <div className='flex items-center gap-2'>
               <CalendarIcon className='size-4' />
               <time dateTime={project.createdAt.toISOString()}>
@@ -129,7 +133,11 @@ export default async function ProjectsPage({
           </div>
 
           {project.tags.length > 0 || project.technologies.length > 0 ? (
-            <div className='flex flex-col gap-2'>
+            <div
+              data-reveal-item
+              style={{ '--reveal-index': 2 } as React.CSSProperties}
+              className='flex flex-col gap-2 pt-2'
+            >
               {project.tags.length > 0 && (
                 <div className='flex flex-wrap items-center gap-2'>
                   <span>Tags:</span>
@@ -153,15 +161,21 @@ export default async function ProjectsPage({
             </div>
           ) : null}
         </header>
+
+        {/* Project Description Body (Staggered to appear after the header) */}
         <div
           data-reveal-item
-          style={{ '--reveal-index': 1 } as React.CSSProperties}
+          style={{ '--reveal-index': 3 } as React.CSSProperties}
         >
           <MarkdownViewer content={project.description} />
         </div>
+      </ScrollReveal>
+
+      {/* Action Links (Isolated block since it's lower down the page) */}
+      <ScrollReveal className='scroll-reveal'>
         <div
           data-reveal-item
-          style={{ '--reveal-index': 2 } as React.CSSProperties}
+          style={{ '--reveal-index': 0 } as React.CSSProperties}
           className='flex flex-wrap items-center gap-2 py-8'
         >
           {project.website && (

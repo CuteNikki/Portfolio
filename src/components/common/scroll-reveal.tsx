@@ -14,15 +14,27 @@ export function ScrollReveal({ children, className = '' }: ScrollRevealProps) {
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        observer.disconnect();
-      }
-    }, { threshold: 0.12 });
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      {
+        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.05,
+      },
+    );
+
     observer.observe(element);
     return () => observer.disconnect();
   }, []);
 
-  return <div ref={ref} className={`${className} ${isVisible ? 'is-visible' : ''}`}>{children}</div>;
+  return (
+    <div ref={ref} className={`${className} ${isVisible ? 'is-visible' : ''}`}>
+      {children}
+    </div>
+  );
 }

@@ -21,7 +21,7 @@ export function Navbar() {
   const publicLinks = NAVBAR_LINKS.filter((link) => !link.requiresAuth);
 
   return (
-    <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
+    <nav className='bg-background/95 supports-backdrop-filter:bg-background/70 sticky top-0 z-50 w-full border-b backdrop-blur-md'>
       <div className='container mx-auto flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8'>
         <div className='flex items-center gap-2'>
           <Link

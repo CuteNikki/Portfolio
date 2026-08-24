@@ -18,6 +18,7 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { ScrollToTopButton } from '@/components/common/scroll-top-buttont';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -127,19 +128,24 @@ function SectionCard({
   children: ReactNode;
 }) {
   return (
-    <Card className='w-full max-w-5xl'>
-      <CardHeader>
-        <CardTitle className='text-primary-text flex items-center gap-2'>
-          {icon}
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>{children}</CardContent>
-    </Card>
+    <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+      <Card
+        className='w-full'
+        data-reveal-item
+        style={{ '--reveal-index': 0 } as React.CSSProperties}
+      >
+        <CardHeader>
+          <CardTitle className='text-primary-text flex items-center gap-2'>
+            {icon}
+            {title}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='flex flex-col gap-4'>{children}</CardContent>
+      </Card>
+    </ScrollReveal>
   );
 }
 
-// 3. The Cleaned Up Main Component
 export function ImprintContent({
   defaultLanguage,
 }: {
@@ -151,26 +157,32 @@ export function ImprintContent({
   return (
     <div className='flex flex-col items-center gap-4 tracking-tight'>
       {/* Header */}
-      <div className='flex w-full max-w-5xl flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'>
-        <div className='flex flex-col gap-2 pb-4'>
-          <h1 className='text-4xl font-bold tracking-normal'>
-            {content.header.title}
-          </h1>
-          <p className='text-muted-foreground text-lg text-balance'>
-            {content.header.description}
-          </p>
+      <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+        <div
+          data-reveal-item
+          style={{ '--reveal-index': 0 } as React.CSSProperties}
+          className='flex w-full flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'
+        >
+          <div className='flex flex-col gap-2 pb-4'>
+            <h1 className='text-4xl font-bold tracking-normal'>
+              {content.header.title}
+            </h1>
+            <p className='text-muted-foreground text-lg text-balance'>
+              {content.header.description}
+            </p>
+          </div>
+          <Button size='lg' asChild>
+            <Link
+              href={language === 'en' ? LINKS.impressum.url : LINKS.imprint.url}
+            >
+              {content.languageToggleIcon}
+              {content.languageToggle}
+            </Link>
+          </Button>
         </div>
-        <Button size='lg' asChild>
-          <Link
-            href={language === 'en' ? LINKS.impressum.url : LINKS.imprint.url}
-          >
-            {content.languageToggleIcon}
-            {content.languageToggle}
-          </Link>
-        </Button>
-      </div>
+      </ScrollReveal>
 
-      {/* Provider */}
+      {/* Sections */}
       <SectionCard icon={content.provider.icon} title={content.provider.title}>
         <h3>{content.provider.name}</h3>
         <div className='flex items-start gap-2'>
@@ -183,46 +195,48 @@ export function ImprintContent({
         </div>
       </SectionCard>
 
-      {/* Contact */}
       <SectionCard icon={content.contact.icon} title={content.contact.title}>
         <EmailAndPhone language={language} />
       </SectionCard>
 
-      {/* Liability for Content */}
       <SectionCard
         icon={content.liabilityContent.icon}
         title={content.liabilityContent.title}
       >
-        {content.liabilityContent.paragraphs.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+        {content.liabilityContent.paragraphs.map((paragraph, i) => (
+          <p key={i}>{paragraph}</p>
         ))}
       </SectionCard>
 
-      {/* Liability for Links */}
       <SectionCard
         icon={content.liabilityLinks.icon}
         title={content.liabilityLinks.title}
       >
-        {content.liabilityLinks.paragraphs.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+        {content.liabilityLinks.paragraphs.map((paragraph, i) => (
+          <p key={i}>{paragraph}</p>
         ))}
       </SectionCard>
 
-      {/* Copyright */}
       <SectionCard
         icon={content.copyright.icon}
         title={content.copyright.title}
       >
-        {content.copyright.paragraphs.map((paragraph, index) => (
-          <p key={index}>{paragraph}</p>
+        {content.copyright.paragraphs.map((paragraph, i) => (
+          <p key={i}>{paragraph}</p>
         ))}
       </SectionCard>
 
       {/* Footer Nav */}
-      <div className='flex flex-col items-center gap-2 sm:flex-row'>
-        <HomeButton />
-        <ScrollToTopButton />
-      </div>
+      <ScrollReveal className='scroll-reveal'>
+        <div
+          data-reveal-item
+          style={{ '--reveal-index': 0 } as React.CSSProperties}
+          className='flex flex-col items-center gap-2 sm:flex-row'
+        >
+          <HomeButton />
+          <ScrollToTopButton />
+        </div>
+      </ScrollReveal>
     </div>
   );
 }

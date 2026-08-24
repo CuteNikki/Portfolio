@@ -5,7 +5,13 @@ import { useState } from 'react';
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-export function ExperienceTabs({ career, education }: { career: React.ReactNode; education: React.ReactNode }) {
+export function ExperienceTabs({
+  career,
+  education,
+}: {
+  career: React.ReactNode;
+  education: React.ReactNode;
+}) {
   const [active, setActive] = useState('career');
 
   return (
@@ -18,8 +24,14 @@ export function ExperienceTabs({ career, education }: { career: React.ReactNode;
         ))}
       </TabsList>
       <div className='mt-6 min-h-56'>
-        <AnimatePresence initial={false} mode='sync'>
-          <motion.div key={active} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18, ease: 'easeOut' }}>
+        <AnimatePresence initial={false} mode='wait'>
+          <motion.div
+            key={active}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+          >
             {active === 'career' ? career : education}
           </motion.div>
         </AnimatePresence>

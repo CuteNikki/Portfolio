@@ -34,6 +34,7 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { ScrollToTopButton } from '@/components/common/scroll-top-buttont';
 import { Button } from '@/components/ui/button';
 import {
@@ -534,6 +535,7 @@ const CONTENT = {
     },
   },
 };
+
 function SectionCard({
   id,
   icon,
@@ -548,63 +550,83 @@ function SectionCard({
   children?: ReactNode;
 }) {
   return (
-    <Card id={id} className='w-full max-w-5xl scroll-mt-20'>
-      <CardHeader>
-        <CardTitle className='text-primary-text flex items-center gap-2'>
-          {icon}
-          {title}
-        </CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
-      </CardHeader>
-      <CardContent className='flex flex-col gap-4'>{children}</CardContent>
-    </Card>
+    <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+      <Card
+        id={id}
+        className='w-full scroll-mt-20'
+        data-reveal-item
+        style={{ '--reveal-index': 0 } as React.CSSProperties}
+      >
+        <CardHeader>
+          <CardTitle className='text-primary-text flex items-center gap-2'>
+            {icon}
+            {title}
+          </CardTitle>
+          {description && <CardDescription>{description}</CardDescription>}
+        </CardHeader>
+        <CardContent className='flex flex-col gap-4'>{children}</CardContent>
+      </Card>
+    </ScrollReveal>
   );
 }
 
-// 3. The Main Component is now incredibly clean
 export function PrivacyContent({
   defaultLanguage,
 }: {
   defaultLanguage: 'en' | 'de';
 }) {
   const [language] = useState<'en' | 'de'>(defaultLanguage);
-  const content = CONTENT[language]; // shortcut variable to save space
+  const content = CONTENT[language];
 
   return (
     <div className='flex w-full flex-col items-center gap-4 tracking-tight'>
       {/* Header */}
-      <div className='flex w-full max-w-5xl flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'>
-        <div className='flex flex-col gap-2 pb-4'>
-          <h1 className='text-4xl font-bold tracking-normal'>
-            {content.header.title}
-          </h1>
-          <p className='text-muted-foreground text-lg text-balance'>
-            {content.header.description}
-          </p>
-          <p className='text-muted-foreground text-sm'>
-            {content.header.lastUpdated}
-          </p>
+      <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+        <div
+          data-reveal-item
+          style={{ '--reveal-index': 0 } as React.CSSProperties}
+          className='flex w-full flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'
+        >
+          <div className='flex flex-col gap-2 pb-4'>
+            <h1 className='text-4xl font-bold tracking-normal'>
+              {content.header.title}
+            </h1>
+            <p className='text-muted-foreground text-lg text-balance'>
+              {content.header.description}
+            </p>
+            <p className='text-muted-foreground text-sm'>
+              {content.header.lastUpdated}
+            </p>
+          </div>
+          <Button size='lg' asChild>
+            <Link
+              href={
+                language === 'en' ? LINKS.datenschutz.url : LINKS.privacy.url
+              }
+            >
+              {content.languageToggleIcon}
+              {content.languageToggle}
+            </Link>
+          </Button>
         </div>
-        <Button size='lg' asChild>
-          <Link
-            href={language === 'en' ? LINKS.datenschutz.url : LINKS.privacy.url}
-          >
-            {content.languageToggleIcon}
-            {content.languageToggle}
-          </Link>
-        </Button>
-      </div>
+      </ScrollReveal>
 
       {/* Notice */}
-      <div className='bg-primary/20 border-primary flex w-full max-w-5xl flex-col gap-2 border p-4 sm:p-8'>
-        <h2 className='flex items-center gap-2 text-xl font-semibold'>
-          {content.notice.icon}
-          {content.notice.title}
-        </h2>
-        <p>{content.notice.description}</p>
-      </div>
+      <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+        <div
+          data-reveal-item
+          style={{ '--reveal-index': 0 } as React.CSSProperties}
+          className='bg-primary/25 border-primary flex w-full flex-col gap-2 border p-4 sm:p-8'
+        >
+          <h2 className='flex items-center gap-2 text-xl font-semibold'>
+            {content.notice.icon}
+            {content.notice.title}
+          </h2>
+          <p>{content.notice.description}</p>
+        </div>
+      </ScrollReveal>
 
-      {/* Quick Navigation */}
+      {/* Sections (Each SectionCard already contains its own ScrollReveal) */}
       <SectionCard
         icon={content.quickNavigation.icon}
         title={content.quickNavigation.title}
@@ -620,7 +642,6 @@ export function PrivacyContent({
         </ul>
       </SectionCard>
 
-      {/* Data Controller */}
       <SectionCard
         id='data-controller'
         icon={content.dataController.icon}
@@ -641,7 +662,6 @@ export function PrivacyContent({
         </div>
       </SectionCard>
 
-      {/* Discord OAuth */}
       <SectionCard
         id='discord-oauth-login'
         icon={content.discordOAuthLogin.icon}
@@ -682,7 +702,6 @@ export function PrivacyContent({
         </p>
       </SectionCard>
 
-      {/* Server Logs */}
       <SectionCard
         id='server-logs'
         icon={content.serverLogs.icon}
@@ -710,7 +729,6 @@ export function PrivacyContent({
         </p>
       </SectionCard>
 
-      {/* Data Retention */}
       <SectionCard
         id='data-retention'
         icon={content.dataRetention.icon}
@@ -727,7 +745,6 @@ export function PrivacyContent({
         </ul>
       </SectionCard>
 
-      {/* Cookies & Sessions */}
       <SectionCard
         id='cookies-and-sessions'
         icon={content.cookiesAndSessions.icon}
@@ -750,13 +767,12 @@ export function PrivacyContent({
             ),
           )}
         </ul>
-        <div className='border-primary bg-primary/20 flex flex-row gap-2 border p-4'>
+        <div className='border-primary bg-primary/25 flex flex-row gap-2 border p-4'>
           {content.cookiesAndSessions.noteIcon}
           <p>{content.cookiesAndSessions.note}</p>
         </div>
       </SectionCard>
 
-      {/* Your Rights */}
       <SectionCard
         id='your-rights'
         icon={content.yourRights.icon}
@@ -776,7 +792,7 @@ export function PrivacyContent({
             ),
           )}
         </ul>
-        <div className='border-primary bg-primary/20 flex flex-row gap-2 border p-4'>
+        <div className='border-primary bg-primary/25 flex flex-row gap-2 border p-4'>
           {content.yourRights.noticeIcon}
           <p>
             {content.yourRights.notice.replace(
@@ -787,7 +803,6 @@ export function PrivacyContent({
         </div>
       </SectionCard>
 
-      {/* Third Party Services */}
       <SectionCard
         id='third-party-services'
         icon={content.thirdPartyServices.icon}
@@ -818,7 +833,6 @@ export function PrivacyContent({
         <p>{content.thirdPartyServices.notice}</p>
       </SectionCard>
 
-      {/* Data Security */}
       <SectionCard
         id='data-security'
         icon={content.dataSecurity.icon}
@@ -836,7 +850,6 @@ export function PrivacyContent({
         <p className='text-sm'>{content.dataSecurity.note}</p>
       </SectionCard>
 
-      {/* Questions */}
       <SectionCard
         id='questions'
         icon={content.questions.icon}
@@ -851,10 +864,17 @@ export function PrivacyContent({
         </p>
       </SectionCard>
 
-      <div className='flex flex-col items-center gap-2 sm:flex-row'>
-        <HomeButton />
-        <ScrollToTopButton />
-      </div>
+      {/* Footer Buttons */}
+      <ScrollReveal className='scroll-reveal'>
+        <div
+          data-reveal-item
+          style={{ '--reveal-index': 0 } as React.CSSProperties}
+          className='flex flex-col items-center gap-2 sm:flex-row'
+        >
+          <HomeButton />
+          <ScrollToTopButton />
+        </div>
+      </ScrollReveal>
     </div>
   );
 }

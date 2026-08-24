@@ -103,68 +103,73 @@ export default async function PostsPage({
       </Button>
 
       <ScrollReveal className='scroll-reveal'>
-        {/* Header Section */}
-        <header
+        {/* Title (Triggers instantly) */}
+        <h1
           data-reveal-item
           style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='mb-10 flex flex-col gap-4 border-b pb-8'
+          className='mb-4 line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'
         >
-          <h1 className='line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'>
-            {post.title}
-          </h1>
+          {post.title}
+        </h1>
 
-          <div className='text-muted-foreground flex flex-wrap items-center gap-4'>
-            <UserHover user={post.writer}>
-              <div className='flex items-center gap-2'>
-                <UserIcon className='size-4' />
-                <span className='text-foreground font-medium'>
-                  {post.writer.displayName || `@${post.writer.username}`}
-                </span>
-              </div>
-            </UserHover>
-            <div className='flex items-center gap-2'>
-              <CalendarIcon className='size-4' />
-              <time dateTime={post.createdAt.toISOString()}>
-                {new Date(post.createdAt).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </time>
-            </div>
-
-            <div className='ml-auto flex items-center gap-2'>
-              <ShareButton postId={post.id} />
-              {(session?.user.role === Role.ADMIN ||
-                session?.user.role === Role.WRITER) && (
-                <Button variant='outline' size='xs' asChild>
-                  <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
-                    <PencilLineIcon />
-                    Edit Post
-                  </Link>
-                </Button>
-              )}
-              {!post.publishedAt && (
-                <Badge variant='destructive' size='lg'>
-                  Unpublished
-                </Badge>
-              )}
-            </div>
-          </div>
-        </header>
-
-        {/* Post Content */}
+        {/* Metadata & Actions (Cascades next) */}
         <div
           data-reveal-item
           style={{ '--reveal-index': 1 } as React.CSSProperties}
+          className='text-muted-foreground mb-10 flex flex-wrap items-center gap-4 border-b pb-8'
         >
-          <MarkdownViewer content={post.content} />
+          <UserHover user={post.writer}>
+            <div className='flex items-center gap-2'>
+              <UserIcon className='size-4' />
+              <span className='text-foreground font-medium'>
+                {post.writer.displayName || `@${post.writer.username}`}
+              </span>
+            </div>
+          </UserHover>
+          <div className='flex items-center gap-2'>
+            <CalendarIcon className='size-4' />
+            <time dateTime={post.createdAt.toISOString()}>
+              {new Date(post.createdAt).toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+            </time>
+          </div>
+
+          <div className='ml-auto flex items-center gap-2'>
+            <ShareButton postId={post.id} />
+            {(session?.user.role === Role.ADMIN ||
+              session?.user.role === Role.WRITER) && (
+              <Button variant='outline' size='xs' asChild>
+                <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
+                  <PencilLineIcon />
+                  Edit Post
+                </Link>
+              </Button>
+            )}
+            {!post.publishedAt && (
+              <Badge variant='destructive' size='lg'>
+                Unpublished
+              </Badge>
+            )}
+          </div>
         </div>
 
-        {/* Comments Section */}
+        {/* Post Content Body (Cascades last with a distinct step) */}
         <div
           data-reveal-item
           style={{ '--reveal-index': 2 } as React.CSSProperties}
+        >
+          <MarkdownViewer content={post.content} />
+        </div>
+      </ScrollReveal>
+
+      {/* Comments Section (Isolated ScrollReveal so it triggers when scrolled into view) */}
+      <ScrollReveal className='scroll-reveal'>
+        <div
+          data-reveal-item
+          style={{ '--reveal-index': 0 } as React.CSSProperties}
           className='mt-8 flex flex-col gap-4 border-t pt-10'
         >
           {/* Write a Comment */}
