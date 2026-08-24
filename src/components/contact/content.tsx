@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { MailIcon, SendHorizontalIcon } from 'lucide-react';
 
 import { DiscordMenu } from '@/components/navigation/discord-menu';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { sendMail } from '@/actions/mail';
 
 import { LINKS } from '@/constants/links';
@@ -65,9 +66,10 @@ export function ContactContent() {
   }
 
   return (
-    <section className='animate-rise-in w-full max-w-6xl'>
+    <ScrollReveal className='w-full max-w-6xl'>
+      <section className='w-full'>
       <div className='grid lg:grid-cols-[0.8fr_1.2fr]'>
-        <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
+        <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-5 border-b-0 p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
           <p className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'><MailIcon className='size-4' /> Contact</p>
           <h1 className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</h1>
           <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
@@ -203,6 +205,7 @@ export function ContactContent() {
         </div>
       </form>
       </div>
-    </section>
+      </section>
+    </ScrollReveal>
   );
 }
