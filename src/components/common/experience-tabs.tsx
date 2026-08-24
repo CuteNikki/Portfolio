@@ -18,11 +18,13 @@ export function ExperienceTabs({ career, education }: { career: React.ReactNode;
           </TabsTrigger>
         ))}
       </TabsList>
-      <AnimatePresence mode='wait' initial={false}>
-        <motion.div key={active} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.14, ease: 'easeOut' }} className='mt-6'>
-          {active === 'career' ? career : education}
-        </motion.div>
-      </AnimatePresence>
+      <div className='mt-6 min-h-56'>
+        <AnimatePresence initial={false} mode='sync'>
+          <motion.div key={active} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.18, ease: 'easeOut' }}>
+            {active === 'career' ? career : education}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </Tabs>
   );
 }
