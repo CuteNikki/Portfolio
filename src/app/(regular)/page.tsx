@@ -24,7 +24,7 @@ export default function Home() {
           Building useful things for the web.
         </h1>
         <p className='text-muted-foreground max-w-2xl text-pretty text-lg leading-relaxed'>
-          I&apos;m {PERSONAL_DETAILS.firstName}, a {PERSONAL_DETAILS.title.toLowerCase()} based in {PERSONAL_DETAILS.address.country}. {PERSONAL_DETAILS.description}
+          I&apos;m {PERSONAL_DETAILS.firstName}, a {PERSONAL_DETAILS.age}-year-old {PERSONAL_DETAILS.title.toLowerCase()} based in {PERSONAL_DETAILS.address.country}. {PERSONAL_DETAILS.description}
         </p>
         <div className='flex flex-wrap items-center gap-3'>
           <Link href='/projects' className='bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-semibold transition-colors'>
