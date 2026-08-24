@@ -7,9 +7,12 @@ import { toast } from 'sonner';
 
 import { MailIcon, SendHorizontalIcon } from 'lucide-react';
 
+import { DiscordMenu } from '@/components/navigation/discord-menu';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { sendMail } from '@/actions/mail';
 
 import { LINKS } from '@/constants/links';
+import { PERSONAL_DETAILS } from '@/constants/personal';
 import { cn } from '@/lib/utils';
 import {
   MailSubmitData,
@@ -18,13 +21,6 @@ import {
 } from '@/types/mail';
 
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import {
   Field,
   FieldDescription,
@@ -70,21 +66,35 @@ export function ContactContent() {
   }
 
   return (
-    <Card className='w-full max-w-5xl'>
-      <CardHeader>
-        <CardTitle className='text-primary-text flex items-center gap-2'>
-          <MailIcon className='shrink-0' /> Get in Touch
-        </CardTitle>
-        <CardDescription className='text-balance'>
-          I would love to hear from you! Whether you have a question, want to
-          collaborate, or just want to say hello, feel free to reach out using
-          the form below.
-        </CardDescription>
-      </CardHeader>
-      <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
-        <CardContent>
+    <ScrollReveal className='scroll-reveal w-full max-w-6xl'>
+      <section className='w-full'>
+      <div className='grid lg:grid-cols-[0.8fr_1.2fr]'>
+        <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
+          <p className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'><MailIcon className='size-4' /> Contact</p>
+          <h1 className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</h1>
+          <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
+            Have a question, an idea, or a project in mind? Send a note and I&apos;ll get back to you soon.
+          </p>
+          <div className='mt-auto flex flex-col gap-4 border-t-0 pt-5 text-sm lg:border-t'>
+            <div className='flex flex-col gap-2'>
+              <span className='text-muted-foreground'>Prefer email?</span>
+              <a className='hover:text-primary-text font-medium transition-colors' href={PERSONAL_DETAILS.emailLink}>{PERSONAL_DETAILS.email}</a>
+            </div>
+            <div className='flex flex-wrap items-center gap-x-5 gap-y-3'>
+              {PERSONAL_DETAILS.socials.filter(({ platform }) => platform !== 'Mail' && platform !== 'Discord').map(({ platform, icon: Icon, url }) => (
+                <Link key={platform} href={url} target='_blank' rel='noopener noreferrer' className='text-muted-foreground hover:text-primary-text flex items-center gap-2 transition-colors'>
+                  <Icon className='size-4' />
+                  {platform}
+                </Link>
+              ))}
+              <DiscordMenu />
+            </div>
+          </div>
+        </div>
+        <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
+        <div data-reveal-item style={{ '--reveal-index': 1 } as React.CSSProperties} className='p-6 sm:p-8 md:p-10'>
           <FieldGroup className='gap-4'>
-            <FieldGroup className='md:flex-row'>
+            <FieldGroup className='lg:flex-row'>
               <Controller
                 name='name'
                 control={form.control}
@@ -192,8 +202,10 @@ export function ContactContent() {
               </Button>
             </div>
           </FieldGroup>
-        </CardContent>
+        </div>
       </form>
-    </Card>
+      </div>
+      </section>
+    </ScrollReveal>
   );
 }

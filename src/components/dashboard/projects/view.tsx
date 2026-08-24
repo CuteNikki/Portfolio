@@ -36,10 +36,12 @@ export async function ProjectList() {
           description='The database is currently unreachable. Please try again later.'
         />
       )}
-      {projects.map((project) => (
+      {projects.map((project, index) => (
         <Link
           href={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
           key={project.id}
+          data-reveal-item
+          style={{ '--reveal-index': index } as React.CSSProperties}
           className='group hover:border-primary/50 hover:bg-muted/20 flex flex-col justify-between border p-5 transition-colors'
         >
           <div className='flex flex-col gap-2'>
@@ -59,6 +61,7 @@ export async function ProjectList() {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',
+                timeZone: 'UTC',
               })}
             </div>
           </div>

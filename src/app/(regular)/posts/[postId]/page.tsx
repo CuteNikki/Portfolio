@@ -17,6 +17,7 @@ import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { addView } from '@/actions/post';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { UserHover } from '@/components/common/user-hover';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
 import { CommentWrapper } from '@/components/dashboard/posts/comment-wrapper';
@@ -101,8 +102,13 @@ export default async function PostsPage({
         </Link>
       </Button>
 
+      <ScrollReveal className='scroll-reveal'>
       {/* Header Section */}
-      <header className='mb-10 flex flex-col gap-4 border-b pb-8'>
+      <header
+        data-reveal-item
+        style={{ '--reveal-index': 0 } as React.CSSProperties}
+        className='mb-10 flex flex-col gap-4 border-b pb-8'
+      >
         <h1 className='line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'>
           {post.title}
         </h1>
@@ -148,12 +154,20 @@ export default async function PostsPage({
       </header>
 
       {/* Post Content */}
-      <div className='prose dark:prose-invert catppuccin-macchiato:prose-invert prose-lg min-h-100 max-w-none wrap-break-word'>
+      <div
+        data-reveal-item
+        style={{ '--reveal-index': 1 } as React.CSSProperties}
+        className='prose dark:prose-invert catppuccin-macchiato:prose-invert prose-lg min-h-100 max-w-none wrap-break-word'
+      >
         <MarkdownViewer content={post.content} />
       </div>
 
       {/* Comments Section */}
-      <div className='mt-8 flex flex-col gap-4 border-t pt-10'>
+      <div
+        data-reveal-item
+        style={{ '--reveal-index': 2 } as React.CSSProperties}
+        className='mt-8 flex flex-col gap-4 border-t pt-10'
+      >
         {/* Write a Comment */}
         {session?.user ? (
           <div className='flex flex-col gap-2'>
@@ -202,6 +216,7 @@ export default async function PostsPage({
         {/* Comments List */}
         <CommentWrapper post={post} session={session} />
       </div>
+      </ScrollReveal>
     </article>
   );
 }

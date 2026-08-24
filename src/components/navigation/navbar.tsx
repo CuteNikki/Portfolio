@@ -22,11 +22,11 @@ export function Navbar() {
 
   return (
     <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
-      <div className='container mx-auto flex items-center justify-between gap-4 p-4'>
+      <div className='container mx-auto flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8'>
         <div className='flex items-center gap-2'>
           <Link
             href={LINKS.home.url}
-            className='font-bold tracking-tight hover:opacity-80'
+            className='text-lg font-bold tracking-[-0.04em] transition-opacity hover:opacity-80'
           >
             niso<span className='text-primary-text'>.moe</span>
           </Link>

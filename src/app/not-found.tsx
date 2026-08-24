@@ -1,34 +1,32 @@
-import { SITE_METADATA } from '@/constants/metadata';
+import { AlertCircleIcon } from 'lucide-react';
 
 import { HomeButton } from '@/components/common/home-button';
 import { Footer } from '@/components/navigation/footer';
 import { Navbar } from '@/components/navigation/navbar';
+import { SITE_METADATA } from '@/constants/metadata';
 
 export const { notFound: metadata } = SITE_METADATA;
 
 export default function NotFound() {
   return (
-    <div className='flex min-h-screen flex-col items-center justify-center'>
+    <div className='flex min-h-screen flex-col'>
       <Navbar />
-      <div className='flex w-full flex-1'>
-        <main className='xs:py-8 xs:px-4 container mx-auto flex flex-col items-center justify-center gap-8 p-4 px-2'>
-          <div className='flex flex-col items-start gap-4'>
-            <div className='flex max-w-3xl flex-col gap-2'>
-              <h1 className='text-3xl font-bold text-balance'>
-                Page Not Found —{' '}
-                <span className='text-primary-text'>Error 404</span>!
-              </h1>
-              <p>
-                Sorry, the page you are looking for does not exist. It might
-                have been removed, had its name changed, or is temporarily
-                unavailable.
-              </p>
-            </div>
-            <p>Please check the URL for errors or return to the homepage.</p>
+      <main className='container mx-auto flex w-full flex-1 items-center px-4 py-16 sm:px-6 lg:px-8'>
+        <section className='w-full max-w-3xl'>
+          <div className='flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em] text-primary-text'>
+            <AlertCircleIcon className='size-4' /> Error 404
+          </div>
+          <h1 className='mt-6 max-w-2xl text-balance text-5xl font-bold tracking-[-0.06em] sm:text-7xl'>
+            This page went somewhere else.
+          </h1>
+          <p className='text-muted-foreground mt-6 max-w-xl text-pretty text-lg leading-relaxed'>
+            The link may be outdated, or the page may have moved. Let&apos;s get you back to something useful.
+          </p>
+          <div className='mt-8'>
             <HomeButton />
           </div>
-        </main>
-      </div>
+        </section>
+      </main>
       <Footer />
     </div>
   );

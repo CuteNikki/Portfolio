@@ -1,186 +1,58 @@
 import Link from 'next/link';
 
+import { ArrowUpRightIcon } from 'lucide-react';
+
+import { DiscordMenu } from '@/components/navigation/discord-menu';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
+
 import { SITE_METADATA } from '@/constants/metadata';
 import { PERSONAL_DETAILS } from '@/constants/personal';
-
 import { formatDate } from '@/lib/utils';
-
 import { Badge } from '@/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { ExperienceTabs } from '@/components/common/experience-tabs';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 export const { home: metadata } = SITE_METADATA;
 
 export default function Home() {
   return (
-    <Card className='w-full max-w-5xl text-base gap-2'>
-      <CardHeader className='gap-2'>
-        <CardTitle className='text-xl font-semibold'>
-          Hello, I&apos;m{' '}
-          <span className='text-primary-text'>
-            {PERSONAL_DETAILS.firstName}
-          </span>
-          ! 👋
-        </CardTitle>
-        <p className='text-balance'>
-          {PERSONAL_DETAILS.age}-year-old {PERSONAL_DETAILS.title} based in{' '}
-          {PERSONAL_DETAILS.address.country} {PERSONAL_DETAILS.address.flag}
+    <div className='flex w-full flex-col gap-12'>
+      <section className='animate-rise-in flex flex-col gap-6'>
+        <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Portfolio / 2026</p>
+        <h1 className='max-w-5xl text-balance text-5xl font-bold tracking-[-0.06em] sm:text-7xl lg:text-8xl'>
+          Building useful things for the web.
+        </h1>
+        <p className='text-muted-foreground max-w-xl text-pretty text-lg leading-relaxed'>
+          I&apos;m {PERSONAL_DETAILS.firstName}, a {PERSONAL_DETAILS.age}-year-old {PERSONAL_DETAILS.title.toLowerCase()} based in {PERSONAL_DETAILS.address.country}. {PERSONAL_DETAILS.description}
         </p>
-        <CardDescription className='text-sm text-pretty xl:text-balance'>
-          {PERSONAL_DETAILS.description}
-        </CardDescription>
-        <ul className='grid grid-cols-2 justify-items-center gap-4 py-2 sm:grid-cols-4 sm:justify-items-start md:grid-cols-6'>
-          {PERSONAL_DETAILS.socials.map(({ platform, icon: Icon, url }) => (
-            <li key={platform}>
-              <Link
-                href={url}
-                target='_blank'
-                rel='noopener noreferrer'
-                className='hover:text-primary-text flex items-center gap-1 transition-colors'
-              >
-                <Icon className='text-primary-text size-5' />
-                {platform}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue='career' className='w-full'>
-          <TabsList className='w-full border border-b-0'>
-            <TabsTrigger value='career'>Career</TabsTrigger>
-            <TabsTrigger value='education'>Education</TabsTrigger>
-          </TabsList>
-          <TabsContent value='career' className='border'>
-            <div className='relative m-4 flex flex-col border-l-2 pl-6 sm:mx-8'>
-              {PERSONAL_DETAILS.career.map(
-                ({
-                  from,
-                  to,
-                  title,
-                  company,
-                  location,
-                  description,
-                  showDays,
-                }) => (
-                  <div
-                    key={`${title}-${company}`}
-                    className='relative mb-4 last:mb-0'
-                  >
-                    {/* The Dot */}
-                    <span
-                      className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
-                      aria-hidden='true'
-                    />
-
-                    {/* Content */}
-                    <div className='flex flex-col'>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h2 className='text-xl font-bold'>{company}</h2>
-                        <time className='text-muted-foreground text-sm'>
-                          {formatDate(from, showDays)} —{' '}
-                          {typeof to === 'string' &&
-                          to.toLowerCase() === 'present' ? (
-                            <span className='font-extrabold'>
-                              {formatDate(to)}
-                            </span>
-                          ) : (
-                            formatDate(to, showDays)
-                          )}
-                        </time>
-                      </div>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h3 className='text-base'>{title}</h3>
-                        <p className='text-muted-foreground text-sm'>
-                          {location}
-                        </p>
-                      </div>
-                      <p className='text-foreground/80 mt-2 leading-relaxed text-pretty'>
-                        {description}
-                      </p>
-                    </div>
-                  </div>
-                ),
-              )}
-            </div>
-          </TabsContent>
-          <TabsContent value='education' className='border'>
-            <div className='relative m-4 flex flex-col border-l-2 pl-6 sm:mx-8'>
-              {PERSONAL_DETAILS.education.map(
-                ({ from, to, title, school, location, description }) => (
-                  <div
-                    key={`${title}-${school}`}
-                    className='relative mb-4 last:mb-0'
-                  >
-                    {/* The Dot */}
-                    <span
-                      className='bg-primary absolute top-2 -left-6.25 size-3 -translate-x-1/2 rounded-full'
-                      aria-hidden='true'
-                    />
-
-                    {/* Content */}
-                    <div className='flex flex-col'>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h2 className='text-xl font-bold'>{school}</h2>
-                        <time className='text-muted-foreground text-sm'>
-                          {formatDate(from)} — {formatDate(to)}
-                        </time>
-                      </div>
-                      <div className='flex flex-col md:flex-row md:items-baseline md:justify-between'>
-                        <h3 className='text-base'>{title}</h3>
-                        <p className='text-muted-foreground text-sm'>
-                          {location}
-                        </p>
-                      </div>
-                      <p className='text-foreground/80 mt-2 leading-relaxed text-pretty'>
-                        {description}
-                      </p>
-                    </div>
-                  </div>
-                ),
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-      <CardFooter >
-        <div className='xs:grid-cols-2 w-full justify-items-center grid grid-cols-1 gap-4 pt-2 md:grid-cols-3 xl:grid-cols-6'>
-          {Object.keys(PERSONAL_DETAILS.skillsTechnologies).map((category) => (
-            <div key={category} className='flex flex-col gap-2'>
-              <span className='capitalize'>{category}</span>
-              <ul>
-                {PERSONAL_DETAILS.skillsTechnologies[category].map(
-                  ({ name, icon, description }) => (
-                    <li key={name}>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Badge variant='secondary'>
-                            {icon}
-                            {name}
-                          </Badge>
-                        </TooltipTrigger>
-                        <TooltipContent>{description}</TooltipContent>
-                      </Tooltip>
-                    </li>
-                  ),
-                )}
-              </ul>
-            </div>
-          ))}
+        <div className='flex flex-wrap items-center gap-3'>
+          <Link href='/projects' className='bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-5 py-3 text-sm font-semibold transition-colors'>
+            View selected work <ArrowUpRightIcon className='size-4' />
+          </Link>
+          <Link href='/contact' className='border-border hover:border-primary-text hover:text-primary-text inline-flex items-center gap-2 rounded-md border px-5 py-3 text-sm font-semibold transition-colors'>Get in touch</Link>
         </div>
-      </CardFooter>
-    </Card>
+      </section>
+
+      <ScrollReveal className='scroll-reveal grid gap-8 border-y border-border py-8 lg:grid-cols-2 lg:gap-16'>
+        <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-3'>
+          <span className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'>Availability</span>
+          <p className='text-muted-foreground max-w-sm leading-relaxed'>Currently open to thoughtful collaborations, product work, and interesting problems.</p>
+          <ul className='flex flex-wrap gap-x-5 gap-y-3'>
+            {PERSONAL_DETAILS.socials.filter(({ platform }) => platform !== 'Discord').map(({ platform, icon: Icon, url }) => <li key={platform}><Link href={url} target='_blank' rel='noopener noreferrer' className='text-muted-foreground hover:text-primary-text flex items-center gap-2 text-sm transition-colors'><Icon className='size-4' />{platform}</Link></li>)}
+            <li><DiscordMenu /></li>
+          </ul>
+        </div>
+        <div data-reveal-item style={{ '--reveal-index': 1 } as React.CSSProperties} className='flex max-w-md flex-col gap-3 lg:border-l lg:border-border lg:pl-8'><span className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Experience</span><p className='text-muted-foreground max-w-xs text-pretty leading-relaxed'>Nearly a decade of experience building on the web, shaped by the work and education that continue to guide how I build.</p></div>
+      </ScrollReveal>
+
+      <ScrollReveal className='scroll-reveal'>
+        <ExperienceTabs
+          career={<div className='flex flex-col gap-6'>{PERSONAL_DETAILS.career.filter(({ company }) => company !== 'TheVace').map(({ from, to, title, company, location, description, showDays }, index) => <div key={`${title}-${company}`} data-reveal-item style={{ '--reveal-index': index } as React.CSSProperties} className='grid gap-2 pb-6 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold'>{company}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from, showDays)} — {typeof to === 'string' && to.toLowerCase() === 'present' ? <span>{formatDate(to)}</span> : formatDate(to, showDays)}</time></div>)}</div>}
+          education={<div className='flex flex-col gap-6'>{PERSONAL_DETAILS.education.map(({ from, to, title, school, location, description }, index) => <div key={`${title}-${school}`} data-reveal-item style={{ '--reveal-index': index } as React.CSSProperties} className='grid gap-2 pb-6 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold'>{school}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from)} — {formatDate(to)}</time></div>)}</div>}
+        />
+      </ScrollReveal>
+
+      <section className='flex flex-col gap-6 border-t border-border pt-8'><div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'><div><p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Toolkit</p><h2 className='text-3xl font-bold tracking-tight'>Things I work with.</h2></div></div><div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>{Object.entries(PERSONAL_DETAILS.skillsTechnologies).map(([category, skills]) => <div key={category} className='flex flex-col gap-3'><h3 className='text-muted-foreground text-sm font-semibold capitalize'>{category}</h3><div className='flex flex-wrap gap-2'>{skills.map(({ name, icon, description }) => <Tooltip key={name}><TooltipTrigger asChild><Badge variant='secondary' className='cursor-help'>{icon}{name}</Badge></TooltipTrigger><TooltipContent>{description}</TooltipContent></Tooltip>)}</div></div>)}</div></section>
+    </div>
   );
 }

@@ -1,20 +1,15 @@
-'use client';
-
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
-import { checkNavPermissions } from '@/actions/user';
+import { Role } from '@/generated/prisma/enums';
+
+import { getCurrentSession } from '@/lib/auth';
 
 import { NAVBAR_LINKS } from '@/constants/links';
 
-export function ProtectedNavLinks({ isMobile }: { isMobile?: boolean }) {
-  const [isAuthorized, setIsAuthorized] = useState(false);
-
-  useEffect(() => {
-    checkNavPermissions().then((hasPermission) => {
-      setIsAuthorized(hasPermission);
-    });
-  }, []);
+export async function ProtectedNavLinks({ isMobile }: { isMobile?: boolean }) {
+  const session = await getCurrentSession();
+  const isAuthorized =
+    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER;
 
   if (!isAuthorized) return null;
 
