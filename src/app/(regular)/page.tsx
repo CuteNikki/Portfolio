@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { ArrowUpRightIcon, GithubIcon, MapPinIcon } from 'lucide-react';
+import { ArrowUpRightIcon, MapPinIcon } from 'lucide-react';
 
 import { DiscordMenu } from '@/components/navigation/discord-menu';
 
@@ -43,16 +43,16 @@ export default function Home() {
         </div>
       </section>
 
-      <section className='animate-rise-in delay-1 grid gap-6 lg:grid-cols-[.8fr_1.2fr]'>
+      <section className='animate-rise-in delay-1 grid gap-8 lg:grid-cols-[minmax(15rem,.65fr)_minmax(0,1.35fr)] lg:items-start'>
         <div className='flex flex-col gap-3'><p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Experience</p><h2 className='text-3xl font-bold tracking-tight'>A practice built on curiosity.</h2><p className='text-muted-foreground leading-relaxed'>A quick look at the places and ideas that have shaped how I work.</p></div>
         <Tabs defaultValue='career' className='w-full'>
           <TabsList className='bg-muted/60 w-full justify-start rounded-none border-b'><TabsTrigger value='career'>Career</TabsTrigger><TabsTrigger value='education'>Education</TabsTrigger></TabsList>
-          <TabsContent value='career' className='mt-6 flex flex-col gap-6'>{PERSONAL_DETAILS.career.map(({ from, to, title, company, location, description, showDays }) => <div key={`${title}-${company}`} className='border-border grid gap-2 border-b pb-6 last:border-0 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold'>{company}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from, showDays)} — {typeof to === 'string' && to.toLowerCase() === 'present' ? <strong className='text-primary-text'>{formatDate(to)}</strong> : formatDate(to, showDays)}</time></div>)}</TabsContent>
+          <TabsContent value='career' className='mt-6 flex flex-col gap-6'>{PERSONAL_DETAILS.career.filter(({ company }) => company !== 'TheVace').map(({ from, to, title, company, location, description, showDays }) => <div key={`${title}-${company}`} className='border-border grid gap-2 border-b pb-6 last:border-0 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold'>{company}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from, showDays)} — {typeof to === 'string' && to.toLowerCase() === 'present' ? <span>{formatDate(to)}</span> : formatDate(to, showDays)}</time></div>)}</TabsContent>
           <TabsContent value='education' className='mt-6 flex flex-col gap-6'>{PERSONAL_DETAILS.education.map(({ from, to, title, school, location, description }) => <div key={`${title}-${school}`} className='border-border grid gap-2 border-b pb-6 last:border-0 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold'>{school}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from)} — {formatDate(to)}</time></div>)}</TabsContent>
         </Tabs>
       </section>
 
-      <section className='animate-rise-in delay-3 border-border flex flex-col gap-6 border-t pt-8'><div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'><div><p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Toolkit</p><h2 className='text-3xl font-bold tracking-tight'>Things I work with.</h2></div><GithubIcon className='text-muted-foreground size-5' /></div><div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>{Object.entries(PERSONAL_DETAILS.skillsTechnologies).map(([category, skills]) => <div key={category} className='flex flex-col gap-3'><h3 className='text-muted-foreground text-sm font-semibold capitalize'>{category}</h3><div className='flex flex-wrap gap-2'>{skills.map(({ name, icon, description }) => <Tooltip key={name}><TooltipTrigger asChild><Badge variant='secondary' className='cursor-help'>{icon}{name}</Badge></TooltipTrigger><TooltipContent>{description}</TooltipContent></Tooltip>)}</div></div>)}</div></section>
+      <section className='animate-rise-in delay-3 border-border flex flex-col gap-6 border-t pt-8'><div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'><div><p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Toolkit</p><h2 className='text-3xl font-bold tracking-tight'>Things I work with.</h2></div></div><div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>{Object.entries(PERSONAL_DETAILS.skillsTechnologies).map(([category, skills]) => <div key={category} className='flex flex-col gap-3'><h3 className='text-muted-foreground text-sm font-semibold capitalize'>{category}</h3><div className='flex flex-wrap gap-2'>{skills.map(({ name, icon, description }) => <Tooltip key={name}><TooltipTrigger asChild><Badge variant='secondary' className='cursor-help'>{icon}{name}</Badge></TooltipTrigger><TooltipContent>{description}</TooltipContent></Tooltip>)}</div></div>)}</div></section>
     </div>
   );
 }

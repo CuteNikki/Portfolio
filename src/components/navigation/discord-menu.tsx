@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckIcon, ChevronDownIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
+import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
+import { SiDiscord } from '@icons-pack/react-simple-icons';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -29,8 +30,8 @@ export function DiscordMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' size='sm' className='text-muted-foreground hover:text-primary-text gap-2 px-2'>
+          <SiDiscord />
           Discord
-          <ChevronDownIcon data-icon='inline-end' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-52'>
