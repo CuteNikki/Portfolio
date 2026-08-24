@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { ArrowUpRightIcon, MapPinIcon } from 'lucide-react';
+import { ArrowUpRightIcon } from 'lucide-react';
 
 import { DiscordMenu } from '@/components/navigation/discord-menu';
 import { ScrollReveal } from '@/components/common/scroll-reveal';
@@ -36,7 +36,7 @@ export default function Home() {
 
       <ScrollReveal className='scroll-reveal grid gap-8 border-y border-border py-8 lg:grid-cols-2 lg:gap-16'>
         <div className='flex flex-col gap-3'>
-          <span className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'><MapPinIcon className='size-4' /> Location</span>
+          <span className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'>Availability</span>
           <p className='text-muted-foreground max-w-sm leading-relaxed'>Currently open to thoughtful collaborations, product work, and interesting problems.</p>
           <ul className='flex flex-wrap gap-x-5 gap-y-3'>
             {PERSONAL_DETAILS.socials.filter(({ platform }) => platform !== 'Discord').map(({ platform, icon: Icon, url }) => <li key={platform}><Link href={url} target='_blank' rel='noopener noreferrer' className='text-muted-foreground hover:text-primary-text flex items-center gap-2 text-sm transition-colors'><Icon className='size-4' />{platform}</Link></li>)}
