@@ -68,7 +68,7 @@ export function ContactContent() {
     <section className='animate-rise-in w-full max-w-6xl'>
       <div className='grid md:grid-cols-[0.8fr_1.2fr]'>
         <div className='flex flex-col gap-5 border-b p-6 sm:p-8 md:border-b-0 md:border-r md:p-10'>
-          <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Contact / Start a conversation</p>
+          <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Contact</p>
           <h1 className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</h1>
           <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
             Have a question, an idea, or a project in mind? Send a note and I&apos;ll get back to you soon.
