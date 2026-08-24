@@ -43,7 +43,7 @@ export default function Home() {
             <li><DiscordMenu /></li>
           </ul>
         </div>
-        <div className='flex flex-col gap-3 lg:border-l lg:border-border lg:pl-8'><p className='text-muted-foreground text-sm font-semibold uppercase tracking-[0.2em]'>Experience</p><h2 className='text-3xl font-bold tracking-tight'>A practice built on curiosity.</h2><p className='text-muted-foreground leading-relaxed'>A quick look at the places and ideas that have shaped how I work.</p></div>
+        <div className='flex items-start gap-3 lg:border-l lg:border-border lg:pl-8'><span className='text-primary-text mt-1 text-sm font-semibold uppercase tracking-[0.2em]'>Experience</span><p className='text-muted-foreground max-w-sm leading-relaxed'>A quick look at the work and education that shaped how I build.</p></div>
       </ScrollReveal>
 
       <ScrollReveal className='scroll-reveal'>
