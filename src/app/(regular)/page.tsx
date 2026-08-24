@@ -23,7 +23,7 @@ export default function Home() {
         <h1 className='max-w-5xl text-balance text-5xl font-bold tracking-[-0.06em] sm:text-7xl lg:text-8xl'>
           Building useful things for the web.
         </h1>
-        <p className='text-muted-foreground max-w-2xl text-pretty text-lg leading-relaxed'>
+        <p className='text-muted-foreground max-w-xl text-pretty text-lg leading-relaxed'>
           I&apos;m {PERSONAL_DETAILS.firstName}, a {PERSONAL_DETAILS.age}-year-old {PERSONAL_DETAILS.title.toLowerCase()} based in {PERSONAL_DETAILS.address.country}. {PERSONAL_DETAILS.description}
         </p>
         <div className='flex flex-wrap items-center gap-3'>
