@@ -28,11 +28,11 @@ export function DiscordMenu() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant='ghost' size='sm' className='text-muted-foreground hover:text-primary-text gap-2 px-2'>
-          <SiDiscord />
+      <DropdownMenuTrigger>
+        <div className='text-muted-foreground hover:text-primary-text flex items-center gap-2 text-sm transition-colors'>
+          <SiDiscord className='size-4' />
           Discord
-        </Button>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-52'>
         <DropdownMenuLabel>Connect on Discord</DropdownMenuLabel>
