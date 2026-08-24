@@ -10,11 +10,10 @@ export function ExperienceTabs({ career, education }: { career: React.ReactNode;
 
   return (
     <Tabs value={active} onValueChange={setActive} className='w-full'>
-      <TabsList className='h-auto w-fit gap-1 rounded-lg bg-muted'>
+      <TabsList className='w-full max-w-xs'>
         {(['career', 'education'] as const).map((tab) => (
           <TabsTrigger key={tab} value={tab} className='uppercase'>
-            {active === tab && <motion.span layoutId='experience-tab-highlight' transition={{ type: 'spring', stiffness: 400, damping: 30 }} />}
-            <span>{tab}</span>
+            {tab}
           </TabsTrigger>
         ))}
       </TabsList>
