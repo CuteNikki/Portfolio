@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { ArrowUpRightIcon, GithubIcon, MapPinIcon } from 'lucide-react';
 
+import { DiscordMenu } from '@/components/navigation/discord-menu';
+
 import { SITE_METADATA } from '@/constants/metadata';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 import { formatDate } from '@/lib/utils';
@@ -15,7 +17,7 @@ export const { home: metadata } = SITE_METADATA;
 export default function Home() {
   return (
     <div className='flex w-full flex-col gap-12'>
-      <section className='animate-rise-in grid gap-8 lg:grid-cols-[1.3fr_.7fr] lg:items-end'>
+      <section className='animate-rise-in grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-16 lg:items-start'>
         <div className='flex flex-col gap-6'>
           <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Portfolio / 2026</p>
           <h1 className='max-w-4xl text-balance text-5xl font-bold tracking-[-0.06em] sm:text-7xl lg:text-8xl'>
@@ -31,11 +33,12 @@ export default function Home() {
             <Link href='/contact' className='border-border hover:border-primary-text hover:text-primary-text inline-flex items-center gap-2 rounded-md border px-5 py-3 text-sm font-semibold transition-colors'>Get in touch</Link>
           </div>
         </div>
-        <div className='animate-rise-in delay-2 border-border flex flex-col gap-5 border-l pl-6'>
+        <div className='animate-rise-in delay-2 border-border flex flex-col gap-5 border-t pt-5 lg:mt-2 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0'>
           <div className='flex items-center gap-2 text-sm'><MapPinIcon className='text-primary-text size-4' /> {PERSONAL_DETAILS.address.city}, {PERSONAL_DETAILS.address.country}</div>
           <p className='text-muted-foreground text-sm leading-relaxed'>Currently open to thoughtful collaborations, product work, and interesting problems.</p>
           <ul className='flex flex-wrap gap-x-5 gap-y-3'>
-            {PERSONAL_DETAILS.socials.map(({ platform, icon: Icon, url }) => <li key={platform}><Link href={url} target='_blank' rel='noopener noreferrer' className='text-muted-foreground hover:text-primary-text flex items-center gap-2 text-sm transition-colors'><Icon className='size-4' />{platform}</Link></li>)}
+            {PERSONAL_DETAILS.socials.filter(({ platform }) => platform !== 'Discord').map(({ platform, icon: Icon, url }) => <li key={platform}><Link href={url} target='_blank' rel='noopener noreferrer' className='text-muted-foreground hover:text-primary-text flex items-center gap-2 text-sm transition-colors'><Icon className='size-4' />{platform}</Link></li>)}
+            <li><DiscordMenu /></li>
           </ul>
         </div>
       </section>
@@ -44,7 +47,7 @@ export default function Home() {
         <div className='flex flex-col gap-3'><p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Experience</p><h2 className='text-3xl font-bold tracking-tight'>A practice built on curiosity.</h2><p className='text-muted-foreground leading-relaxed'>A quick look at the places and ideas that have shaped how I work.</p></div>
         <Tabs defaultValue='career' className='w-full'>
           <TabsList className='bg-muted/60 w-full justify-start rounded-none border-b'><TabsTrigger value='career'>Career</TabsTrigger><TabsTrigger value='education'>Education</TabsTrigger></TabsList>
-          <TabsContent value='career' className='mt-6 flex flex-col gap-6'>{PERSONAL_DETAILS.career.map(({ from, to, title, company, location, description, showDays }) => <div key={`${title}-${company}`} className='border-border group grid gap-2 border-b pb-6 last:border-0 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold group-hover:text-primary-text transition-colors'>{company}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from, showDays)} — {typeof to === 'string' && to.toLowerCase() === 'present' ? <strong className='text-primary-text'>{formatDate(to)}</strong> : formatDate(to, showDays)}</time></div>)}</TabsContent>
+          <TabsContent value='career' className='mt-6 flex flex-col gap-6'>{PERSONAL_DETAILS.career.map(({ from, to, title, company, location, description, showDays }) => <div key={`${title}-${company}`} className='border-border grid gap-2 border-b pb-6 last:border-0 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold'>{company}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from, showDays)} — {typeof to === 'string' && to.toLowerCase() === 'present' ? <strong className='text-primary-text'>{formatDate(to)}</strong> : formatDate(to, showDays)}</time></div>)}</TabsContent>
           <TabsContent value='education' className='mt-6 flex flex-col gap-6'>{PERSONAL_DETAILS.education.map(({ from, to, title, school, location, description }) => <div key={`${title}-${school}`} className='border-border grid gap-2 border-b pb-6 last:border-0 sm:grid-cols-[1fr_auto]'><div><h3 className='text-xl font-semibold'>{school}</h3><p className='text-muted-foreground text-sm'>{title} · {location}</p><p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>{description}</p></div><time className='text-muted-foreground text-sm'>{formatDate(from)} — {formatDate(to)}</time></div>)}</TabsContent>
         </Tabs>
       </section>

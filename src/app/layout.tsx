@@ -1,4 +1,4 @@
-import { Geist, JetBrains_Mono } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
 
 import './globals.css';
 
@@ -8,7 +8,6 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { ThemeProvider } from '@/providers/theme';
 import { ToastProvider } from '@/providers/toast';
 
-const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const { root: metadata } = SITE_METADATA;
@@ -23,7 +22,7 @@ export default function RootLayout({
     <html lang='en' suppressHydrationWarning>
       {/* always show scrollbar to avoid layout shift when switching between scrollable and non-scrollable pages */}
       <body
-        className={`${geist.variable} ${jetbrainsMono.variable} overflow-y-scroll font-sans antialiased`}
+        className={`${jetbrainsMono.variable} overflow-y-scroll font-mono antialiased`}
       >
         <div id='top' />
         <ThemeProvider
