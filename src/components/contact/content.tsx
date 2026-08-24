@@ -75,7 +75,7 @@ export function ContactContent() {
           <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
             Have a question, an idea, or a project in mind? Send a note and I&apos;ll get back to you soon.
           </p>
-          <div className='mt-auto flex flex-col gap-4 border-t pt-5 text-sm lg:border-t-0'>
+          <div className='mt-auto flex flex-col gap-4 border-t-0 pt-5 text-sm lg:border-t'>
             <div className='flex flex-col gap-2'>
               <span className='text-muted-foreground'>Prefer email?</span>
               <a className='hover:text-primary-text font-medium transition-colors' href={PERSONAL_DETAILS.emailLink}>{PERSONAL_DETAILS.email}</a>
