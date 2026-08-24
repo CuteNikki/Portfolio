@@ -62,6 +62,7 @@ export async function PostList() {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',
+                timeZone: 'UTC',
               })}
             </div>
             <div className='flex items-center gap-1'>

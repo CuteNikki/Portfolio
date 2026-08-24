@@ -20,6 +20,7 @@ export function formatDate(date: Date | string, showDays = false): string {
     year: 'numeric',
     month: 'long',
     day: showDays ? '2-digit' : undefined,
+    timeZone: 'UTC',
   }).format(date);
 }
 

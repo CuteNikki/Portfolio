@@ -252,7 +252,7 @@ export const columns: ColumnDef<ProjectWithWriter>[] = [
     ),
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
-      return <span>{date.toLocaleDateString()}</span>;
+      return <span>{date.toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>;
     },
   },
   {

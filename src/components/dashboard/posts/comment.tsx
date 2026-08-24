@@ -67,9 +67,10 @@ export function Comment({
             </UserHover>
             <div className='flex items-center gap-2'>
               <span className='text-muted-foreground text-sm'>
-                {new Date(comment.createdAt).toLocaleDateString(undefined, {
+                {new Date(comment.createdAt).toLocaleDateString('en-US', {
                   hour: '2-digit',
                   minute: '2-digit',
+                  timeZone: 'UTC',
                 })}
               </span>
               <CommentActions
