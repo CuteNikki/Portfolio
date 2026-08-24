@@ -34,7 +34,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollReveal className='scroll-reveal grid gap-8 border-y border-border py-8 lg:grid-cols-2 lg:gap-16'>
+      <ScrollReveal className='scroll-reveal grid gap-8 py-4 lg:grid-cols-2 lg:gap-16'>
         <div className='flex flex-col gap-3'>
           <span className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'>Availability</span>
           <p className='text-muted-foreground max-w-sm leading-relaxed'>Currently open to thoughtful collaborations, product work, and interesting problems.</p>
