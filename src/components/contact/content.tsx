@@ -66,7 +66,7 @@ export function ContactContent() {
   }
 
   return (
-    <ScrollReveal className='w-full max-w-6xl'>
+    <ScrollReveal className='scroll-reveal w-full max-w-6xl'>
       <section className='w-full'>
       <div className='grid lg:grid-cols-[0.8fr_1.2fr]'>
         <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
@@ -90,7 +90,7 @@ export function ContactContent() {
               <DiscordMenu />
             </div>
           </div>
-                </div>
+        </div>
         <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
         <div data-reveal-item style={{ '--reveal-index': 1 } as React.CSSProperties} className='p-6 sm:p-8 md:p-10'>
           <FieldGroup className='gap-4'>
