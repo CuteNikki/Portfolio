@@ -1,162 +1,89 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-'use client';
-
-import { motion } from 'framer-motion';
-import { useTheme } from 'next-themes';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
 
-import { Moon, MoonIcon, OrbitIcon, Sun, SunIcon } from 'lucide-react';
+import { MenuIcon } from 'lucide-react';
 
-import { NAVBAR_LINKS } from '@/constants/links';
-import { cn, useIndicatorPosition } from '@/lib/utils';
+import { LINKS, NAVBAR_LINKS } from '@/constants/links';
 
-import { ThemeButton } from '@/components/theme/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ProtectedNavLinks } from '@/components/navigation/protected-links';
+import { ThemeSwitcher } from '@/components/theme/switcher';
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetBody,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 
-export function DesktopNavbar() {
-  const [mounted, setMounted] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  const pathname = usePathname();
-  const navRef = useRef<HTMLElement | null>(null);
-  const indicatorStyle = useIndicatorPosition(navRef, pathname, mounted);
-
-  useEffect(() => {
-    setMounted(true);
-
-    function onResize() {
-      setIsDesktop(window.innerWidth >= 640);
-    }
-
-    onResize();
-
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  if (!isDesktop) return null;
+export function Navbar() {
+  const publicLinks = NAVBAR_LINKS.filter((link) => !link.requiresAuth);
 
   return (
-    <header className='sticky top-0 z-50 hidden px-2 py-4 sm:block'>
-      <div className='bg-card/95 supports-backdrop-filter:bg-card/50 outline-foreground/10 mx-auto w-full max-w-6xl rounded-xl outline backdrop-blur'>
-        <div className='flex items-center justify-between px-4 py-2'>
-          <Link href='#top' className='hover:text-primary px-2 text-sm font-medium text-gray-600 transition-colors dark:text-gray-300 dark:hover:text-white'>
-            Nikki
+    <nav className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-50 w-full border-b backdrop-blur'>
+      <div className='container mx-auto flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8'>
+        <div className='flex items-center gap-2'>
+          <Link
+            href={LINKS.home.url}
+            className='text-lg font-bold tracking-[-0.04em] transition-opacity hover:opacity-80'
+          >
+            niso<span className='text-primary-text'>.moe</span>
           </Link>
+        </div>
+        <ul className='hidden items-center gap-6 text-sm font-medium sm:flex'>
+          {publicLinks.map(({ url, label }) => (
+            <li key={url}>
+              <Link
+                href={url}
+                className='hover:text-primary-text text-muted-foreground lowercase transition-colors'
+              >
+                {label}
+              </Link>
+            </li>
+          ))}
+          <ProtectedNavLinks />
+        </ul>
 
-          <div className='flex gap-2'>
-            <ThemeButton />
-            <nav ref={navRef} className='relative hidden items-center space-x-1 sm:flex'>
-              {NAVBAR_LINKS.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    data-active={pathname === link.href ? 'true' : undefined}
-                    className={cn(
-                      'relative flex-nowrap rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                      isActive ? 'text-primary' : 'hover:text-primary text-gray-600 dark:text-gray-300 dark:hover:text-white',
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
-              <motion.div
-                className='bg-primary absolute bottom-0 h-0.5'
-                animate={{
-                  left: mounted ? indicatorStyle.left : 0,
-                  width: mounted ? indicatorStyle.width : 0,
-                }}
-                transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-              />
-            </nav>
-          </div>
+        <div className='flex items-center gap-2'>
+          {/* MOBILE NAV */}
+          <Sheet>
+            <SheetTrigger className='sm:hidden' asChild>
+              <Button size='icon' variant='outline'>
+                <MenuIcon className='h-5 w-5' />
+                <span className='sr-only'>Open menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side='left'>
+              <SheetHeader>
+                <SheetTitle>
+                  niso<span className='text-primary-text'>.moe</span>
+                </SheetTitle>
+                <SheetDescription>
+                  Navigate to different sections
+                </SheetDescription>
+              </SheetHeader>
+              <SheetBody>
+                <ul className='flex flex-col gap-4 py-4'>
+                  {publicLinks.map(({ url, label, icon: Icon }) => (
+                    <li key={url}>
+                      <Link
+                        href={url}
+                        className='hover:text-primary-text active:text-primary-text focus:text-primary-text flex items-center gap-2 text-lg font-medium lowercase transition-colors'
+                      >
+                        {Icon && <Icon className='size-5 shrink-0' />}
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                  <ProtectedNavLinks isMobile />
+                </ul>
+              </SheetBody>
+            </SheetContent>
+          </Sheet>
+          <ThemeSwitcher />
         </div>
       </div>
-    </header>
-  );
-}
-
-export function MobileNavbar() {
-  const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  const pathname = usePathname();
-  const { setTheme } = useTheme();
-
-  const navRef = useRef<HTMLElement | null>(null);
-  const indicatorStyle = useIndicatorPosition(navRef, pathname, mounted);
-
-  useEffect(() => {
-    setMounted(true);
-
-    function onResize() {
-      setIsMobile(window.innerWidth < 640);
-    }
-
-    onResize();
-
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  if (!isMobile) return null;
-
-  return (
-    <header className='sticky bottom-0 z-50 px-2 py-4 sm:hidden'>
-      <div className='bg-card/95 supports-backdrop-filter:bg-card/50 outline-foreground/10 mx-auto w-fit rounded-xl outline backdrop-blur'>
-        <nav ref={navRef} suppressHydrationWarning className='relative flex items-center gap-2 px-4 pt-2'>
-          <DropdownMenu>
-            <DropdownMenuTrigger className='cursor-pointer'>
-              <Sun className='hover:text-foreground text-muted-foreground m-2 size-6 shrink-0 transition-all dark:hidden' />
-              <Moon className='hover:text-foreground text-muted-foreground m-2 hidden size-6 shrink-0 transition-all dark:block' />
-              <span className='sr-only'>Toggle theme</span>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align='center' side='bottom'>
-              <DropdownMenuItem className='justify-between' onClick={() => setTheme('light')}>
-                Light <SunIcon />
-              </DropdownMenuItem>
-              <DropdownMenuItem className='justify-between' onClick={() => setTheme('dark')}>
-                Dark <MoonIcon />
-              </DropdownMenuItem>
-              <DropdownMenuItem className='justify-between' onClick={() => setTheme('system')}>
-                System <OrbitIcon />
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {NAVBAR_LINKS.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                data-active={pathname === link.href ? 'true' : undefined}
-                aria-label={link.label || 'unknown'}
-                className='relative flex flex-col flex-nowrap items-center rounded-md text-sm font-medium'
-              >
-                <link.icon
-                  className={cn(
-                    'hover:text-foreground m-2 size-6 shrink-0 transition-colors duration-300',
-                    isActive ? 'text-foreground' : 'text-muted-foreground',
-                  )}
-                />
-              </Link>
-            );
-          })}
-          <motion.div
-            className='bg-primary absolute bottom-0 h-0.5 rounded-full'
-            animate={{
-              left: mounted ? indicatorStyle.left : 0,
-              width: mounted ? indicatorStyle.width : 0,
-            }}
-            transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-          />
-        </nav>
-      </div>
-    </header>
+    </nav>
   );
 }

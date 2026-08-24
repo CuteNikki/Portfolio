@@ -1,53 +1,50 @@
 import { clsx, type ClassValue } from 'clsx';
-import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 
+/**
+ * Combines class names using clsx and merges them with twMerge for Tailwind CSS compatibility.
+ *
+ * @param inputs - An array of class names or class name objects.
+ * @returns The combined and merged class names as a single string.
+ */
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function useIndicatorPosition(navRef: React.RefObject<HTMLElement | null>, pathname: string, mounted: boolean) {
-  const [style, setStyle] = useState({ left: 0, width: 0 });
-
-  useEffect(() => {
-    if (!mounted) return;
-    if (typeof window === 'undefined') return;
-
-    const nav = navRef.current;
-    if (!nav) return;
-
-    function update() {
-      if (!nav) return;
-      const activeLink = nav.querySelector('a[data-active="true"]') as HTMLElement | null;
-      if (activeLink) {
-        setStyle({ left: activeLink.offsetLeft, width: activeLink.offsetWidth });
-      } else {
-        setStyle({ left: 0, width: 0 });
-      }
-    }
-
-    update();
-
-    window.addEventListener('resize', update);
-
-    return () => {
-      window.removeEventListener('resize', update);
-    };
-  }, [pathname, navRef, mounted]);
-
-  return style;
-}
-
-export function calculateAge(dob: string): number {
-  const birthDate = new Date(dob);
-  const today = new Date();
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDiff = today.getMonth() - birthDate.getMonth();
-  const dayDiff = today.getDate() - birthDate.getDate();
-
-  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-    age--;
+export function formatDate(date: Date | string, showDays = false): string {
+  if (typeof date === 'string') {
+    return date;
   }
 
-  return age;
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: showDays ? '2-digit' : undefined,
+    timeZone: 'UTC',
+  }).format(date);
+}
+
+export function getUserAvatarUrl(
+  userId: string,
+  discriminator: string,
+  avatarHash: string | null,
+  size: number = 64,
+): string {
+  // If they have a custom avatar, return it immediately
+  if (avatarHash) {
+    const isAnimated = avatarHash.startsWith('a_');
+    const format = isAnimated ? 'gif' : 'webp';
+    return `https://cdn.discordapp.com/avatars/${userId}/${avatarHash}.${format}?size=${size}`;
+  }
+
+  // Handle Default Avatars
+  if (discriminator === '0' || discriminator === '#0000') {
+    // New system: Use User ID
+    const index = Number((BigInt(userId) >> BigInt(22)) % BigInt(6));
+    return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
+  } else {
+    // Legacy system: Use Discriminator
+    const index = parseInt(discriminator) % 5;
+    return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
+  }
 }

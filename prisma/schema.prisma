@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER // Can only read and comment
+  WRITER // Can read, comment and create posts
+  ADMIN // Can do everything, including managing other users
+}
+
+model User {
+  id          String  @id @default(cuid())
+  discordId   String  @unique
+  displayName String?
+  username    String
+  avatarUrl   String
+  role        Role    @default(USER)
+
+  accessToken    String? @db.Text
+  refreshToken   String? @db.Text
+  tokenExpiresAt Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  comments Comment[]
+  posts    Post[]
+  projects Project[]
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expiresAt    DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id       String  @id @default(cuid())
+  writerId String
+  title    String
+  slug     String? @unique
+  content  String  @db.Text
+  views    Int     @default(0)
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  writer   User      @relation(fields: [writerId], references: [id])
+  comments Comment[]
+}
+
+model Comment {
+  id       String  @id @default(cuid())
+  postId   String
+  parentId String? // For nested comments
+  authorId String
+  content  String  @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  author User @relation(fields: [authorId], references: [id])
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  parent  Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentToComment")
+}
+
+model Project {
+  id          String  @id @default(cuid())
+  writerId    String
+  title       String
+  slug        String? @unique
+  description String  @db.Text
+
+  tags         String[]
+  technologies String[]
+
+  // Optional links related to the project
+  repository String?
+  website    String?
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  writer User @relation(fields: [writerId], references: [id])
+}

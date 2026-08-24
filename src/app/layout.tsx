@@ -1,24 +1,16 @@
-import { Geist, Geist_Mono } from 'next/font/google';
-
-import { DEFAULT_METADATA } from '@/constants/metadata';
-
-import { DesktopNavbar, MobileNavbar } from '@/components/navigation/navbar';
-import { NextThemeProvider } from '@/components/theme/provider';
-import { Toaster } from '@/components/ui/sonner';
+import { JetBrains_Mono } from 'next/font/google';
 
 import './globals.css';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
+import { SITE_METADATA } from '@/constants/metadata';
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { ThemeProvider } from '@/providers/theme';
+import { ToastProvider } from '@/providers/toast';
 
-export const metadata = DEFAULT_METADATA;
+const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
+
+export const { root: metadata } = SITE_METADATA;
 
 export default function RootLayout({
   children,
@@ -26,24 +18,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // Suppress hydration warning due to theme mismatch between server and client
     <html lang='en' suppressHydrationWarning>
-      {/* Permanently show scrollbar to prevent layout shift */}
-      <body className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col overflow-y-scroll antialiased`}>
-        {/* Apply system theme */}
-        <NextThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
-          <Toaster richColors />
-
-          {/* Navbar */}
-          <DesktopNavbar />
-
-          {/* Page Content and anchors */}
-          <div id='top' />
-          <main className='flex flex-1 flex-col'>{children}</main>
-          <div id='bottom' className='p-4' />
-
-          {/* Navbar */}
-          <MobileNavbar />
-        </NextThemeProvider>
+      {/* always show scrollbar to avoid layout shift when switching between scrollable and non-scrollable pages */}
+      <body
+        className={`${jetbrainsMono.variable} overflow-y-scroll font-mono antialiased`}
+      >
+        <div id='top' />
+        <ThemeProvider
+          enableSystem
+          disableTransitionOnChange
+          defaultTheme='system'
+          attribute='class'
+          themes={[
+            'light',
+            'dark',
+            'system',
+            'catppuccin-latte',
+            'catppuccin-macchiato',
+          ]}
+        >
+          <ToastProvider />
+          <TooltipProvider>{children}</TooltipProvider>
+        </ThemeProvider>
+        <div id='bottom' />
       </body>
     </html>
   );
