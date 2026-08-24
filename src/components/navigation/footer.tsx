@@ -7,7 +7,7 @@ import { FOOTER_LINKS } from '@/constants/links';
 export function Footer() {
   return (
     <footer className='bg-background/95 w-full border-t'>
-      <div className='container mx-auto flex items-center justify-between gap-4 p-4 tracking-tight'>
+      <div className='container mx-auto flex flex-col items-start justify-between gap-4 px-4 py-6 tracking-tight sm:flex-row sm:items-center sm:px-6 lg:px-8'>
         <p className='text-muted-foreground text-sm'>
           &copy; {new Date().getFullYear()} niso.moe
         </p>

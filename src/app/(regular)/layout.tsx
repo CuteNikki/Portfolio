@@ -3,17 +3,15 @@ import { Navbar } from '@/components/navigation/navbar';
 
 export default function RegularPageLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <div className='flex min-h-screen flex-col items-center justify-center'>
+    <div className='site-shell flex min-h-screen flex-col'>
       <Navbar />
-      <div className='flex w-full flex-1'>
-        <main className='xs:py-8 xs:px-4 container mx-auto flex flex-col items-center justify-center gap-8 p-4 px-2'>
+      <main className='flex-1'>
+        <div className='container mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 py-10 sm:px-6 sm:py-16 lg:px-8'>
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
       <Footer />
     </div>
   );
