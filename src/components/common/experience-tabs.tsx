@@ -10,10 +10,10 @@ export function ExperienceTabs({ career, education }: { career: React.ReactNode;
 
   return (
     <Tabs value={active} onValueChange={setActive} className='w-full'>
-      <TabsList className='h-11 w-fit gap-1 overflow-hidden rounded-lg border border-border bg-muted/40 p-1'>
+      <TabsList className='h-auto w-fit gap-1 rounded-lg border border-border bg-muted/40 p-2'>
         {(['career', 'education'] as const).map((tab) => (
           <TabsTrigger key={tab} value={tab} className='relative h-9 flex-none rounded-md px-4 text-sm font-semibold capitalize data-[state=active]:bg-transparent data-[state=active]:shadow-none'>
-            {active === tab && <motion.span layoutId='experience-tab-highlight' transition={{ type: 'tween', duration: 0.18, ease: 'easeOut' }} className='absolute inset-0.5 rounded-[0.3rem] bg-background shadow-sm' />}
+            {active === tab && <motion.span layoutId='experience-tab-highlight' transition={{ type: 'spring', stiffness: 400, damping: 30 }} className='absolute inset-0.5 rounded-[0.3rem] border-b-2 border-primary bg-transparent' />}
             <span className='relative z-10'>{tab}</span>
           </TabsTrigger>
         ))}
