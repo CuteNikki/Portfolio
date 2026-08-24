@@ -9,7 +9,6 @@ import { SITE_METADATA } from '@/constants/metadata';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 import { formatDate } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ExperienceTabs } from '@/components/common/experience-tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 

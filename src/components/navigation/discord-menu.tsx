@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
 import { SiDiscord } from '@icons-pack/react-simple-icons';
 
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
