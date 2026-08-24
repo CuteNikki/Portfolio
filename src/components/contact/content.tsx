@@ -66,8 +66,8 @@ export function ContactContent() {
 
   return (
     <section className='animate-rise-in w-full max-w-6xl'>
-      <div className='grid md:grid-cols-[0.8fr_1.2fr]'>
-        <div className='flex flex-col gap-5 border-b p-6 sm:p-8 md:border-b-0 md:border-r md:p-10'>
+      <div className='grid lg:grid-cols-[0.8fr_1.2fr]'>
+        <div className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
           <p className='text-primary-text text-sm font-semibold uppercase tracking-[0.2em]'>Contact</p>
           <h1 className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</h1>
           <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
@@ -92,7 +92,7 @@ export function ContactContent() {
         <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
         <div className='p-6 sm:p-8 md:p-10'>
           <FieldGroup className='gap-4'>
-            <FieldGroup className='md:flex-row'>
+            <FieldGroup className='lg:flex-row'>
               <Controller
                 name='name'
                 control={form.control}
