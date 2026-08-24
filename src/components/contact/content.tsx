@@ -69,13 +69,13 @@ export function ContactContent() {
     <ScrollReveal className='w-full max-w-6xl'>
       <section className='w-full'>
       <div className='grid lg:grid-cols-[0.8fr_1.2fr]'>
-        <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-5 border-b-0 p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
+        <div data-reveal-item style={{ '--reveal-index': 0 } as React.CSSProperties} className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-b-0 lg:border-r lg:p-10'>
           <p className='text-primary-text flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.2em]'><MailIcon className='size-4' /> Contact</p>
           <h1 className='text-4xl tracking-tight sm:text-5xl'>Let&apos;s talk.</h1>
           <p className='text-muted-foreground max-w-sm text-balance leading-relaxed'>
             Have a question, an idea, or a project in mind? Send a note and I&apos;ll get back to you soon.
           </p>
-          <div className='mt-auto flex flex-col gap-4 border-t pt-5 text-sm'>
+          <div className='mt-auto flex flex-col gap-4 pt-5 text-sm'>
             <div className='flex flex-col gap-2'>
               <span className='text-muted-foreground'>Prefer email?</span>
               <a className='hover:text-primary-text font-medium transition-colors' href={PERSONAL_DETAILS.emailLink}>{PERSONAL_DETAILS.email}</a>
