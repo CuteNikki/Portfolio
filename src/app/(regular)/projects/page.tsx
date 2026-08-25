@@ -21,7 +21,7 @@ export default function ProjectsPage() {
             <PresentationIcon className='size-4 shrink-0' /> Selected work
           </p>
           <h1 className='text-5xl font-bold tracking-tighter sm:text-7xl'>
-            Projects<span className='text-primary-text'>.</span>
+            Projects.
           </h1>
           <p className='text-muted-foreground max-w-xl leading-relaxed text-pretty'>
             A collection of products, experiments, and systems I&apos;ve helped

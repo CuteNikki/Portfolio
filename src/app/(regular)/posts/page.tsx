@@ -18,7 +18,7 @@ export default function PostsPage() {
             <NewspaperIcon className='size-4 shrink-0' /> Notes & thinking
           </p>
           <h1 className='text-5xl font-bold tracking-tighter sm:text-7xl'>
-            Writing<span className='text-primary-text'>.</span>
+            Writing.
           </h1>
           <p className='text-muted-foreground max-w-xl leading-relaxed text-pretty'>
             Notes on building products, learning in public, and the details that

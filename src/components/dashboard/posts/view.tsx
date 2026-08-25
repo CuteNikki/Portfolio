@@ -55,9 +55,9 @@ export async function PostList() {
             </p>
           </div>
 
-          <div className='text-muted-foreground mt-6 flex items-center gap-4 text-xs'>
-            <div className='flex items-center gap-1'>
-              <CalendarIcon className='size-3' />
+          <div className='text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm'>
+            <div className='flex items-center gap-2'>
+              <CalendarIcon className='size-4 shrink-0' />
               {new Date(post.createdAt).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
@@ -65,16 +65,16 @@ export async function PostList() {
                 timeZone: 'UTC',
               })}
             </div>
-            <div className='flex items-center gap-1'>
-              <ClockIcon className='size-3' />
+            <div className='flex items-center gap-2'>
+              <ClockIcon className='size-4 shrink-0' />
               {Math.max(
                 1,
                 Math.ceil(post.content.trim().split(/\s+/).length / 200),
               )}{' '}
               min read
             </div>
-            <div className='flex items-center gap-1'>
-              <EyeIcon className='size-3' />
+            <div className='flex items-center gap-2'>
+              <EyeIcon className='size-4 shrink-0' />
               {post.views || 0} views
             </div>
           </div>
@@ -102,9 +102,10 @@ export function PostListSkeleton() {
             <Skeleton className='h-15 w-full' />
           </div>
 
-          <div className='mt-6 flex items-center gap-4'>
-            <Skeleton className='h-4 w-24' />
-            <Skeleton className='h-4 w-24' />
+          <div className='mt-2 flex flex-wrap items-center gap-x-4 gap-y-2'>
+            <Skeleton className='h-5 w-24' />
+            <Skeleton className='h-5 w-24' />
+            <Skeleton className='h-5 w-24' />
           </div>
         </div>
       ))}
