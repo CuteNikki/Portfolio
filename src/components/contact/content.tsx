@@ -8,18 +8,20 @@ import { toast } from 'sonner';
 import { MailIcon, SendHorizontalIcon } from 'lucide-react';
 
 import { sendMail } from '@/actions/mail';
-import { ScrollReveal } from '@/components/common/scroll-reveal';
-import { DiscordMenu } from '@/components/navigation/discord-menu';
 
-import { LINKS } from '@/constants/links';
-import { PERSONAL_DETAILS } from '@/constants/personal';
-import { cn } from '@/lib/utils';
 import {
   MailSubmitData,
   mailSubmitSchema,
   MAX_MESSAGE_LENGTH,
 } from '@/types/mail';
 
+import { LINKS } from '@/constants/links';
+import { PERSONAL_DETAILS } from '@/constants/personal';
+
+import { cn } from '@/lib/utils';
+
+import { ScrollReveal } from '@/components/common/scroll-reveal';
+import { DiscordMenu } from '@/components/navigation/discord-menu';
 import { Button } from '@/components/ui/button';
 import {
   Field,
@@ -72,9 +74,9 @@ export function ContactContent() {
           <div
             data-reveal-item
             style={{ '--reveal-index': 0 } as React.CSSProperties}
-            className='flex flex-col gap-5 border-b p-6 sm:p-8 lg:border-r lg:border-b-0 lg:p-10'
+            className='flex flex-col gap-4 border-b p-6 sm:p-8 lg:border-r lg:border-b-0 lg:p-10'
           >
-            <p className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-[0.2em] uppercase'>
+            <p className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-widest uppercase'>
               <MailIcon className='size-4' /> Contact
             </p>
             <h1 className='text-4xl tracking-tight sm:text-5xl'>
@@ -87,10 +89,12 @@ export function ContactContent() {
             <div
               data-reveal-item
               style={{ '--reveal-index': 1 } as React.CSSProperties}
-              className='mt-auto flex flex-col gap-4 border-t-0 pt-5 text-sm lg:border-t'
+              className='mt-auto flex flex-col gap-4 border-t-0 pt-6 text-sm lg:border-t'
             >
               <div className='flex flex-col gap-2'>
-                <span className='text-muted-foreground'>Prefer email?</span>
+                <span className='text-muted-foreground'>
+                  Prefer other methods?
+                </span>
                 <a
                   className='hover:text-primary-text font-medium transition-colors'
                   href={PERSONAL_DETAILS.emailLink}
@@ -98,7 +102,7 @@ export function ContactContent() {
                   {PERSONAL_DETAILS.email}
                 </a>
               </div>
-              <div className='flex flex-wrap items-center gap-x-5 gap-y-3'>
+              <div className='flex flex-wrap items-center gap-x-4 gap-y-2'>
                 {PERSONAL_DETAILS.socials
                   .filter(
                     ({ platform }) =>
@@ -112,7 +116,7 @@ export function ContactContent() {
                       rel='noopener noreferrer'
                       className='text-muted-foreground hover:text-primary-text flex items-center gap-2 transition-colors'
                     >
-                      <Icon className='size-4' />
+                      <Icon className='size-4 shrink-0' />
                       {platform}
                     </Link>
                   ))}

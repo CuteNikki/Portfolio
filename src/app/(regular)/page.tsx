@@ -2,10 +2,14 @@ import Link from 'next/link';
 
 import { ArrowRightIcon } from 'lucide-react';
 
-import { ScrollReveal } from '@/components/common/scroll-reveal';
-import { DiscordMenu } from '@/components/navigation/discord-menu';
+import { formatDate } from '@/lib/utils';
+
+import { SITE_METADATA } from '@/constants/metadata';
+import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { ExperienceTabs } from '@/components/common/experience-tabs';
+import { ScrollReveal } from '@/components/common/scroll-reveal';
+import { DiscordMenu } from '@/components/navigation/discord-menu';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,9 +17,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { SITE_METADATA } from '@/constants/metadata';
-import { PERSONAL_DETAILS } from '@/constants/personal';
-import { formatDate } from '@/lib/utils';
 
 export const { home: metadata } = SITE_METADATA;
 
@@ -23,10 +24,10 @@ export default function Home() {
   return (
     <div className='flex w-full flex-col gap-12'>
       <section className='animate-rise-in flex flex-col gap-6'>
-        <p className='text-primary-text text-sm font-semibold tracking-[0.2em] uppercase'>
+        <p className='text-primary-text text-sm font-semibold tracking-widest uppercase'>
           Portfolio / 2026
         </p>
-        <h1 className='max-w-5xl text-5xl font-bold tracking-[-0.06em] text-balance sm:text-7xl lg:text-8xl'>
+        <h1 className='max-w-5xl text-5xl font-bold tracking-tighter text-balance sm:text-7xl lg:text-8xl'>
           Building useful things for the web.
         </h1>
         <p className='text-muted-foreground max-w-xl text-lg leading-relaxed text-pretty'>
@@ -52,7 +53,7 @@ export default function Home() {
           style={{ '--reveal-index': 1 } as React.CSSProperties}
           className='flex flex-col gap-3'
         >
-          <span className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-[0.2em] uppercase'>
+          <span className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-widest uppercase'>
             Availability
           </span>
           <p className='text-muted-foreground max-w-sm leading-relaxed'>
@@ -85,7 +86,7 @@ export default function Home() {
           style={{ '--reveal-index': 2 } as React.CSSProperties}
           className='lg:border-border flex max-w-md flex-col gap-3 lg:border-l lg:pl-8'
         >
-          <span className='text-primary-text text-sm font-semibold tracking-[0.2em] uppercase'>
+          <span className='text-primary-text text-sm font-semibold tracking-widest uppercase'>
             Experience
           </span>
           <p className='text-muted-foreground max-w-xs leading-relaxed text-pretty'>
@@ -175,7 +176,7 @@ export default function Home() {
         <section className='border-border flex flex-col gap-6 border-t pt-8'>
           <div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
             <div>
-              <p className='text-primary-text text-sm font-semibold tracking-[0.2em] uppercase'>
+              <p className='text-primary-text text-sm font-semibold tracking-widest uppercase'>
                 Toolkit
               </p>
               <h2 className='text-3xl font-bold tracking-tight'>
@@ -190,12 +191,12 @@ export default function Home() {
                   key={category}
                   data-reveal-item
                   style={{ '--reveal-index': index } as React.CSSProperties}
-                  className='flex flex-col gap-3'
+                  className='flex flex-col gap-2'
                 >
                   <h3 className='text-muted-foreground text-sm font-semibold capitalize'>
                     {category}
                   </h3>
-                  <div className='flex flex-wrap gap-2'>
+                  <div className='flex flex-wrap gap-1'>
                     {skills.map(({ name, icon, description }) => (
                       <Tooltip key={name}>
                         <TooltipTrigger asChild>

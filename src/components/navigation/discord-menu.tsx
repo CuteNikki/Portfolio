@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
+
 import { SiDiscord } from '@icons-pack/react-simple-icons';
+import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
 
 import {
   DropdownMenu,
@@ -20,9 +21,17 @@ export function DiscordMenu() {
   const [copied, setCopied] = useState(false);
 
   async function copyUsername() {
-    await navigator.clipboard.writeText(discordUsername);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1600);
+    await navigator.clipboard
+      .writeText(discordUsername)
+      .then(() => {
+        setCopied(true);
+      })
+      .catch((err) => {
+        console.error('Failed to copy text: ', err);
+      })
+      .finally(() => {
+        window.setTimeout(() => setCopied(false), 1600);
+      });
   }
 
   return (
@@ -33,8 +42,10 @@ export function DiscordMenu() {
           Discord
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-52'>
-        <DropdownMenuLabel>Connect on Discord</DropdownMenuLabel>
+      <DropdownMenuContent align='center' className='w-52'>
+        <DropdownMenuLabel className='text-center'>
+          Connect on Discord
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={copyUsername}>
           {copied ? <CheckIcon /> : <CopyIcon />}
