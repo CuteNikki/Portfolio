@@ -160,48 +160,45 @@ export default async function ProjectsPage({
               )}
             </div>
           ) : null}
+
+          <div
+            data-reveal-item
+            style={{ '--reveal-index': 3 } as React.CSSProperties}
+            className='flex flex-wrap items-center gap-2'
+          >
+            {project.website && (
+              <Button asChild>
+                <Link
+                  href={project.website}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <GlobeIcon />
+                  Visit Website
+                </Link>
+              </Button>
+            )}
+            {project.repository && (
+              <Button asChild>
+                <Link
+                  href={project.repository}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <SiGit />
+                  View Source
+                </Link>
+              </Button>
+            )}
+          </div>
         </header>
 
         {/* Project Description Body (Staggered to appear after the header) */}
         <div
           data-reveal-item
-          style={{ '--reveal-index': 3 } as React.CSSProperties}
+          style={{ '--reveal-index': 4 } as React.CSSProperties}
         >
           <MarkdownViewer content={project.description} />
-        </div>
-      </ScrollReveal>
-
-      {/* Action Links (Isolated block since it's lower down the page) */}
-      <ScrollReveal className='scroll-reveal'>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='flex flex-wrap items-center gap-2 py-8'
-        >
-          {project.website && (
-            <Button asChild>
-              <Link
-                href={project.website}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <GlobeIcon />
-                Visit Website
-              </Link>
-            </Button>
-          )}
-          {project.repository && (
-            <Button asChild>
-              <Link
-                href={project.repository}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <SiGit />
-                View Repository
-              </Link>
-            </Button>
-          )}
         </div>
       </ScrollReveal>
     </article>
