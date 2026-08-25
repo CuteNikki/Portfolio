@@ -49,7 +49,7 @@ export default function Home() {
       <ScrollReveal className='scroll-reveal border-border grid gap-8 border-y py-8 lg:grid-cols-2 lg:gap-16'>
         <div
           data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
+          style={{ '--reveal-index': 1 } as React.CSSProperties}
           className='flex flex-col gap-3'
         >
           <span className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-[0.2em] uppercase'>
@@ -82,7 +82,7 @@ export default function Home() {
         </div>
         <div
           data-reveal-item
-          style={{ '--reveal-index': 1 } as React.CSSProperties}
+          style={{ '--reveal-index': 2 } as React.CSSProperties}
           className='lg:border-border flex max-w-md flex-col gap-3 lg:border-l lg:pl-8'
         >
           <span className='text-primary-text text-sm font-semibold tracking-[0.2em] uppercase'>
@@ -98,7 +98,11 @@ export default function Home() {
       <ScrollReveal className='scroll-reveal'>
         <ExperienceTabs
           career={
-            <div className='flex flex-col gap-6'>
+            <div
+              data-reveal-item
+              style={{ '--reveal-index': 3 } as React.CSSProperties}
+              className='flex flex-col gap-6'
+            >
               {PERSONAL_DETAILS.career.map(
                 (
                   { from, to, title, company, location, description, showDays },
@@ -107,7 +111,9 @@ export default function Home() {
                   <div
                     key={`${title}-${company}`}
                     data-reveal-item
-                    style={{ '--reveal-index': index } as React.CSSProperties}
+                    style={
+                      { '--reveal-index': index + 2 } as React.CSSProperties
+                    }
                     className='grid gap-2 pb-6 sm:grid-cols-[1fr_auto]'
                   >
                     <div>
@@ -140,7 +146,9 @@ export default function Home() {
                   <div
                     key={`${title}-${school}`}
                     data-reveal-item
-                    style={{ '--reveal-index': index } as React.CSSProperties}
+                    style={
+                      { '--reveal-index': index + 2 } as React.CSSProperties
+                    }
                     className='grid gap-2 pb-6 sm:grid-cols-[1fr_auto]'
                   >
                     <div>
