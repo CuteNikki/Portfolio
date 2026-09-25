@@ -32,6 +32,8 @@ export async function createProject(formData: FormData) {
       .map((tech) => tech.trim())
       .filter((tech) => tech.length > 0) || [];
 
+  const createdAt = parseProjectDate(formData.get('date'));
+
   const isPublished = formData.get('isPublished') === 'true';
   if (!title || !description) {
     throw new Error('Title and description are required.');
@@ -58,6 +60,7 @@ export async function createProject(formData: FormData) {
       website,
       technologies,
       tags,
+      createdAt,
       writerId: session.user.id,
       publishedAt: isPublished ? new Date() : null,
     },
@@ -107,6 +110,8 @@ export async function updateProject(formData: FormData) {
       .map((tech) => tech.trim())
       .filter((tech) => tech.length > 0) || [];
 
+  const createdAt = parseProjectDate(formData.get('date'));
+
   const isPublished = formData.get('isPublished') === 'true';
 
   if (!id || !title) {
@@ -136,11 +141,25 @@ export async function updateProject(formData: FormData) {
       website,
       technologies,
       tags,
+      createdAt,
       publishedAt: isPublished ? new Date() : null,
     },
   });
 
   revalidateProjectPaths(id, slug);
+}
+
+// Parses a "YYYY-MM-DD" date input. Stored at noon UTC so the displayed day
+// doesn't shift in other time zones. Returns undefined if no date was given.
+function parseProjectDate(value: FormDataEntryValue | null) {
+  if (!value) return undefined;
+
+  const date = new Date(`${value}T12:00:00Z`);
+  if (Number.isNaN(date.getTime())) {
+    throw new Error('Please enter a valid project date.');
+  }
+
+  return date;
 }
 
 function revalidateProjectPaths(projectId: string, slug: string | null) {

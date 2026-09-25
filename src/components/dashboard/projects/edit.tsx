@@ -180,6 +180,21 @@ export function EditProjectForm({ project }: { project: Project }) {
         />
       </div>
 
+      {/* Project Date */}
+      <div className='flex flex-col gap-2'>
+        <label htmlFor='date' className='text-sm font-medium'>
+          Project Date
+        </label>
+        <Input
+          id='date'
+          name='date'
+          type='date'
+          className='w-fit'
+          defaultValue={project.createdAt.toISOString().slice(0, 10)}
+          required
+        />
+      </div>
+
       <EditActionButtons
         publishedAt={project.publishedAt}
         isPending={isPending}

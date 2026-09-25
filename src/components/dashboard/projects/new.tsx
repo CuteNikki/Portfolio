@@ -162,6 +162,17 @@ export function NewProjectForm() {
         />
       </div>
 
+      {/* Project Date */}
+      <div className='flex flex-col gap-2'>
+        <label htmlFor='date' className='text-sm font-medium'>
+          Project Date
+        </label>
+        <Input id='date' name='date' type='date' className='w-fit' />
+        <p className='text-muted-foreground text-xs'>
+          Leave empty to use today&apos;s date.
+        </p>
+      </div>
+
       <NewActionButtons
         isPending={isPending}
         isMissingRequiredFields={!description.trim()}
