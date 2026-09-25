@@ -2,6 +2,7 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -38,7 +39,18 @@ import {
   InputGroupTextarea,
 } from '@/components/ui/input-group';
 
+function msSince(timestamp: number) {
+  return Date.now() - timestamp;
+}
+
 export function ContactContent() {
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const mountedAtRef = useRef(0);
+
+  useEffect(() => {
+    mountedAtRef.current = Date.now();
+  }, []);
+
   const form = useForm<MailSubmitData>({
     resolver: zodResolver(mailSubmitSchema),
     defaultValues: {
@@ -50,7 +62,10 @@ export function ContactContent() {
   });
 
   async function onSubmit(data: MailSubmitData) {
-    const result = await sendMail(data);
+    const result = await sendMail(data, {
+      website: honeypotRef.current?.value ?? '',
+      elapsedMs: msSince(mountedAtRef.current),
+    });
 
     if (result.error) {
       toast.error('Something went wrong!', {
@@ -124,12 +139,31 @@ export function ContactContent() {
               </div>
             </div>
           </div>
-          <form id='contact' onSubmit={form.handleSubmit(onSubmit)}>
+          <form
+            id='contact'
+            onSubmit={(event) => form.handleSubmit(onSubmit)(event)}
+          >
             <div
               data-reveal-item
               style={{ '--reveal-index': 2 } as React.CSSProperties}
               className='p-6 sm:p-8 md:p-10'
             >
+              {/* Honeypot: invisible to humans, bots fill it in */}
+              <div
+                aria-hidden
+                className='absolute -left-[9999px] h-px w-px overflow-hidden'
+              >
+                <label htmlFor='contact-website'>Website</label>
+                <input
+                  ref={honeypotRef}
+                  id='contact-website'
+                  name='website'
+                  type='text'
+                  tabIndex={-1}
+                  autoComplete='off'
+                  defaultValue=''
+                />
+              </div>
               <FieldGroup className='gap-4'>
                 <FieldGroup className='lg:flex-row'>
                   <Controller

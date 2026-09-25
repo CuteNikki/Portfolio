@@ -24,3 +24,15 @@ export const mailSubmitSchema = z.object({
 });
 
 export type MailSubmitData = z.infer<typeof mailSubmitSchema>;
+
+// Minimum time between the form mounting and being submitted. Bots submit instantly.
+export const MIN_SUBMIT_TIME_MS = 3000;
+
+export const antiSpamSchema = z.object({
+  // Honeypot: hidden from humans, so it must stay empty
+  website: z.string(),
+  // Milliseconds the form was open before submitting
+  elapsedMs: z.number(),
+});
+
+export type AntiSpamData = z.infer<typeof antiSpamSchema>;
