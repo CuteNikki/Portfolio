@@ -131,6 +131,15 @@ export async function updateProject(formData: FormData) {
     }
   }
 
+  const currentProject = await prisma.project.findUnique({
+    where: { id },
+    select: { publishedAt: true },
+  });
+
+  if (!currentProject) {
+    throw new Error('Project not found.');
+  }
+
   await prisma.project.update({
     where: { id },
     data: {
@@ -142,7 +151,10 @@ export async function updateProject(formData: FormData) {
       technologies,
       tags,
       createdAt,
-      publishedAt: isPublished ? new Date() : null,
+      // Keep the original publish date when updating an already published project
+      publishedAt: isPublished
+        ? (currentProject.publishedAt ?? new Date())
+        : null,
     },
   });
 

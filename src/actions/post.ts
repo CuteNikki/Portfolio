@@ -107,13 +107,23 @@ export async function updatePost(formData: FormData) {
     }
   }
 
+  const currentPost = await prisma.post.findUnique({
+    where: { id },
+    select: { publishedAt: true },
+  });
+
+  if (!currentPost) {
+    throw new Error('Post not found.');
+  }
+
   await prisma.post.update({
     where: { id },
     data: {
       title,
       slug,
       content,
-      publishedAt: isPublished ? new Date() : null,
+      // Keep the original publish date when updating an already published post
+      publishedAt: isPublished ? (currentPost.publishedAt ?? new Date()) : null,
     },
   });
 
