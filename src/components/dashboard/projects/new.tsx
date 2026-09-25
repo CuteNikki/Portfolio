@@ -28,6 +28,9 @@ export function NewProjectForm() {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
+    // The textarea is unmounted while the Preview tab is open, so take the value from state
+    formData.set('description', description);
+
     formData.append(
       'isPublished',
       submitAction === 'publish' ? 'true' : 'false',

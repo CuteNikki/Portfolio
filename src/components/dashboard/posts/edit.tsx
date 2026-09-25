@@ -25,6 +25,9 @@ export function EditPostForm({ post }: { post: Post }) {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
+    // The textarea is unmounted while the Preview tab is open, so take the value from state
+    formData.set('content', content);
+
     formData.append('postId', post.id);
     formData.append('isPublished', action === 'publish' ? 'true' : 'false');
 

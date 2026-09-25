@@ -114,7 +114,7 @@ export async function updateProject(formData: FormData) {
 
   const isPublished = formData.get('isPublished') === 'true';
 
-  if (!id || !title) {
+  if (!id || !title || !description) {
     throw new Error('Some required fields are missing.');
   }
 
