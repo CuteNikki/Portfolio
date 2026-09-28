@@ -17,7 +17,9 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 
-import { Project, User } from '@/generated/prisma/browser';
+import { Project } from '@/generated/prisma/browser';
+
+import type { PublicUser } from '@/lib/data';
 
 import { deleteProject } from '@/actions/project';
 import { LINKS } from '@/constants/links';
@@ -42,7 +44,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-type ProjectWithWriter = Project & { writer: User };
+type ProjectWithWriter = Project & { writer: PublicUser };
 
 const ProjectActions = ({ project }: { project: ProjectWithWriter }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -252,7 +254,9 @@ export const columns: ColumnDef<ProjectWithWriter>[] = [
     ),
     cell: ({ row }) => {
       const date = new Date(row.getValue('createdAt'));
-      return <span>{date.toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>;
+      return (
+        <span>{date.toLocaleDateString('en-US', { timeZone: 'UTC' })}</span>
+      );
     },
   },
   {

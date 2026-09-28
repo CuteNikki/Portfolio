@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 
 import {
   CalendarIcon,
@@ -9,20 +10,35 @@ import {
   PencilLineIcon,
 } from 'lucide-react';
 
-import { Role } from '@/generated/prisma/enums';
-
 import { LINKS } from '@/constants/links';
 import { NO_INDEX } from '@/constants/metadata';
-import { getCurrentSession } from '@/lib/auth';
-import prisma from '@/lib/prisma';
+import {
+  getDraftProject,
+  getPublishedProject,
+  getPublishedProjects,
+} from '@/lib/data';
 import { toExcerpt } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
+import { WriterOnly } from '@/components/common/writer-only';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { ShareButton } from '@/components/dashboard/posts/share';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { SiGit } from '@icons-pack/react-simple-icons';
+
+export async function generateStaticParams() {
+  const projects = await getPublishedProjects();
+
+  // Cache Components needs at least one param to prerender the route. The
+  // placeholder renders as not found.
+  if (projects.length === 0) return [{ projectId: 'none' }];
+
+  return projects.map((project) => ({
+    projectId: project.slug ?? project.id,
+  }));
+}
 
 export async function generateMetadata({
   params,
@@ -30,57 +46,24 @@ export async function generateMetadata({
   params: Promise<{ projectId: string }>;
 }): Promise<Metadata> {
   const { projectId } = await params;
+  const project = await getPublishedProject(projectId);
 
-  const project = await prisma.project
-    .findFirst({
-      where: {
-        OR: [{ id: projectId }, { slug: projectId }],
-      },
-    })
-    .then((project) => project)
-    .catch(() => null);
-
-  if (!project) return { title: 'Project Not Found' };
+  // Drafts and missing projects look the same here, so a draft's title never leaks
+  if (!project) return { title: 'Project', robots: NO_INDEX };
 
   return {
     title: project.title,
     description: toExcerpt(project.description),
     keywords: [...project.technologies, ...project.tags],
     alternates: { canonical: `/projects/${project.slug ?? project.id}` },
-    robots: project.publishedAt ? undefined : NO_INDEX,
   };
 }
 
-export default async function ProjectsPage({
+export default function ProjectPage({
   params,
 }: {
   params: Promise<{ projectId: string }>;
 }) {
-  const { projectId } = await params;
-
-  const { project, hasError } = await prisma.project
-    .findFirst({
-      where: {
-        OR: [{ id: projectId }, { slug: projectId }],
-      },
-    })
-    .then((project) => ({ project, hasError: false }))
-    .catch(() => ({ project: null, hasError: true }));
-
-  if (!project || hasError) {
-    notFound();
-  }
-
-  const session = await getCurrentSession();
-  if (!project.publishedAt) {
-    if (
-      !session ||
-      (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-    ) {
-      notFound();
-    }
-  }
-
   return (
     <article className='mx-auto w-full max-w-3xl py-8'>
       {/* Back Button */}
@@ -91,6 +74,32 @@ export default async function ProjectsPage({
         </Link>
       </Button>
 
+      <Suspense fallback={<ProjectSkeleton />}>
+        <ProjectContent params={params} />
+      </Suspense>
+    </article>
+  );
+}
+
+async function ProjectContent({
+  params,
+}: {
+  params: Promise<{ projectId: string }>;
+}) {
+  const { projectId } = await params;
+
+  // Published projects come from the cache and are prerendered. Only unknown
+  // ids fall through to the draft lookup, which reads the session.
+  const project =
+    (await getPublishedProject(projectId)) ??
+    (await getDraftProject(projectId));
+
+  if (!project) {
+    notFound();
+  }
+
+  return (
+    <>
       {/* Unified ScrollReveal for Title, Meta, and Body */}
       <ScrollReveal className='scroll-reveal'>
         <header className='mb-10 flex flex-col gap-4 border-b pb-8'>
@@ -120,15 +129,14 @@ export default async function ProjectsPage({
 
             <div className='ml-auto flex flex-wrap items-center gap-2'>
               <ShareButton postId={project.id} />
-              {(session?.user.role === Role.ADMIN ||
-                session?.user.role === Role.WRITER) && (
+              <WriterOnly>
                 <Button variant='outline' size='xs' asChild>
                   <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
                     <PencilLineIcon />
                     Edit Project
                   </Link>
                 </Button>
-              )}
+              </WriterOnly>
               {!project.publishedAt && (
                 <Badge variant='destructive' size='lg'>
                   Unpublished
@@ -206,6 +214,16 @@ export default async function ProjectsPage({
           <MarkdownViewer content={project.description} />
         </div>
       </ScrollReveal>
-    </article>
+    </>
+  );
+}
+
+function ProjectSkeleton() {
+  return (
+    <div className='flex flex-col gap-4'>
+      <Skeleton className='h-12 w-3/4' />
+      <Skeleton className='mb-10 h-6 w-1/2' />
+      <Skeleton className='h-64 w-full' />
+    </div>
   );
 }

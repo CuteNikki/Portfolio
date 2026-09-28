@@ -1,41 +1,42 @@
 import { CalendarIcon } from 'lucide-react';
 import Link from 'next/link';
 
-import { Role } from '@/generated/prisma/enums';
-
 import { LINKS } from '@/constants/links';
-import { getCurrentSession } from '@/lib/auth';
-import prisma from '@/lib/prisma';
+import { getDraftProjects, getPublishedProjects } from '@/lib/data';
 
-import { ErrorToast } from '@/components/common/error-toast';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export async function ProjectList() {
-  const session = await getCurrentSession();
-  const isAdmin =
-    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER;
+  const projects = await getPublishedProjects();
 
-  const { projects, hasError } = await prisma.project
-    .findMany({
-      where: isAdmin ? {} : { publishedAt: { not: null } },
-      orderBy: { createdAt: 'desc' },
-      include: { writer: true },
-    })
-    .then((projects) => ({ projects, hasError: false }))
-    .catch((error) => {
-      console.error('Error fetching projects:', error);
-      return { projects: [], hasError: true };
-    });
+  if (projects.length === 0) {
+    return (
+      <div className='text-muted-foreground py-20 text-center'>
+        No projects found. Check back later!
+      </div>
+    );
+  }
 
+  return <ProjectGrid projects={projects} />;
+}
+
+// Only rendered for writers, so it streams in separately from the cached list
+export async function DraftProjectList() {
+  const projects = await getDraftProjects();
+
+  if (projects.length === 0) return null;
+
+  return <ProjectGrid projects={projects} />;
+}
+
+function ProjectGrid({
+  projects,
+}: {
+  projects: Awaited<ReturnType<typeof getPublishedProjects>>;
+}) {
   return (
     <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
-      {hasError && (
-        <ErrorToast
-          title='Failed to load latest projects.'
-          description='The database is currently unreachable. Please try again later.'
-        />
-      )}
       {projects.map((project, index) => (
         <Link
           href={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
@@ -67,11 +68,6 @@ export async function ProjectList() {
           </div>
         </Link>
       ))}
-      {projects.length === 0 && (
-        <div className='text-muted-foreground col-span-full py-20 text-center'>
-          No projects found. Check back later!
-        </div>
-      )}
     </div>
   );
 }

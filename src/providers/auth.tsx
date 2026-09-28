@@ -2,9 +2,13 @@
 
 import { createContext, ReactNode, useContext } from 'react';
 
-import type { Session, User } from '@/generated/prisma/browser';
+import type { PublicUser } from '@/lib/data';
 
-const AuthContext = createContext<(Session & { user: User }) | null>(null);
+// Only what the dashboard UI needs. The full session holds the session token and
+// the user's Discord tokens, which must never reach the browser.
+type AuthSession = { user: PublicUser };
+
+const AuthContext = createContext<AuthSession | null>(null);
 
 export function AuthProvider({
   children,
@@ -12,7 +16,7 @@ export function AuthProvider({
 }: {
   children: ReactNode;
 
-  session: (Session & { user: User }) | null;
+  session: AuthSession | null;
 }) {
   return (
     <AuthContext.Provider value={session}>{children}</AuthContext.Provider>

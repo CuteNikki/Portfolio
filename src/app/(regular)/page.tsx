@@ -1,3 +1,4 @@
+import { cacheLife } from 'next/cache';
 import Link from 'next/link';
 
 import { ArrowRightIcon } from 'lucide-react';
@@ -20,6 +21,14 @@ import {
 
 export const { home: metadata } = SITE_METADATA;
 
+// Cached so the page can be prerendered; refreshed daily to catch birthdays
+async function Age() {
+  'use cache';
+  cacheLife('days');
+
+  return PERSONAL_DETAILS.age;
+}
+
 export default function Home() {
   return (
     <div className='flex w-full flex-col gap-12'>
@@ -31,7 +40,7 @@ export default function Home() {
           Building useful things for the web.
         </h1>
         <p className='text-muted-foreground max-w-xl text-lg leading-relaxed text-pretty'>
-          I&apos;m {PERSONAL_DETAILS.firstName}, a {PERSONAL_DETAILS.age}
+          I&apos;m {PERSONAL_DETAILS.firstName}, a <Age />
           -year-old {PERSONAL_DETAILS.title.toLowerCase()} based in{' '}
           {PERSONAL_DETAILS.address.country}. {PERSONAL_DETAILS.description}
         </p>

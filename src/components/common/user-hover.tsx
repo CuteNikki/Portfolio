@@ -1,4 +1,4 @@
-import { type User } from '@/generated/prisma/browser';
+import type { PublicUser } from '@/lib/data';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -11,13 +11,13 @@ export function UserHover({
   user,
   children,
 }: {
-  user: User;
+  user: PublicUser;
   children: React.ReactNode;
 }) {
   return (
     <HoverCard>
       <HoverCardTrigger>{children}</HoverCardTrigger>
-      <HoverCardContent className='flex items-center justify-center gap-2 min-w-80 p-4'>
+      <HoverCardContent className='flex min-w-80 items-center justify-center gap-2 p-4'>
         <Avatar>
           <AvatarImage src={user.avatarUrl} alt={user.username} />
           <AvatarFallback>

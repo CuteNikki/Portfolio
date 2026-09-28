@@ -15,7 +15,7 @@ import {
   TrashIcon,
 } from 'lucide-react';
 
-import type { Role, User } from '@/generated/prisma/client';
+import type { Role, User as UserModel } from '@/generated/prisma/client';
 
 import { deleteUser, updateUserRole } from '@/actions/user';
 
@@ -45,6 +45,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+
+// The users page leaves out the Discord tokens
+type User = Omit<UserModel, 'accessToken' | 'refreshToken' | 'tokenExpiresAt'>;
 
 const userColumn: ColumnDef<User> = {
   accessorKey: 'username',

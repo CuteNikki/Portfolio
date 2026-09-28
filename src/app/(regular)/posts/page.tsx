@@ -5,7 +5,11 @@ import { NewspaperIcon } from 'lucide-react';
 import { SITE_METADATA } from '@/constants/metadata';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
-import { PostList, PostListSkeleton } from '@/components/dashboard/posts/view';
+import {
+  DraftPostList,
+  PostList,
+  PostListSkeleton,
+} from '@/components/dashboard/posts/view';
 
 export const { posts: metadata } = SITE_METADATA;
 
@@ -26,7 +30,10 @@ export default function PostsPage() {
           </p>
         </div>
       </header>
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal className='scroll-reveal flex flex-col gap-4'>
+        <Suspense fallback={null}>
+          <DraftPostList />
+        </Suspense>
         <Suspense fallback={<PostListSkeleton />}>
           <PostList />
         </Suspense>

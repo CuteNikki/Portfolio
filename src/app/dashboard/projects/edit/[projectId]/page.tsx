@@ -3,19 +3,20 @@ import { notFound } from 'next/navigation';
 
 import { PencilLineIcon } from 'lucide-react';
 
+import { requireAdmin } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { EditProjectForm } from '@/components/dashboard/projects/edit';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
-export const dynamic = 'force-dynamic';
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ projectId: string }>;
 }): Promise<Metadata> {
+  await requireAdmin();
+
   const { projectId } = await params;
 
   const project = await prisma.project
@@ -40,6 +41,8 @@ export default async function EditProjectPage({
 }: {
   params: Promise<{ projectId: string }>;
 }) {
+  await requireAdmin();
+
   const { projectId } = await params;
 
   const project = await prisma.project

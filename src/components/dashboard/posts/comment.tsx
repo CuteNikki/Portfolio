@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 
-import type { Comment as CommentType, User } from '@/generated/prisma/browser';
+import type { Comment as CommentType } from '@/generated/prisma/browser';
+
+import type { PublicUser } from '@/lib/data';
 
 import { editComment } from '@/actions/post';
 
@@ -28,8 +30,8 @@ export function Comment({
   setEditingCommentIdAction,
 }: {
   depth: number;
-  allComments: (CommentType & { author: User })[];
-  comment: CommentType & { author: User };
+  allComments: (CommentType & { author: PublicUser })[];
+  comment: CommentType & { author: PublicUser };
   isAdmin: boolean;
   userId: string;
   postSlug: string;
@@ -45,7 +47,7 @@ export function Comment({
     <div className='flex flex-col'>
       <div className='relative flex items-start gap-4'>
         {(replies?.length ?? 0) > 0 && (
-          <div className='border-border absolute top-10 bottom-0 left-2 sm:left-6 border-l-2' />
+          <div className='border-border absolute top-10 bottom-0 left-2 border-l-2 sm:left-6' />
         )}
 
         <Avatar className='z-10 h-12 w-12'>
@@ -164,7 +166,7 @@ export function Comment({
       </div>
 
       {(replies?.length ?? 0) > 0 && (
-        <div className='ml-2 sm:ml-6 flex flex-col'>
+        <div className='ml-2 flex flex-col sm:ml-6'>
           {replies?.map((reply, index) => {
             const isLast = index === replies.length - 1;
             return (

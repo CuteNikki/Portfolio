@@ -6,6 +6,7 @@ import { SITE_METADATA } from '@/constants/metadata';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import {
+  DraftProjectList,
   ProjectList,
   ProjectListSkeleton,
 } from '@/components/dashboard/projects/view';
@@ -29,7 +30,10 @@ export default function ProjectsPage() {
           </p>
         </div>
       </header>
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal className='scroll-reveal flex flex-col gap-4'>
+        <Suspense fallback={null}>
+          <DraftProjectList />
+        </Suspense>
         <Suspense fallback={<ProjectListSkeleton />}>
           <ProjectList />
         </Suspense>

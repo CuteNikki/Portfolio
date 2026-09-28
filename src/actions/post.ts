@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 import { Role } from '@/generated/prisma/enums';
 
@@ -260,6 +260,7 @@ export async function addView(formData: FormData) {
 }
 
 function revalidatePostPaths(postId: string, slug: string | null) {
+  updateTag('posts');
   revalidatePath('/dashboard/posts');
   revalidatePath('/dashboard/posts/new');
   revalidatePath(`/dashboard/posts/edit/${postId}`);

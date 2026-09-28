@@ -1,22 +1,14 @@
 import Link from 'next/link';
 
-import { Role } from '@/generated/prisma/enums';
-
-import { getCurrentSession } from '@/lib/auth';
-
 import { NAVBAR_LINKS } from '@/constants/links';
 
-export async function ProtectedNavLinks({ isMobile }: { isMobile?: boolean }) {
-  const session = await getCurrentSession();
-  const isAuthorized =
-    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER;
+import { WriterOnly } from '@/components/common/writer-only';
 
-  if (!isAuthorized) return null;
-
+export function ProtectedNavLinks({ isMobile }: { isMobile?: boolean }) {
   const protectedLinks = NAVBAR_LINKS.filter((link) => link.requiresAuth);
 
   return (
-    <>
+    <WriterOnly>
       {protectedLinks.map(({ url, label, icon: Icon }) => (
         <li key={url}>
           <Link
@@ -32,6 +24,6 @@ export async function ProtectedNavLinks({ isMobile }: { isMobile?: boolean }) {
           </Link>
         </li>
       ))}
-    </>
+    </WriterOnly>
   );
 }

@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 import { Role } from '@/generated/prisma/enums';
 
@@ -39,6 +39,8 @@ export async function updateUserRole(formData: FormData) {
       throw new Error('Internal server error: failed to update user role');
     });
 
+  // Roles and authors show up on cached posts and comments
+  updateTag('posts');
   revalidatePath('/admin/users');
 }
 
@@ -72,6 +74,8 @@ export async function deleteUser(formData: FormData) {
       throw new Error('Internal server error: failed to delete user');
     });
 
+  // Roles and authors show up on cached posts and comments
+  updateTag('posts');
   revalidatePath('/admin/users');
 }
 

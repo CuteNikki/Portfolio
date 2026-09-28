@@ -3,19 +3,20 @@ import { notFound } from 'next/navigation';
 
 import { PencilLineIcon } from 'lucide-react';
 
+import { requireAdmin } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { EditPostForm } from '@/components/dashboard/posts/edit';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
-export const dynamic = 'force-dynamic';
-
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ postId: string }>;
 }): Promise<Metadata> {
+  await requireAdmin();
+
   const { postId } = await params;
 
   const post = await prisma.post
@@ -40,6 +41,8 @@ export default async function EditPostPage({
 }: {
   params: Promise<{ postId: string }>;
 }) {
+  await requireAdmin();
+
   const { postId } = await params;
 
   const post = await prisma.post

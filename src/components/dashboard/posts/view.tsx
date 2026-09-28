@@ -1,41 +1,42 @@
 import { CalendarIcon, ClockIcon, EyeIcon } from 'lucide-react';
 import Link from 'next/link';
 
-import { Role } from '@/generated/prisma/enums';
-
 import { LINKS } from '@/constants/links';
-import { getCurrentSession } from '@/lib/auth';
-import prisma from '@/lib/prisma';
+import { getDraftPosts, getPublishedPosts } from '@/lib/data';
 
-import { ErrorToast } from '@/components/common/error-toast';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export async function PostList() {
-  const session = await getCurrentSession();
-  const isAdmin =
-    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER;
+  const posts = await getPublishedPosts();
 
-  const { posts, hasError } = await prisma.post
-    .findMany({
-      where: isAdmin ? {} : { publishedAt: { not: null } },
-      orderBy: { createdAt: 'desc' },
-      include: { writer: true },
-    })
-    .then((posts) => ({ posts, hasError: false }))
-    .catch((error) => {
-      console.error('Error fetching posts:', error);
-      return { posts: [], hasError: true };
-    });
+  if (posts.length === 0) {
+    return (
+      <div className='text-muted-foreground py-20 text-center'>
+        No posts found. Check back later!
+      </div>
+    );
+  }
 
+  return <PostGrid posts={posts} />;
+}
+
+// Only rendered for writers, so it streams in separately from the cached list
+export async function DraftPostList() {
+  const posts = await getDraftPosts();
+
+  if (posts.length === 0) return null;
+
+  return <PostGrid posts={posts} />;
+}
+
+function PostGrid({
+  posts,
+}: {
+  posts: Awaited<ReturnType<typeof getPublishedPosts>>;
+}) {
   return (
     <div className='grid w-full grid-cols-1 gap-4 md:grid-cols-2'>
-      {hasError && (
-        <ErrorToast
-          title='Failed to load latest posts.'
-          description='The database is currently unreachable. Please try again later.'
-        />
-      )}
       {posts.map((post, index) => (
         <Link
           href={LINKS.postWithSlugOrId(post.slug ?? post.id).url}
@@ -80,11 +81,6 @@ export async function PostList() {
           </div>
         </Link>
       ))}
-      {posts.length === 0 && (
-        <div className='text-muted-foreground col-span-full py-20 text-center'>
-          No posts found. Check back later!
-        </div>
-      )}
     </div>
   );
 }

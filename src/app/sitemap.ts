@@ -1,12 +1,8 @@
 import type { MetadataRoute } from 'next';
 
-import prisma from '@/lib/prisma';
+import { getPublishedPosts, getPublishedProjects } from '@/lib/data';
 
 import { SITE_URL } from '@/constants/metadata';
-
-// Query the database on request instead of at build time, so new posts and
-// projects show up without a rebuild
-export const dynamic = 'force-dynamic';
 
 const STATIC_ROUTES = [
   '',
@@ -20,15 +16,10 @@ const STATIC_ROUTES = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const published = {
-    where: { publishedAt: { not: null } },
-    select: { id: true, slug: true, updatedAt: true },
-  };
-
   const [posts, projects] = await Promise.all([
-    prisma.post.findMany(published),
-    prisma.project.findMany(published),
-  ]).catch(() => [[], []]);
+    getPublishedPosts(),
+    getPublishedProjects(),
+  ]);
 
   return [
     ...STATIC_ROUTES.map((route) => ({ url: `${SITE_URL}${route}` })),

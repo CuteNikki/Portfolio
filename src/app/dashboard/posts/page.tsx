@@ -4,6 +4,8 @@ import { NewspaperIcon, PlusIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
+import { requireAdmin } from '@/lib/auth';
+import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
 
 import { columns } from '@/components/dashboard/posts/columns';
@@ -19,13 +21,13 @@ import {
 
 export const { dashboardPosts: metadata } = SITE_METADATA;
 
-export const dynamic = 'force-dynamic';
-
 export default async function PostsPage() {
+  await requireAdmin();
+
   const { posts, hasError } = await prisma.post
     .findMany({
       orderBy: { createdAt: 'desc' },
-      include: { writer: true },
+      include: { writer: { select: PUBLIC_USER_SELECT } },
     })
     .then((posts) => ({ posts, hasError: false }))
     .catch((error) => {

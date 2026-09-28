@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import { cacheLife } from 'next/cache';
 import { ImageResponse } from 'next/og';
 
 export const OG_SIZE = { width: 1200, height: 630 };
@@ -20,18 +21,26 @@ const fonts = Promise.all([
   readFile(join(fontsDir, 'JetBrainsMono-Bold.ttf')),
 ]);
 
-export async function renderOgImage({
-  eyebrow,
-  title,
-  subtitle,
-}: {
+interface OgImageProps {
   eyebrow: string;
   title: string;
   subtitle?: string;
-}) {
+}
+
+export async function renderOgImage(props: OgImageProps) {
+  const png = await renderOgPng(props);
+  return new Response(png, { headers: { 'Content-Type': 'image/png' } });
+}
+
+// Rendering the image looks like uncached work to Next.js, which would make the
+// route dynamic. Caching the PNG by its text lets the image be prerendered.
+async function renderOgPng({ eyebrow, title, subtitle }: OgImageProps) {
+  'use cache';
+  cacheLife('max');
+
   const [regular, bold] = await fonts;
 
-  return new ImageResponse(
+  const image = new ImageResponse(
     <div
       style={{
         width: '100%',
@@ -97,4 +106,6 @@ export async function renderOgImage({
       ],
     },
   );
+
+  return new Uint8Array(await image.arrayBuffer());
 }

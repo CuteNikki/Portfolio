@@ -1,8 +1,4 @@
-import { redirect } from 'next/navigation';
-
-import { Role } from '@/generated/prisma/enums';
-
-import { getCurrentSession } from '@/lib/auth';
+import { requireAdmin } from '@/lib/auth';
 
 import { SITE_METADATA } from '@/constants/metadata';
 
@@ -15,19 +11,31 @@ import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 export const { dashboard: metadata } = SITE_METADATA;
 
+// The dashboard is private and every page checks the session, so it renders on
+// every request instead of being prerendered
+export const instant = false;
+
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getCurrentSession();
-
-  if (!session || session.user.role !== Role.ADMIN) {
-    redirect('/');
-  }
+  const { user } = await requireAdmin();
 
   return (
-    <AuthProvider session={session}>
+    <AuthProvider
+      session={{
+        user: {
+          id: user.id,
+          discordId: user.discordId,
+          displayName: user.displayName,
+          username: user.username,
+          avatarUrl: user.avatarUrl,
+          role: user.role,
+          createdAt: user.createdAt,
+        },
+      }}
+    >
       <SidebarProvider>
         <AppSidebar />
 

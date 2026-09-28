@@ -1,6 +1,7 @@
 import { Users2Icon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
+import { requireAdmin } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { DashboardHeader } from '@/components/dashboard/shared/header';
@@ -10,11 +11,13 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export const { dashboardUsers: metadata } = SITE_METADATA;
 
-export const dynamic = 'force-dynamic';
-
 export default async function UsersPage() {
+  await requireAdmin();
+
   const { users, hasError } = await prisma.user
-    .findMany()
+    .findMany({
+      omit: { accessToken: true, refreshToken: true, tokenExpiresAt: true },
+    })
     .then((users) => ({ users, hasError: false }))
     .catch((error) => {
       console.error('Error fetching users:', error);

@@ -1,6 +1,7 @@
 import { MedalIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
+import { requireAdmin } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { ErrorToast } from '@/components/common/error-toast';
@@ -11,9 +12,9 @@ import { SidebarInset } from '@/components/ui/sidebar';
 
 export const { dashboard: metadata } = SITE_METADATA;
 
-export const dynamic = 'force-dynamic';
-
 export default async function DashboardPage() {
+  await requireAdmin();
+
   const { posts, hasPostsError } = await prisma.post
     .findMany({ orderBy: { views: 'desc' }, take: 5 })
     .then((posts) => ({ posts, hasPostsError: false }))

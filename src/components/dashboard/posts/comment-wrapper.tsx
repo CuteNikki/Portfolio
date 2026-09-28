@@ -2,25 +2,22 @@
 
 import { useState } from 'react';
 
-import type {
-  Comment as CommentType,
-  Post,
-  Session,
-  User,
-} from '@/generated/prisma/browser';
+import type { Comment as CommentType } from '@/generated/prisma/browser';
+import type { Role } from '@/generated/prisma/enums';
+
+import type { PublicUser } from '@/lib/data';
 
 import { Comment } from '@/components/dashboard/posts/comment';
 
 export function CommentWrapper({
   post,
-  session,
+  viewer,
 }: {
-  post: Post & {
-    comments: (CommentType & {
-      author: User;
-    })[];
+  post: {
+    slug: string | null;
+    comments: (CommentType & { author: PublicUser })[];
   };
-  session: (Session & { user: User }) | null;
+  viewer: { id: string; role: Role } | null;
 }) {
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
 
@@ -41,8 +38,8 @@ export function CommentWrapper({
                   allComments={post.comments}
                   comment={comment}
                   postSlug={post.slug || ''}
-                  userId={session?.user.id || ''}
-                  isAdmin={session?.user.role === 'ADMIN'}
+                  userId={viewer?.id || ''}
+                  isAdmin={viewer?.role === 'ADMIN'}
                   editingCommentId={editingCommentId}
                   setEditingCommentIdAction={setEditingCommentId}
                   depth={0}

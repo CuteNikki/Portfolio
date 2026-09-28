@@ -4,6 +4,8 @@ import { PlusIcon, PresentationIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
+import { requireAdmin } from '@/lib/auth';
+import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
 
 import { columns } from '@/components/dashboard/projects/columns';
@@ -19,13 +21,13 @@ import {
 
 export const { dashboardProjects: metadata } = SITE_METADATA;
 
-export const dynamic = 'force-dynamic';
-
 export default async function ProjectsPage() {
+  await requireAdmin();
+
   const { projects, hasError } = await prisma.project
     .findMany({
       orderBy: { createdAt: 'desc' },
-      include: { writer: true },
+      include: { writer: { select: PUBLIC_USER_SELECT } },
     })
     .then((projects) => ({ projects, hasError: false }))
     .catch((error) => {

@@ -1,5 +1,8 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { cache } from 'react';
+
+import { Role } from '@/generated/prisma/enums';
 
 import prisma from '@/lib/prisma';
 
@@ -28,6 +31,26 @@ export const getCurrentSession = cache(async () => {
     return null;
   }
 });
+
+// Next.js renders layouts and pages in parallel, so a check in the dashboard
+// layout alone doesn't stop a page from rendering its data. Call this at the
+// top of every dashboard page, before loading anything.
+export async function requireAdmin() {
+  const session = await getCurrentSession();
+
+  if (!session || session.user.role !== Role.ADMIN) {
+    redirect('/');
+  }
+
+  return session;
+}
+
+export async function isWriter() {
+  const session = await getCurrentSession();
+  return (
+    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER
+  );
+}
 
 export async function refreshDiscordToken(refreshToken: string) {
   const response = await fetch('https://discord.com/api/oauth2/token', {

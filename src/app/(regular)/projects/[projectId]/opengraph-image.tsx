@@ -1,9 +1,18 @@
+import { getPublishedProject, getPublishedProjects } from '@/lib/data';
 import { OG_SIZE, renderOgImage } from '@/lib/og';
-import prisma from '@/lib/prisma';
 
 export const alt = 'niso.moe - Project';
 export const size = OG_SIZE;
 export const contentType = 'image/png';
+
+export async function generateStaticParams() {
+  const projects = await getPublishedProjects();
+
+  // Cache Components needs at least one param to prerender the route
+  if (projects.length === 0) return [{ projectId: 'none' }];
+
+  return projects.map((project) => ({ projectId: project.slug ?? project.id }));
+}
 
 export default async function Image({
   params,
@@ -13,14 +22,7 @@ export default async function Image({
   const { projectId } = await params;
 
   // Only published projects, so the image can't leak the title of a draft
-  const project = await prisma.project
-    .findFirst({
-      where: {
-        OR: [{ id: projectId }, { slug: projectId }],
-        publishedAt: { not: null },
-      },
-    })
-    .catch(() => null);
+  const project = await getPublishedProject(projectId);
 
   return renderOgImage({
     eyebrow: 'Project',

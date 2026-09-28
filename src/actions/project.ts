@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 import { Role } from '@/generated/prisma/enums';
 
@@ -175,6 +175,7 @@ function parseProjectDate(value: FormDataEntryValue | null) {
 }
 
 function revalidateProjectPaths(projectId: string, slug: string | null) {
+  updateTag('projects');
   revalidatePath('/dashboard/projects');
   revalidatePath('/dashboard/projects/new');
   revalidatePath(`/dashboard/projects/edit/${projectId}`);
