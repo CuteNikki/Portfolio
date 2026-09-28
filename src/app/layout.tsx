@@ -1,3 +1,4 @@
+import type { Viewport } from 'next';
 import { JetBrains_Mono } from 'next/font/google';
 
 import './globals.css';
@@ -11,6 +12,13 @@ import { ToastProvider } from '@/providers/toast';
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 
 export const { root: metadata } = SITE_METADATA;
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#09090b' },
+  ],
+};
 
 export default function RootLayout({
   children,

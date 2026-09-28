@@ -12,8 +12,10 @@ import {
 import { Role } from '@/generated/prisma/enums';
 
 import { LINKS } from '@/constants/links';
+import { NO_INDEX } from '@/constants/metadata';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { toExcerpt } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
@@ -41,8 +43,11 @@ export async function generateMetadata({
   if (!project) return { title: 'Project Not Found' };
 
   return {
-    title: `niso.moe | ${project.title}`,
-    description: project.description.substring(0, 160).concat('...'),
+    title: project.title,
+    description: toExcerpt(project.description),
+    keywords: [...project.technologies, ...project.tags],
+    alternates: { canonical: `/projects/${project.slug ?? project.id}` },
+    robots: project.publishedAt ? undefined : NO_INDEX,
   };
 }
 

@@ -13,8 +13,11 @@ import {
 import { Role } from '@/generated/prisma/enums';
 
 import { LINKS } from '@/constants/links';
+import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
+import { PERSONAL_DETAILS } from '@/constants/personal';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { toExcerpt } from '@/lib/utils';
 
 import { addView } from '@/actions/post';
 import { ScrollReveal } from '@/components/common/scroll-reveal';
@@ -46,8 +49,17 @@ export async function generateMetadata({
   if (!post) return { title: 'Post Not Found' };
 
   return {
-    title: `niso.moe | ${post.title}`,
-    description: post.content.substring(0, 160).concat('...'),
+    title: post.title,
+    description: toExcerpt(post.content),
+    alternates: { canonical: `/posts/${post.slug ?? post.id}` },
+    robots: post.publishedAt ? undefined : NO_INDEX,
+    openGraph: {
+      ...SITE_OPEN_GRAPH,
+      type: 'article',
+      publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
+      authors: [PERSONAL_DETAILS.fullName],
+    },
   };
 }
 

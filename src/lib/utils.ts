@@ -48,3 +48,28 @@ export function getUserAvatarUrl(
     return `https://cdn.discordapp.com/embed/avatars/${index}.png`;
   }
 }
+
+/**
+ * Turns markdown into a plain-text excerpt for meta descriptions, cut at a word boundary.
+ *
+ * @param markdown - The markdown source.
+ * @param maxLength - The maximum length of the excerpt, including the ellipsis.
+ * @returns The plain-text excerpt.
+ */
+export function toExcerpt(markdown: string, maxLength = 160): string {
+  const text = markdown
+    .replace(/```[\s\S]*?```/g, ' ') // code blocks
+    .replace(/<[^>]+>/g, ' ') // html tags
+    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ') // images
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links
+    .replace(/^\s{0,3}(#{1,6}|>|[-*+]|\d+\.)\s+/gm, '') // headings, quotes, lists
+    .replace(/[*_~`|]/g, '') // emphasis, inline code, tables
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (text.length <= maxLength) return text;
+
+  const cut = text.slice(0, maxLength - 1);
+  const lastSpace = cut.lastIndexOf(' ');
+  return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?-]+$/, '')}…`;
+}

@@ -30,7 +30,7 @@ export async function generateMetadata({
   if (!post) return { title: 'Post Not Found' };
 
   return {
-    title: `niso.moe | ${post.title}`,
+    title: `Edit: ${post.title}`,
     description: `Edit the post titled "${post.title}".`,
   };
 }

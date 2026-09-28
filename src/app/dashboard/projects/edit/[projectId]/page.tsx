@@ -30,7 +30,7 @@ export async function generateMetadata({
   if (!project) return { title: 'Project Not Found' };
 
   return {
-    title: `niso.moe | ${project.title}`,
+    title: `Edit: ${project.title}`,
     description: `Edit the project titled "${project.title}".`,
   };
 }

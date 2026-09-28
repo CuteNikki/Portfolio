@@ -1,6 +1,10 @@
 import { Intro } from '@/app/test/intro';
 import Text from '@/app/test/text';
 
+import { NO_INDEX } from '@/constants/metadata';
+
+export const metadata = { robots: NO_INDEX };
+
 const IMAGES = [
   'https://i.pinimg.com/736x/cf/ad/4a/cfad4a21cd2a84f22979e5b757e09c07.jpg',
   'https://i.pinimg.com/1200x/f1/82/97/f182976f1382eebd7be2c0526142587c.jpg',
