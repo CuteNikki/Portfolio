@@ -25,7 +25,9 @@ import {
   SiTailwindcss,
   SiTypescript,
 } from '@icons-pack/react-simple-icons';
-import { GithubIcon, LinkedinIcon, LucideIcon, MailIcon } from 'lucide-react';
+import { LucideIcon, MailIcon } from 'lucide-react';
+
+import { GithubIcon, LinkedinIcon } from '@/components/common/brand-icons';
 
 export interface SocialLink {
   icon: IconType | LucideIcon;
