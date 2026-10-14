@@ -46,24 +46,23 @@ export async function sendMail(data: MailSubmitData, antiSpam: AntiSpamData) {
     const url = process.env.SMTP_URL;
     if (!url) throw new Error('Set SMTP_URL to send emails.');
 
-    const email = createElement(ContactTemplate, {
-      name: validatedFields.data.name,
-      email: validatedFields.data.email,
-      subject: validatedFields.data.subject,
-      message: validatedFields.data.message,
-    });
+    const { name, email, subject, message } = validatedFields.data;
 
     await nodemailer.createTransport(url).sendMail({
       // The visitor's name, but our address: the server only sends as its own accounts
       from: {
-        name: `${validatedFields.data.name} via Contact Form`,
+        name: `${name} via Contact Form`,
         address: process.env.EMAIL_FROM ?? '',
       },
       to: `Contact Form <${process.env.EMAIL_TO}>`,
-      replyTo: validatedFields.data.email,
-      subject: `[Portfolio] ${validatedFields.data.subject}`,
-      html: await render(email),
-      text: await render(email, { plainText: true }),
+      replyTo: email,
+      subject: `[Portfolio] ${subject}`,
+      html: await render(
+        createElement(ContactTemplate, { name, email, subject, message }),
+      ),
+      // Written out rather than generated from the HTML, which brings along the
+      // preview text's invisible padding as rows of blank lines
+      text: `${name} (${email}) wrote through the contact form:\n\n${message}`,
     });
 
     return { success: true };
