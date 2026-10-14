@@ -60,8 +60,7 @@ export async function sendMail(data: MailSubmitData, antiSpam: AntiSpamData) {
       html: await render(
         createElement(ContactTemplate, { name, email, subject, message }),
       ),
-      // Written out rather than generated from the HTML, which brings along the
-      // preview text's invisible padding as rows of blank lines
+      // For clients that show or quote plain text: just who wrote and what
       text: `${name} (${email}) wrote through the contact form:\n\n${message}`,
     });
 

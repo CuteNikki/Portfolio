@@ -7,12 +7,12 @@ import {
   Hr,
   Html,
   pixelBasedPreset,
-  Preview,
   Row,
   Section,
   Tailwind,
   Text,
 } from '@react-email/components';
+import { Fragment } from 'react';
 
 interface ContactTemplateProps {
   name: string;
@@ -29,9 +29,6 @@ export const ContactTemplate: React.FC<Readonly<ContactTemplateProps>> = ({
 }) => (
   <Html>
     <Head />
-    <Preview>
-      New message from {name} regarding {subject}
-    </Preview>
     <Tailwind config={{ presets: [pixelBasedPreset] }}>
       <Body className='py-10 font-sans'>
         <Container className='mx-auto rounded-lg border border-solid border-[#e5e7eb] bg-white'>
@@ -65,7 +62,13 @@ export const ContactTemplate: React.FC<Readonly<ContactTemplateProps>> = ({
                   Message
                 </Text>
                 <Text className='leading-relaxed whitespace-pre-wrap'>
-                  {message}
+                  {/* Real line breaks, which survive when a reply turns this into text */}
+                  {message.split('\n').map((line, i) => (
+                    <Fragment key={i}>
+                      {i > 0 && <br />}
+                      {line}
+                    </Fragment>
+                  ))}
                 </Text>
               </Section>
             </Column>
