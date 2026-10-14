@@ -1,6 +1,8 @@
 'use server';
 
-import { Resend } from 'resend';
+import { render } from '@react-email/render';
+import nodemailer from 'nodemailer';
+import { createElement } from 'react';
 
 import { ContactTemplate } from '@/components/resend/contact-template';
 
@@ -11,8 +13,6 @@ import {
   mailSubmitSchema,
   MIN_SUBMIT_TIME_MS,
 } from '@/types/mail';
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 
 function getSpamReason(data: MailSubmitData, antiSpam: unknown) {
   const validatedAntiSpam = antiSpamSchema.safeParse(antiSpam);
@@ -42,20 +42,30 @@ export async function sendMail(data: MailSubmitData, antiSpam: AntiSpamData) {
   }
 
   try {
-    const { error } = await resend.emails.send({
-      from: `Contact Form <${process.env.RESEND_EMAIL_FROM}>`,
-      to: [`Contact Form <${process.env.RESEND_EMAIL_TO}>`],
-      replyTo: validatedFields.data.email,
-      subject: `[Portfolio] ${validatedFields.data.subject}`,
-      react: await ContactTemplate({
-        name: validatedFields.data.name,
-        email: validatedFields.data.email,
-        subject: validatedFields.data.subject,
-        message: validatedFields.data.message,
-      }),
+    // Our mail server, e.g. smtps://no-reply%40niso.moe:password@mail.niso.moe
+    const url = process.env.SMTP_URL;
+    if (!url) throw new Error('Set SMTP_URL to send emails.');
+
+    const email = createElement(ContactTemplate, {
+      name: validatedFields.data.name,
+      email: validatedFields.data.email,
+      subject: validatedFields.data.subject,
+      message: validatedFields.data.message,
     });
 
-    if (error) return { error: 'Failed to send email' };
+    await nodemailer.createTransport(url).sendMail({
+      // The visitor's name, but our address: the server only sends as its own accounts
+      from: {
+        name: `${validatedFields.data.name} via Contact Form`,
+        address: process.env.EMAIL_FROM ?? '',
+      },
+      to: `Contact Form <${process.env.EMAIL_TO}>`,
+      replyTo: validatedFields.data.email,
+      subject: `[Portfolio] ${validatedFields.data.subject}`,
+      html: await render(email),
+      text: await render(email, { plainText: true }),
+    });
+
     return { success: true };
   } catch (err) {
     console.error('Error sending contact form email:', err);

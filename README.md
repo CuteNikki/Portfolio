@@ -9,7 +9,7 @@ A personal portfolio website built with **Next.js 16**, **React 19**, and **Type
 - **Portfolio & About** — Home page with career, education, skills, and social links
 - **Projects** — Showcase of projects with tags, technologies, and links
 - **Blog Posts** — Markdown-powered blog with syntax highlighting, GFM support, and nested comments
-- **Contact Form** — Email delivery via Resend
+- **Contact Form** — Email delivery via our own mail server (Stalwart at mail.niso.moe)
 - **Admin Dashboard** — Protected area for managing posts, projects, and users (admin-only)
 - **Authentication** — Discord OAuth2 login with session management
 - **Theming** — Light, dark, system, and Catppuccin themes
@@ -25,7 +25,7 @@ A personal portfolio website built with **Next.js 16**, **React 19**, and **Type
 | Database   | PostgreSQL via Prisma ORM                                   |
 | Styling    | Tailwind CSS 4, shadcn/ui, Radix UI                         |
 | Auth       | Discord OAuth2 (custom implementation)                      |
-| Email      | Resend + React Email                                        |
+| Email      | Nodemailer + React Email                                    |
 | Animations | Framer Motion                                               |
 | Markdown   | react-markdown, remark-gfm, rehype-slug, syntax-highlighter |
 | Tables     | TanStack Table                                              |
@@ -50,10 +50,10 @@ DISCORD_CLIENT_SECRET=
 NEXT_PUBLIC_DISCORD_CLIENT_ID=
 NEXT_PUBLIC_DISCORD_REDIRECT_URI=
 
-# Resend (Email)
-RESEND_API_KEY=
-RESEND_EMAIL_FROM=
-RESEND_EMAIL_TO=
+# Email: SMTP_URL logs in to the mail server, e.g. smtps://no-reply%40niso.moe:password@mail.niso.moe
+SMTP_URL=
+EMAIL_FROM=
+EMAIL_TO=
 ```
 
 ### Installation
