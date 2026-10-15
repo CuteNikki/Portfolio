@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -12,14 +12,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function ThemeSwitcher({ className }: { className?: string }) {
-  const [mounted, setMounted] = useState(false);
-  const { setTheme } = useTheme();
+const subscribeToNothing = () => () => {};
 
-  // useEffect only runs on the client, so this is safely set to true after hydration
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+export function ThemeSwitcher({ className }: { className?: string }) {
+  // False on the server and during hydration, true once the client has taken over
+  const mounted = useSyncExternalStore(
+    subscribeToNothing,
+    () => true,
+    () => false,
+  );
+  const { setTheme } = useTheme();
 
   // During SSR and the initial client hydration, render a non-interactive fallback
   // that looks identical to the actual trigger button to prevent layout shift.
