@@ -1,19 +1,18 @@
 'use client';
 
 import {
-  ColumnDef,
-  ColumnFiltersState,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
+  RowData,
   SortingState,
-  useReactTable,
+  useTable,
 } from '@tanstack/react-table';
 import { useState } from 'react';
 
 import { ErrorToast } from '@/components/common/error-toast';
+import {
+  dashboardTableFeatures,
+  DashboardColumnDef,
+} from '@/components/dashboard/shared/table-features';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -32,38 +31,31 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
+interface DataTableProps<TData extends RowData> {
+  columns: DashboardColumnDef<TData>[];
   data: TData[];
 }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends RowData>({
   columns,
   data,
   hasError = false,
   filterPlaceholder = 'Filter...',
-}: DataTableProps<TData, TValue> & {
+}: DataTableProps<TData> & {
   filterPlaceholder?: string;
   hasError?: boolean;
 }) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const table = useReactTable({
+  const table = useTable({
+    features: dashboardTableFeatures,
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
     onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
-      columnFilters,
       globalFilter,
     },
   });
@@ -102,11 +94,8 @@ export function DataTable<TData, TValue>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                >
-                  {row.getVisibleCells().map((cell) => (
+                <TableRow key={row.id}>
+                  {row.getAllCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
@@ -148,15 +137,13 @@ export function DataTable<TData, TValue>({
           <div className='flex items-center gap-2'>
             <p className='text-sm font-medium'>Rows per page</p>
             <Select
-              value={`${table.getState().pagination.pageSize}`}
+              value={`${table.state.pagination.pageSize}`}
               onValueChange={(value) => {
                 table.setPageSize(Number(value));
               }}
             >
               <SelectTrigger size='sm' className='w-16'>
-                <SelectValue
-                  placeholder={table.getState().pagination.pageSize}
-                />
+                <SelectValue placeholder={table.state.pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side='top'>
                 {[5, 10, 15, 20, 25, 30, 40, 50].map((pageSize) => (
@@ -170,7 +157,7 @@ export function DataTable<TData, TValue>({
 
           {/* Page Counter */}
           <div className='flex items-center text-sm font-medium'>
-            Page {table.getState().pagination.pageIndex + 1} of{' '}
+            Page {table.state.pagination.pageIndex + 1} of{' '}
             {table.getPageCount() || 1}
           </div>
 

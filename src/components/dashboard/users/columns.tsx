@@ -1,6 +1,5 @@
 'use client';
 
-import { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
@@ -19,6 +18,7 @@ import type { Role, User as UserModel } from '@/generated/prisma/client';
 
 import { deleteUser, updateUserRole } from '@/actions/user';
 
+import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,7 +49,7 @@ import {
 // The users page leaves out the Discord tokens
 type User = Omit<UserModel, 'accessToken' | 'refreshToken' | 'tokenExpiresAt'>;
 
-const userColumn: ColumnDef<User> = {
+const userColumn: DashboardColumnDef<User> = {
   accessorKey: 'username',
   header: ({ column }) => (
     <Button
@@ -81,7 +81,7 @@ const userColumn: ColumnDef<User> = {
   ),
 };
 
-const nameColumn: ColumnDef<User> = {
+const nameColumn: DashboardColumnDef<User> = {
   accessorKey: 'displayName',
   header: ({ column }) => (
     <Button
@@ -154,7 +154,7 @@ const RoleSelectCell = ({ user }: { user: User }) => {
   );
 };
 
-const roleColumn: ColumnDef<User> = {
+const roleColumn: DashboardColumnDef<User> = {
   accessorKey: 'role',
   header: ({ column }) => (
     <Button
@@ -263,13 +263,13 @@ const UserActions = ({ user }: { user: User }) => {
   );
 };
 
-const actionsColumn: ColumnDef<User> = {
+const actionsColumn: DashboardColumnDef<User> = {
   id: 'actions',
   header: () => '',
   cell: ({ row }) => <UserActions user={row.original} />,
 };
 
-const idColumn: ColumnDef<User> = {
+const idColumn: DashboardColumnDef<User> = {
   accessorKey: 'discordId',
   header: ({ column }) => (
     <Button
@@ -288,7 +288,7 @@ const idColumn: ColumnDef<User> = {
   ),
 };
 
-export const columns: ColumnDef<User>[] = [
+export const columns: DashboardColumnDef<User>[] = [
   userColumn,
   nameColumn,
   roleColumn,

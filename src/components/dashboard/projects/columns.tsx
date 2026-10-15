@@ -1,6 +1,5 @@
 'use client';
 
-import { ColumnDef } from '@tanstack/react-table';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -24,6 +23,7 @@ import type { PublicUser } from '@/lib/data';
 import { deleteProject } from '@/actions/project';
 import { LINKS } from '@/constants/links';
 
+import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -155,7 +155,7 @@ const ProjectActions = ({ project }: { project: ProjectWithWriter }) => {
   );
 };
 
-export const columns: ColumnDef<ProjectWithWriter>[] = [
+export const columns: DashboardColumnDef<ProjectWithWriter>[] = [
   {
     accessorKey: 'title',
     header: ({ column }) => (
