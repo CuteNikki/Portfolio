@@ -48,7 +48,7 @@ function SectionHeading({
       <p className={EYEBROW}>{eyebrow}</p>
       <h2
         id={id}
-        className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
+        className='text-[32px] leading-tight font-bold tracking-tighter'
       >
         {children}
       </h2>
@@ -308,7 +308,7 @@ export default function Home() {
           <div className='max-w-xl'>
             <h2
               id='contact-heading'
-              className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
+              className='text-[32px] leading-tight font-bold tracking-tighter'
             >
               Have a project in mind?
             </h2>

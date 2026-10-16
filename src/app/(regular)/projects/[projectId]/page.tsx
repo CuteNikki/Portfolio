@@ -264,7 +264,7 @@ async function ProjectContent({
           <MarkdownViewer content={project.description} />
         </div>
         {headings.length > 1 && (
-          <nav aria-label='On this page' className='order-first lg:order-none'>
+          <nav aria-label='On this page' className='order-first lg:order-0'>
             <div className='flex flex-col gap-2.5 text-[13px] lg:sticky lg:top-28'>
               <span className='text-muted-foreground'>On this page</span>
               <ul className='flex flex-col gap-2'>

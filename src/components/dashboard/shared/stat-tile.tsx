@@ -25,7 +25,7 @@ export function StatTile({
       )}
     >
       <dt className='text-muted-foreground text-xs'>{label}</dt>
-      <dd className='text-[28px] leading-tight font-bold tracking-[-0.05em] tabular-nums'>
+      <dd className='text-[28px] leading-tight font-bold tracking-tighter tabular-nums'>
         {value}
       </dd>
       <dd className='text-muted-foreground text-xs'>{note}</dd>
