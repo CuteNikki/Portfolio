@@ -49,7 +49,12 @@ export async function GET(req: NextRequest) {
     cookieStore.delete({ name: RETURN_TO_COOKIE, path: '/api/auth' });
   }
 
-  const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(scopes.join(' '))}&state=${state}`;
+  // "Refresh" on the account page signs in again to pick up a new Discord name or picture. Someone who already allowed
+  // the site skips Discord's Authorize screen then.
+  const prompt =
+    req.nextUrl.searchParams.get('refresh') === '1' ? '&prompt=none' : '';
+
+  const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(scopes.join(' '))}&state=${state}${prompt}`;
 
   return NextResponse.redirect(discordAuthUrl);
 }

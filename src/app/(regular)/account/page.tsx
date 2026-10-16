@@ -5,6 +5,7 @@ import {
   LogInIcon,
   MessageSquareIcon,
   MonitorSmartphoneIcon,
+  RefreshCwIcon,
   Trash2Icon,
   UserIcon,
 } from 'lucide-react';
@@ -130,10 +131,21 @@ async function AccountContent() {
               </p>
             </div>
           </div>
-          <p className='text-muted-foreground mt-5 text-[13px] leading-relaxed'>
-            Your name and picture come from Discord and update each time you
-            sign in.
-          </p>
+          <div className='mt-5 flex flex-wrap items-center justify-between gap-4'>
+            <p className='text-muted-foreground max-w-md text-[13px] leading-relaxed'>
+              Your name and picture come from Discord. Changed them there?
+              Refresh to bring them over.
+            </p>
+            <Button asChild variant='outline'>
+              {/* Signs in with Discord again and comes back here. A plain link: a prefetch would start a login. */}
+              <a
+                href={`/api/auth/login?refresh=1&next=${encodeURIComponent('/account')}`}
+              >
+                <RefreshCwIcon />
+                Refresh
+              </a>
+            </Button>
+          </div>
         </Section>
 
         <Section id='comments' title='Your comments' count={comments.length}>

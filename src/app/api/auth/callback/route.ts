@@ -32,6 +32,13 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // Cancelling on Discord's Authorize screen just goes back to where the sign-in started
+  if (error === 'access_denied') {
+    const returnTo = safeReturnPath(cookieStore.get(RETURN_TO_COOKIE)?.value);
+    cookieStore.delete({ name: RETURN_TO_COOKIE, path: '/api/auth' });
+    return NextResponse.redirect(new URL(returnTo ?? LINKS.home.url, req.url));
+  }
+
   if (error) {
     console.error('OAuth Callback Error:', error);
 
@@ -141,9 +148,23 @@ export async function GET(req: NextRequest) {
     const sessionToken = crypto.randomUUID(); // Native secure random string
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
 
+    // Signing in again on the same device, e.g. with Refresh on the account page, replaces that device's session
+    // rather than listing the device twice
+    const previousToken = cookieStore.get(SESSION_COOKIE)?.value;
+
     await prisma.$transaction([
       // Sessions nobody comes back to are otherwise never removed
       prisma.session.deleteMany({ where: { expiresAt: { lt: new Date() } } }),
+      ...(previousToken
+        ? [
+            prisma.session.deleteMany({
+              where: {
+                sessionToken: hashSessionToken(previousToken),
+                userId: user.id,
+              },
+            }),
+          ]
+        : []),
       prisma.session.create({
         data: {
           sessionToken: hashSessionToken(sessionToken),
