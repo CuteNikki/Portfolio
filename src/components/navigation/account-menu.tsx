@@ -17,8 +17,10 @@ import type { Role } from '@/generated/prisma/enums';
 
 import { LINKS } from '@/constants/links';
 
+import { cn } from '@/lib/utils';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -58,14 +60,20 @@ export function AccountMenu({ user }: { user: AccountMenuUser | null }) {
           <p className='text-muted-foreground mt-1 mb-3.5 text-[13px] leading-relaxed'>
             Sign in with Discord to comment on posts and manage your account.
           </p>
-          <DropdownMenuItem asChild className='p-0 focus:bg-transparent'>
-            <Button asChild className='w-full'>
-              {/* A plain link: a prefetch of the login route would start a new login and replace one in progress */}
-              <a href={`/api/auth/login?next=${encodeURIComponent(pathname)}`}>
-                <LogInIcon />
-                Sign in
-              </a>
-            </Button>
+          {/* A menu item styled as the primary button. The item's own focus highlight would replace the violet, so
+              focus (which is also how the menu shows hover) gets the button's hover look instead. */}
+          <DropdownMenuItem
+            asChild
+            className={cn(
+              buttonVariants(),
+              'focus:bg-primary focus:text-primary-foreground not-data-[variant=destructive]:focus:**:text-primary-foreground w-full cursor-pointer justify-center focus:-translate-y-px focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)]',
+            )}
+          >
+            {/* A plain link: a prefetch of the login route would start a new login and replace one in progress */}
+            <a href={`/api/auth/login?next=${encodeURIComponent(pathname)}`}>
+              <LogInIcon />
+              Sign in
+            </a>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
