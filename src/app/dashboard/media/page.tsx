@@ -191,7 +191,7 @@ async function UnusedPictures() {
         {unused.previews.slice(0, 4).map((url) => (
           <li
             key={url}
-            className='bg-muted ring-card relative h-7 w-14 overflow-hidden rounded-md ring-2'
+            className='bg-muted ring-card relative h-7 w-14 overflow-hidden rounded-[4px] ring-2'
           >
             <StoredImage
               url={url}
