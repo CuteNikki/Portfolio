@@ -101,3 +101,13 @@ model Project {
 
   writer User @relation(fields: [writerId], references: [id])
 }
+
+// Fixed-window counters for rate limits, e.g. contact form sends per visitor or one counted view per visitor and post.
+// Keys hold hashed IPs, never raw ones, and expired rows are cleared on the next write.
+model RateLimit {
+  key       String   @id
+  count     Int
+  expiresAt DateTime
+
+  @@index([expiresAt])
+}

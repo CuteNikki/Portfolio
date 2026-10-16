@@ -62,12 +62,15 @@ export function ContactContent() {
   });
 
   async function onSubmit(data: MailSubmitData) {
+    // A network error or a deploy that changed the action rejects instead of returning an error
     const result = await sendMail(data, {
       website: honeypotRef.current?.value ?? '',
       elapsedMs: msSince(mountedAtRef.current),
-    });
+    }).catch(() => ({
+      error: 'Could not reach the server. Please try again.',
+    }));
 
-    if (result.error) {
+    if ('error' in result && result.error) {
       toast.error('Something went wrong!', {
         description: result.error,
       });
