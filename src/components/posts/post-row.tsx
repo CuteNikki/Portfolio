@@ -19,10 +19,23 @@ export interface PostRowData {
 }
 
 // A post in a list: its cover on the left, then the date, title and excerpt. The title's underline sweeps in on hover.
-export function PostRow({ post }: { post: PostRowData }) {
+export function PostRow({
+  post,
+  revealIndex,
+}: {
+  post: PostRowData;
+  // Rows near the top rise in one after another; leave out where a section already does
+  revealIndex?: number;
+}) {
   return (
     <Link
       href={post.href}
+      data-reveal={revealIndex === undefined ? undefined : ''}
+      style={
+        revealIndex === undefined
+          ? undefined
+          : ({ '--reveal-index': revealIndex } as React.CSSProperties)
+      }
       className='group hover:bg-muted/50 -mx-3 flex flex-col gap-5 rounded-xl p-3 transition-colors sm:flex-row sm:items-center sm:gap-8'
     >
       <div

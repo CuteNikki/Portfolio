@@ -548,7 +548,7 @@ function SectionCard({
   children?: ReactNode;
 }) {
   return (
-    <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+    <ScrollReveal className='w-full max-w-5xl'>
       <Card
         id={id}
         className='w-full scroll-mt-20'
@@ -583,7 +583,7 @@ export function PrivacyContent({
       className='flex w-full flex-col items-center gap-4 tracking-tight'
     >
       {/* Header */}
-      <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+      <ScrollReveal className='w-full max-w-5xl'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 0 } as React.CSSProperties}
@@ -614,7 +614,7 @@ export function PrivacyContent({
       </ScrollReveal>
 
       {/* Notice */}
-      <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+      <ScrollReveal className='w-full max-w-5xl'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 0 } as React.CSSProperties}
@@ -867,7 +867,7 @@ export function PrivacyContent({
       </SectionCard>
 
       {/* Footer Buttons */}
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <div
           data-reveal-item
           style={{ '--reveal-index': 0 } as React.CSSProperties}

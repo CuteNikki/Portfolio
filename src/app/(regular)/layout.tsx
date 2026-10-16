@@ -1,3 +1,4 @@
+import { RevealOnScroll } from '@/components/common/reveal-on-scroll';
 import { Footer } from '@/components/navigation/footer';
 import { Navbar } from '@/components/navigation/navbar';
 
@@ -13,6 +14,7 @@ export default function RegularPageLayout({
         </div>
       </main>
       <Footer />
+      <RevealOnScroll />
     </div>
   );
 }

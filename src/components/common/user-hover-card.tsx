@@ -22,7 +22,7 @@ export default function UserHoverCard({
       {/* Never wider than a small phone's screen */}
       <HoverCardContent className='flex w-80 max-w-[calc(100vw-2rem)] items-center justify-center gap-2 p-4'>
         <Avatar>
-          <AvatarImage src={user.avatarUrl} alt={user.username} />
+          <AvatarImage src={user.avatarUrl} alt='' />
           <AvatarFallback>
             {user.username.charAt(0).toUpperCase()}
           </AvatarFallback>

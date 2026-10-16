@@ -126,7 +126,7 @@ function SectionCard({
   children: ReactNode;
 }) {
   return (
-    <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+    <ScrollReveal className='w-full max-w-5xl'>
       <Card
         className='w-full'
         data-reveal-item
@@ -161,7 +161,7 @@ export function ImprintContent({
       className='flex flex-col items-center gap-4 tracking-tight'
     >
       {/* Header */}
-      <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
+      <ScrollReveal className='w-full max-w-5xl'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 0 } as React.CSSProperties}
@@ -231,7 +231,7 @@ export function ImprintContent({
       </SectionCard>
 
       {/* Footer Nav */}
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <div
           data-reveal-item
           style={{ '--reveal-index': 0 } as React.CSSProperties}

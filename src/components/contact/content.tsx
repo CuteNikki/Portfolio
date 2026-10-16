@@ -1,76 +1,84 @@
 import Link from 'next/link';
 
-import { MailIcon } from 'lucide-react';
+import { ArrowUpRightIcon } from 'lucide-react';
 
 import { PERSONAL_DETAILS } from '@/constants/personal';
 
-import { ScrollReveal } from '@/components/common/scroll-reveal';
+import { PageHeader } from '@/components/common/page-header';
 import { ContactForm } from '@/components/contact/contact-form';
 import { DiscordMenu } from '@/components/navigation/discord-menu';
 
-// The contact page: how to reach me, rendered on the server with the social links and their icons, and the form,
-// which is the only part that runs in the browser
+// The contact page: the form, and the other ways to reach me beside it. Rendered on the server with the social links
+// and their icons; only the form runs in the browser.
 export function ContactContent() {
+  const socials = PERSONAL_DETAILS.socials.filter(
+    ({ platform }) => platform !== 'Mail' && platform !== 'Discord',
+  );
+
   return (
-    <ScrollReveal className='scroll-reveal w-full max-w-6xl'>
-      <section className='w-full'>
-        <div className='grid lg:grid-cols-[0.8fr_1.2fr]'>
-          <div
-            data-reveal-item
-            style={{ '--reveal-index': 0 } as React.CSSProperties}
-            className='flex flex-col gap-4 border-b p-4 sm:p-8 lg:border-r lg:border-b-0 lg:p-10'
-          >
-            <p className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-widest uppercase'>
-              <MailIcon className='size-4' /> Contact
-            </p>
-            <h1 className='text-4xl tracking-tight sm:text-5xl'>
-              Let&apos;s talk.
-            </h1>
-            <p className='text-muted-foreground max-w-sm leading-relaxed text-balance'>
-              Have a question, an idea, or a project in mind? Send a note and
-              I&apos;ll get back to you soon.
-            </p>
-            <div
-              data-reveal-item
-              style={{ '--reveal-index': 1 } as React.CSSProperties}
-              className='mt-auto flex flex-col gap-4 border-t-0 pt-6 text-sm lg:border-t'
-            >
-              <div className='flex flex-col gap-2'>
-                <span className='text-muted-foreground'>
-                  Prefer other methods?
-                </span>
-                <a
-                  className='hover:text-primary-text font-medium transition-colors'
-                  href={PERSONAL_DETAILS.emailLink}
-                >
-                  {PERSONAL_DETAILS.email}
-                </a>
-              </div>
-              <div className='flex flex-wrap items-center gap-x-4 gap-y-2'>
-                {PERSONAL_DETAILS.socials
-                  .filter(
-                    ({ platform }) =>
-                      platform !== 'Mail' && platform !== 'Discord',
-                  )
-                  .map(({ platform, icon: Icon, url }) => (
-                    <Link
-                      key={platform}
-                      href={url}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                      className='text-muted-foreground hover:text-primary-text flex items-center gap-2 transition-colors'
-                    >
-                      <Icon className='size-4 shrink-0' />
-                      {platform}
-                    </Link>
-                  ))}
-                <DiscordMenu />
-              </div>
-            </div>
-          </div>
+    <div className='flex w-full flex-col gap-10'>
+      <PageHeader
+        eyebrow='Contact'
+        title='Let’s talk.'
+        description='Have a question, an idea or a project in mind? Send a note and I’ll get back to you soon.'
+      />
+
+      <div className='grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start'>
+        <section
+          aria-labelledby='contact-form-heading'
+          data-reveal=''
+          className='bg-card rounded-xl border p-5 sm:p-8'
+        >
+          <h2 id='contact-form-heading' className='mb-6 text-[15px] font-bold'>
+            Send a message
+          </h2>
           <ContactForm />
-        </div>
-      </section>
-    </ScrollReveal>
+        </section>
+
+        <aside
+          aria-labelledby='contact-other-heading'
+          data-reveal=''
+          style={{ '--reveal-index': 1 } as React.CSSProperties}
+          className='bg-card flex flex-col gap-5 rounded-xl border p-5 sm:p-6'
+        >
+          <div>
+            <h2 id='contact-other-heading' className='text-[15px] font-bold'>
+              Other ways
+            </h2>
+            <p className='text-muted-foreground mt-1 text-xs'>
+              Rather write directly? Reach me here.
+            </p>
+          </div>
+          <a
+            href={PERSONAL_DETAILS.emailLink}
+            className='hover:text-primary-text text-sm font-semibold break-all transition-colors'
+          >
+            {PERSONAL_DETAILS.email}
+          </a>
+          <ul className='flex flex-col gap-3 border-t pt-5 text-sm'>
+            {socials.map(({ platform, icon: Icon, url }) => (
+              <li key={platform}>
+                <Link
+                  href={url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='group text-muted-foreground hover:text-primary-text flex items-center gap-2 transition-colors'
+                >
+                  <Icon className='size-4 shrink-0' />
+                  {platform}
+                  <ArrowUpRightIcon
+                    aria-hidden
+                    className='ml-auto size-3.5 opacity-60 transition-opacity group-hover:opacity-100'
+                  />
+                </Link>
+              </li>
+            ))}
+            <li>
+              <DiscordMenu />
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </div>
   );
 }

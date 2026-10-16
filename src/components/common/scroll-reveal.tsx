@@ -1,11 +1,15 @@
-// A section that rises in as it scrolls into view. The animation is plain CSS (see .scroll-reveal in globals.css),
-// so this ships no JavaScript and never hides content while a page loads.
+// A section that rises in as the page loads, or as it scrolls into view further down (see RevealOnScroll). Items
+// inside marked data-reveal-item rise in one after another instead of the section as a whole.
 export function ScrollReveal({
   children,
-  className = '',
+  className,
 }: {
   children: React.ReactNode;
   className?: string;
 }) {
-  return <div className={className}>{children}</div>;
+  return (
+    <div data-reveal='' className={className}>
+      {children}
+    </div>
+  );
 }

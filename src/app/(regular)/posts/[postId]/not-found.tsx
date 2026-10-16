@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 
 export default function PostNotFound() {
   return (
-    <ScrollReveal className='scroll-reveal mx-auto w-full max-w-3xl py-8'>
+    <ScrollReveal className='mx-auto w-full max-w-3xl py-8'>
       <section>
         <p
           data-reveal-item

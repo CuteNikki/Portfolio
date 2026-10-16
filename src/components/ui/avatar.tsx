@@ -1,10 +1,7 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
-
 import { cn, proxiedAvatarUrl } from '@/lib/utils';
 
-// A picture over initials, without a library: the initials show until the picture has loaded, and stay if it fails
+// A picture over initials, without a library or any script: an image with empty alt text draws nothing while it loads
+// or if it fails, so the initials underneath show until the picture covers them
 
 function Avatar({
   className,
@@ -32,18 +29,7 @@ function AvatarImage({
   alt = '',
   ...props
 }: React.ComponentProps<'img'>) {
-  const ref = useRef<HTMLImageElement>(null);
-  const [state, setState] = useState<'loading' | 'loaded' | 'failed'>(
-    'loading',
-  );
-
-  // The picture may have loaded or failed before React took over, when its own events had nobody listening
-  useEffect(() => {
-    const image = ref.current;
-    if (image?.complete) setState(image.naturalWidth > 0 ? 'loaded' : 'failed');
-  }, []);
-
-  if (!src || state === 'failed') return null;
+  if (!src) return null;
 
   // Discord avatars load through this site, so visitors' browsers don't contact Discord's CDN
   const imageSrc = typeof src === 'string' ? proxiedAvatarUrl(src) : src;
@@ -51,13 +37,9 @@ function AvatarImage({
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      ref={ref}
       data-slot='avatar-image'
-      data-state={state}
       src={imageSrc}
       alt={alt}
-      onLoad={() => setState('loaded')}
-      onError={() => setState('failed')}
       className={cn(
         'absolute inset-0 z-1 aspect-square size-full rounded-full object-cover',
         className,
@@ -72,7 +54,7 @@ function AvatarFallback({ className, ...props }: React.ComponentProps<'span'>) {
     <span
       data-slot='avatar-fallback'
       className={cn(
-        'bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-sm group-has-[img[data-state=loaded]]/avatar:invisible group-data-[size=sm]/avatar:text-xs',
+        'bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs',
         className,
       )}
       {...props}

@@ -155,8 +155,12 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
 
       {shown.length > 0 ? (
         <div className='flex flex-col gap-2'>
-          {shown.map((post) => (
-            <PostRow key={post.id} post={post} />
+          {shown.map((post, index) => (
+            <PostRow
+              key={post.id}
+              post={post}
+              revealIndex={Math.min(index, 3)}
+            />
           ))}
         </div>
       ) : (

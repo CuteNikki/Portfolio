@@ -66,8 +66,11 @@ export function ContactForm() {
   const [attempted, setAttempted] = useState(false);
   const [pending, startTransition] = useTransition();
 
+  // Runs again each time the page shows: Next keeps it alive in the background. Coming back starts without the last
+  // visit's errors; what was typed stays.
   useEffect(() => {
     mountedAtRef.current = Date.now();
+    return () => setAttempted(false);
   }, []);
 
   const errors = attempted ? errorsOf(values) : {};
@@ -120,15 +123,11 @@ export function ContactForm() {
 
   return (
     <form id='contact' noValidate onSubmit={submit}>
-      <div
-        data-reveal-item
-        style={{ '--reveal-index': 2 } as React.CSSProperties}
-        className='p-4 sm:p-8 md:p-10'
-      >
+      <div>
         {/* Honeypot: invisible to humans, bots fill it in */}
         <div
           aria-hidden
-          className='absolute -left-[9999px] h-px w-px overflow-hidden'
+          className='absolute left-[-9999px] h-px w-px overflow-hidden'
         >
           <label htmlFor='contact-website'>Website</label>
           <input
@@ -144,20 +143,21 @@ export function ContactForm() {
         <FieldGroup className='gap-4'>
           <FieldGroup className='lg:flex-row'>
             <Field data-invalid={!!errors.name}>
-              <FieldLabel htmlFor='contact-name'>Your Name</FieldLabel>
+              <FieldLabel htmlFor='contact-name'>Name</FieldLabel>
               <Input
                 {...field('name')}
-                placeholder='Nikki'
-                autoComplete='off'
+                placeholder='Your name'
+                autoComplete='name'
               />
               {error('name')}
             </Field>
             <Field data-invalid={!!errors.email}>
-              <FieldLabel htmlFor='contact-email'>Your Email</FieldLabel>
+              <FieldLabel htmlFor='contact-email'>Email</FieldLabel>
               <Input
                 {...field('email')}
                 type='email'
-                placeholder='contact@niso.moe'
+                placeholder='you@example.com'
+                autoComplete='email'
               />
               {error('email')}
             </Field>
@@ -165,10 +165,7 @@ export function ContactForm() {
 
           <Field data-invalid={!!errors.subject}>
             <FieldLabel htmlFor='contact-subject'>Subject</FieldLabel>
-            <Input
-              {...field('subject')}
-              placeholder='*insert some subject here*'
-            />
+            <Input {...field('subject')} placeholder='What it’s about' />
             {error('subject')}
           </Field>
           <Field data-invalid={!!errors.message}>
@@ -194,11 +191,7 @@ export function ContactForm() {
             </InputGroup>
             {error('message')}
           </Field>
-          <div
-            data-reveal-item
-            style={{ '--reveal-index': 3 } as React.CSSProperties}
-            className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'
-          >
+          <div className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'>
             <FieldDescription>
               By submitting this form, you agree to the{' '}
               <Link href={LINKS.privacy.url}>{LINKS.privacy.label}</Link>.

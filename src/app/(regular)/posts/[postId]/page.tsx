@@ -179,7 +179,11 @@ async function PostContent({
       </header>
 
       {post.coverUrl && (
-        <div className='bg-muted relative mx-auto aspect-video w-full max-w-4xl overflow-hidden rounded-xl border sm:aspect-2/1'>
+        <div
+          data-reveal=''
+          style={{ '--reveal-index': 3 } as React.CSSProperties}
+          className='bg-muted relative mx-auto aspect-video w-full max-w-4xl overflow-hidden rounded-xl border sm:aspect-2/1'
+        >
           <StoredImage
             url={post.coverUrl}
             alt={`${post.title}'s cover picture`}
@@ -191,7 +195,11 @@ async function PostContent({
         </div>
       )}
 
-      <div className='mx-auto grid w-full max-w-3xl gap-10 xl:max-w-none xl:grid-cols-[1fr_minmax(0,48rem)_1fr]'>
+      <div
+        data-reveal=''
+        style={{ '--reveal-index': 4 } as React.CSSProperties}
+        className='mx-auto grid w-full max-w-3xl gap-10 xl:max-w-none xl:grid-cols-[1fr_minmax(0,48rem)_1fr]'
+      >
         <div className='min-w-0 xl:col-start-2'>
           <MarkdownViewer content={post.content} />
         </div>
@@ -219,7 +227,7 @@ async function PostContent({
         )}
       </div>
 
-      <ScrollReveal className='scroll-reveal mx-auto w-full max-w-3xl'>
+      <ScrollReveal className='mx-auto w-full max-w-3xl'>
         <section
           aria-labelledby='comments-heading'
           className='bg-card mt-6 flex flex-col gap-6 rounded-xl border p-5 sm:p-8'

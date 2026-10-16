@@ -223,7 +223,11 @@ async function ProjectContent({
       </header>
 
       {project.coverUrl && (
-        <div className='bg-muted relative aspect-video overflow-hidden rounded-xl border sm:aspect-2/1'>
+        <div
+          data-reveal=''
+          style={{ '--reveal-index': 3 } as React.CSSProperties}
+          className='bg-muted relative aspect-video overflow-hidden rounded-xl border sm:aspect-2/1'
+        >
           <StoredImage
             url={project.coverUrl}
             alt={`${project.title}'s cover picture`}
@@ -236,7 +240,11 @@ async function ProjectContent({
       )}
 
       {project.images.length > 0 && (
-        <section aria-labelledby='pictures-heading'>
+        <section
+          aria-labelledby='pictures-heading'
+          data-reveal=''
+          style={{ '--reveal-index': 4 } as React.CSSProperties}
+        >
           <h2 id='pictures-heading' className='sr-only'>
             Pictures
           </h2>
@@ -247,7 +255,11 @@ async function ProjectContent({
         </section>
       )}
 
-      <div className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-16'>
+      <div
+        data-reveal=''
+        style={{ '--reveal-index': 5 } as React.CSSProperties}
+        className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-16'
+      >
         <div className='max-w-3xl min-w-0'>
           <MarkdownViewer content={project.description} />
         </div>

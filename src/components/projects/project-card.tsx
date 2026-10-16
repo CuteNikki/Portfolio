@@ -27,15 +27,24 @@ export function ProjectCard({
   project,
   featured,
   priority,
+  revealIndex,
 }: {
   project: ProjectCardData;
   // The first card on the home page spans two columns and gets a taller picture
   featured?: boolean;
   priority?: boolean;
+  // Where the card sits in its row, so cards rise in one after another; leave out where a section already does
+  revealIndex?: number;
 }) {
   return (
     <Link
       href={project.href}
+      data-reveal={revealIndex === undefined ? undefined : ''}
+      style={
+        revealIndex === undefined
+          ? undefined
+          : ({ '--reveal-index': revealIndex } as React.CSSProperties)
+      }
       className={cn(
         'card-lift group bg-card flex flex-col overflow-hidden rounded-xl border',
         featured && 'lg:col-span-2',

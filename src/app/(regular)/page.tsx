@@ -95,7 +95,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollReveal className='scroll-reveal bg-card -mt-6 grid gap-8 rounded-xl border p-7 sm:-mt-12 sm:p-8 lg:grid-cols-2 lg:gap-0'>
+      <ScrollReveal className='bg-card -mt-6 grid gap-8 rounded-xl border p-7 sm:-mt-12 sm:p-8 lg:grid-cols-2 lg:gap-0'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 1 } as React.CSSProperties}
@@ -140,7 +140,7 @@ export default function Home() {
         </div>
       </ScrollReveal>
 
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <section aria-labelledby='what-i-do'>
           <h2 id='what-i-do' className='sr-only'>
             What I do
@@ -169,7 +169,7 @@ export default function Home() {
         </section>
       </ScrollReveal>
 
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <section aria-labelledby='projects-heading'>
           <SelectedProjects />
           <div className='mt-6 flex justify-center'>
@@ -183,7 +183,7 @@ export default function Home() {
         </section>
       </ScrollReveal>
 
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <section aria-labelledby='posts-heading'>
           <div className='mb-6 flex flex-wrap items-end justify-between gap-4'>
             <SectionHeading id='posts-heading' eyebrow='Writing'>
@@ -200,7 +200,7 @@ export default function Home() {
         </section>
       </ScrollReveal>
 
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <section aria-labelledby='experience-heading'>
           <SectionHeading
             id='experience-heading'
@@ -250,7 +250,7 @@ export default function Home() {
         </section>
       </ScrollReveal>
 
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <section
           aria-labelledby='toolkit-heading'
           className='flex flex-col gap-7'
@@ -296,7 +296,7 @@ export default function Home() {
         </section>
       </ScrollReveal>
 
-      <ScrollReveal className='scroll-reveal'>
+      <ScrollReveal>
         <section
           aria-labelledby='contact-heading'
           className='bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-xl border p-8 sm:p-12 lg:flex-row lg:items-end lg:justify-between'

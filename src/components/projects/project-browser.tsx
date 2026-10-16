@@ -301,6 +301,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
               key={project.id}
               project={project}
               priority={index < 3}
+              revealIndex={index % 3}
             />
           ))}
         </div>
