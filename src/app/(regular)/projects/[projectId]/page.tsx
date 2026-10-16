@@ -14,10 +14,10 @@ import {
   getPublishedProjects,
 } from '@/lib/data';
 import { headingsOf } from '@/lib/toc';
-import { formatShortDate, toExcerpt } from '@/lib/utils';
+import { formatShortDate, toDescription } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
-import { NO_INDEX } from '@/constants/metadata';
+import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 
 import { AuthorName } from '@/components/common/author-name';
 import { TableOfContents } from '@/components/common/table-of-contents';
@@ -54,15 +54,18 @@ export async function generateMetadata({
   // Drafts and missing projects look the same here, so a draft's title never leaks
   if (!project) return { title: 'Project', robots: NO_INDEX };
 
+  const path = `/projects/${project.slug ?? project.id}`;
+
   return {
     title: project.title,
-    description: toExcerpt(project.description),
+    description: toDescription(project.description),
     keywords: [...project.technologies, ...project.tags],
     authors: authorsOf(project).map(({ name, url }) => ({
       name,
       url: url ?? undefined,
     })),
-    alternates: { canonical: `/projects/${project.slug ?? project.id}` },
+    alternates: { canonical: path },
+    openGraph: { ...SITE_OPEN_GRAPH, title: project.title, url: path },
   };
 }
 

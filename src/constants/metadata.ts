@@ -10,6 +10,7 @@ export const SITE_NAME = 'niso.moe';
 export const SITE_OPEN_GRAPH = {
   siteName: SITE_NAME,
   locale: 'en_US',
+  type: 'website',
 } satisfies Metadata['openGraph'];
 
 export const NO_INDEX = {
@@ -17,75 +18,121 @@ export const NO_INDEX = {
   follow: false,
 } satisfies Metadata['robots'];
 
+/**
+ * The metadata of a public page. Link previews show the site name on their own, so the Open Graph title leaves it
+ * out of the page title.
+ *
+ * @param page.title - The page's name, shown before the site name in the browser tab.
+ * @param page.path - The page's canonical address.
+ * @param page.locale - The Open Graph locale, for pages that aren't in English.
+ * @param page.languages - The same page in other languages, by language code.
+ */
+export function pageMetadata({
+  title,
+  description,
+  path,
+  locale,
+  languages,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  locale?: string;
+  languages?: Record<string, string>;
+}): Metadata {
+  return {
+    title,
+    description,
+    alternates: { canonical: path, languages },
+    openGraph: {
+      ...SITE_OPEN_GRAPH,
+      ...(locale && { locale }),
+      title,
+      url: path,
+    },
+  };
+}
+
+const IMPRINT_LANGUAGES = { en: '/imprint', de: '/impressum' };
+const PRIVACY_LANGUAGES = { en: '/privacy', de: '/datenschutz' };
+
 export const SITE_METADATA: Record<string, Metadata> = {
   root: {
     metadataBase: new URL(SITE_URL),
     title: {
-      default: 'niso.moe - Portfolio',
-      template: 'niso.moe - %s',
+      default: SITE_NAME,
+      template: `%s - ${SITE_NAME}`,
     },
     description:
-      'Welcome to my personal portfolio website! Explore my projects, skills, and experience as you navigate through my portfolio.',
+      'Full-stack developer building fast, accessible web apps from the ground up.',
     applicationName: SITE_NAME,
     authors: [{ name: PERSONAL_DETAILS.fullName, url: SITE_URL }],
     creator: PERSONAL_DETAILS.fullName,
-    // Title, description and image are filled in per page by Next.js
-    openGraph: { ...SITE_OPEN_GRAPH, type: 'website' },
+    // Pages fill in their own title, description and image
+    openGraph: SITE_OPEN_GRAPH,
     twitter: { card: 'summary_large_image' },
   },
   home: {
-    title: 'Home',
-    description:
-      'Welcome to my personal portfolio website! Explore my projects, skills, and experience as you navigate through my portfolio.',
-    alternates: { canonical: '/' },
+    ...pageMetadata({
+      title: `${PERSONAL_DETAILS.firstName} ${PERSONAL_DETAILS.middleName} ${PERSONAL_DETAILS.lastName[0]}., full-stack developer`,
+      description:
+        'Full-stack developer building fast, accessible web apps from the ground up. See what I have built, read how I build it, or get in touch.',
+      path: '/',
+    }),
+    // The tab shows the site name first on the home page
+    title: { absolute: `${SITE_NAME} - Full-stack developer` },
   },
-  projects: {
+  projects: pageMetadata({
     title: 'Projects',
     description:
-      'Discover a curated selection of my projects, showcasing my skills and experience in development. Each project highlights the technologies used.',
-    alternates: { canonical: '/projects' },
-  },
-  contact: {
+      'Things I have built, from web apps to games, each with the technologies behind it and a look at how it works.',
+    path: '/projects',
+  }),
+  contact: pageMetadata({
     title: 'Contact',
     description:
-      'Get in touch with me! Whether you have a question, want to collaborate, or just want to say hi, I would love to hear from you.',
-    alternates: { canonical: '/contact' },
-  },
+      'Have a question, an idea or a project in mind? Send me a message and I will get back to you.',
+    path: '/contact',
+  }),
   notFound: {
     title: '404',
     description:
       'The page you are looking for does not exist. Please check the URL or return to the homepage.',
   },
-  privacy: {
+  privacy: pageMetadata({
     title: 'Privacy Policy',
     description:
-      'Read about how I handle your data and protect your privacy on my portfolio website.',
-    alternates: { canonical: '/privacy' },
-  },
-  imprint: {
+      'What this site stores about you, why, for how long, and how to download or delete it.',
+    path: '/privacy',
+    languages: PRIVACY_LANGUAGES,
+  }),
+  imprint: pageMetadata({
     title: 'Imprint',
-    description:
-      'Learn more about the legal information and ownership of this portfolio website.',
-    alternates: { canonical: '/imprint' },
-  },
-  impressum: {
+    description: 'Legal information about this website and who runs it.',
+    path: '/imprint',
+    languages: IMPRINT_LANGUAGES,
+  }),
+  impressum: pageMetadata({
     title: 'Impressum',
-    description:
-      'Erfahre mehr über die rechtlichen Informationen und den Eigentümern dieser Portfolio-Website.',
-    alternates: { canonical: '/impressum' },
-  },
-  datenschutz: {
+    description: 'Rechtliche Angaben zu dieser Website und wer sie betreibt.',
+    path: '/impressum',
+    locale: 'de_DE',
+    languages: IMPRINT_LANGUAGES,
+  }),
+  datenschutz: pageMetadata({
     title: 'Datenschutz',
     description:
-      'Erfahre, wie deine Daten auf dieser Portfolio-Website verwaltet und deine Privatsphäre geschützt werden.',
-    alternates: { canonical: '/datenschutz' },
-  },
-  posts: {
+      'Welche Daten diese Website über Sie speichert, wozu, wie lange, und wie Sie sie herunterladen oder löschen können.',
+    path: '/datenschutz',
+    locale: 'de_DE',
+    languages: PRIVACY_LANGUAGES,
+  }),
+  posts: pageMetadata({
     title: 'Posts',
     description:
-      'Read my latest posts on various topics related to development, technology and more. Stay updated with my insights and experiences.',
-    alternates: { canonical: '/posts' },
-  },
+      'Notes on how I build things: deep dives into full-stack development, interface details and lessons from my projects.',
+    path: '/posts',
+  }),
   account: {
     title: 'Account',
     description:

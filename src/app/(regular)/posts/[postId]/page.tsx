@@ -15,7 +15,7 @@ import {
   authorsOf,
 } from '@/lib/data';
 import { headingsOf } from '@/lib/toc';
-import { formatShortDate, readingMinutes, toExcerpt } from '@/lib/utils';
+import { formatShortDate, readingMinutes, toDescription } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { TableOfContents } from '@/components/common/table-of-contents';
@@ -55,13 +55,17 @@ export async function generateMetadata({
   // Drafts and missing posts look the same here, so a draft's title never leaks
   if (!post) return { title: 'Post', robots: NO_INDEX };
 
+  const path = `/posts/${post.slug ?? post.id}`;
+
   return {
     title: post.title,
-    description: toExcerpt(post.content),
-    alternates: { canonical: `/posts/${post.slug ?? post.id}` },
+    description: toDescription(post.content),
+    alternates: { canonical: path },
     openGraph: {
       ...SITE_OPEN_GRAPH,
       type: 'article',
+      title: post.title,
+      url: path,
       publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
       authors: authorsOf(post).map(({ name }) => name),

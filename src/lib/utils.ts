@@ -76,6 +76,24 @@ export function toExcerpt(markdown: string, maxLength = 160): string {
 }
 
 /**
+ * Turns markdown into a description for link previews and search results. It ends on the last whole sentence that
+ * fits, and only cuts mid-sentence when that sentence would be too short to say much.
+ *
+ * @param markdown - The markdown source.
+ * @param maxLength - The maximum length of the description.
+ * @returns The plain-text description.
+ */
+export function toDescription(markdown: string, maxLength = 160): string {
+  const text = toExcerpt(markdown, Infinity);
+  if (text.length <= maxLength) return text;
+
+  const sentences = text.slice(0, maxLength + 1).match(/^.*[.!?](?=\s)/);
+  if (sentences && sentences[0].length >= 60) return sentences[0];
+
+  return toExcerpt(markdown, maxLength);
+}
+
+/**
  * Turns text into a URL slug of lowercase ASCII letters, digits and dashes, e.g. "Über Linux!" becomes "ueber-linux".
  *
  * @param text - The text to turn into a slug, e.g. a title.
