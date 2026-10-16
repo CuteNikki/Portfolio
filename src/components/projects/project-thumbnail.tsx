@@ -26,13 +26,22 @@ export function ProjectThumbnail({
   priority?: boolean;
   className?: string;
 }) {
+  // A colour picked by hand fills the panel as it is; the chart colours only tint it, so they suit every theme
+  const exact = tone.startsWith('#');
+
   return (
     <div
       className={cn(
-        'relative overflow-hidden bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]',
+        'relative overflow-hidden',
+        !exact && 'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]',
         className,
       )}
-      style={{ '--tone': tone } as React.CSSProperties}
+      style={
+        {
+          '--tone': tone,
+          ...(exact && { background: tone }),
+        } as React.CSSProperties
+      }
     >
       <div
         aria-hidden

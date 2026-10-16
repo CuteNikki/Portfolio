@@ -368,8 +368,18 @@ function ProjectSwatch({
   return (
     <span
       aria-hidden
-      className='relative h-7.5 w-12 shrink-0 overflow-hidden rounded-md bg-[color-mix(in_oklab,var(--tone)_18%,var(--card))]'
-      style={{ '--tone': tone } as React.CSSProperties}
+      className={cn(
+        'relative h-7.5 w-12 shrink-0 overflow-hidden rounded-md',
+        // A colour picked by hand is shown as it is, as on the cards
+        !tone.startsWith('#') &&
+          'bg-[color-mix(in_oklab,var(--tone)_18%,var(--card))]',
+      )}
+      style={
+        {
+          '--tone': tone,
+          ...(tone.startsWith('#') && { background: tone }),
+        } as React.CSSProperties
+      }
     >
       <span className='bg-card absolute inset-x-[14%] top-[22%] -bottom-[10%] rounded-[3px]' />
     </span>
