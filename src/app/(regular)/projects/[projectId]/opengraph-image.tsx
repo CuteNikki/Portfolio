@@ -28,5 +28,6 @@ export default async function Image({
     eyebrow: 'Project',
     title: project?.title ?? 'Projects',
     subtitle: project?.technologies.slice(0, 5).join(' · ') || undefined,
+    coverUrl: project?.coverUrl,
   });
 }

@@ -45,6 +45,7 @@ export function ProjectCard({
         title={project.title}
         coverUrl={project.coverUrl}
         priority={priority}
+        large={featured}
         sizes={
           featured
             ? '(min-width: 1024px) 760px, 100vw'

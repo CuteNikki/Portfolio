@@ -19,6 +19,7 @@ import {
   parseDateQuery,
   shortDateQuery,
 } from '@/lib/date-query';
+import { imageUrl } from '@/lib/images';
 import { cn, toneFor } from '@/lib/utils';
 
 import {
@@ -119,7 +120,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
       meta: [p.date, p.technologies.slice(0, 3).join(' · ')]
         .filter(Boolean)
         .join(' · '),
-      icon: <ProjectSwatch title={p.title} />,
+      icon: <ProjectSwatch title={p.title} coverUrl={p.coverUrl} />,
     }));
 
   let sections: SuggestionSection[];
@@ -344,7 +345,25 @@ function ActiveFilter({
 }
 
 // The project's colour as a small square, so suggestions are easy to tell apart
-function ProjectSwatch({ title }: { title: string }) {
+function ProjectSwatch({
+  title,
+  coverUrl,
+}: {
+  title: string;
+  coverUrl: string | null;
+}) {
+  if (coverUrl) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={imageUrl(coverUrl, 'small')}
+        alt=''
+        loading='lazy'
+        className='h-7.5 w-12 shrink-0 rounded-md object-cover'
+      />
+    );
+  }
+
   return (
     <span
       aria-hidden

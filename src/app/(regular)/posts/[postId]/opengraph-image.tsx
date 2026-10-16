@@ -26,8 +26,9 @@ export default async function Image({
   const post = await getPublishedPost(postId);
 
   return renderOgImage({
-    eyebrow: 'Blog',
+    eyebrow: 'Post',
     title: post?.title ?? 'Posts',
     subtitle: post ? formatDate(post.createdAt, true) : undefined,
+    coverUrl: post?.coverUrl,
   });
 }

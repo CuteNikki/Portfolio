@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { imageUrl } from '@/lib/images';
 import { cn, toneFor } from '@/lib/utils';
 
 import { Badge } from '@/components/ui/badge';
@@ -34,7 +35,7 @@ export function PostRow({ post }: { post: PostRowData }) {
       >
         {post.coverUrl ? (
           <Image
-            src={post.coverUrl}
+            src={imageUrl(post.coverUrl, 'small')}
             alt=''
             fill
             sizes='(min-width: 640px) 240px, 100vw'
