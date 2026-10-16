@@ -59,13 +59,23 @@ export function EditPostForm({
             )
           )
             return;
-          await deletePost(formData);
-          toast.success('Post deleted successfully');
+          const deleted = await deletePost(formData);
+          if (deleted.error) {
+            toast.error('The post wasn’t deleted', {
+              description: deleted.error,
+            });
+            return;
+          }
+          toast.success('Post deleted');
           router.push(LINKS.dashboardPosts.url);
           return;
         }
 
-        await updatePost(formData);
+        const { error } = await updatePost(formData);
+        if (error) {
+          toast.error('The post wasn’t saved', { description: error });
+          return;
+        }
         toast.success(
           intent === 'publish' ? 'Post published!' : 'Draft saved!',
         );

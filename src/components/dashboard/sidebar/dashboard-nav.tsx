@@ -82,7 +82,7 @@ function NewMenu({ compact }: { compact?: boolean }) {
       <DropdownMenuTrigger asChild>
         <Button
           className={compact ? undefined : 'flex-1'}
-          size={compact ? 'icon-lg' : 'lg'}
+          size={compact ? 'icon' : 'default'}
           aria-label={compact ? 'New' : undefined}
         >
           <PlusIcon />
@@ -178,12 +178,12 @@ export function DashboardSidebar({
         collapsed ? 'w-18' : 'w-66',
       )}
     >
-      <div className='sticky top-17 flex max-h-[calc(100svh-4.25rem)] flex-col gap-6 overflow-y-auto px-3 py-6'>
+      <div className='sticky top-16 flex max-h-[calc(100svh-4rem)] flex-col gap-6 overflow-y-auto px-3 py-6'>
         <div className={cn('flex gap-2', collapsed && 'flex-col items-center')}>
           <NewMenu compact={collapsed} />
           <Button
             variant='outline'
-            size='icon-lg'
+            size='icon'
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             aria-expanded={!collapsed}
             onClick={() => setCollapsed(!collapsed)}

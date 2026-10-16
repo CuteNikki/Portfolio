@@ -54,7 +54,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
     return (
       <Button
         variant='outline'
-        size='icon-lg'
+        size='icon'
         className={className}
         disabled
         aria-label='Theme'
@@ -71,7 +71,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
       <DropdownMenuTrigger asChild>
         <Button
           variant='outline'
-          size='icon-lg'
+          size='icon'
           className={cn(className)}
           aria-label={`Theme: ${current.label}`}
         >

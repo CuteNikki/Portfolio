@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { PlusIcon, PresentationIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
@@ -9,15 +9,9 @@ import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
 
 import { columns } from '@/components/dashboard/projects/columns';
-import { DashboardHeader } from '@/components/dashboard/shared/header';
+import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
 import { DataTable } from '@/components/dashboard/shared/table';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-} from '@/components/ui/card';
 
 export const { dashboardProjects: metadata } = SITE_METADATA;
 
@@ -30,7 +24,7 @@ export default async function ProjectsPage() {
 
   const { projects, hasError } = await prisma.project
     .findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { updatedAt: 'desc' },
       include: {
         authors: {
           orderBy: { position: 'asc' },
@@ -45,30 +39,25 @@ export default async function ProjectsPage() {
     });
 
   return (
-    <Card className='w-full'>
-      <CardHeader>
-        <DashboardHeader
-          icon={PresentationIcon}
-          title={'Projects'}
-          description={'Manage projects and drafts.'}
-        />
-        <CardAction>
-          <Button asChild>
-            <Link href={LINKS.dashboardProjectNew.url}>
-              <PlusIcon />
-              {LINKS.dashboardProjectNew.label}
-            </Link>
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <DataTable
-          columns={columns}
-          data={projects}
-          filterPlaceholder='Filter Projects...'
-          hasError={hasError}
-        />
-      </CardContent>
-    </Card>
+    <div className='flex flex-col gap-6'>
+      <DashboardPageHeader
+        title='Projects'
+        description='Every project and draft. Search, sort and edit them here.'
+      >
+        <Button asChild>
+          <Link href={LINKS.dashboardProjectNew.url}>
+            <PlusIcon />
+            New project
+          </Link>
+        </Button>
+      </DashboardPageHeader>
+      <DataTable
+        columns={columns}
+        data={projects}
+        filterPlaceholder='Search projects'
+        hasError={hasError}
+        defaultSorting={[{ id: 'updatedAt', desc: true }]}
+      />
+    </div>
   );
 }

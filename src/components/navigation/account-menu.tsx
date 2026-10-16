@@ -81,7 +81,7 @@ export function accountLinkGroups(user: AccountMenuUser) {
 // (which is also how menus show hover) gets the button's hover look instead.
 export const SIGN_IN_ITEM_CLASS = cn(
   buttonVariants(),
-  'focus:bg-primary focus:text-primary-foreground not-data-[variant=destructive]:focus:**:text-primary-foreground w-full cursor-pointer justify-center focus:-translate-y-px focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)]',
+  'focus:bg-primary focus:text-primary-foreground not-data-[variant=destructive]:focus:**:text-primary-foreground w-full cursor-pointer justify-center focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)]',
 );
 
 // Signing in returns to the page it started from
@@ -160,7 +160,7 @@ export function AccountMenu({
       <DropdownMenuTrigger asChild>
         <Button
           variant='outline'
-          size='icon-lg'
+          size='icon'
           aria-label={label}
           className={className}
         >

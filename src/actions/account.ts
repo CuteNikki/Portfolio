@@ -5,12 +5,9 @@ import { cookies } from 'next/headers';
 
 import { Role } from '@/generated/prisma/enums';
 
+import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession, SESSION_COOKIE } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-
-// Messages go back as values rather than thrown errors: a production build replaces a thrown error's message with a
-// generic one, and these are meant to be read.
-export type ActionResult = { error?: string };
 
 const NOT_SIGNED_IN = 'You need to be signed in.';
 

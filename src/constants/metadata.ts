@@ -108,6 +108,14 @@ export const SITE_METADATA: Record<string, Metadata> = {
     description:
       'Create a new post! Use the editor to write content and publish it. This area is protected and only accessible to authorized users.',
   },
+  dashboardComments: {
+    title: 'Comments',
+    description: 'Every comment on every post, to read and moderate.',
+  },
+  dashboardMedia: {
+    title: 'Media',
+    description: 'Every picture the site uses and the space they take.',
+  },
   dashboardPosts: {
     title: 'Posts',
     description:

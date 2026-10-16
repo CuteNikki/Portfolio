@@ -35,13 +35,13 @@ export function AccountButtonPlaceholder() {
     <>
       <span
         aria-hidden
-        className='border-border bg-card text-muted-foreground hidden size-11 place-items-center rounded-lg border sm:grid'
+        className='border-border bg-card text-muted-foreground hidden size-10 place-items-center rounded-lg border sm:grid'
       >
         <CircleUserRoundIcon className='size-4.5' />
       </span>
       <span
         aria-hidden
-        className='border-border bg-card text-muted-foreground grid size-11 place-items-center rounded-lg border sm:hidden'
+        className='border-border bg-card text-muted-foreground grid size-10 place-items-center rounded-lg border sm:hidden'
       >
         <MenuIcon className='size-5' />
       </span>

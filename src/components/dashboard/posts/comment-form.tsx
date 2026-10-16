@@ -37,12 +37,16 @@ export function CommentForm({
         }
 
         createComment(formData)
-          .then(() => {
+          .then(({ error }) => {
+            if (error) {
+              toast.error('The comment wasn’t posted', { description: error });
+              return;
+            }
             setContent('');
             if (setShowReplyFormAction) {
               setShowReplyFormAction(false);
             }
-            toast.success('Comment posted successfully!');
+            toast.success('Comment posted');
           })
           .catch((error) => {
             toast.error(`Failed to post comment!`, {

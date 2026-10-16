@@ -42,11 +42,14 @@ export function DataTable<TData extends RowData & { id: string }>({
   data,
   hasError = false,
   filterPlaceholder = 'Filter...',
+  defaultSorting = [],
 }: DataTableProps<TData> & {
   filterPlaceholder?: string;
   hasError?: boolean;
+  // How the rows are sorted at first, shown on that column's header, e.g. [{ id: 'updatedAt', desc: true }]
+  defaultSorting?: SortingState;
 }) {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>(defaultSorting);
   const [globalFilter, setGlobalFilter] = useState('');
 
   const table = useTable({

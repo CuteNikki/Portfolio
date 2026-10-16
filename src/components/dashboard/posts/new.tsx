@@ -66,15 +66,19 @@ export function NewPostForm({
 
     startTransition(async () => {
       try {
-        const post = await createPost(formData);
+        const created = await createPost(formData);
+        if (created.error || !created.id) {
+          toast.error('The post wasn’t saved', {
+            description: created.error ?? 'Please try again.',
+          });
+          return;
+        }
 
         toast.success(
-          submitAction === 'publish'
-            ? 'Post published successfully!'
-            : 'Draft saved successfully!',
+          submitAction === 'publish' ? 'Post published' : 'Draft saved',
         );
         setIsSaved(true);
-        router.push(LINKS.dashboardPostEditWithId(post.id).url);
+        router.push(LINKS.dashboardPostEditWithId(created.id).url);
       } catch (error) {
         toast.error('Something went wrong', {
           description: error instanceof Error ? error.message : 'Unknown error',

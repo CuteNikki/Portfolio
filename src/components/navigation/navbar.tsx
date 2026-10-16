@@ -27,7 +27,7 @@ export function Navbar({
     <header className='bg-background/85 supports-backdrop-filter:bg-background/70 sticky top-0 z-50 w-full border-b backdrop-blur-md'>
       <div
         className={cn(
-          'mx-auto flex h-17 items-center justify-between gap-4 px-4 sm:px-6',
+          'mx-auto flex h-16 items-center justify-between gap-4 px-4 sm:px-6',
           wide ? 'lg:px-6' : 'container max-w-6xl lg:px-8',
         )}
       >

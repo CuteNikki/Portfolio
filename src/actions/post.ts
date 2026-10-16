@@ -6,6 +6,7 @@ import { headers } from 'next/headers';
 
 import { Role } from '@/generated/prisma/enums';
 
+import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { readCover, removedImages } from '@/lib/form-images';
@@ -14,6 +15,10 @@ import prisma from '@/lib/prisma';
 import { hit, visitorHash } from '@/lib/rate-limit';
 import { resolveSlug } from '@/lib/slug';
 
+// Messages go back as values, since a production build hides a thrown error's message (see action-result.ts)
+const fail = (error: string) => ({ error });
+type CreateResult = ActionResult & { id?: string; slug?: string | null };
+
 function isPostSlugTaken(exceptId?: string) {
   return async (slug: string) =>
     (await prisma.post.count({
@@ -21,16 +26,14 @@ function isPostSlugTaken(exceptId?: string) {
     })) > 0;
 }
 
-export async function createPost(formData: FormData) {
+export async function createPost(formData: FormData): Promise<CreateResult> {
   const session = await getCurrentSession();
 
   if (
     !session ||
     (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
   ) {
-    throw new Error(
-      'Unauthorized: You do not have permission to publish posts.',
-    );
+    return fail('Only writers and admins can do that.');
   }
 
   const title = formData.get('title') as string;
@@ -39,7 +42,7 @@ export async function createPost(formData: FormData) {
   const isPublished = formData.get('isPublished') === 'true';
 
   if (!title || !content) {
-    throw new Error('Title and content are required.');
+    return fail('Title and content are required.');
   }
 
   const slug = await resolveSlug(
@@ -63,17 +66,17 @@ export async function createPost(formData: FormData) {
   });
 
   revalidatePostPaths(createdPost.id, createdPost.slug);
-  return createdPost;
+  return { id: createdPost.id, slug: createdPost.slug };
 }
 
-export async function deletePost(formData: FormData) {
+export async function deletePost(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (
     !session ||
     (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
   ) {
-    throw new Error('Unauthorized');
+    return fail('Only writers and admins can do that.');
   }
 
   const postId = formData.get('postId') as string;
@@ -84,7 +87,7 @@ export async function deletePost(formData: FormData) {
   });
 
   if (!post) {
-    throw new Error('Post not found.');
+    return fail('Post not found.');
   }
 
   const deletedPost = await prisma.post.delete({
@@ -98,16 +101,17 @@ export async function deletePost(formData: FormData) {
   }
 
   revalidatePostPaths(deletedPost.id, deletedPost.slug);
+  return {};
 }
 
-export async function updatePost(formData: FormData) {
+export async function updatePost(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (
     !session ||
     (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
   ) {
-    throw new Error('Unauthorized');
+    return fail('Only writers and admins can do that.');
   }
 
   const id = formData.get('postId') as string;
@@ -116,7 +120,7 @@ export async function updatePost(formData: FormData) {
   const isPublished = formData.get('isPublished') === 'true';
 
   if (!id || !title || !content) {
-    throw new Error('All fields are required.');
+    return fail('All fields are required.');
   }
 
   const currentPost = await prisma.post.findFirst({
@@ -125,7 +129,7 @@ export async function updatePost(formData: FormData) {
   });
 
   if (!currentPost) {
-    throw new Error('Post not found.');
+    return fail('Post not found.');
   }
 
   const slug = await resolveSlug(
@@ -160,13 +164,14 @@ export async function updatePost(formData: FormData) {
   }
 
   revalidatePostPaths(id, slug);
+  return {};
 }
 
-export async function createComment(formData: FormData) {
+export async function createComment(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (!session) {
-    throw new Error('Unauthorized: You must be logged in to comment.');
+    return fail('Sign in to comment.');
   }
 
   const postId = formData.get('postId') as string;
@@ -177,11 +182,11 @@ export async function createComment(formData: FormData) {
   const content = rawContent.trim().replace(/(?:\r?\n){3,}/g, '\n\n');
 
   if (!postId || !content) {
-    throw new Error('Post ID and comment content are required.');
+    return fail('Post ID and comment content are required.');
   }
 
   if (content.length > 1000) {
-    throw new Error('Comment content cannot exceed 1000 characters.');
+    return fail('Comment content cannot exceed 1000 characters.');
   }
 
   await prisma.comment.create({
@@ -194,20 +199,21 @@ export async function createComment(formData: FormData) {
   });
 
   revalidatePostPaths(postId, postSlug);
+  return {};
 }
 
-export async function deleteComment(formData: FormData) {
+export async function deleteComment(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (!session) {
-    throw new Error('Unauthorized: You must be logged in to delete a comment.');
+    return fail('Sign in to delete comments.');
   }
 
   const commentId = formData.get('commentId') as string;
   const postSlug = formData.get('postSlug') as string | null;
 
   if (!commentId) {
-    throw new Error('Comment ID is required.');
+    return fail('Comment ID is required.');
   }
 
   const comment = await prisma.comment.findUnique({
@@ -215,17 +221,16 @@ export async function deleteComment(formData: FormData) {
   });
 
   if (!comment) {
-    throw new Error('Comment not found.');
+    return fail('Comment not found.');
   }
 
-  // Only allow deletion if the user is the comment author or an admin
+  // A comment's author can delete it, and so can writers and admins, who look after the posts
   if (
     comment.authorId !== session.user.id &&
-    session.user.role !== Role.ADMIN
+    session.user.role !== Role.ADMIN &&
+    session.user.role !== Role.WRITER
   ) {
-    throw new Error(
-      'Unauthorized: You do not have permission to delete this comment.',
-    );
+    return fail('You can only delete your own comments.');
   }
 
   await prisma.comment.delete({
@@ -233,13 +238,14 @@ export async function deleteComment(formData: FormData) {
   });
 
   revalidatePostPaths(comment.postId, postSlug);
+  return {};
 }
 
-export async function editComment(formData: FormData) {
+export async function editComment(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (!session) {
-    throw new Error('Unauthorized: You must be logged in to edit a comment.');
+    return fail('Sign in to edit comments.');
   }
 
   const commentId = formData.get('commentId') as string;
@@ -249,11 +255,11 @@ export async function editComment(formData: FormData) {
   const content = rawContent.trim().replace(/(?:\r?\n){3,}/g, '\n\n');
 
   if (!commentId || !content) {
-    throw new Error('Comment ID and content are required.');
+    return fail('Comment ID and content are required.');
   }
 
   if (content.length > 1000) {
-    throw new Error('Comment content cannot exceed 1000 characters.');
+    return fail('Comment content cannot exceed 1000 characters.');
   }
 
   const comment = await prisma.comment.findUnique({
@@ -261,13 +267,11 @@ export async function editComment(formData: FormData) {
   });
 
   if (!comment) {
-    throw new Error('Comment not found.');
+    return fail('Comment not found.');
   }
 
   if (comment.authorId !== session.user.id) {
-    throw new Error(
-      'Unauthorized: You do not have permission to edit this comment.',
-    );
+    return fail('You can only edit your own comments.');
   }
 
   await prisma.comment.update({
@@ -276,15 +280,16 @@ export async function editComment(formData: FormData) {
   });
 
   revalidatePostPaths(comment.postId, postSlug);
+  return {};
 }
 
 // Matches crawlers and link previews that run scripts, and audit tools like Lighthouse
 const NOT_A_READER = /bot|crawl|spider|slurp|preview|lighthouse|headless/i;
 
-export async function addView(formData: FormData) {
+export async function addView(formData: FormData): Promise<ActionResult> {
   const postId = formData.get('postId');
 
-  if (typeof postId !== 'string' || !postId) return;
+  if (typeof postId !== 'string' || !postId) return {};
 
   const [session, headerList] = await Promise.all([
     getCurrentSession(),
@@ -298,14 +303,14 @@ export async function addView(formData: FormData) {
     session?.user.role === Role.WRITER ||
     NOT_A_READER.test(userAgent)
   ) {
-    return;
+    return {};
   }
 
   // Drafts don't count, and an unknown id shouldn't leave a rate-limit row behind
   const isPublished = await prisma.post.count({
     where: { id: postId, publishedAt: { not: null } },
   });
-  if (!isPublished) return;
+  if (!isPublished) return {};
 
   // One view per visitor and post a day, however often they reload. The visitor includes the browser, so people sharing
   // a network count separately, and the cap per network keeps a script that changes its user agent from counting up.
@@ -317,11 +322,12 @@ export async function addView(formData: FormData) {
     (await hit(`view-network:${network}`, 24 * 60 * 60)) > 100 ||
     (await hit(`view:${postId}:${visitor}`, 24 * 60 * 60)) > 1
   ) {
-    return;
+    return {};
   }
 
   // Raw SQL, because Prisma's update would also move updatedAt, which the sitemap reports as the post's last change
   await prisma.$executeRaw`UPDATE "Post" SET "views" = "views" + 1 WHERE "id" = ${postId}`;
+  return {};
 }
 
 function revalidatePostPaths(postId: string, slug: string | null) {

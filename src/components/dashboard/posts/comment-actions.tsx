@@ -59,8 +59,10 @@ export function CommentActions({
     formData.append('postSlug', postSlug);
 
     deleteComment(formData)
-      .then(() => {
-        toast.success('Comment deleted successfully');
+      .then(({ error }) => {
+        if (error)
+          toast.error('The comment wasn’t deleted', { description: error });
+        else toast.success('Comment deleted');
         setShowDeleteDialog(false);
       })
       .catch((error) => {

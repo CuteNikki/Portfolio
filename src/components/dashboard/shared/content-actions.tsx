@@ -66,9 +66,15 @@ export function ContentActions({
       try {
         const formData = new FormData();
         formData.set(kind === 'post' ? 'postId' : 'projectId', id);
-        await (kind === 'post'
+        const { error } = await (kind === 'post'
           ? deletePost(formData)
           : deleteProject(formData));
+        if (error) {
+          toast.error(`The ${kind} couldn’t be deleted`, {
+            description: error,
+          });
+          return;
+        }
         toast.success(kind === 'post' ? 'Post deleted' : 'Project deleted');
         router.refresh();
       } catch {

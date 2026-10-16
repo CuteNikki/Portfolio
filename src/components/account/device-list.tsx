@@ -5,11 +5,9 @@ import { useTransition } from 'react';
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import {
-  type ActionResult,
-  signOutDevice,
-  signOutOtherDevices,
-} from '@/actions/account';
+import { signOutDevice, signOutOtherDevices } from '@/actions/account';
+
+import type { ActionResult } from '@/lib/action-result';
 
 import type { DeviceKind } from '@/lib/user-agent';
 

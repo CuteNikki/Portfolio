@@ -67,17 +67,25 @@ export function EditProjectForm({
             )
           )
             return;
-          await deleteProject(formData);
-          toast.success('Project deleted successfully');
+          const deleted = await deleteProject(formData);
+          if (deleted.error) {
+            toast.error('The project wasn’t deleted', {
+              description: deleted.error,
+            });
+            return;
+          }
+          toast.success('Project deleted');
           router.push(LINKS.dashboardProjects.url);
           return;
         }
 
-        await updateProject(formData);
+        const { error } = await updateProject(formData);
+        if (error) {
+          toast.error('The project wasn’t saved', { description: error });
+          return;
+        }
         toast.success(
-          intent === 'publish'
-            ? 'Project published successfully!'
-            : 'Draft saved successfully!',
+          intent === 'publish' ? 'Project published' : 'Draft saved',
         );
         router.refresh();
       } catch (error) {

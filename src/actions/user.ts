@@ -5,27 +5,28 @@ import z from 'zod';
 
 import { Role } from '@/generated/prisma/enums';
 
+import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-export async function updateUserRole(formData: FormData) {
+export async function updateUserRole(
+  formData: FormData,
+): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (!session || session.user.role !== Role.ADMIN) {
-    throw new Error('Unauthorized: only admins can update user roles');
+    return { error: 'Only admins can change roles.' };
   }
 
   const targetUserId = formData.get('userId') as string;
   const parsedRole = z.enum(Role).safeParse(formData.get('role'));
 
   if (!parsedRole.success) {
-    throw new Error('Invalid role');
+    return { error: 'That isn’t a role.' };
   }
 
-  const newRole = parsedRole.data;
-
   if (session.user.id === targetUserId) {
-    throw new Error('Invalid user: cannot change own role');
+    return { error: 'You can’t change your own role.' };
   }
 
   const targetUser = await prisma.user.findUnique({
@@ -33,33 +34,34 @@ export async function updateUserRole(formData: FormData) {
   });
 
   if (!targetUser) {
-    throw new Error('Invalid user: user not found');
+    return { error: 'That user doesn’t exist any more.' };
   }
 
-  await prisma.user
-    .update({
+  try {
+    await prisma.user.update({
       where: { id: targetUserId },
-      data: { role: newRole },
-    })
-    .catch((error) => {
-      console.error('Error updating user role:', error);
-      throw new Error('Internal server error: failed to update user role');
+      data: { role: parsedRole.data },
     });
+  } catch (error) {
+    console.error('Error updating user role:', error);
+    return { error: 'The role couldn’t be saved. Please try again.' };
+  }
 
   revalidateUserPaths();
+  return {};
 }
 
-export async function deleteUser(formData: FormData) {
+export async function deleteUser(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (!session || session.user.role !== Role.ADMIN) {
-    throw new Error('Unauthorized: only admins can delete users');
+    return { error: 'Only admins can delete users.' };
   }
 
   const targetUserId = formData.get('userId') as string;
 
   if (session.user.id === targetUserId) {
-    throw new Error('Invalid user: cannot delete own account');
+    return { error: 'Delete your own account on the account page.' };
   }
 
   const targetUser = await prisma.user.findUnique({
@@ -67,29 +69,23 @@ export async function deleteUser(formData: FormData) {
   });
 
   if (!targetUser) {
-    throw new Error('Invalid user: user not found');
+    return { error: 'That user doesn’t exist any more.' };
   }
 
   // Comments block deleting their author, so they go first, along with the replies to them. Posts and projects can
   // have other authors, so they stay: deleting the user only takes them off the author lists.
-  await prisma
-    .$transaction([
+  try {
+    await prisma.$transaction([
       prisma.comment.deleteMany({ where: { authorId: targetUserId } }),
       prisma.user.delete({ where: { id: targetUserId } }),
-    ])
-    .catch((error) => {
-      console.error('Error deleting user:', error);
-      throw new Error('Internal server error: failed to delete user');
-    });
+    ]);
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return { error: 'The user couldn’t be deleted. Please try again.' };
+  }
 
   revalidateUserPaths();
-}
-
-export async function checkNavPermissions() {
-  const session = await getCurrentSession();
-
-  if (!session) return false;
-  return session.user.role === Role.ADMIN || session.user.role === Role.WRITER;
+  return {};
 }
 
 // Roles and authors show up on cached posts, projects and comments

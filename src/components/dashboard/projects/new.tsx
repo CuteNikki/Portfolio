@@ -69,15 +69,19 @@ export function NewProjectForm({
 
     startTransition(async () => {
       try {
-        const project = await createProject(formData);
+        const created = await createProject(formData);
+        if (created.error || !created.id) {
+          toast.error('The project wasn’t saved', {
+            description: created.error ?? 'Please try again.',
+          });
+          return;
+        }
 
         toast.success(
-          submitAction === 'publish'
-            ? 'Project published successfully!'
-            : 'Draft saved successfully!',
+          submitAction === 'publish' ? 'Project published' : 'Draft saved',
         );
         setIsSaved(true);
-        router.push(LINKS.dashboardProjectEditWithId(project.id).url);
+        router.push(LINKS.dashboardProjectEditWithId(created.id).url);
       } catch (error) {
         toast.error('Something went wrong', {
           description: error instanceof Error ? error.message : 'Unknown error',

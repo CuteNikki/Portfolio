@@ -8,9 +8,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        // The violet fill with dark text, lifting slightly and gaining a soft violet ring on hover
+        // The violet fill with dark text, gaining a soft violet ring on hover
         default:
-          'bg-primary text-primary-foreground font-bold hover:-translate-y-px hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)] active:translate-y-0',
+          'bg-primary text-primary-foreground font-bold hover:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)]',
         outline:
           'border-border bg-card hover:bg-muted hover:border-line-strong hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground',
         secondary:

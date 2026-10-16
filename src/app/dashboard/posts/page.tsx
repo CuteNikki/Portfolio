@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { NewspaperIcon, PlusIcon } from 'lucide-react';
+import { PlusIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
@@ -9,15 +9,9 @@ import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
 
 import { columns } from '@/components/dashboard/posts/columns';
-import { DashboardHeader } from '@/components/dashboard/shared/header';
+import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
 import { DataTable } from '@/components/dashboard/shared/table';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-} from '@/components/ui/card';
 
 export const { dashboardPosts: metadata } = SITE_METADATA;
 
@@ -30,7 +24,7 @@ export default async function PostsPage() {
 
   const { posts, hasError } = await prisma.post
     .findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { updatedAt: 'desc' },
       include: {
         authors: {
           orderBy: { position: 'asc' },
@@ -45,30 +39,25 @@ export default async function PostsPage() {
     });
 
   return (
-    <Card className='w-full'>
-      <CardHeader>
-        <DashboardHeader
-          icon={NewspaperIcon}
-          title={'Posts'}
-          description={'Manage posts and drafts.'}
-        />
-        <CardAction>
-          <Button asChild>
-            <Link href={LINKS.dashboardPostNew.url}>
-              <PlusIcon />
-              {LINKS.dashboardPostNew.label}
-            </Link>
-          </Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <DataTable
-          columns={columns}
-          data={posts}
-          filterPlaceholder='Filter Posts...'
-          hasError={hasError}
-        />
-      </CardContent>
-    </Card>
+    <div className='flex flex-col gap-6'>
+      <DashboardPageHeader
+        title='Posts'
+        description='Every post and draft. Search, sort and edit them here.'
+      >
+        <Button asChild>
+          <Link href={LINKS.dashboardPostNew.url}>
+            <PlusIcon />
+            New post
+          </Link>
+        </Button>
+      </DashboardPageHeader>
+      <DataTable
+        columns={columns}
+        data={posts}
+        filterPlaceholder='Search posts'
+        hasError={hasError}
+        defaultSorting={[{ id: 'updatedAt', desc: true }]}
+      />
+    </div>
   );
 }

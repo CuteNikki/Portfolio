@@ -5,9 +5,6 @@ import { useOptimistic, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import {
-  ArrowDownIcon,
-  ArrowUpDownIcon,
-  ArrowUpIcon,
   ClipboardCopyIcon,
   LoaderCircleIcon,
   MoreHorizontalIcon,
@@ -20,6 +17,7 @@ import { proxiedAvatarUrl } from '@/lib/utils';
 
 import { deleteUser, updateUserRole } from '@/actions/user';
 
+import { sortableHeader } from '@/components/dashboard/shared/column-parts';
 import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
 import {
   AlertDialog,
@@ -53,21 +51,7 @@ type User = Omit<UserModel, 'accessToken' | 'refreshToken' | 'tokenExpiresAt'>;
 
 const userColumn: DashboardColumnDef<User> = {
   accessorKey: 'username',
-  header: ({ column }) => (
-    <Button
-      variant='ghost'
-      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    >
-      User
-      {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon />
-      ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon />
-      ) : (
-        <ArrowUpDownIcon className='opacity-50' />
-      )}
-    </Button>
-  ),
+  header: sortableHeader('User'),
   cell: ({ row }) => (
     <div className='flex flex-row items-center gap-2'>
       <Image
@@ -84,21 +68,7 @@ const userColumn: DashboardColumnDef<User> = {
 
 const nameColumn: DashboardColumnDef<User> = {
   accessorKey: 'displayName',
-  header: ({ column }) => (
-    <Button
-      variant='ghost'
-      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    >
-      Name
-      {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon />
-      ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon />
-      ) : (
-        <ArrowUpDownIcon className='opacity-50' />
-      )}
-    </Button>
-  ),
+  header: sortableHeader('Name'),
 };
 
 const RoleSelectCell = ({ user }: { user: User }) => {
@@ -115,8 +85,12 @@ const RoleSelectCell = ({ user }: { user: User }) => {
       formData.append('role', newRole);
 
       try {
-        await updateUserRole(formData);
-        toast.success('Role updated successfully!', {
+        const { error } = await updateUserRole(formData);
+        if (error) {
+          toast.error('The role wasn’t changed', { description: error });
+          return;
+        }
+        toast.success('Role updated', {
           description: `${user.username} is now ${newRole}.`,
         });
       } catch (error) {
@@ -157,23 +131,13 @@ const RoleSelectCell = ({ user }: { user: User }) => {
   );
 };
 
+// Admins first, then writers, then everyone else
+const ROLE_RANK: Record<Role, number> = { ADMIN: 0, WRITER: 1, USER: 2 };
+
 const roleColumn: DashboardColumnDef<User> = {
   accessorKey: 'role',
-  header: ({ column }) => (
-    <Button
-      variant='ghost'
-      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    >
-      Role
-      {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon />
-      ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon />
-      ) : (
-        <ArrowUpDownIcon className='opacity-50' />
-      )}
-    </Button>
-  ),
+  sortFn: (a, b) => ROLE_RANK[a.original.role] - ROLE_RANK[b.original.role],
+  header: sortableHeader('Role'),
   cell: ({ row }) => <RoleSelectCell user={row.original} />,
 };
 
@@ -185,8 +149,10 @@ const UserActions = ({ user }: { user: User }) => {
     formData.append('userId', user.id);
 
     deleteUser(formData)
-      .then(() => {
-        toast.success('User deleted successfully!');
+      .then(({ error }) => {
+        if (error)
+          toast.error('The user wasn’t deleted', { description: error });
+        else toast.success('User deleted');
         setShowDeleteDialog(false);
       })
       .catch((error) => {
@@ -274,21 +240,7 @@ const actionsColumn: DashboardColumnDef<User> = {
 
 const idColumn: DashboardColumnDef<User> = {
   accessorKey: 'discordId',
-  header: ({ column }) => (
-    <Button
-      variant='ghost'
-      onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-    >
-      ID
-      {column.getIsSorted() === 'asc' ? (
-        <ArrowUpIcon />
-      ) : column.getIsSorted() === 'desc' ? (
-        <ArrowDownIcon />
-      ) : (
-        <ArrowUpDownIcon className='opacity-50' />
-      )}
-    </Button>
-  ),
+  header: sortableHeader('ID'),
 };
 
 export const columns: DashboardColumnDef<User>[] = [

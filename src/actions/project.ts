@@ -5,12 +5,17 @@ import { after } from 'next/server';
 
 import { Role } from '@/generated/prisma/enums';
 
+import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { readCover, readGallery, removedImages } from '@/lib/form-images';
 import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
 import { resolveSlug } from '@/lib/slug';
+
+// Messages go back as values, since a production build hides a thrown error's message (see action-result.ts)
+const fail = (error: string) => ({ error });
+type CreateResult = ActionResult & { id?: string; slug?: string | null };
 
 function canWrite(
   session: Awaited<ReturnType<typeof getCurrentSession>>,
@@ -28,13 +33,11 @@ function isProjectSlugTaken(exceptId?: string) {
     })) > 0;
 }
 
-export async function createProject(formData: FormData) {
+export async function createProject(formData: FormData): Promise<CreateResult> {
   const session = await getCurrentSession();
 
   if (!canWrite(session)) {
-    throw new Error(
-      'Unauthorized: You do not have permission to publish projects.',
-    );
+    return fail('Only writers and admins can do that.');
   }
 
   const title = formData.get('title') as string;
@@ -53,10 +56,11 @@ export async function createProject(formData: FormData) {
       .filter((tech) => tech.length > 0) || [];
 
   const createdAt = parseProjectDate(formData.get('date'));
+  if (createdAt === null) return fail('Please enter a valid project date.');
 
   const isPublished = formData.get('isPublished') === 'true';
   if (!title || !description) {
-    throw new Error('Title and description are required.');
+    return fail('Title and description are required.');
   }
 
   const slug = await resolveSlug(
@@ -86,14 +90,14 @@ export async function createProject(formData: FormData) {
   });
 
   revalidateProjectPaths(createdProject.id, createdProject.slug);
-  return createdProject;
+  return { id: createdProject.id, slug: createdProject.slug };
 }
 
-export async function deleteProject(formData: FormData) {
+export async function deleteProject(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (!canWrite(session)) {
-    throw new Error('Unauthorized');
+    return fail('Only writers and admins can do that.');
   }
 
   const projectId = formData.get('projectId') as string;
@@ -104,7 +108,7 @@ export async function deleteProject(formData: FormData) {
   });
 
   if (!project) {
-    throw new Error('Project not found.');
+    return fail('Project not found.');
   }
 
   const deletedProject = await prisma.project.delete({
@@ -123,13 +127,14 @@ export async function deleteProject(formData: FormData) {
   );
 
   revalidateProjectPaths(deletedProject.id, deletedProject.slug);
+  return {};
 }
 
-export async function updateProject(formData: FormData) {
+export async function updateProject(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
   if (!canWrite(session)) {
-    throw new Error('Unauthorized');
+    return fail('Only writers and admins can do that.');
   }
 
   const id = formData.get('projectId') as string;
@@ -149,11 +154,12 @@ export async function updateProject(formData: FormData) {
       .filter((tech) => tech.length > 0) || [];
 
   const createdAt = parseProjectDate(formData.get('date'));
+  if (createdAt === null) return fail('Please enter a valid project date.');
 
   const isPublished = formData.get('isPublished') === 'true';
 
   if (!id || !title || !description) {
-    throw new Error('Some required fields are missing.');
+    return fail('Some required fields are missing.');
   }
 
   const currentProject = await prisma.project.findFirst({
@@ -166,7 +172,7 @@ export async function updateProject(formData: FormData) {
   });
 
   if (!currentProject) {
-    throw new Error('Project not found.');
+    return fail('Project not found.');
   }
 
   const slug = await resolveSlug(
@@ -218,19 +224,16 @@ export async function updateProject(formData: FormData) {
   if (removed.length > 0) after(() => deleteImages(removed));
 
   revalidateProjectPaths(id, slug);
+  return {};
 }
 
 // Parses a "YYYY-MM-DD" date input. Stored at noon UTC so the displayed day
-// doesn't shift in other time zones. Returns undefined if no date was given.
+// doesn't shift in other time zones. Undefined if no date was given, null if it isn't a date.
 function parseProjectDate(value: FormDataEntryValue | null) {
   if (!value) return undefined;
 
   const date = new Date(`${value}T12:00:00Z`);
-  if (Number.isNaN(date.getTime())) {
-    throw new Error('Please enter a valid project date.');
-  }
-
-  return date;
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 function revalidateProjectPaths(projectId: string, slug: string | null) {

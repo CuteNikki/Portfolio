@@ -5,7 +5,6 @@ import { PlusIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { STORAGE_QUOTA_BYTES, storageUsage } from '@/lib/uploads';
 import { formatShortDate, toExcerpt } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
@@ -15,6 +14,7 @@ import { StoredImage } from '@/components/common/stored-image';
 import { UserHover } from '@/components/common/user-hover';
 import { ContentActions } from '@/components/dashboard/shared/content-actions';
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
+import { StatTile, StorageTile } from '@/components/dashboard/shared/stat-tile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -151,18 +151,18 @@ export default async function DashboardPage() {
       </DashboardPageHeader>
 
       <dl className='grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-5'>
-        <Tile
+        <StatTile
           label='Published posts'
           value={posts.published}
           note={plural(posts.drafts, 'draft')}
         />
-        <Tile
+        <StatTile
           label='Published projects'
           value={projects.published}
           note={plural(projects.drafts, 'draft')}
         />
-        <Tile label='Post views' value={views} note='all time' />
-        <Tile
+        <StatTile label='Post views' value={views} note='all time' />
+        <StatTile
           label='Comments'
           value={comments}
           note={`${commentsThisWeek} this week`}
@@ -337,67 +337,6 @@ export default async function DashboardPage() {
 
 const plural = (count: number, word: string) =>
   `${count} ${word}${count === 1 ? '' : 's'}`;
-
-function Tile({
-  label,
-  value,
-  note,
-  children,
-}: {
-  label: string;
-  value: string | number;
-  note: string;
-  children?: React.ReactNode;
-}) {
-  return (
-    <div className='bg-card flex h-full flex-col gap-1 rounded-xl border px-4 py-4 sm:px-5'>
-      <dt className='text-muted-foreground text-xs'>{label}</dt>
-      <dd className='text-[28px] leading-tight font-bold tracking-[-0.05em] tabular-nums'>
-        {value}
-      </dd>
-      <dd className='text-muted-foreground text-xs'>{note}</dd>
-      {children}
-    </div>
-  );
-}
-
-// Lists the bucket, which can take a moment, so it streams in on its own
-async function StorageTile() {
-  const usage = await storageUsage();
-  if (!usage) {
-    return <Tile label='Image storage' value='—' note='not set up here' />;
-  }
-
-  const share = usage.bytes / STORAGE_QUOTA_BYTES;
-  return (
-    <Tile
-      label='Image storage'
-      value={formatBytes(usage.bytes)}
-      note={`${plural(usage.pictures, 'picture')} · of ${formatBytes(STORAGE_QUOTA_BYTES)}`}
-    >
-      <dd
-        aria-hidden
-        className='bg-muted mt-1.5 h-1.5 overflow-hidden rounded-full'
-      >
-        <span
-          className='bg-primary block h-full rounded-full'
-          style={{ width: `${Math.max(share * 100, 1)}%` }}
-        />
-      </dd>
-    </Tile>
-  );
-}
-
-function formatBytes(bytes: number) {
-  const units = ['B', 'KB', 'MB', 'GB'];
-  let value = bytes;
-  let unit = 0;
-  while (value >= 1024 && unit < units.length - 1) {
-    value /= 1024;
-    unit += 1;
-  }
-  return `${value >= 10 || unit === 0 ? Math.round(value) : value.toFixed(1)} ${units[unit]}`;
-}
 
 function Panel({
   title,

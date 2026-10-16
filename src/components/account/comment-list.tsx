@@ -51,7 +51,13 @@ export function CommentList({ comments }: { comments: OwnComment[] }) {
         const formData = new FormData();
         formData.set('commentId', comment.id);
         formData.set('postSlug', comment.postSlug);
-        await deleteComment(formData);
+        const { error } = await deleteComment(formData);
+        if (error) {
+          toast.error('The comment couldn’t be deleted', {
+            description: error,
+          });
+          return;
+        }
         toast.success('Comment deleted');
       } catch (error) {
         toast.error('The comment couldn’t be deleted', {

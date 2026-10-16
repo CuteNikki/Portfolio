@@ -106,9 +106,15 @@ export function Comment({
                   formData.append('postSlug', postSlug);
 
                   editComment(formData)
-                    .then(() => {
+                    .then(({ error }) => {
+                      if (error) {
+                        toast.error('The comment wasn’t saved', {
+                          description: error,
+                        });
+                        return;
+                      }
                       setEditingCommentIdAction(null);
-                      toast.success('Comment edited successfully!');
+                      toast.success('Comment saved');
                     })
                     .catch((error) => {
                       toast.error(`Failed to edit comment!`, {
