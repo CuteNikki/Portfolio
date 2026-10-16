@@ -20,7 +20,8 @@ export interface PostRowData {
   isDraft: boolean;
 }
 
-// A post in a list: its cover on the left, then the date, title and excerpt. The title's underline sweeps in on hover.
+// A post in a list, in a card like the projects': its cover on the left, then the date, title and excerpt. The title's
+// underline sweeps in on hover.
 export function PostRow({
   post,
   revealIndex,
@@ -38,11 +39,11 @@ export function PostRow({
           ? undefined
           : ({ '--reveal-index': revealIndex } as React.CSSProperties)
       }
-      className='group hover:bg-muted/50 -mx-3 flex flex-col gap-5 rounded-xl p-3 transition-colors sm:flex-row sm:items-center sm:gap-8'
+      className='card-lift group bg-card flex flex-col gap-5 rounded-xl border p-3 sm:flex-row sm:items-center sm:gap-7'
     >
       <div
         className={cn(
-          'relative aspect-16/10 w-full shrink-0 overflow-hidden rounded-xl sm:w-60',
+          'relative aspect-16/10 w-full shrink-0 overflow-hidden rounded-lg sm:w-60',
           'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]',
         )}
         style={{ '--tone': toneFor(post.title) } as React.CSSProperties}
@@ -64,7 +65,7 @@ export function PostRow({
           </span>
         )}
       </div>
-      <div className='flex min-w-0 flex-col gap-2'>
+      <div className='flex min-w-0 flex-col gap-2 px-2 pb-2 sm:px-0 sm:pr-4 sm:pb-0'>
         <span className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs'>
           {post.isDraft && <Badge>Draft</Badge>}
           <time dateTime={new Date(post.time).toISOString()}>{post.date}</time>

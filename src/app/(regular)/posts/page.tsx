@@ -55,7 +55,7 @@ async function Drafts() {
           · only writers see these
         </span>
       </h2>
-      <div className='flex flex-col gap-2'>
+      <div className='flex flex-col gap-4'>
         {drafts.map((post) => (
           <PostRow key={post.id} post={toPostRow(post)} />
         ))}

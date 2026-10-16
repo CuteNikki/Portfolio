@@ -381,7 +381,7 @@ async function LatestPosts() {
   }
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-4'>
       {posts.map((post) => (
         <PostRow key={post.id} post={toPostRow(post)} />
       ))}
