@@ -162,12 +162,12 @@ function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
           Uploaded {uploadedAgo(picture.uploadedAt)}
         </span>
         <Button
-          variant='ghost'
+          variant='destructive'
           size='icon-xs'
           aria-label='Delete this unused picture'
           onClick={remove}
           disabled={pending}
-          className='text-muted-foreground hover:text-destructive shrink-0'
+          className='shrink-0'
         >
           {pending ? (
             <LoaderCircleIcon className='animate-spin' />
