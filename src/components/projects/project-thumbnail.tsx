@@ -10,6 +10,7 @@ export function ProjectThumbnail({
   title,
   coverUrl,
   coverDarkUrl,
+  tone = toneFor(title),
   sizes,
   priority,
   className,
@@ -18,13 +19,13 @@ export function ProjectThumbnail({
   coverUrl?: string | null;
   // Shown instead in dark themes
   coverDarkUrl?: string | null;
+  // The project's colour (see projectTone); one from its title when left out
+  tone?: string;
   // Passed to the image so the browser picks a fitting width, e.g. "(min-width: 1024px) 66vw, 100vw"
   sizes: string;
   priority?: boolean;
   className?: string;
 }) {
-  const tone = toneFor(title);
-
   return (
     <div
       className={cn(

@@ -162,9 +162,10 @@ export async function removePicture(
       where: { thumbnailUrl: url },
       data: { thumbnailUrl: null },
     }),
+    // Its colour came from the cover, so it goes with it
     prisma.project.updateMany({
       where: { coverUrl: url },
-      data: { coverUrl: null },
+      data: { coverUrl: null, coverTone: null },
     }),
     prisma.project.updateMany({
       where: { coverDarkUrl: url },

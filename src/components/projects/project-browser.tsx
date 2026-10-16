@@ -20,7 +20,7 @@ import {
   shortDateQuery,
 } from '@/lib/date-query';
 import { imageUrl } from '@/lib/images';
-import { cn, toneFor } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 import {
   ProjectCard,
@@ -120,7 +120,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
       meta: [p.date, p.technologies.slice(0, 3).join(' · ')]
         .filter(Boolean)
         .join(' · '),
-      icon: <ProjectSwatch title={p.title} coverUrl={p.coverUrl} />,
+      icon: <ProjectSwatch tone={p.tone} coverUrl={p.coverUrl} />,
     }));
 
   let sections: SuggestionSection[];
@@ -347,10 +347,10 @@ function ActiveFilter({
 
 // The project's colour as a small square, so suggestions are easy to tell apart
 function ProjectSwatch({
-  title,
+  tone,
   coverUrl,
 }: {
-  title: string;
+  tone: string;
   coverUrl: string | null;
 }) {
   if (coverUrl) {
@@ -369,7 +369,7 @@ function ProjectSwatch({
     <span
       aria-hidden
       className='relative h-7.5 w-12 shrink-0 overflow-hidden rounded-md bg-[color-mix(in_oklab,var(--tone)_18%,var(--card))]'
-      style={{ '--tone': toneFor(title) } as React.CSSProperties}
+      style={{ '--tone': tone } as React.CSSProperties}
     >
       <span className='bg-card absolute inset-x-[14%] top-[22%] -bottom-[10%] rounded-[3px]' />
     </span>

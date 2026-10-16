@@ -14,7 +14,7 @@ import {
   getPublishedProjects,
 } from '@/lib/data';
 import { headingsOf } from '@/lib/toc';
-import { formatShortDate, toDescription } from '@/lib/utils';
+import { formatShortDate, projectTone, toDescription } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
@@ -236,6 +236,7 @@ async function ProjectContent({
             title={project.title}
             coverUrl={project.coverUrl}
             coverDarkUrl={project.coverDarkUrl}
+            tone={projectTone(project)}
             priority
             sizes='(min-width: 1200px) 990px, calc(86vw - 28px)'
             className='aspect-2/1 rounded-xl border'
@@ -320,6 +321,7 @@ function NeighbourCard({
         title={project.title}
         coverUrl={project.coverUrl}
         coverDarkUrl={project.coverDarkUrl}
+        tone={project.tone}
         sizes='(min-width: 640px) 200px, calc(100vw - 56px)'
         className='aspect-16/10 shrink-0 rounded-lg sm:w-50'
       />

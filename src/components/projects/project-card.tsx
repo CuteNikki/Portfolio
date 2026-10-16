@@ -21,6 +21,8 @@ export interface ProjectCardData {
   coverUrl: string | null;
   // Shown instead in dark themes
   coverDarkUrl: string | null;
+  // The project's colour, a CSS colour (see projectTone)
+  tone: string;
   // Unpublished projects only writers see
   isDraft: boolean;
 }
@@ -56,6 +58,7 @@ export function ProjectCard({
         title={project.title}
         coverUrl={project.coverUrl}
         coverDarkUrl={project.coverDarkUrl}
+        tone={project.tone}
         priority={priority}
         // The window inside is about 86% of the card's width
         sizes={

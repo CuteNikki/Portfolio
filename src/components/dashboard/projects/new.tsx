@@ -18,6 +18,10 @@ import {
   GalleryField,
 } from '@/components/dashboard/shared/image-fields';
 import { ProjectDetailFields } from '@/components/dashboard/projects/detail-fields';
+import {
+  ALL_TONES,
+  ToneField,
+} from '@/components/dashboard/projects/tone-field';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
 import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
 import {
@@ -174,6 +178,8 @@ export function NewProjectForm({
               <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={null} />
               <CoverField defaultValue={null} kind='dark' />
+              {/* Until there's a cover to match, Auto has no one colour to show */}
+              <ToneField defaultValue={null} autoTone={ALL_TONES} />
             </FormCard>
           </>
         }

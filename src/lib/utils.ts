@@ -157,6 +157,26 @@ export function toneFor(text: string): string {
 }
 
 /**
+ * A project's colour: the one picked for it in the dashboard, or else the chart colour closest to its cover's main
+ * colour, or else one from its title (see toneFor).
+ *
+ * @param project - The project's title, picked colour ("1" to "5" for a chart colour, or "#rrggbb") and cover colour.
+ * @returns A CSS colour, e.g. "var(--chart-3)" or "#e88c3a".
+ */
+export function projectTone(project: {
+  title: string;
+  tone?: string | null;
+  coverTone?: number | null;
+}): string {
+  const { tone, coverTone } = project;
+  if (tone && /^[1-5]$/.test(tone)) return `var(--chart-${tone})`;
+  if (tone && /^#[0-9a-f]{6}$/i.test(tone)) return tone;
+  if (coverTone && coverTone >= 1 && coverTone <= 5)
+    return `var(--chart-${coverTone})`;
+  return toneFor(project.title);
+}
+
+/**
  * Roughly how long a text takes to read, at about 220 words a minute.
  *
  * @param markdown - The text, as markdown.

@@ -123,6 +123,10 @@ model Project {
   coverUrl     String?
   // The cover for dark themes, if the project has one; the cover above is used everywhere else
   coverDarkUrl String?
+  // The project's colour: one picked in the dashboard, a chart colour ("1" to "5") or any colour ("#rrggbb"), or else
+  // the chart colour closest to its cover's main colour (1 to 5, see src/lib/tone.ts), or else one from its title
+  tone         String?
+  coverTone    Int?
   images       ProjectImage[]
 
   publishedAt DateTime?

@@ -9,6 +9,7 @@ import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { readCover, readGallery, removedImages } from '@/lib/form-images';
+import { coverTone } from '@/lib/tone';
 import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
 import { resolveSlug } from '@/lib/slug';
@@ -72,6 +73,8 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
     isProjectSlugTaken(),
   );
 
+  const coverUrl = readCover(formData) ?? null;
+
   const createdProject = await prisma.project.create({
     data: {
       title,
@@ -82,8 +85,10 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
       technologies,
       tags,
       createdAt,
-      coverUrl: readCover(formData) ?? null,
+      coverUrl,
       coverDarkUrl: readCover(formData, 'coverDarkUrl') ?? null,
+      tone: readTone(formData) ?? null,
+      coverTone: await coverTone(coverUrl),
       images: { create: readGallery(formData) ?? [] },
       // The picked authors, or else whoever creates it
       authors: {
@@ -197,6 +202,10 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
   const coverUrl = readCover(formData);
   const coverDarkUrl = readCover(formData, 'coverDarkUrl');
   const gallery = readGallery(formData);
+  const tone = readTone(formData);
+  // A new cover brings its own colour for Auto
+  const coverChanged =
+    coverUrl !== undefined && coverUrl !== currentProject.coverUrl;
 
   await prisma.project.update({
     where: { id },
@@ -206,6 +215,8 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
       }),
       ...(coverUrl !== undefined && { coverUrl }),
       ...(coverDarkUrl !== undefined && { coverDarkUrl }),
+      ...(coverChanged && { coverTone: await coverTone(coverUrl) }),
+      ...(tone !== undefined && { tone }),
       ...(gallery && { images: { deleteMany: {}, create: gallery } }),
       title,
       slug,
@@ -240,6 +251,14 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
 
   revalidateProjectPaths(id, slug);
   return {};
+}
+
+// The colour picked in a project's form: a chart colour ("1" to "5") or any colour ("#rrggbb"), null for Auto (matched
+// to the cover), or undefined if the form had no colour field (then the saved one stays)
+function readTone(formData: FormData): string | null | undefined {
+  if (!formData.has('tone')) return undefined;
+  const tone = String(formData.get('tone')).trim().toLowerCase();
+  return /^([1-5]|#[0-9a-f]{6})$/.test(tone) ? tone : null;
 }
 
 // A project's repository or website: empty, or a web address. People often leave out the https://, which is added

@@ -1,4 +1,9 @@
-import { formatShortDate, readingMinutes, toExcerpt } from '@/lib/utils';
+import {
+  formatShortDate,
+  projectTone,
+  readingMinutes,
+  toExcerpt,
+} from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 
@@ -16,6 +21,8 @@ interface ProjectLike {
   createdAt: Date;
   coverUrl?: string | null;
   coverDarkUrl?: string | null;
+  tone?: string | null;
+  coverTone?: number | null;
 }
 
 interface PostLike {
@@ -47,6 +54,7 @@ export function toProjectCard(project: ProjectLike): ProjectCardData {
     tags: project.tags,
     coverUrl: project.coverUrl ?? null,
     coverDarkUrl: project.coverDarkUrl ?? null,
+    tone: projectTone(project),
     isDraft: project.publishedAt === null,
   };
 }

@@ -10,7 +10,7 @@ import { deleteProject, updateProject } from '@/actions/project';
 
 import type { AuthorEntry } from '@/lib/authors';
 import { LINKS } from '@/constants/links';
-import { formatShortDate } from '@/lib/utils';
+import { formatShortDate, projectTone } from '@/lib/utils';
 
 import {
   type AuthorOption,
@@ -22,6 +22,7 @@ import {
   GalleryField,
 } from '@/components/dashboard/shared/image-fields';
 import { ProjectDetailFields } from '@/components/dashboard/projects/detail-fields';
+import { ToneField } from '@/components/dashboard/projects/tone-field';
 import {
   EditActionButtons,
   getEditAction,
@@ -194,6 +195,13 @@ export function EditProjectForm({
               <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={project.coverUrl} />
               <CoverField defaultValue={project.coverDarkUrl} kind='dark' />
+              <ToneField
+                defaultValue={project.tone}
+                autoTone={projectTone({
+                  title: project.title,
+                  coverTone: project.coverTone,
+                })}
+              />
             </FormCard>
           </>
         }
