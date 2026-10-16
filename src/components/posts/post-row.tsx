@@ -39,11 +39,11 @@ export function PostRow({
           ? undefined
           : ({ '--reveal-index': revealIndex } as React.CSSProperties)
       }
-      className='card-lift group bg-card flex flex-col gap-5 rounded-xl border p-3 sm:flex-row sm:items-center sm:gap-7'
+      className='card-lift group bg-card flex flex-col gap-5 rounded-xl border p-3 md:flex-row md:items-center md:gap-7'
     >
       <div
         className={cn(
-          'relative aspect-2/1 w-full shrink-0 overflow-hidden rounded-lg sm:w-64',
+          'relative aspect-2/1 w-full shrink-0 overflow-hidden rounded-lg md:w-64',
           'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]',
         )}
         style={{ '--tone': toneFor(post.title) } as React.CSSProperties}
@@ -53,7 +53,7 @@ export function PostRow({
             url={post.coverUrl}
             alt=''
             fill
-            sizes='(min-width: 640px) 256px, calc(100vw - 32px)'
+            sizes='(min-width: 768px) 256px, calc(100vw - 32px)'
             className='object-cover object-top transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.04]'
           />
         ) : (
@@ -65,7 +65,7 @@ export function PostRow({
           </span>
         )}
       </div>
-      <div className='flex min-w-0 flex-col gap-2 px-2 pb-2 sm:px-0 sm:pr-4 sm:pb-0'>
+      <div className='flex min-w-0 flex-col gap-2 px-2 pb-2 md:px-0 md:pr-4 md:pb-0'>
         <span className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs'>
           {post.isDraft && <Badge>Draft</Badge>}
           <time dateTime={new Date(post.time).toISOString()}>{post.date}</time>
