@@ -12,7 +12,7 @@ import { editComment } from '@/actions/post';
 import { UserHover } from '@/components/common/user-hover';
 import { CommentActions } from '@/components/dashboard/posts/comment-actions';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
-import { formatShortDate } from '@/lib/utils';
+import { cn, formatShortDate } from '@/lib/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,8 @@ import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
 
 const MAX_DEPTH = 3;
+// How many levels replies indent on phones; deeper ones stay in line
+const MAX_PHONE_INDENT = 2;
 
 export function Comment({
   depth,
@@ -137,25 +139,20 @@ export function Comment({
                   <FieldDescription
                     className={content.length >= 1000 ? 'text-destructive' : ''}
                   >
-                    {content.trim().length}/1000 characters
+                    {content.trim().length}/1000
                   </FieldDescription>
                 </Field>
-                <div className='flex justify-end gap-2'>
+                <div className='flex flex-wrap justify-end gap-2'>
                   {content.trim().length > 0 && (
                     <Button
                       variant='outline'
-
                       onClick={() => setEditingCommentIdAction(null)}
                     >
                       Cancel
                     </Button>
                   )}
-                  <Button
-                    type='submit'
-
-                    disabled={content.trim().length === 0}
-                  >
-                    Edit Comment
+                  <Button type='submit' disabled={content.trim().length === 0}>
+                    Save
                   </Button>
                 </div>
               </form>
@@ -179,20 +176,59 @@ export function Comment({
       </div>
 
       {(replies?.length ?? 0) > 0 && (
-        <div className='ml-[17px] flex flex-col'>
+        <div
+          className={cn(
+            'ml-[17px] flex flex-col',
+            // Phones run out of room after two levels: the deepest replies line up with the comment they answer
+            depth >= MAX_PHONE_INDENT && 'max-sm:ml-0',
+          )}
+        >
           {replies?.map((reply, index) => {
             const isLast = index === replies.length - 1;
+            const flatOnPhones = depth >= MAX_PHONE_INDENT;
             return (
-              <div key={reply.id} className='relative pt-4 pl-5'>
+              <div
+                key={reply.id}
+                className={cn(
+                  'relative pt-4 pl-5',
+                  flatOnPhones && 'max-sm:pl-0',
+                )}
+              >
                 {!isLast && (
                   <>
-                    <div className='border-border absolute top-0 bottom-0 left-0 border-l-2' />
-                    <div className='border-border absolute top-0 left-0 h-[34px] w-5 border-b-2' />
+                    <div
+                      className={cn(
+                        'border-border absolute top-0 bottom-0 left-0 border-l-2',
+                        flatOnPhones && 'max-sm:hidden',
+                      )}
+                    />
+                    <div
+                      className={cn(
+                        'border-border absolute top-0 left-0 h-[34px] w-5 border-b-2',
+                        flatOnPhones && 'max-sm:hidden',
+                      )}
+                    />
                   </>
                 )}
 
                 {isLast && (
-                  <div className='border-border absolute top-0 left-0 h-[34px] w-5 rounded-bl-xl border-b-2 border-l-2' />
+                  <div
+                    className={cn(
+                      'border-border absolute top-0 left-0 h-[34px] w-5 rounded-bl-xl border-b-2 border-l-2',
+                      flatOnPhones && 'max-sm:hidden',
+                    )}
+                  />
+                )}
+
+                {/* In line on phones: the line runs straight down from the avatar above, on past this reply to the
+                    next one */}
+                {flatOnPhones && (
+                  <div
+                    className={cn(
+                      'border-border absolute top-0 left-[17px] border-l-2 sm:hidden',
+                      isLast ? 'h-4' : 'bottom-0',
+                    )}
+                  />
                 )}
 
                 <Comment
