@@ -79,8 +79,8 @@ export const SITE_METADATA: Record<string, Metadata> = {
         'Full-stack developer building fast, accessible web apps from the ground up. See what I have built, read how I build it, or get in touch.',
       path: '/',
     }),
-    // The tab shows the site name first on the home page
-    title: { absolute: `${SITE_NAME} - Full-stack developer` },
+    // The tab shows just the site name on the home page
+    title: { absolute: SITE_NAME },
   },
   projects: pageMetadata({
     title: 'Projects',
