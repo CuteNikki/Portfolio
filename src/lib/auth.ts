@@ -1,7 +1,7 @@
 import { createHash } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { connection } from 'next/server';
+import { after, connection } from 'next/server';
 import { cache } from 'react';
 
 import { Role } from '@/generated/prisma/enums';
@@ -11,6 +11,8 @@ import prisma from '@/lib/prisma';
 export const SESSION_COOKIE = 'auth_session';
 export const OAUTH_STATE_COOKIE = 'oauth_state';
 export const RETURN_TO_COOKIE = 'auth_return_to';
+
+const LAST_SEEN_INTERVAL_MS = 15 * 60 * 1000;
 
 // Where to send someone after signing in. Only paths on this site count, so a crafted link can't use the login to
 // send people elsewhere ("//evil.example" and "/\\evil.example" are other hosts to a browser).
@@ -54,6 +56,19 @@ export const getCurrentSession = cache(async () => {
     if (session.expiresAt < new Date()) {
       await prisma.session.delete({ where: { id: session.id } });
       return null;
+    }
+
+    // The account page shows when each device was last used. A few minutes off is fine, so it's written at most every
+    // quarter of an hour, and only after the response is sent.
+    if (Date.now() - session.lastSeenAt.getTime() > LAST_SEEN_INTERVAL_MS) {
+      after(() =>
+        prisma.session
+          .update({
+            where: { id: session.id },
+            data: { lastSeenAt: new Date() },
+          })
+          .catch(() => {}),
+      );
     }
 
     return session;

@@ -87,7 +87,9 @@ export async function uploadImage(
   ) as Record<ImageSize, number>;
   const total = IMAGE_SIZE_NAMES.reduce((sum, size) => sum + sizes[size], 0);
 
-  const { url, uploads } = await requestImageUpload(type, sizes);
+  const upload = await requestImageUpload(type, sizes);
+  if ('error' in upload) throw new Error(upload.error);
+  const { url, uploads } = upload;
 
   let done = 0;
   for (const size of IMAGE_SIZE_NAMES) {

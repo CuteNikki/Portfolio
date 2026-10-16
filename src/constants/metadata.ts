@@ -86,6 +86,12 @@ export const SITE_METADATA: Record<string, Metadata> = {
       'Read my latest posts on various topics related to development, technology and more. Stay updated with my insights and experiences.',
     alternates: { canonical: '/posts' },
   },
+  account: {
+    title: 'Account',
+    description:
+      'Your profile, your comments and the devices you are signed in on.',
+    robots: NO_INDEX,
+  },
   dashboard: {
     title: 'Dashboard',
     description:

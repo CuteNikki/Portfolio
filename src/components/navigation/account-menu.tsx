@@ -18,6 +18,7 @@ import {
 import type { Role } from '@/generated/prisma/enums';
 
 import { LINKS, NAVBAR_LINKS } from '@/constants/links';
+import { ROLE_LABELS } from '@/constants/roles';
 
 import { cn } from '@/lib/utils';
 
@@ -41,12 +42,6 @@ export interface AccountMenuUser {
   role: Role;
   canWrite: boolean;
 }
-
-export const ROLE_LABELS: Record<Role, string> = {
-  USER: 'User',
-  WRITER: 'Writer',
-  ADMIN: 'Admin',
-};
 
 // The account links, in groups that menus separate with a line. Writers and admins also get the dashboard.
 export function accountLinkGroups(user: AccountMenuUser) {

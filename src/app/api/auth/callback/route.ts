@@ -149,6 +149,8 @@ export async function GET(req: NextRequest) {
           sessionToken: hashSessionToken(sessionToken),
           userId: user.id,
           expiresAt,
+          // Only for the account page's device list
+          userAgent: req.headers.get('user-agent')?.slice(0, 300) ?? null,
         },
       }),
     ]);

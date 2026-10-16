@@ -45,6 +45,11 @@ model Session {
   userId       String
   expiresAt    DateTime
 
+  // Shown on the account page, so people can tell their devices apart and sign out ones they don't use
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

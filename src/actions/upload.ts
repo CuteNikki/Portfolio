@@ -36,13 +36,21 @@ export async function requestImageUpload(
   type: string,
   bytes: Record<ImageSize, number>,
 ) {
-  await requireWriterSession();
-
+  // Reasons go back as values: a production build hides a thrown error's message
+  const session = await getCurrentSession();
+  if (
+    !session ||
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
+  ) {
+    return { error: 'Only writers can upload pictures.' } as const;
+  }
   if (!(type in IMAGE_TYPES)) {
-    throw new Error('Pictures must be WebP or JPEG.');
+    return { error: 'Pictures must be WebP or JPEG.' } as const;
   }
   if (!IMAGE_SIZE_NAMES.every((size) => isValidUploadSize(bytes?.[size]))) {
-    throw new Error('That picture is too large, even after shrinking.');
+    return {
+      error: 'That picture is too large, even after shrinking.',
+    } as const;
   }
 
   // Only the expected sizes go on, whatever else the browser sent
