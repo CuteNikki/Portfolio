@@ -1,17 +1,26 @@
-import { getPublishedProject, getPublishedProjects } from '@/lib/data';
+import { getPublishedProject } from '@/lib/data';
 import { OG_SIZE, renderOgImage } from '@/lib/og';
 
-export const alt = 'niso.moe - Project';
-export const size = OG_SIZE;
-export const contentType = 'image/png';
+// Gives the image an alt text with the project's title. Next.js then serves it under its own id, and prerendering
+// the image as well isn't possible, but the picture itself is cached.
+export async function generateImageMetadata({
+  params,
+}: {
+  params: { projectId: string };
+}) {
+  // Only published projects, so the alt text can't leak the title of a draft
+  const project = await getPublishedProject(params.projectId);
 
-export async function generateStaticParams() {
-  const projects = await getPublishedProjects();
-
-  // Cache Components needs at least one param to prerender the route
-  if (projects.length === 0) return [{ projectId: 'none' }];
-
-  return projects.map((project) => ({ projectId: project.slug ?? project.id }));
+  return [
+    {
+      id: 'cover',
+      alt: project
+        ? `${project.title}, a project on niso.moe`
+        : 'Projects on niso.moe',
+      size: OG_SIZE,
+      contentType: 'image/png',
+    },
+  ];
 }
 
 export default async function Image({
@@ -27,7 +36,7 @@ export default async function Image({
   return renderOgImage({
     eyebrow: 'Project',
     title: project?.title ?? 'Projects',
-    subtitle: project?.technologies.slice(0, 5).join(' · ') || undefined,
+    details: project?.technologies.slice(0, 4),
     coverUrl: project?.coverUrl,
   });
 }

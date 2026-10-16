@@ -1,18 +1,25 @@
-import { getPublishedPost, getPublishedPosts } from '@/lib/data';
+import { getPublishedPost } from '@/lib/data';
 import { OG_SIZE, renderOgImage } from '@/lib/og';
 import { formatDate } from '@/lib/utils';
 
-export const alt = 'niso.moe - Post';
-export const size = OG_SIZE;
-export const contentType = 'image/png';
+// Gives the image an alt text with the post's title. Next.js then serves it under its own id, and prerendering
+// the image as well isn't possible, but the picture itself is cached.
+export async function generateImageMetadata({
+  params,
+}: {
+  params: { postId: string };
+}) {
+  // Only published posts, so the alt text can't leak the title of a draft
+  const post = await getPublishedPost(params.postId);
 
-export async function generateStaticParams() {
-  const posts = await getPublishedPosts();
-
-  // Cache Components needs at least one param to prerender the route
-  if (posts.length === 0) return [{ postId: 'none' }];
-
-  return posts.map((post) => ({ postId: post.slug ?? post.id }));
+  return [
+    {
+      id: 'cover',
+      alt: post ? `${post.title}, a post on niso.moe` : 'Posts on niso.moe',
+      size: OG_SIZE,
+      contentType: 'image/png',
+    },
+  ];
 }
 
 export default async function Image({
