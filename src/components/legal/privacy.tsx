@@ -35,7 +35,7 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
 import { ScrollReveal } from '@/components/common/scroll-reveal';
-import { ScrollToTopButton } from '@/components/common/scroll-top-buttont';
+import { ScrollToTopButton } from '@/components/common/scroll-top-button';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -579,7 +579,11 @@ export function PrivacyContent({
   const content = CONTENT[language];
 
   return (
-    <div className='flex w-full flex-col items-center gap-4 tracking-tight'>
+    // The page itself is marked English, so screen readers need to know when this part is German
+    <div
+      lang={language}
+      className='flex w-full flex-col items-center gap-4 tracking-tight'
+    >
       {/* Header */}
       <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
         <div
@@ -616,7 +620,7 @@ export function PrivacyContent({
         <div
           data-reveal-item
           style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='bg-primary/25 border-primary flex w-full flex-col gap-2 border p-4 sm:p-8'
+          className='bg-primary/15 border-primary flex w-full flex-col gap-2 border p-4 sm:p-8'
         >
           <h2 className='flex items-center gap-2 text-xl font-semibold'>
             {content.notice.icon}
@@ -767,7 +771,7 @@ export function PrivacyContent({
             ),
           )}
         </ul>
-        <div className='border-primary bg-primary/25 flex flex-row gap-2 border p-4'>
+        <div className='border-primary bg-primary/15 flex flex-row gap-2 border p-4'>
           {content.cookiesAndSessions.noteIcon}
           <p>{content.cookiesAndSessions.note}</p>
         </div>
@@ -792,7 +796,7 @@ export function PrivacyContent({
             ),
           )}
         </ul>
-        <div className='border-primary bg-primary/25 flex flex-row gap-2 border p-4'>
+        <div className='border-primary bg-primary/15 flex flex-row gap-2 border p-4'>
           {content.yourRights.noticeIcon}
           <p>
             {content.yourRights.notice.replace(

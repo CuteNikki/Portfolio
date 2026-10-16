@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export function ExperienceTabs({
   career,
@@ -25,15 +25,24 @@ export function ExperienceTabs({
       </TabsList>
       <div className='mt-6 min-h-56'>
         <AnimatePresence initial={false} mode='wait'>
-          <motion.div
+          {/* The tab panel the active trigger points to. forceMount keeps the old panel visible while it fades out. */}
+          <TabsContent
             key={active}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
+            value={active}
+            forceMount
+            asChild
+            // The panel styles would shrink the text to text-sm. The panel is focusable, so it gets a focus ring.
+            className='focus-visible:ring-ring/50 text-base focus-visible:ring-[3px]'
           >
-            {active === 'career' ? career : education}
-          </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+            >
+              {active === 'career' ? career : education}
+            </motion.div>
+          </TabsContent>
         </AnimatePresence>
       </div>
     </Tabs>

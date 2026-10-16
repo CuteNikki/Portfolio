@@ -19,7 +19,7 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
 import { ScrollReveal } from '@/components/common/scroll-reveal';
-import { ScrollToTopButton } from '@/components/common/scroll-top-buttont';
+import { ScrollToTopButton } from '@/components/common/scroll-top-button';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -27,7 +27,7 @@ const CONTENT = {
   en: {
     header: {
       title: 'Imprint',
-      description: 'Legal information according to § 5 TMG',
+      description: 'Legal information according to § 5 DDG',
     },
     languageToggle: 'Read in German',
     languageToggleIcon: <LanguagesIcon className='shrink-0' />,
@@ -47,8 +47,8 @@ const CONTENT = {
       icon: <ScaleIcon className='shrink-0' />,
       title: 'Liability for Content',
       paragraphs: [
-        'As a service provider, we are responsible for our own content on these pages in accordance with general laws pursuant to § 7 Para. 1 TMG (German Telemedia Act).',
-        'However, according to §§ 8 to 10 TMG, we as a service provider are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity.',
+        'As a service provider, we are responsible for our own content on these pages in accordance with general laws pursuant to § 7 Para. 1 DDG (German Digital Services Act).',
+        'However, according to §§ 8 to 10 DDG, we as a service provider are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity.',
         'Obligations to remove or block the use of information under general laws remain unaffected. However, liability in this respect is only possible from the time of knowledge of a specific infringement. Upon becoming aware of such violations, we will remove the content immediately.',
       ],
     },
@@ -73,7 +73,7 @@ const CONTENT = {
   de: {
     header: {
       title: 'Impressum',
-      description: 'Rechtliche Angaben gemäß § 5 TMG',
+      description: 'Rechtliche Angaben gemäß § 5 DDG',
     },
     languageToggle: 'Read in English',
     languageToggleIcon: <LanguagesIcon className='shrink-0' />,
@@ -93,8 +93,8 @@ const CONTENT = {
       icon: <ScaleIcon className='shrink-0' />,
       title: 'Haftung für Inhalte',
       paragraphs: [
-        'Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.',
-        'Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.',
+        'Als Diensteanbieter sind wir gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.',
+        'Nach §§ 8 bis 10 DDG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.',
         'Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.',
       ],
     },
@@ -135,9 +135,11 @@ function SectionCard({
         style={{ '--reveal-index': 0 } as React.CSSProperties}
       >
         <CardHeader>
-          <CardTitle className='text-primary-text flex items-center gap-2'>
-            {icon}
-            {title}
+          <CardTitle>
+            <h2 className='text-primary-text flex items-center gap-2'>
+              {icon}
+              {title}
+            </h2>
           </CardTitle>
         </CardHeader>
         <CardContent className='flex flex-col gap-4'>{children}</CardContent>
@@ -155,7 +157,11 @@ export function ImprintContent({
   const content = CONTENT[language];
 
   return (
-    <div className='flex flex-col items-center gap-4 tracking-tight'>
+    // The page itself is marked English, so screen readers need to know when this part is German
+    <div
+      lang={language}
+      className='flex flex-col items-center gap-4 tracking-tight'
+    >
       {/* Header */}
       <ScrollReveal className='scroll-reveal w-full max-w-5xl'>
         <div

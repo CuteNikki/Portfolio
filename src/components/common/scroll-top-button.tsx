@@ -8,7 +8,8 @@ export function ScrollToTopButton() {
   return (
     <Button
       size='lg'
-      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      // No behavior here: the page's CSS scrolls smoothly, except for people who asked for reduced motion
+      onClick={() => window.scrollTo({ top: 0 })}
     >
       <ArrowUpIcon className='shrink-0' />
       Scroll to Top

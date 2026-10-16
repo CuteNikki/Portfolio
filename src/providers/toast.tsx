@@ -3,12 +3,21 @@
 import { useTheme } from 'next-themes';
 import { Toaster } from 'sonner';
 
+// Sonner only knows light and dark, so the Catppuccin themes map to the one they're based on
+const TOAST_THEMES: Record<string, 'light' | 'dark'> = {
+  light: 'light',
+  dark: 'dark',
+  'catppuccin-latte': 'light',
+  'catppuccin-macchiato': 'dark',
+};
+
 export function ToastProvider() {
-  const { theme } = useTheme();
+  const { resolvedTheme } = useTheme();
 
-  return <Toaster richColors theme={isValidTheme(theme) ? theme : 'system'} />;
-}
-
-function isValidTheme(theme: unknown): theme is 'light' | 'dark' | 'system' {
-  return ['light', 'dark', 'system'].includes(theme as string);
+  return (
+    <Toaster
+      richColors
+      theme={(resolvedTheme && TOAST_THEMES[resolvedTheme]) || 'system'}
+    />
+  );
 }

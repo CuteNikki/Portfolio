@@ -31,6 +31,19 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -50,14 +63,31 @@
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
   --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
+  --muted-foreground: oklch(0.5 0.016 285.938);
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
+  --destructive: oklch(0.51 0.21 27);
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.705 0.015 286.067);
   --radius: 0.75rem;
+  --code-background: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.56 0.25 302);
+  --chart-2: oklch(0.6 0.17 250);
+  --chart-3: oklch(0.65 0.14 175);
+  --chart-4: oklch(0.75 0.16 75);
+  --chart-5: oklch(0.63 0.21 15);
+
+  /* The sidebar follows each theme's own colours. The theme classes sit on <html>, like :root, so these pick up the
+     theme's values. */
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--card-foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
 }
 .dark {
   --background: oklch(0.141 0.005 285.823);
@@ -66,7 +96,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.21 0.006 285.885);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.58 0.22 303);
+  --primary: oklch(0.55 0.22 303);
   --primary-text: oklch(0.68 0.21 303);
   --primary-foreground: oklch(0.98 0.01 308);
   --secondary: oklch(0.24 0.006 286);
@@ -79,30 +109,47 @@
   --border: oklch(1 0 0 / 11%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.552 0.016 286);
+  --code-background: var(--muted);
+  --chart-1: oklch(0.68 0.21 303);
+  --chart-2: oklch(0.7 0.14 250);
+  --chart-3: oklch(0.75 0.13 175);
+  --chart-4: oklch(0.8 0.15 80);
+  --chart-5: oklch(0.7 0.19 15);
 }
 .catppuccin-latte {
   --background: hsl(220 23% 95%);
   --foreground: hsl(231 11% 36%);
   --card: hsl(223 20% 92%);
   --card-foreground: hsl(231 11% 36%);
+  --popover: hsl(220 23% 95%);
+  --popover-foreground: hsl(231 11% 36%);
   --primary: hsl(266 44% 49%);
   --primary-text: hsl(266 44% 39%);
   --primary-foreground: hsl(220 23% 95%);
   --secondary: hsl(225 18% 83%);
   --secondary-foreground: hsl(231 11% 36%);
-  --muted: hsl(225 18% 83%);
+  --muted: hsl(223 16% 88%);
   --muted-foreground: hsl(231 10% 40%);
   --accent: hsl(226 15% 77%);
   --accent-foreground: hsl(231 11% 36%);
   --border: hsl(228 12% 71%);
   --input: hsl(228 12% 71%);
   --ring: hsl(266 44% 49%);
+  --destructive: hsl(347 87% 44%);
+  --chart-1: hsl(266 85% 58%);
+  --chart-2: hsl(220 91% 54%);
+  --chart-3: hsl(183 74% 35%);
+  --chart-4: hsl(22 99% 52%);
+  --chart-5: hsl(347 87% 44%);
+  color-scheme: light;
 }
 .catppuccin-macchiato {
   --background: hsl(232 23% 18%);
   --foreground: hsl(227 68% 88%);
   --card: hsl(233 23% 15%);
   --card-foreground: hsl(227 68% 88%);
+  --popover: hsl(233 23% 15%);
+  --popover-foreground: hsl(227 68% 88%);
   --primary: hsl(267 83% 80%);
   --primary-text: hsl(267 63% 70%);
   --primary-foreground: hsl(232 23% 18%);
@@ -115,14 +162,23 @@
   --border: hsl(230 14% 41%);
   --input: hsl(230 14% 41%);
   --ring: hsl(267 83% 80%);
+  --destructive: hsl(351 74% 73%);
+  --code-background: var(--card);
+  --chart-1: hsl(267 83% 80%);
+  --chart-2: hsl(220 83% 75%);
+  --chart-3: hsl(171 47% 69%);
+  --chart-4: hsl(21 86% 73%);
+  --chart-5: hsl(351 74% 73%);
+  color-scheme: dark;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50 scroll-smooth;
+    @apply border-border outline-ring/50;
   }
+  /* Next only turns smooth scrolling off for route changes when <html> also has data-scroll-behavior="smooth" */
   html {
-    @apply bg-background;
+    @apply bg-background scroll-smooth;
   }
   body {
     @apply bg-background text-foreground;
@@ -172,6 +228,13 @@
       color-mix(in oklab, var(--primary) 4%, transparent),
       transparent 22rem
     );
+  }
+}
+/* Without JavaScript nothing reveals the content, so it stays visible */
+@media (scripting: none) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {

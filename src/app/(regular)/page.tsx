@@ -106,6 +106,8 @@ export default function Home() {
       </ScrollReveal>
 
       <ScrollReveal className='scroll-reveal'>
+        {/* The tabs say what's in them, but the career and school names below need a section heading above them */}
+        <h2 className='sr-only'>Experience</h2>
         <ExperienceTabs
           career={
             <div

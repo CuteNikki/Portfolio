@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { SiDiscord } from '@icons-pack/react-simple-icons';
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 import {
   DropdownMenu,
@@ -26,8 +27,8 @@ export function DiscordMenu() {
       .then(() => {
         setCopied(true);
       })
-      .catch((err) => {
-        console.error('Failed to copy text: ', err);
+      .catch(() => {
+        toast.error('Could not copy the username');
       })
       .finally(() => {
         window.setTimeout(() => setCopied(false), 1600);
@@ -36,18 +37,23 @@ export function DiscordMenu() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <div className='text-muted-foreground hover:text-primary-text flex items-center gap-2 text-sm transition-colors'>
-          <SiDiscord className='size-4' />
-          Discord
-        </div>
+      <DropdownMenuTrigger className='text-muted-foreground hover:text-primary-text focus-visible:text-primary-text focus-visible:outline-ring flex items-center gap-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2'>
+        {/* The icon has its own "Discord" title, which screen readers would read before the label */}
+        <SiDiscord className='size-4' title='' aria-hidden />
+        Discord
       </DropdownMenuTrigger>
       <DropdownMenuContent align='center' className='w-52'>
         <DropdownMenuLabel className='text-center'>
           Connect on Discord
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={copyUsername}>
+        {/* Stays open so "Username copied" can be seen */}
+        <DropdownMenuItem
+          onSelect={(event) => {
+            event.preventDefault();
+            void copyUsername();
+          }}
+        >
           {copied ? <CheckIcon /> : <CopyIcon />}
           {copied ? 'Username copied' : `Copy @${discordUsername}`}
         </DropdownMenuItem>

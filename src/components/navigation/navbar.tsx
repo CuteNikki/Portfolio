@@ -17,7 +17,13 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 
-export function Navbar() {
+// `showWriterLinks` adds the dashboard links for writers, which reads the session. The global 404 page leaves them out:
+// it also renders for missing dashboard pages, where Next checks it can show without waiting on the session.
+export function Navbar({
+  showWriterLinks = true,
+}: {
+  showWriterLinks?: boolean;
+}) {
   const publicLinks = NAVBAR_LINKS.filter((link) => !link.requiresAuth);
 
   return (
@@ -42,7 +48,7 @@ export function Navbar() {
               </Link>
             </li>
           ))}
-          <ProtectedNavLinks />
+          {showWriterLinks && <ProtectedNavLinks />}
         </ul>
 
         <div className='flex items-center gap-2'>
@@ -76,7 +82,7 @@ export function Navbar() {
                       </Link>
                     </li>
                   ))}
-                  <ProtectedNavLinks isMobile />
+                  {showWriterLinks && <ProtectedNavLinks isMobile />}
                 </ul>
               </SheetBody>
             </SheetContent>
