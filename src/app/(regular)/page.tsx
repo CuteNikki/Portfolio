@@ -5,7 +5,7 @@ import { ArrowRightIcon, BriefcaseIcon, GraduationCapIcon } from 'lucide-react';
 
 import { toPostRow, toProjectCard } from '@/lib/cards';
 import { getPublishedPosts, getPublishedProjects } from '@/lib/data';
-import { formatDate } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
@@ -33,6 +33,34 @@ async function Age() {
   return PERSONAL_DETAILS.age;
 }
 
+// The small violet label above each heading, as in the hero
+const EYEBROW =
+  'text-primary-text text-[13px] font-semibold tracking-[0.14em] uppercase';
+
+function SectionHeading({
+  id,
+  eyebrow,
+  className,
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cn('flex flex-col gap-2', className)}>
+      <p className={EYEBROW}>{eyebrow}</p>
+      <h2
+        id={id}
+        className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
+      >
+        {children}
+      </h2>
+    </div>
+  );
+}
+
 const reveal = (index: number) =>
   ({ '--reveal-index': index }) as React.CSSProperties;
 
@@ -46,7 +74,7 @@ export default function Home() {
           aria-hidden
           className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-160 w-screen -translate-x-1/2 sm:-top-24'
         />
-        <p className='animate-hero-in text-primary-text pt-6 text-[13px] font-semibold tracking-[0.14em] uppercase sm:pt-10'>
+        <p className={cn(EYEBROW, 'animate-hero-in pt-6 sm:pt-10')}>
           Portfolio / 2026
         </p>
         <h1 className='animate-hero-in max-w-5xl text-[44px] leading-[1.04] font-bold tracking-[-0.06em] text-balance delay-1 sm:text-6xl lg:text-[76px]'>
@@ -72,16 +100,14 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollReveal className='scroll-reveal -mt-6 grid gap-8 py-2 sm:-mt-12 lg:grid-cols-2 lg:gap-16'>
+      <ScrollReveal className='scroll-reveal bg-card -mt-6 grid gap-8 rounded-xl border p-7 sm:-mt-12 sm:p-8 lg:grid-cols-2 lg:gap-0'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 1 } as React.CSSProperties}
-          className='flex flex-col gap-3'
+          className='flex flex-col gap-3 lg:pr-8'
         >
-          <span className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-widest uppercase'>
-            Availability
-          </span>
-          <p className='text-muted-foreground max-w-sm leading-relaxed'>
+          <span className={EYEBROW}>Availability</span>
+          <p className='text-body max-w-md text-sm leading-relaxed'>
             Currently open to thoughtful collaborations, product work, and
             interesting problems.
           </p>
@@ -109,12 +135,10 @@ export default function Home() {
         <div
           data-reveal-item
           style={{ '--reveal-index': 2 } as React.CSSProperties}
-          className='lg:border-border flex max-w-md flex-col gap-3 lg:border-l lg:pl-8'
+          className='lg:border-border flex flex-col gap-3 lg:border-l lg:pl-8'
         >
-          <span className='text-primary-text text-sm font-semibold tracking-widest uppercase'>
-            Experience
-          </span>
-          <p className='text-muted-foreground max-w-xs leading-relaxed text-pretty'>
+          <span className={EYEBROW}>Experience</span>
+          <p className='text-body max-w-md text-sm leading-relaxed text-pretty'>
             Nearly a decade of experience building on the web, shaped by the
             work and education that continue to guide how I build.
           </p>
@@ -166,13 +190,10 @@ export default function Home() {
 
       <ScrollReveal className='scroll-reveal'>
         <section aria-labelledby='posts-heading'>
-          <div className='mb-4 flex flex-wrap items-baseline justify-between gap-4'>
-            <h2
-              id='posts-heading'
-              className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
-            >
+          <div className='mb-6 flex flex-wrap items-end justify-between gap-4'>
+            <SectionHeading id='posts-heading' eyebrow='Writing'>
               Latest posts
-            </h2>
+            </SectionHeading>
             <Link
               href={LINKS.posts.url}
               className='nav-underline text-muted-foreground hover:text-foreground text-sm transition-colors'
@@ -186,12 +207,13 @@ export default function Home() {
 
       <ScrollReveal className='scroll-reveal'>
         <section aria-labelledby='experience-heading'>
-          <h2
+          <SectionHeading
             id='experience-heading'
-            className='mb-7 text-[32px] leading-tight font-bold tracking-[-0.05em]'
+            eyebrow='Background'
+            className='mb-7'
           >
             Experience
-          </h2>
+          </SectionHeading>
           <div className='grid items-start gap-4 lg:grid-cols-2'>
             <ExperienceCard
               title='Career'
@@ -234,18 +256,14 @@ export default function Home() {
       </ScrollReveal>
 
       <ScrollReveal className='scroll-reveal'>
-        <section className='flex flex-col gap-6'>
-          <div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
-            <div>
-              <p className='text-primary-text text-sm font-semibold tracking-widest uppercase'>
-                Toolkit
-              </p>
-              <h2 className='text-3xl font-bold tracking-tight'>
-                Things I work with.
-              </h2>
-            </div>
-          </div>
-          <div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-4'>
+        <section
+          aria-labelledby='toolkit-heading'
+          className='flex flex-col gap-7'
+        >
+          <SectionHeading id='toolkit-heading' eyebrow='Toolkit'>
+            Things I work with.
+          </SectionHeading>
+          <div className='bg-card grid gap-x-6 gap-y-8 rounded-xl border p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4'>
             {Object.entries(PERSONAL_DETAILS.skillsTechnologies).map(
               ([category, skills], index) => (
                 <div
@@ -254,14 +272,15 @@ export default function Home() {
                   style={{ '--reveal-index': index } as React.CSSProperties}
                   className='flex flex-col gap-2'
                 >
-                  <h3 className='text-muted-foreground text-sm font-semibold capitalize'>
-                    {category}
-                  </h3>
-                  <div className='flex flex-wrap gap-1'>
+                  <h3 className='text-sm font-bold capitalize'>{category}</h3>
+                  <div className='flex flex-wrap gap-1.5'>
                     {skills.map(({ name, icon, description }) => (
                       <Tooltip key={name}>
                         <TooltipTrigger asChild>
-                          <Badge variant='secondary' className='cursor-help'>
+                          <Badge
+                            variant='outline'
+                            className='bg-background text-body hover:border-line-strong hover:text-foreground h-7 cursor-help gap-1.5 rounded-lg px-2.5 text-xs font-normal transition-colors'
+                          >
                             {icon}
                             {name}
                           </Badge>
@@ -328,12 +347,9 @@ async function SelectedProjects() {
   const projects = await getPublishedProjects();
 
   const heading = (
-    <h2
-      id='projects-heading'
-      className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
-    >
+    <SectionHeading id='projects-heading' eyebrow='Work'>
       Selected projects
-    </h2>
+    </SectionHeading>
   );
 
   if (projects.length === 0) {
