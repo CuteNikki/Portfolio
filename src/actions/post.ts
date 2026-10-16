@@ -1,11 +1,26 @@
 'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
+import { headers } from 'next/headers';
 
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { hit, visitorHash } from '@/lib/rate-limit';
+import { resolveSlug } from '@/lib/slug';
+
+// Writers manage their own posts, admins every post. The dashboard is admin-only, but actions can be called directly.
+function editablePosts(user: { id: string; role: Role }) {
+  return user.role === Role.ADMIN ? {} : { writerId: user.id };
+}
+
+function isPostSlugTaken(exceptId?: string) {
+  return async (slug: string) =>
+    (await prisma.post.count({
+      where: exceptId ? { slug, NOT: { id: exceptId } } : { slug },
+    })) > 0;
+}
 
 export async function createPost(formData: FormData) {
   const session = await getCurrentSession();
@@ -21,7 +36,6 @@ export async function createPost(formData: FormData) {
 
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
-  const slug = (formData.get('slug') || null) as string | null;
 
   const isPublished = formData.get('isPublished') === 'true';
 
@@ -29,17 +43,11 @@ export async function createPost(formData: FormData) {
     throw new Error('Title and content are required.');
   }
 
-  if (slug) {
-    const existingPost = await prisma.post.findUnique({
-      where: { slug },
-    });
-
-    if (existingPost) {
-      throw new Error(
-        'A post with this URL slug already exists. Please choose a different one.',
-      );
-    }
-  }
+  const slug = await resolveSlug(
+    formData.get('slug'),
+    title,
+    isPostSlugTaken(),
+  );
 
   const createdPost = await prisma.post.create({
     data: {
@@ -67,8 +75,17 @@ export async function deletePost(formData: FormData) {
 
   const postId = formData.get('postId') as string;
 
+  const post = await prisma.post.findFirst({
+    where: { id: postId, ...editablePosts(session.user) },
+    select: { id: true },
+  });
+
+  if (!post) {
+    throw new Error('Post not found.');
+  }
+
   const deletedPost = await prisma.post.delete({
-    where: { id: postId },
+    where: { id: post.id },
   });
 
   revalidatePostPaths(deletedPost.id, deletedPost.slug);
@@ -86,7 +103,6 @@ export async function updatePost(formData: FormData) {
 
   const id = formData.get('postId') as string;
   const title = formData.get('title') as string;
-  const slug = formData.get('slug') as string;
   const content = formData.get('content') as string;
   const isPublished = formData.get('isPublished') === 'true';
 
@@ -94,27 +110,20 @@ export async function updatePost(formData: FormData) {
     throw new Error('All fields are required.');
   }
 
-  if (slug) {
-    const existingPost = await prisma.post.findFirst({
-      where: {
-        slug,
-        NOT: { id },
-      },
-    });
-
-    if (existingPost) {
-      throw new Error('Another post is already using this URL slug.');
-    }
-  }
-
-  const currentPost = await prisma.post.findUnique({
-    where: { id },
+  const currentPost = await prisma.post.findFirst({
+    where: { id, ...editablePosts(session.user) },
     select: { publishedAt: true },
   });
 
   if (!currentPost) {
     throw new Error('Post not found.');
   }
+
+  const slug = await resolveSlug(
+    formData.get('slug'),
+    title,
+    isPostSlugTaken(id),
+  );
 
   await prisma.post.update({
     where: { id },
@@ -246,17 +255,50 @@ export async function editComment(formData: FormData) {
   revalidatePostPaths(comment.postId, postSlug);
 }
 
-export async function addView(formData: FormData) {
-  const postId = formData.get('postId') as string;
+// Matches crawlers and link previews that run scripts, and audit tools like Lighthouse
+const NOT_A_READER = /bot|crawl|spider|slurp|preview|lighthouse|headless/i;
 
-  if (!postId) {
-    throw new Error('Post ID is required.');
+export async function addView(formData: FormData) {
+  const postId = formData.get('postId');
+
+  if (typeof postId !== 'string' || !postId) return;
+
+  const [session, headerList] = await Promise.all([
+    getCurrentSession(),
+    headers(),
+  ]);
+  const userAgent = headerList.get('user-agent') ?? '';
+
+  // Writers and admins checking their own blog aren't readers
+  if (
+    session?.user.role === Role.ADMIN ||
+    session?.user.role === Role.WRITER ||
+    NOT_A_READER.test(userAgent)
+  ) {
+    return;
   }
 
-  await prisma.post.update({
-    where: { id: postId },
-    data: { views: { increment: 1 } },
+  // Drafts don't count, and an unknown id shouldn't leave a rate-limit row behind
+  const isPublished = await prisma.post.count({
+    where: { id: postId, publishedAt: { not: null } },
   });
+  if (!isPublished) return;
+
+  // One view per visitor and post a day, however often they reload. The visitor includes the browser, so people sharing
+  // a network count separately, and the cap per network keeps a script that changes its user agent from counting up.
+  const [network, visitor] = await Promise.all([
+    visitorHash(),
+    visitorHash(userAgent),
+  ]);
+  if (
+    (await hit(`view-network:${network}`, 24 * 60 * 60)) > 100 ||
+    (await hit(`view:${postId}:${visitor}`, 24 * 60 * 60)) > 1
+  ) {
+    return;
+  }
+
+  // Raw SQL, because Prisma's update would also move updatedAt, which the sitemap reports as the post's last change
+  await prisma.$executeRaw`UPDATE "Post" SET "views" = "views" + 1 WHERE "id" = ${postId}`;
 }
 
 function revalidatePostPaths(postId: string, slug: string | null) {

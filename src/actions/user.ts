@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
+import z from 'zod';
 
 import { Role } from '@/generated/prisma/enums';
 
@@ -15,7 +16,13 @@ export async function updateUserRole(formData: FormData) {
   }
 
   const targetUserId = formData.get('userId') as string;
-  const newRole = formData.get('role') as Role;
+  const parsedRole = z.enum(Role).safeParse(formData.get('role'));
+
+  if (!parsedRole.success) {
+    throw new Error('Invalid role');
+  }
+
+  const newRole = parsedRole.data;
 
   if (session.user.id === targetUserId) {
     throw new Error('Invalid user: cannot change own role');
@@ -39,9 +46,7 @@ export async function updateUserRole(formData: FormData) {
       throw new Error('Internal server error: failed to update user role');
     });
 
-  // Roles and authors show up on cached posts and comments
-  updateTag('posts');
-  revalidatePath('/admin/users');
+  revalidateUserPaths();
 }
 
 export async function deleteUser(formData: FormData) {
@@ -65,18 +70,21 @@ export async function deleteUser(formData: FormData) {
     throw new Error('Invalid user: user not found');
   }
 
-  await prisma.user
-    .delete({
-      where: { id: targetUserId },
-    })
+  // Comments, posts and projects block deleting their author, so they go first. Replies to the user's comments and
+  // comments on their posts go with them.
+  await prisma
+    .$transaction([
+      prisma.comment.deleteMany({ where: { authorId: targetUserId } }),
+      prisma.post.deleteMany({ where: { writerId: targetUserId } }),
+      prisma.project.deleteMany({ where: { writerId: targetUserId } }),
+      prisma.user.delete({ where: { id: targetUserId } }),
+    ])
     .catch((error) => {
       console.error('Error deleting user:', error);
       throw new Error('Internal server error: failed to delete user');
     });
 
-  // Roles and authors show up on cached posts and comments
-  updateTag('posts');
-  revalidatePath('/admin/users');
+  revalidateUserPaths();
 }
 
 export async function checkNavPermissions() {
@@ -84,4 +92,11 @@ export async function checkNavPermissions() {
 
   if (!session) return false;
   return session.user.role === Role.ADMIN || session.user.role === Role.WRITER;
+}
+
+// Roles and authors show up on cached posts, projects and comments
+function revalidateUserPaths() {
+  updateTag('posts');
+  updateTag('projects');
+  revalidatePath('/dashboard/users');
 }

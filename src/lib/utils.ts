@@ -73,3 +73,35 @@ export function toExcerpt(markdown: string, maxLength = 160): string {
   const lastSpace = cut.lastIndexOf(' ');
   return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?-]+$/, '')}…`;
 }
+
+/**
+ * Turns text into a URL slug of lowercase ASCII letters, digits and dashes, e.g. "Über Linux!" becomes "ueber-linux".
+ *
+ * @param text - The text to turn into a slug, e.g. a title.
+ * @param maxLength - The maximum length of the slug.
+ * @returns The slug, or an empty string if the text has no letters or digits.
+ */
+export function slugify(text: string, maxLength = 80): string {
+  return text
+    .toLowerCase()
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '') // accents
+    .replace(/[^a-z0-9]+/g, '-')
+    .slice(0, maxLength)
+    .replace(/^-+|-+$/g, '');
+}
+
+/**
+ * Points a Discord avatar URL at this site's /discord-cdn rewrite (see next.config.ts), so the browser loads it from
+ * here instead of from Discord. Other URLs are returned unchanged.
+ *
+ * @param url - The avatar URL as stored for the user.
+ * @returns The URL to put in the page.
+ */
+export function proxiedAvatarUrl(url: string): string {
+  return url.replace(/^https:\/\/cdn\.discordapp\.com\//, '/discord-cdn/');
+}

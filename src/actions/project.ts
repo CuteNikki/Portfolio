@@ -6,6 +6,14 @@ import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { resolveSlug } from '@/lib/slug';
+
+function isProjectSlugTaken(exceptId?: string) {
+  return async (slug: string) =>
+    (await prisma.project.count({
+      where: exceptId ? { slug, NOT: { id: exceptId } } : { slug },
+    })) > 0;
+}
 
 export async function createProject(formData: FormData) {
   const session = await getCurrentSession();
@@ -18,7 +26,6 @@ export async function createProject(formData: FormData) {
 
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
-  const slug = (formData.get('slug') || null) as string | null;
   const repository = formData.get('repository') as string;
   const website = formData.get('website') as string;
   const tags =
@@ -39,17 +46,11 @@ export async function createProject(formData: FormData) {
     throw new Error('Title and description are required.');
   }
 
-  if (slug) {
-    const existingProject = await prisma.project.findUnique({
-      where: { slug },
-    });
-
-    if (existingProject) {
-      throw new Error(
-        'A project with this URL slug already exists. Please choose a different one.',
-      );
-    }
-  }
+  const slug = await resolveSlug(
+    formData.get('slug'),
+    title,
+    isProjectSlugTaken(),
+  );
 
   const createdProject = await prisma.project.create({
     data: {
@@ -95,7 +96,6 @@ export async function updateProject(formData: FormData) {
 
   const id = formData.get('projectId') as string;
   const title = formData.get('title') as string;
-  const slug = formData.get('slug') as string;
   const description = formData.get('description') as string;
   const repository = formData.get('repository') as string;
   const website = formData.get('website') as string;
@@ -118,19 +118,6 @@ export async function updateProject(formData: FormData) {
     throw new Error('Some required fields are missing.');
   }
 
-  if (slug) {
-    const existingProject = await prisma.project.findFirst({
-      where: {
-        slug,
-        NOT: { id },
-      },
-    });
-
-    if (existingProject) {
-      throw new Error('Another project is already using this URL slug.');
-    }
-  }
-
   const currentProject = await prisma.project.findUnique({
     where: { id },
     select: { publishedAt: true },
@@ -139,6 +126,12 @@ export async function updateProject(formData: FormData) {
   if (!currentProject) {
     throw new Error('Project not found.');
   }
+
+  const slug = await resolveSlug(
+    formData.get('slug'),
+    title,
+    isProjectSlugTaken(id),
+  );
 
   await prisma.project.update({
     where: { id },
