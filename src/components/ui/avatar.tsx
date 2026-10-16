@@ -2,7 +2,7 @@
 
 import { Avatar as AvatarPrimitive } from 'radix-ui';
 
-import { cn } from '@/lib/utils';
+import { cn, proxiedAvatarUrl } from '@/lib/utils';
 
 function Avatar({
   className,
@@ -26,11 +26,16 @@ function Avatar({
 
 function AvatarImage({
   className,
+  src,
   ...props
 }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+  // Discord avatars load through this site, so visitors' browsers don't contact Discord's CDN
+  const imageSrc = typeof src === 'string' ? proxiedAvatarUrl(src) : src;
+
   return (
     <AvatarPrimitive.Image
       data-slot='avatar-image'
+      src={imageSrc}
       className={cn(
         'aspect-square size-full rounded-full object-cover',
         className,

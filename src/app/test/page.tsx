@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 import { Intro } from '@/app/test/intro';
 import Text from '@/app/test/text';
@@ -17,7 +18,12 @@ const IMAGES = [
 
 const INTRO_END_DELAY_SEC = 0.35 + (IMAGES.length - 1) * 0.25 + 1 + 1;
 
+// A playground for animations. It hotlinks images from Pinterest, so it stays out of the live site.
 export default function TestPage() {
+  if (process.env.NODE_ENV === 'production') {
+    notFound();
+  }
+
   return (
     <main>
       <Intro images={IMAGES} />

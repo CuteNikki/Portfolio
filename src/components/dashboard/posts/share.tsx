@@ -1,24 +1,27 @@
 'use client';
 
 import { SendIcon } from 'lucide-react';
-
-import { LINKS } from '@/constants/links';
-
-import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 
-export function ShareButton({ postId }: { postId: string }) {
+import { Button } from '@/components/ui/button';
+
+// Copies the link to a post or project. Pass the slug-based path, so the copied link is the canonical one.
+export function ShareButton({
+  path,
+  label,
+}: {
+  path: string;
+  label: 'Post' | 'Project';
+}) {
   return (
     <Button
       variant='outline'
       size='xs'
       onClick={() =>
         navigator.clipboard
-          .writeText(
-            `${window.location.origin}${LINKS.postWithSlugOrId(postId).url}`,
-          )
+          .writeText(`${window.location.origin}${path}`)
           .then(() => {
-            toast.success('Post URL copied to clipboard!');
+            toast.success(`${label} URL copied to clipboard!`);
           })
           .catch((err) => {
             toast.error('Failed to copy URL: ' + err.message);

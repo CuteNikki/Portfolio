@@ -61,7 +61,7 @@ export async function generateMetadata({
     openGraph: {
       ...SITE_OPEN_GRAPH,
       type: 'article',
-      publishedTime: post.createdAt.toISOString(),
+      publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
       authors: [PERSONAL_DETAILS.fullName],
     },
@@ -90,6 +90,9 @@ export default function PostPage({
   );
 }
 
+// notFound() here runs after the page has started streaming, so an unknown post keeps a 200 status with noindex.
+// Calling it before the stream would give a 404, but Next then sends an empty error page that renders only in the
+// browser: no content without JavaScript, and the theme flashes.
 async function PostContent({
   params,
 }: {
@@ -107,7 +110,8 @@ async function PostContent({
 
   return (
     <>
-      <ViewTracker postId={post.id} />
+      {/* Drafts aren't read by anyone but their writers, so they don't count views */}
+      {post.publishedAt && <ViewTracker postId={post.id} />}
 
       <ScrollReveal className='scroll-reveal'>
         {/* Title (Triggers instantly) */}
@@ -140,12 +144,16 @@ async function PostContent({
                 month: 'long',
                 day: 'numeric',
                 year: 'numeric',
+                timeZone: 'UTC',
               })}
             </time>
           </div>
 
           <div className='ml-auto flex items-center gap-2'>
-            <ShareButton postId={post.id} />
+            <ShareButton
+              path={LINKS.postWithSlugOrId(post.slug ?? post.id).url}
+              label='Post'
+            />
             <WriterOnly>
               <Button variant='outline' size='xs' asChild>
                 <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
@@ -232,10 +240,11 @@ async function Comments({ post }: { post: Post }) {
               You must be logged in to post a comment.
             </p>
             <Button asChild>
-              <Link href='/api/auth/login'>
+              {/* A plain link: a prefetch of the login route would start a new login and replace one in progress */}
+              <a href='/api/auth/login'>
                 <SendHorizontalIcon className='mr-2 size-4' />
                 Log In
-              </Link>
+              </a>
             </Button>
           </div>
         </div>

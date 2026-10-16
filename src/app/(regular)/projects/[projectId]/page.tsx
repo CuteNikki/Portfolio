@@ -81,6 +81,9 @@ export default function ProjectPage({
   );
 }
 
+// notFound() here runs after the page has started streaming, so an unknown project keeps a 200 status with noindex.
+// Calling it before the stream would give a 404, but Next then sends an empty error page that renders only in the
+// browser: no content without JavaScript, and the theme flashes.
 async function ProjectContent({
   params,
 }: {
@@ -123,12 +126,16 @@ async function ProjectContent({
                   month: 'long',
                   day: 'numeric',
                   year: 'numeric',
+                  timeZone: 'UTC',
                 })}
               </time>
             </div>
 
             <div className='ml-auto flex flex-wrap items-center gap-2'>
-              <ShareButton postId={project.id} />
+              <ShareButton
+                path={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
+                label='Project'
+              />
               <WriterOnly>
                 <Button variant='outline' size='xs' asChild>
                   <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
