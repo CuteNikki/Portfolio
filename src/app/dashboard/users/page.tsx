@@ -11,12 +11,17 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export const { dashboardUsers: metadata } = SITE_METADATA;
 
+// Every dashboard page checks the session before it renders anything, so moving between them waits for the server.
+// The layout's `instant = false` only covers arriving from outside the dashboard.
+export const instant = false;
+
 export default async function UsersPage() {
   await requireAdmin();
 
   const { users, hasError } = await prisma.user
     .findMany({
       omit: { accessToken: true, refreshToken: true, tokenExpiresAt: true },
+      orderBy: { createdAt: 'asc' },
     })
     .then((users) => ({ users, hasError: false }))
     .catch((error) => {

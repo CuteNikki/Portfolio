@@ -49,7 +49,7 @@ export function CommentActions({
   userId: string;
   isAdmin: boolean;
   setEditingCommentIdAction: (commentId: string | null) => void;
-  setShowReplyFormAction: (show: boolean) => void;
+  setShowReplyFormAction?: (show: boolean) => void;
 }) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
@@ -80,10 +80,12 @@ export function CommentActions({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align='end'>
-          <DropdownMenuItem onClick={() => setShowReplyFormAction(true)}>
-            <CornerDownRightIcon />
-            Reply
-          </DropdownMenuItem>
+          {setShowReplyFormAction && (
+            <DropdownMenuItem onClick={() => setShowReplyFormAction(true)}>
+              <CornerDownRightIcon />
+              Reply
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem
             onClick={() =>

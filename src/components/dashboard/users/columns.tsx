@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useTransition } from 'react';
+import { useOptimistic, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import {
@@ -15,6 +15,8 @@ import {
 } from 'lucide-react';
 
 import type { Role, User as UserModel } from '@/generated/prisma/client';
+
+import { proxiedAvatarUrl } from '@/lib/utils';
 
 import { deleteUser, updateUserRole } from '@/actions/user';
 
@@ -69,8 +71,7 @@ const userColumn: DashboardColumnDef<User> = {
   cell: ({ row }) => (
     <div className='flex flex-row items-center gap-2'>
       <Image
-        unoptimized
-        src={row.original.avatarUrl}
+        src={proxiedAvatarUrl(row.original.avatarUrl)}
         alt='Avatar'
         className='min-h-6 min-w-6 shrink-0 rounded-full'
         width={24}
@@ -102,14 +103,13 @@ const nameColumn: DashboardColumnDef<User> = {
 
 const RoleSelectCell = ({ user }: { user: User }) => {
   const [isPending, startTransition] = useTransition();
-  const [optimisticRole, setOptimisticRole] = useState(user.role);
+  // Shows the picked role while it saves, then the role from the server, so a failed change goes back by itself
+  const [optimisticRole, setOptimisticRole] = useOptimistic(user.role);
 
   const handleRoleChange = (newRole: string) => {
-    const previousRole = optimisticRole;
-
-    setOptimisticRole(newRole as Role);
-
     startTransition(async () => {
+      setOptimisticRole(newRole as Role);
+
       const formData = new FormData();
       formData.append('userId', user.id);
       formData.append('role', newRole);
@@ -126,7 +126,6 @@ const RoleSelectCell = ({ user }: { user: User }) => {
               ? error.message
               : 'An unknown error occurred',
         });
-        setOptimisticRole(previousRole);
       }
     });
   };
@@ -265,7 +264,7 @@ const UserActions = ({ user }: { user: User }) => {
 
 const actionsColumn: DashboardColumnDef<User> = {
   id: 'actions',
-  header: () => '',
+  header: () => <span className='sr-only'>Actions</span>,
   cell: ({ row }) => <UserActions user={row.original} />,
 };
 

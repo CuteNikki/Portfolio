@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useLayoutEffect, useRef, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { createPost } from '@/actions/post';
@@ -17,6 +17,22 @@ import { Textarea } from '@/components/ui/textarea';
 export function NewPostForm() {
   const [content, setContent] = useState('');
   const [isPending, startTransition] = useTransition();
+  // Stays set once saved: the transition ends before the edit page has loaded, and a second click would save a copy
+  const [isSaved, setIsSaved] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  // Next keeps this page alive in the background and restores its state when coming back. After a save, start with an
+  // empty, enabled form next time instead of the saved entry.
+  useLayoutEffect(() => {
+    if (!isSaved) return;
+
+    const form = formRef.current;
+    return () => {
+      setIsSaved(false);
+      setContent('');
+      form?.reset();
+    };
+  }, [isSaved]);
 
   const router = useRouter();
 
@@ -45,6 +61,7 @@ export function NewPostForm() {
             ? 'Post published successfully!'
             : 'Draft saved successfully!',
         );
+        setIsSaved(true);
         router.push(LINKS.dashboardPostEditWithId(post.id).url);
       } catch (error) {
         toast.error('Something went wrong', {
@@ -55,7 +72,7 @@ export function NewPostForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+    <form ref={formRef} onSubmit={handleSubmit} className='flex flex-col gap-6'>
       {/* Title & Slug */}
       <div className='grid gap-4 sm:grid-cols-2'>
         <div className='flex flex-col gap-2'>
@@ -74,7 +91,11 @@ export function NewPostForm() {
           <label htmlFor='slug' className='text-sm font-medium'>
             URL Slug
           </label>
-          <Input id='slug' name='slug' placeholder='why-i-switched-to-linux' />
+          <Input
+            id='slug'
+            name='slug'
+            placeholder='Leave empty to use the title'
+          />
         </div>
       </div>
 
@@ -87,6 +108,7 @@ export function NewPostForm() {
 
         <TabsContent value='write'>
           <Textarea
+            aria-label='Post content (Markdown)'
             name='content'
             placeholder='Write your post content here using Markdown...'
             className='min-h-100 resize-y'
@@ -110,7 +132,7 @@ export function NewPostForm() {
       </Tabs>
 
       <NewActionButtons
-        isPending={isPending}
+        isPending={isPending || isSaved}
         isMissingRequiredFields={!content.trim()}
         action={submitAction}
         setAction={setSubmitAction}

@@ -21,6 +21,8 @@ export function CommentForm({
   setShowReplyFormAction?: (show: boolean) => void;
 }) {
   const [content, setContent] = React.useState('');
+  // Each reply form needs its own id, or the label points at the first textarea on the page
+  const fieldId = React.useId();
 
   return (
     <form
@@ -51,13 +53,13 @@ export function CommentForm({
       className='flex flex-col gap-2'
     >
       <Field>
-        <FieldLabel htmlFor='content' className='sr-only'>
+        <FieldLabel htmlFor={fieldId} className='sr-only'>
           Your Comment
         </FieldLabel>
         <Textarea
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          id='content'
+          id={fieldId}
           name='content'
         />
         <div className='flex items-center justify-between gap-2'>

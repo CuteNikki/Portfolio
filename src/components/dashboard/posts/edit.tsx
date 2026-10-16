@@ -10,30 +10,36 @@ import { deletePost, updatePost } from '@/actions/post';
 import { LINKS } from '@/constants/links';
 
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
-import { EditActionButtons } from '@/components/dashboard/shared/actions-edit';
+import {
+  EditActionButtons,
+  getEditAction,
+  type EditAction,
+} from '@/components/dashboard/shared/actions-edit';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
 export function EditPostForm({ post }: { post: Post }) {
   const [content, setContent] = useState(post.content);
-  const [action, setAction] = useState<'save' | 'publish' | 'delete'>('save');
+  const [action, setAction] = useState<EditAction>('save');
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const intent = getEditAction(event);
+    setAction(intent);
     const formData = new FormData(event.currentTarget);
 
     // The textarea is unmounted while the Preview tab is open, so take the value from state
     formData.set('content', content);
 
     formData.append('postId', post.id);
-    formData.append('isPublished', action === 'publish' ? 'true' : 'false');
+    formData.append('isPublished', intent === 'publish' ? 'true' : 'false');
 
     startTransition(async () => {
       try {
-        if (action === 'delete') {
+        if (intent === 'delete') {
           if (
             !window.confirm(
               'Are you sure you want to delete this post? This cannot be undone.',
@@ -48,7 +54,7 @@ export function EditPostForm({ post }: { post: Post }) {
 
         await updatePost(formData);
         toast.success(
-          action === 'publish' ? 'Post published!' : 'Draft saved!',
+          intent === 'publish' ? 'Post published!' : 'Draft saved!',
         );
         router.refresh();
       } catch (error) {
@@ -82,7 +88,7 @@ export function EditPostForm({ post }: { post: Post }) {
           <Input
             id='slug'
             name='slug'
-            placeholder='why-i-switched-to-linux'
+            placeholder='Leave empty to use the title'
             defaultValue={post.slug ?? undefined}
           />
         </div>
@@ -99,6 +105,7 @@ export function EditPostForm({ post }: { post: Post }) {
 
         <TabsContent value='write'>
           <Textarea
+            aria-label='Post content (Markdown)'
             name='content'
             className='min-h-100 resize-y'
             value={content}
@@ -125,7 +132,6 @@ export function EditPostForm({ post }: { post: Post }) {
         isPending={isPending}
         isMissingRequiredFields={!content.trim()}
         action={action}
-        setAction={setAction}
       />
     </form>
   );

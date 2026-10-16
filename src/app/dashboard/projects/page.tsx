@@ -21,6 +21,10 @@ import {
 
 export const { dashboardProjects: metadata } = SITE_METADATA;
 
+// Every dashboard page checks the session before it renders anything, so moving between them waits for the server.
+// The layout's `instant = false` only covers arriving from outside the dashboard.
+export const instant = false;
+
 export default async function ProjectsPage() {
   await requireAdmin();
 

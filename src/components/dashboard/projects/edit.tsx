@@ -11,30 +11,36 @@ import { deleteProject, updateProject } from '@/actions/project';
 import { LINKS } from '@/constants/links';
 
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
-import { EditActionButtons } from '@/components/dashboard/shared/actions-edit';
+import {
+  EditActionButtons,
+  getEditAction,
+  type EditAction,
+} from '@/components/dashboard/shared/actions-edit';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
 export function EditProjectForm({ project }: { project: Project }) {
   const [description, setDescription] = useState(project.description);
-  const [action, setAction] = useState<'save' | 'publish' | 'delete'>('save');
+  const [action, setAction] = useState<EditAction>('save');
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const intent = getEditAction(event);
+    setAction(intent);
     const formData = new FormData(event.currentTarget);
 
     // The textarea is unmounted while the Preview tab is open, so take the value from state
     formData.set('description', description);
 
     formData.append('projectId', project.id);
-    formData.append('isPublished', action === 'publish' ? 'true' : 'false');
+    formData.append('isPublished', intent === 'publish' ? 'true' : 'false');
 
     startTransition(async () => {
       try {
-        if (action === 'delete') {
+        if (intent === 'delete') {
           if (
             !window.confirm(
               'Are you sure you want to delete this project? This cannot be undone.',
@@ -49,7 +55,7 @@ export function EditProjectForm({ project }: { project: Project }) {
 
         await updateProject(formData);
         toast.success(
-          action === 'publish'
+          intent === 'publish'
             ? 'Project published successfully!'
             : 'Draft saved successfully!',
         );
@@ -86,7 +92,7 @@ export function EditProjectForm({ project }: { project: Project }) {
           <Input
             id='slug'
             name='slug'
-            placeholder='my-awesome-project'
+            placeholder='Leave empty to use the title'
             defaultValue={project.slug ?? undefined}
           />
         </div>
@@ -203,7 +209,6 @@ export function EditProjectForm({ project }: { project: Project }) {
         isPending={isPending}
         isMissingRequiredFields={!description.trim()}
         action={action}
-        setAction={setAction}
       />
     </form>
   );

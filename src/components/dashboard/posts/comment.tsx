@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { toast } from 'sonner';
 
 import type { Comment as CommentType } from '@/generated/prisma/browser';
@@ -39,6 +39,7 @@ export function Comment({
   setEditingCommentIdAction: (commentId: string | null) => void;
 }) {
   const [content, setContent] = useState(comment.content);
+  const fieldId = useId();
   const [showReplyForm, setShowReplyForm] = useState(false);
 
   const replies = allComments.filter((c) => c.parentId === comment.id);
@@ -83,7 +84,10 @@ export function Comment({
                 userId={userId}
                 isAdmin={isAdmin}
                 setEditingCommentIdAction={setEditingCommentIdAction}
-                setShowReplyFormAction={setShowReplyForm}
+                // Replies stop nesting at MAX_DEPTH, so the deepest comments don't offer Reply
+                setShowReplyFormAction={
+                  depth < MAX_DEPTH ? setShowReplyForm : undefined
+                }
               />
             </div>
           </div>
@@ -112,13 +116,13 @@ export function Comment({
                 className='flex flex-col gap-2'
               >
                 <Field>
-                  <FieldLabel htmlFor='content' className='sr-only'>
+                  <FieldLabel htmlFor={fieldId} className='sr-only'>
                     Your Comment
                   </FieldLabel>
                   <Textarea
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
-                    id='content'
+                    id={fieldId}
                     name='content'
                   />
                   <FieldDescription

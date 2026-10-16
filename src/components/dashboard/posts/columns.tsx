@@ -19,6 +19,7 @@ import {
 import type { Post } from '@/generated/prisma/client';
 
 import type { PublicUser } from '@/lib/data';
+import { proxiedAvatarUrl } from '@/lib/utils';
 
 import { deletePost } from '@/actions/post';
 import { LINKS } from '@/constants/links';
@@ -223,8 +224,7 @@ export const columns: DashboardColumnDef<PostWithWriter>[] = [
     cell: ({ row }) => (
       <div className='flex flex-row items-center gap-2'>
         <Image
-          unoptimized
-          src={row.original.writer.avatarUrl}
+          src={proxiedAvatarUrl(row.original.writer.avatarUrl)}
           alt='Avatar'
           className='min-h-6 min-w-6 shrink-0 rounded-full'
           width={24}
@@ -278,7 +278,7 @@ export const columns: DashboardColumnDef<PostWithWriter>[] = [
   },
   {
     id: 'actions',
-    header: () => '',
+    header: () => <span className='sr-only'>Actions</span>,
     cell: ({ row }) => <PostActions post={row.original} />,
   },
 ];

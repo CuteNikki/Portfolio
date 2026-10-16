@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 
 export function SidebarNavigationGroup({
@@ -23,6 +24,8 @@ export function SidebarNavigationGroup({
     icon?: LucideIcon;
   }[];
 }) {
+  const { setOpenMobile } = useSidebar();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>{label}</SidebarGroupLabel>
@@ -30,7 +33,8 @@ export function SidebarNavigationGroup({
         {items.map((item) => (
           <SidebarMenuItem key={item.label}>
             <SidebarMenuButton asChild>
-              <Link href={item.url}>
+              {/* On mobile the sidebar is a sheet over the page, so close it once a page is picked */}
+              <Link href={item.url} onClick={() => setOpenMobile(false)}>
                 {item.icon && <item.icon className='size-4 shrink-0' />}
                 <span>{item.label}</span>
               </Link>

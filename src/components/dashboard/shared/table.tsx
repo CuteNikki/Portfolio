@@ -31,12 +31,13 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-interface DataTableProps<TData extends RowData> {
+// Rows need an id: React keys them by it, so per-row state stays with its row when the data reorders
+interface DataTableProps<TData extends RowData & { id: string }> {
   columns: DashboardColumnDef<TData>[];
   data: TData[];
 }
 
-export function DataTable<TData extends RowData>({
+export function DataTable<TData extends RowData & { id: string }>({
   columns,
   data,
   hasError = false,
@@ -52,6 +53,7 @@ export function DataTable<TData extends RowData>({
     features: dashboardTableFeatures,
     data,
     columns,
+    getRowId: (row) => row.id,
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     state: {
@@ -142,7 +144,11 @@ export function DataTable<TData extends RowData>({
                 table.setPageSize(Number(value));
               }}
             >
-              <SelectTrigger size='sm' className='w-16'>
+              <SelectTrigger
+                size='sm'
+                className='w-16'
+                aria-label='Rows per page'
+              >
                 <SelectValue placeholder={table.state.pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side='top'>
