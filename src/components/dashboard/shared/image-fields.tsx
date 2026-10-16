@@ -18,7 +18,7 @@ import { imageUrl } from '@/lib/images';
 import { uploadImage } from '@/lib/upload-image';
 import { cn } from '@/lib/utils';
 
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export interface GalleryImage {
@@ -28,14 +28,17 @@ export interface GalleryImage {
 
 const MAX_GALLERY = 12;
 
-// Picks picture files with a button, or by dropping them onto the area. `children` is what the area shows.
+// Picks picture files with a button, or by dropping them onto the area. `children` is what the area shows. As a
+// `button`, it looks like the outline buttons next to it but still takes a dropped picture.
 function DropArea({
+  look = 'area',
   multiple,
   disabled,
   onFiles,
   className,
   children,
 }: {
+  look?: 'area' | 'button';
   multiple?: boolean;
   disabled?: boolean;
   onFiles: (files: File[]) => void;
@@ -80,7 +83,9 @@ function DropArea({
           pick(event.dataTransfer.files);
         }}
         className={cn(
-          'text-muted-foreground hover:border-line-strong hover:text-foreground flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed text-[13px] transition-colors disabled:pointer-events-none',
+          look === 'button'
+            ? buttonVariants({ variant: 'outline' })
+            : 'text-muted-foreground hover:border-line-strong hover:text-foreground flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed text-[13px] transition-colors disabled:pointer-events-none',
           over && 'border-primary-text bg-primary-soft text-foreground',
           className,
         )}
@@ -153,12 +158,9 @@ export function CoverField({ defaultValue }: { defaultValue: string | null }) {
               className='size-full object-cover'
             />
           </div>
-          <div className='flex flex-wrap gap-2'>
-            <DropArea
-              onFiles={upload}
-              className='h-9 flex-row border-solid px-3'
-            >
-              <RefreshCwIcon className='size-4' />
+          <div className='grid grid-cols-2 gap-2'>
+            <DropArea look='button' onFiles={upload}>
+              <RefreshCwIcon />
               Replace
             </DropArea>
             <Button type='button' variant='destructive' onClick={remove}>
