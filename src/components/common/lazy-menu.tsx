@@ -21,9 +21,17 @@ export function LazyMenu<P extends object>({
   const [Menu, setMenu] = useState<Loaded<P> | null>(null);
   const loading = useRef<Promise<Loaded<P>> | null>(null);
 
-  const preload = () => (loading.current ??= load());
+  // A failed download (e.g. a dropped connection) is forgotten, so the next try loads again
+  const preload = () =>
+    (loading.current ??= load().catch((error: unknown) => {
+      loading.current = null;
+      throw error;
+    }));
   const open = () => {
-    void preload().then((component) => setMenu(() => component));
+    preload().then(
+      (component) => setMenu(() => component),
+      () => {},
+    );
   };
 
   if (Menu) return <Menu {...props} defaultOpen />;
@@ -31,9 +39,9 @@ export function LazyMenu<P extends object>({
   return cloneElement(trigger, {
     'aria-haspopup': 'menu',
     'aria-expanded': false,
-    onPointerEnter: preload,
-    onFocus: preload,
-    onTouchStart: preload,
+    onPointerEnter: () => void preload().catch(() => {}),
+    onFocus: () => void preload().catch(() => {}),
+    onTouchStart: () => void preload().catch(() => {}),
     onClick: open,
     onKeyDown: (event: React.KeyboardEvent<HTMLButtonElement>) => {
       if (event.key !== 'ArrowDown') return;

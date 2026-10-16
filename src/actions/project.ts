@@ -42,8 +42,11 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
 
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
-  const repository = formData.get('repository') as string;
-  const website = formData.get('website') as string;
+  const repository = readLink(formData.get('repository'));
+  const website = readLink(formData.get('website'));
+  if (repository === false || website === false) {
+    return fail('Links must be web addresses, like https://example.com.');
+  }
   const tags =
     (formData.get('tags') as string)
       ?.split(',')
@@ -142,8 +145,11 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
   const id = formData.get('projectId') as string;
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
-  const repository = formData.get('repository') as string;
-  const website = formData.get('website') as string;
+  const repository = readLink(formData.get('repository'));
+  const website = readLink(formData.get('website'));
+  if (repository === false || website === false) {
+    return fail('Links must be web addresses, like https://example.com.');
+  }
   const tags =
     (formData.get('tags') as string)
       ?.split(',')
@@ -227,6 +233,23 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
 
   revalidateProjectPaths(id, slug);
   return {};
+}
+
+// A project's repository or website: empty, or a web address. People often leave out the https://, which is added
+// then. False for anything else, such as a javascript: link, which the project page would otherwise turn into a link.
+function readLink(value: FormDataEntryValue | null): string | false {
+  const text = String(value ?? '').trim();
+  if (!text) return '';
+  try {
+    const url = new URL(
+      /^[a-z][a-z\d+.-]*:/i.test(text) ? text : `https://${text}`,
+    );
+    return url.protocol === 'https:' || url.protocol === 'http:'
+      ? url.href
+      : false;
+  } catch {
+    return false;
+  }
 }
 
 // Parses a "YYYY-MM-DD" date input. Stored at noon UTC so the displayed day

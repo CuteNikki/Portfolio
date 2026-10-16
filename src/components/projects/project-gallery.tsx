@@ -31,8 +31,12 @@ export function ProjectGallery({
   const loadViewer = () => {
     if (loading.current) return;
     loading.current = true;
-    void import('@/components/projects/gallery-viewer').then((module) =>
-      setViewer(() => module.default),
+    import('@/components/projects/gallery-viewer').then(
+      (module) => setViewer(() => module.default),
+      // Tried again on the next click
+      () => {
+        loading.current = false;
+      },
     );
   };
 

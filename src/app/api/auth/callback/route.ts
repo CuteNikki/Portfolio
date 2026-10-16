@@ -39,6 +39,19 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL(returnTo ?? LINKS.home.url, req.url));
   }
 
+  // Refresh asks Discord to skip its Authorize screen, which it can't for someone who removed the app or isn't signed
+  // in to Discord. Then sign in the usual way, which shows that screen.
+  if (
+    error === 'consent_required' ||
+    error === 'login_required' ||
+    error === 'interaction_required'
+  ) {
+    const returnTo = safeReturnPath(cookieStore.get(RETURN_TO_COOKIE)?.value);
+    const login = new URL('/api/auth/login', req.url);
+    if (returnTo) login.searchParams.set('next', returnTo);
+    return NextResponse.redirect(login);
+  }
+
   if (error) {
     console.error('OAuth Callback Error:', error);
 

@@ -169,6 +169,34 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
   return {};
 }
 
+// Replies nest at most this deep (the post page stops offering Reply there), so threads stay readable
+const MAX_COMMENT_DEPTH = 3;
+const MAX_COMMENT_LENGTH = 1000;
+
+// A comment's text as it's kept: trimmed, with runs of blank lines shortened to one
+function readCommentContent(formData: FormData) {
+  return String(formData.get('content') ?? '')
+    .trim()
+    .replace(/(?:\r?\n){3,}/g, '\n\n');
+}
+
+// How many replies deep a comment is: 0 for a comment on the post itself
+async function depthOf(commentId: string) {
+  let depth = 0;
+  let parentId: string | null = commentId;
+  while (parentId && depth <= MAX_COMMENT_DEPTH) {
+    const parent: { parentId: string | null } | null =
+      await prisma.comment.findUnique({
+        where: { id: parentId },
+        select: { parentId: true },
+      });
+    if (!parent) break;
+    parentId = parent.parentId;
+    if (parentId) depth += 1;
+  }
+  return depth;
+}
+
 export async function createComment(formData: FormData): Promise<ActionResult> {
   const session = await getCurrentSession();
 
@@ -176,31 +204,59 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
     return fail('Sign in to comment.');
   }
 
-  const postId = formData.get('postId') as string;
-  const rawContent = formData.get('content') as string;
-  const postSlug = (formData.get('postSlug') || null) as string | null;
+  const postId = String(formData.get('postId') ?? '');
   const parentId = (formData.get('parentId') || null) as string | null;
-
-  const content = rawContent.trim().replace(/(?:\r?\n){3,}/g, '\n\n');
+  const content = readCommentContent(formData);
 
   if (!postId || !content) {
-    return fail('Post ID and comment content are required.');
+    return fail('Write something first.');
   }
 
-  if (content.length > 1000) {
-    return fail('Comment content cannot exceed 1000 characters.');
+  if (content.length > MAX_COMMENT_LENGTH) {
+    return fail(`A comment can be ${MAX_COMMENT_LENGTH} characters at most.`);
+  }
+
+  // Only published posts take comments, from anyone, and drafts from the people who write them
+  const isStaff =
+    session.user.role === Role.ADMIN || session.user.role === Role.WRITER;
+  const post = await prisma.post.findFirst({
+    where: {
+      id: postId,
+      ...(isStaff ? {} : { publishedAt: { not: null } }),
+    },
+    select: { id: true, slug: true },
+  });
+  if (!post) return fail('That post doesn’t exist any more.');
+
+  // A reply answers a comment on the same post, and nests no deeper than the page shows
+  if (parentId) {
+    const parent = await prisma.comment.findUnique({
+      where: { id: parentId },
+      select: { postId: true },
+    });
+    if (!parent || parent.postId !== post.id) {
+      return fail('The comment you replied to doesn’t exist any more.');
+    }
+    if ((await depthOf(parentId)) >= MAX_COMMENT_DEPTH) {
+      return fail('Replies can’t go any deeper here.');
+    }
+  }
+
+  // Enough for a conversation, not for flooding a post
+  if ((await hit(`comment:${session.user.id}`, 10 * 60)) > 10) {
+    return fail('That’s a lot of comments at once. Please wait a few minutes.');
   }
 
   await prisma.comment.create({
     data: {
       content,
-      postId,
+      postId: post.id,
       parentId,
       authorId: session.user.id,
     },
   });
 
-  revalidatePostPaths(postId, postSlug);
+  revalidatePostPaths(post.id, post.slug);
   return {};
 }
 
@@ -211,8 +267,7 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
     return fail('Sign in to delete comments.');
   }
 
-  const commentId = formData.get('commentId') as string;
-  const postSlug = formData.get('postSlug') as string | null;
+  const commentId = String(formData.get('commentId') ?? '');
 
   if (!commentId) {
     return fail('Comment ID is required.');
@@ -220,6 +275,7 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
 
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },
+    include: { post: { select: { slug: true } } },
   });
 
   if (!comment) {
@@ -239,7 +295,7 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
     where: { id: commentId },
   });
 
-  revalidatePostPaths(comment.postId, postSlug);
+  revalidatePostPaths(comment.postId, comment.post.slug);
   return {};
 }
 
@@ -250,22 +306,20 @@ export async function editComment(formData: FormData): Promise<ActionResult> {
     return fail('Sign in to edit comments.');
   }
 
-  const commentId = formData.get('commentId') as string;
-  const postSlug = formData.get('postSlug') as string | null;
-  const rawContent = formData.get('content') as string;
-
-  const content = rawContent.trim().replace(/(?:\r?\n){3,}/g, '\n\n');
+  const commentId = String(formData.get('commentId') ?? '');
+  const content = readCommentContent(formData);
 
   if (!commentId || !content) {
-    return fail('Comment ID and content are required.');
+    return fail('Write something first.');
   }
 
-  if (content.length > 1000) {
-    return fail('Comment content cannot exceed 1000 characters.');
+  if (content.length > MAX_COMMENT_LENGTH) {
+    return fail(`A comment can be ${MAX_COMMENT_LENGTH} characters at most.`);
   }
 
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },
+    include: { post: { select: { slug: true } } },
   });
 
   if (!comment) {
@@ -281,7 +335,7 @@ export async function editComment(formData: FormData): Promise<ActionResult> {
     data: { content },
   });
 
-  revalidatePostPaths(comment.postId, postSlug);
+  revalidatePostPaths(comment.postId, comment.post.slug);
   return {};
 }
 

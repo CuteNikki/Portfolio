@@ -29,8 +29,12 @@ export function UserHover(props: UserHoverProps) {
     hovering.current = true;
     if (loading.current) return;
     loading.current = true;
-    void import('@/components/common/user-hover-card').then((module) =>
-      setLoaded({ Card: module.default, open: hovering.current }),
+    import('@/components/common/user-hover-card').then(
+      (module) => setLoaded({ Card: module.default, open: hovering.current }),
+      // Tried again on the next hover
+      () => {
+        loading.current = false;
+      },
     );
   };
 
