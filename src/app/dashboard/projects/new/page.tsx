@@ -23,7 +23,7 @@ export default async function NewProjectPage() {
       />
       <NewProjectForm
         authorOptions={authorOptions}
-        authorIds={[session.user.id]}
+        authors={[{ userId: session.user.id }]}
       />
     </>
   );

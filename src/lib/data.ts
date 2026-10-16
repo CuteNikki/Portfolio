@@ -40,12 +40,8 @@ const PROJECT_INCLUDE = {
   images: { orderBy: { position: 'asc' } },
 } satisfies Prisma.ProjectInclude;
 
-/**
- * The authors of a post or project as users, in the order they're shown.
- */
-export function authorsOf(item: { authors: { user: PublicUser }[] }) {
-  return item.authors.map(({ user }) => user);
-}
+// Kept in a file without server code, since the dashboard's tables use it in the browser too
+export { type Author, authorsOf } from '@/lib/author-list';
 
 const bySlugOrId = (idOrSlug: string) => ({
   OR: [{ id: idOrSlug }, { slug: idOrSlug }],

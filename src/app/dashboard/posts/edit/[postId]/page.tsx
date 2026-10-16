@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { ExternalLinkIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
-import { getAuthorOptions } from '@/lib/authors';
+import { authorEntries, getAuthorOptions } from '@/lib/authors';
 import prisma from '@/lib/prisma';
 
 import { LINKS } from '@/constants/links';
@@ -82,7 +82,7 @@ export default async function EditPostPage({
       <EditPostForm
         post={post}
         authorOptions={await getAuthorOptions()}
-        authorIds={post.authors.map(({ userId }) => userId)}
+        authors={authorEntries(post.authors)}
       />
     </>
   );

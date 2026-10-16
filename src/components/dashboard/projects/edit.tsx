@@ -8,6 +8,7 @@ import { Project } from '@/generated/prisma/browser';
 
 import { deleteProject, updateProject } from '@/actions/project';
 
+import type { AuthorEntry } from '@/lib/authors';
 import { LINKS } from '@/constants/links';
 import { formatShortDate } from '@/lib/utils';
 
@@ -38,13 +39,13 @@ export function EditProjectForm({
   project,
   gallery,
   authorOptions,
-  authorIds,
+  authors,
 }: {
   project: Project;
   // The project's further pictures, in order
   gallery: GalleryImage[];
   authorOptions: AuthorOption[];
-  authorIds: string[];
+  authors: AuthorEntry[];
 }) {
   const [description, setDescription] = useState(project.description);
   const [action, setAction] = useState<EditAction>('save');
@@ -179,7 +180,7 @@ export function EditProjectForm({
             </FormCard>
 
             <FormCard>
-              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={project.coverUrl} />
             </FormCard>
           </>

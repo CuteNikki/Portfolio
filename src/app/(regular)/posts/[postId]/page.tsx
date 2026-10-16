@@ -19,7 +19,7 @@ import { formatShortDate, readingMinutes, toExcerpt } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { StoredImage } from '@/components/common/stored-image';
-import { UserHover } from '@/components/common/user-hover';
+import { AuthorName } from '@/components/common/author-name';
 import { WriterOnly } from '@/components/common/writer-only';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
 import { CommentWrapper } from '@/components/dashboard/posts/comment-wrapper';
@@ -63,9 +63,7 @@ export async function generateMetadata({
       type: 'article',
       publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
-      authors: authorsOf(post).map(
-        (author) => author.displayName ?? author.username,
-      ),
+      authors: authorsOf(post).map(({ name }) => name),
     },
   };
 }
@@ -147,21 +145,9 @@ async function PostContent({
             {authors.length > 0 && (
               <span className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
                 {authors.map((author) => (
-                  <UserHover key={author.id} user={author}>
-                    <span className='text-foreground flex items-center gap-2'>
-                      <Avatar className='size-6 rounded-md after:rounded-md'>
-                        <AvatarImage
-                          src={author.avatarUrl}
-                          alt=''
-                          className='rounded-md'
-                        />
-                        <AvatarFallback className='rounded-md text-[10px]'>
-                          {author.username.slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      {author.displayName ?? author.username}
-                    </span>
-                  </UserHover>
+                  <span key={author.key} className='text-foreground'>
+                    <AuthorName author={author} />
+                  </span>
                 ))}
               </span>
             )}

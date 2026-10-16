@@ -23,7 +23,7 @@ export default async function NewPostPage() {
       />
       <NewPostForm
         authorOptions={authorOptions}
-        authorIds={[session.user.id]}
+        authors={[{ userId: session.user.id }]}
       />
     </>
   );

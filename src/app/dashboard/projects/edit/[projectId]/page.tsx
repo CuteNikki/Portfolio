@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import { ExternalLinkIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
-import { getAuthorOptions } from '@/lib/authors';
+import { authorEntries, getAuthorOptions } from '@/lib/authors';
 import prisma from '@/lib/prisma';
 
 import { LINKS } from '@/constants/links';
@@ -88,7 +88,7 @@ export default async function EditProjectPage({
         project={project}
         gallery={project.images.map(({ url, alt }) => ({ url, alt }))}
         authorOptions={await getAuthorOptions()}
-        authorIds={project.authors.map(({ userId }) => userId)}
+        authors={authorEntries(project.authors)}
       />
     </>
   );

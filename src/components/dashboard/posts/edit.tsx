@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import type { Post } from '@/generated/prisma/client';
 
 import { deletePost, updatePost } from '@/actions/post';
+import type { AuthorEntry } from '@/lib/authors';
 import { LINKS } from '@/constants/links';
 import { formatShortDate } from '@/lib/utils';
 
@@ -31,11 +32,11 @@ import { Input } from '@/components/ui/input';
 export function EditPostForm({
   post,
   authorOptions,
-  authorIds,
+  authors,
 }: {
   post: Post;
   authorOptions: AuthorOption[];
-  authorIds: string[];
+  authors: AuthorEntry[];
 }) {
   const [content, setContent] = useState(post.content);
   const [action, setAction] = useState<EditAction>('save');
@@ -151,7 +152,7 @@ export function EditPostForm({
             </FormCard>
 
             <FormCard>
-              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={post.coverUrl} />
             </FormCard>
           </>

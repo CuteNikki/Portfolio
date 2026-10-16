@@ -60,7 +60,9 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
       publishedAt: isPublished ? new Date() : null,
       // The picked authors, or else whoever creates it
       authors: {
-        create: authorRows((await readAuthors(formData)) ?? [session.user.id]),
+        create: authorRows(
+          (await readAuthors(formData)) ?? [{ userId: session.user.id }],
+        ),
       },
     },
   });

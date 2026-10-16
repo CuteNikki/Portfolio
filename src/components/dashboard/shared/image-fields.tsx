@@ -171,16 +171,20 @@ export function CoverField({ defaultValue }: { defaultValue: string | null }) {
         <DropArea
           disabled={progress !== null}
           onFiles={upload}
-          className='aspect-video w-full'
+          className='bg-muted/30 aspect-video w-full gap-1.5 px-6 text-center'
         >
           {progress !== null ? (
             <Progress value={progress} />
           ) : (
             <>
-              <ImageUpIcon className='size-6' />
-              <span>Drop a picture here, or click to choose one</span>
-              <span className='text-xs'>
-                Shown on cards, at the top of the page and in link previews
+              <span className='bg-muted text-foreground grid size-10 place-items-center rounded-lg'>
+                <ImageUpIcon className='size-5' />
+              </span>
+              <span className='text-foreground font-semibold'>
+                Upload a cover
+              </span>
+              <span className='text-xs text-balance'>
+                Drop a picture or click. Shown on cards and in link previews.
               </span>
             </>
           )}
@@ -312,14 +316,19 @@ export function GalleryField({
               multiple
               disabled={progress !== null}
               onFiles={upload}
-              className='aspect-16/10 h-full min-h-40 w-full'
+              className='bg-muted/30 aspect-16/10 h-full min-h-40 w-full gap-1.5 px-6 text-center'
             >
               {progress !== null ? (
                 <Progress value={progress} />
               ) : (
                 <>
-                  <ImageUpIcon className='size-6' />
-                  <span>Add pictures</span>
+                  <span className='bg-muted text-foreground grid size-10 place-items-center rounded-lg'>
+                    <ImageUpIcon className='size-5' />
+                  </span>
+                  <span className='text-foreground font-semibold'>
+                    Add pictures
+                  </span>
+                  <span className='text-xs'>Drop them here or click</span>
                 </>
               )}
             </DropArea>

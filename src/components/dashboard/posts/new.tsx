@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { createPost } from '@/actions/post';
 
+import type { AuthorEntry } from '@/lib/authors';
 import { LINKS } from '@/constants/links';
 
 import {
@@ -24,11 +25,11 @@ import { Input } from '@/components/ui/input';
 
 export function NewPostForm({
   authorOptions,
-  authorIds,
+  authors,
 }: {
   authorOptions: AuthorOption[];
   // Starts with whoever writes it
-  authorIds: string[];
+  authors: AuthorEntry[];
 }) {
   const [content, setContent] = useState('');
   const [isPending, startTransition] = useTransition();
@@ -140,7 +141,7 @@ export function NewPostForm({
             </FormCard>
 
             <FormCard>
-              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={null} />
             </FormCard>
           </>

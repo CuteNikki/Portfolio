@@ -1,16 +1,16 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from 'lucide-react';
 
-import type { PublicUser } from '@/lib/data';
+import type { Author } from '@/lib/author-list';
 import { proxiedAvatarUrl } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 
 import { StoredImage } from '@/components/common/stored-image';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -103,40 +103,63 @@ export function StatusBadge({ published }: { published: boolean }) {
   );
 }
 
-export function AuthorsCell({ authors }: { authors: PublicUser[] }) {
+export function AuthorsCell({ authors }: { authors: Author[] }) {
   if (authors.length === 0)
     return <span className='text-muted-foreground'>—</span>;
 
-  const nameOf = (author: PublicUser) => author.displayName ?? author.username;
+  // People who signed in open their dashboard page; others have none
+  const hrefOf = (author: Author) =>
+    author.user ? LINKS.dashboardUserWithId(author.user.id).url : null;
+  const first = authors[0];
+  const firstHref = hrefOf(first);
 
   return (
     <div className='flex items-center gap-2'>
       <div className='flex -space-x-2'>
-        {authors.slice(0, 3).map((author) => (
-          <Link
-            key={author.id}
-            href={LINKS.dashboardUserWithId(author.id).url}
-            aria-label={nameOf(author)}
-            title={nameOf(author)}
-            className='ring-card hover:ring-primary/40 relative shrink-0 rounded-md ring-2 transition-shadow hover:z-10'
-          >
-            <Image
-              src={proxiedAvatarUrl(author.avatarUrl)}
-              alt=''
-              className='size-6 rounded-md'
-              width={24}
-              height={24}
-            />
-          </Link>
-        ))}
+        {authors.slice(0, 3).map((author) => {
+          const avatar = (
+            <Avatar className='ring-card size-6 rounded-md ring-2 after:rounded-md'>
+              {author.avatarUrl && (
+                <AvatarImage
+                  src={proxiedAvatarUrl(author.avatarUrl)}
+                  alt=''
+                  className='rounded-md'
+                />
+              )}
+              <AvatarFallback className='rounded-md text-[9px]'>
+                {author.name.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+          );
+          const href = hrefOf(author);
+          return href ? (
+            <Link
+              key={author.key}
+              href={href}
+              aria-label={author.name}
+              title={author.name}
+              className='relative shrink-0 rounded-md hover:z-10'
+            >
+              {avatar}
+            </Link>
+          ) : (
+            <span key={author.key} title={author.name} className='shrink-0'>
+              {avatar}
+            </span>
+          );
+        })}
       </div>
       <span className='truncate'>
-        <Link
-          href={LINKS.dashboardUserWithId(authors[0].id).url}
-          className='hover:text-primary-text transition-colors'
-        >
-          {nameOf(authors[0])}
-        </Link>
+        {firstHref ? (
+          <Link
+            href={firstHref}
+            className='hover:text-primary-text transition-colors'
+          >
+            {first.name}
+          </Link>
+        ) : (
+          first.name
+        )}
         {authors.length > 1 && (
           <span className='text-muted-foreground'> +{authors.length - 1}</span>
         )}

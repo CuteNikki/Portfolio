@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { createProject } from '@/actions/project';
 
+import type { AuthorEntry } from '@/lib/authors';
 import { LINKS } from '@/constants/links';
 
 import {
@@ -28,11 +29,11 @@ import { Input } from '@/components/ui/input';
 
 export function NewProjectForm({
   authorOptions,
-  authorIds,
+  authors,
 }: {
   authorOptions: AuthorOption[];
   // Starts with whoever writes it
-  authorIds: string[];
+  authors: AuthorEntry[];
 }) {
   const [description, setDescription] = useState('');
   const [isPending, startTransition] = useTransition();
@@ -159,7 +160,7 @@ export function NewProjectForm({
             </FormCard>
 
             <FormCard>
-              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={null} />
             </FormCard>
           </>

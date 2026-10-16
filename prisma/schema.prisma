@@ -70,16 +70,20 @@ model Post {
   comments Comment[]
 }
 
-// The people who wrote a post, in the order they're shown. Removing a user only removes them from the list.
+// The people who wrote a post, in the order they're shown: someone who signed in, or someone without an account with
+// just a name and maybe a link. Removing a user only removes them from the list.
 model PostAuthor {
+  id       String  @id @default(cuid())
   postId   String
-  userId   String
-  position Int    @default(0)
+  userId   String?
+  name     String?
+  url      String?
+  position Int     @default(0)
 
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post  @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([postId, userId])
+  @@unique([postId, userId])
   @@index([userId])
 }
 
@@ -124,16 +128,19 @@ model Project {
   authors ProjectAuthor[]
 }
 
-// The people who made a project, in the order they're shown. Removing a user only removes them from the list.
+// The people who made a project, like PostAuthor
 model ProjectAuthor {
+  id        String  @id @default(cuid())
   projectId String
-  userId    String
-  position  Int    @default(0)
+  userId    String?
+  name      String?
+  url       String?
+  position  Int     @default(0)
 
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([projectId, userId])
+  @@unique([projectId, userId])
   @@index([userId])
 }
 

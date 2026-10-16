@@ -20,14 +20,13 @@ import { LINKS } from '@/constants/links';
 import { NO_INDEX } from '@/constants/metadata';
 
 import { StoredImage } from '@/components/common/stored-image';
-import { UserHover } from '@/components/common/user-hover';
+import { AuthorName } from '@/components/common/author-name';
 import { WriterOnly } from '@/components/common/writer-only';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { ShareButton } from '@/components/dashboard/posts/share';
 import type { ProjectCardData } from '@/components/projects/project-card';
 import { ProjectGallery } from '@/components/projects/project-gallery';
 import { ProjectThumbnail } from '@/components/projects/project-thumbnail';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -59,8 +58,9 @@ export async function generateMetadata({
     title: project.title,
     description: toExcerpt(project.description),
     keywords: [...project.technologies, ...project.tags],
-    authors: authorsOf(project).map((author) => ({
-      name: author.displayName ?? author.username,
+    authors: authorsOf(project).map(({ name, url }) => ({
+      name,
+      url: url ?? undefined,
     })),
     alternates: { canonical: `/projects/${project.slug ?? project.id}` },
   };
@@ -194,21 +194,7 @@ async function ProjectContent({
               </dt>
               <dd className='flex flex-wrap gap-x-3 gap-y-1.5'>
                 {authors.map((author) => (
-                  <UserHover key={author.id} user={author}>
-                    <span className='flex items-center gap-2'>
-                      <Avatar className='size-5 rounded-md after:rounded-md'>
-                        <AvatarImage
-                          src={author.avatarUrl}
-                          alt=''
-                          className='rounded-md'
-                        />
-                        <AvatarFallback className='rounded-md text-[9px]'>
-                          {author.username.slice(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      {author.displayName ?? author.username}
-                    </span>
-                  </UserHover>
+                  <AuthorName key={author.key} author={author} size='sm' />
                 ))}
               </dd>
             </div>
