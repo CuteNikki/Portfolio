@@ -19,7 +19,6 @@ import { formatShortDate, toExcerpt } from '@/lib/utils';
 import { LINKS } from '@/constants/links';
 import { NO_INDEX } from '@/constants/metadata';
 
-import { StoredImage } from '@/components/common/stored-image';
 import { AuthorName } from '@/components/common/author-name';
 import { WriterOnly } from '@/components/common/writer-only';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
@@ -227,15 +226,14 @@ async function ProjectContent({
         <div
           data-reveal=''
           style={{ '--reveal-index': 3 } as React.CSSProperties}
-          className='bg-muted relative aspect-video overflow-hidden rounded-xl border sm:aspect-2/1'
         >
-          <StoredImage
-            url={project.coverUrl}
-            alt={`${project.title}'s cover picture`}
-            fill
+          {/* The same window on a tinted panel as on the cards, so screenshots sit alike in every theme */}
+          <ProjectThumbnail
+            title={project.title}
+            coverUrl={project.coverUrl}
             priority
-            sizes='(min-width: 1200px) 1152px, calc(100vw - 32px)'
-            className='object-cover'
+            sizes='(min-width: 1200px) 990px, calc(86vw - 28px)'
+            className='aspect-2/1 rounded-xl border'
           />
         </div>
       )}

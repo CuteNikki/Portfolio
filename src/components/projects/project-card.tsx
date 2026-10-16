@@ -54,12 +54,13 @@ export function ProjectCard({
         title={project.title}
         coverUrl={project.coverUrl}
         priority={priority}
+        // The window inside is about 86% of the card's width
         sizes={
           featured
-            ? '(min-width: 1024px) 760px, calc(100vw - 32px)'
-            : '(min-width: 1024px) 380px, (min-width: 640px) calc(50vw - 32px), calc(100vw - 32px)'
+            ? '(min-width: 1024px) 660px, calc(86vw - 28px)'
+            : '(min-width: 1024px) 330px, (min-width: 640px) calc(43vw - 28px), calc(86vw - 28px)'
         }
-        className={featured ? 'h-50 lg:h-75' : 'h-50'}
+        className='aspect-2/1'
       />
       <div className='flex flex-1 flex-col gap-1.5 border-t px-5 pt-4.5 pb-5'>
         <div className='flex items-center justify-between gap-3'>
