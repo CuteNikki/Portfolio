@@ -1,6 +1,12 @@
+import { timingSafeEqual } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
+import {
+  hashSessionToken,
+  OAUTH_STATE_COOKIE,
+  SESSION_COOKIE,
+} from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { getUserAvatarUrl } from '@/lib/utils';
 
@@ -10,6 +16,19 @@ export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
   const code = searchParams.get('code');
   const error = searchParams.get('error');
+  const state = searchParams.get('state');
+
+  // Only finish a login this browser started (see the login route). The state is single use.
+  const cookieStore = await cookies();
+  const expectedState = cookieStore.get(OAUTH_STATE_COOKIE)?.value;
+  cookieStore.delete({ name: OAUTH_STATE_COOKIE, path: '/api/auth' });
+
+  if (!state || !expectedState || !isSameString(state, expectedState)) {
+    return NextResponse.json(
+      { error: 'Login expired or was started elsewhere. Please try again.' },
+      { status: 400 },
+    );
+  }
 
   if (error) {
     console.error('OAuth Callback Error:', error);
@@ -95,11 +114,8 @@ export async function GET(req: NextRequest) {
       userData.avatar,
     );
 
-    // 3. Upsert the user in your database (Update if exists, Create if new)
-
-    const discordTokenExpires =
-      Math.floor(Date.now() / 1000) + tokenData.expires_in;
-
+    // 3. Upsert the user in your database (Update if exists, Create if new). The Discord tokens aren't kept: the profile
+    // is all we need, and only at login. Clearing them also removes ones stored before.
     const user = await prisma.user.upsert({
       where: { discordId: userData.id },
       update: {
@@ -107,37 +123,36 @@ export async function GET(req: NextRequest) {
         username: userData.username,
         avatarUrl,
 
-        accessToken: tokenData.access_token,
-        refreshToken: tokenData.refresh_token,
-        tokenExpiresAt: discordTokenExpires,
+        accessToken: null,
+        refreshToken: null,
+        tokenExpiresAt: null,
       },
       create: {
         discordId: userData.id,
         displayName: userData.global_name,
         username: userData.username,
         avatarUrl,
-
-        accessToken: tokenData.access_token,
-        refreshToken: tokenData.refresh_token,
-        tokenExpiresAt: discordTokenExpires,
       },
     });
 
-    // 4. Create a new Session
+    // 4. Create a new Session. The cookie gets the token, the database only its hash.
     const sessionToken = crypto.randomUUID(); // Native secure random string
     const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
 
-    await prisma.session.create({
-      data: {
-        sessionToken,
-        userId: user.id,
-        expiresAt,
-      },
-    });
+    await prisma.$transaction([
+      // Sessions nobody comes back to are otherwise never removed
+      prisma.session.deleteMany({ where: { expiresAt: { lt: new Date() } } }),
+      prisma.session.create({
+        data: {
+          sessionToken: hashSessionToken(sessionToken),
+          userId: user.id,
+          expiresAt,
+        },
+      }),
+    ]);
 
     // 5. Set the HTTP-Only cookie so the browser remembers them
-    const cookieStore = await cookies();
-    cookieStore.set('auth_session', sessionToken, {
+    cookieStore.set(SESSION_COOKIE, sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       expires: expiresAt,
@@ -155,4 +170,10 @@ export async function GET(req: NextRequest) {
       { status: 500 },
     );
   }
+}
+
+function isSameString(a: string, b: string) {
+  const bufferA = Buffer.from(a);
+  const bufferB = Buffer.from(b);
+  return bufferA.length === bufferB.length && timingSafeEqual(bufferA, bufferB);
 }

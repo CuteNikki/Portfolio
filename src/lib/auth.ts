@@ -1,20 +1,35 @@
+import { createHash } from 'node:crypto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { connection } from 'next/server';
 import { cache } from 'react';
 
 import { Role } from '@/generated/prisma/enums';
 
 import prisma from '@/lib/prisma';
 
+export const SESSION_COOKIE = 'auth_session';
+export const OAUTH_STATE_COOKIE = 'oauth_state';
+
+// The database keeps only a hash of each session token, so a leaked copy of it can't be used to sign in
+export function hashSessionToken(token: string) {
+  return createHash('sha256').update(token).digest('hex');
+}
+
 export const getCurrentSession = cache(async () => {
   const cookieStore = await cookies();
-  const sessionToken = cookieStore.get('auth_session')?.value;
+  const sessionToken = cookieStore.get(SESSION_COOKIE)?.value;
 
   if (!sessionToken) return null;
 
+  // With Partial Prefetching, cookies() resolves while the App Shell is prerendered, so without this the session
+  // lookup would run there too. The database driver's random values aren't allowed in a prerender, and a session
+  // check shouldn't be cached anyway, so it waits for the request.
+  await connection();
+
   try {
     const session = await prisma.session.findUnique({
-      where: { sessionToken },
+      where: { sessionToken: hashSessionToken(sessionToken) },
       include: { user: true },
     });
 
@@ -50,25 +65,4 @@ export async function isWriter() {
   return (
     session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER
   );
-}
-
-export async function refreshDiscordToken(refreshToken: string) {
-  const response = await fetch('https://discord.com/api/oauth2/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      client_id: process.env.DISCORD_CLIENT_ID!,
-      client_secret: process.env.DISCORD_CLIENT_SECRET!,
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-    }),
-  });
-
-  const data = await response.json();
-  if (!response.ok)
-    throw new Error(data.error_description || 'Failed to refresh token');
-
-  return data;
 }
