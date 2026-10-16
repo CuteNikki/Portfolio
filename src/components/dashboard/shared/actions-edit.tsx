@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import {
@@ -8,45 +9,67 @@ import {
   Trash2Icon,
 } from 'lucide-react';
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 
 export type EditAction = 'save' | 'publish' | 'delete';
 
 // Reads which button submitted the form. Pressing Enter in a field submits with the first submit button in the form:
-// Update for a published entry, so it stays live, and Save Draft for a draft. Delete comes last, so Enter never deletes.
+// Update for a published entry, so it stays live, and Save draft for a draft. Delete isn't a submit button, so Enter
+// never deletes.
 export function getEditAction(
   event: React.SubmitEvent<HTMLFormElement>,
-): EditAction {
+): Exclude<EditAction, 'delete'> {
   const value = (event.submitter as HTMLButtonElement | null)?.value;
-  return value === 'publish' || value === 'delete' ? value : 'save';
+  return value === 'publish' ? 'publish' : 'save';
 }
 
+// The buttons of the Publish card on an edit page, stacked with the main one on top
 export function EditActionButtons({
+  kind,
+  title,
   publishedAt,
   isPending,
   isMissingRequiredFields,
   action,
+  onDelete,
 }: {
+  kind: 'post' | 'project';
+  title: string;
   publishedAt: Date | null;
   isPending: boolean;
   isMissingRequiredFields: boolean;
   action: EditAction;
+  onDelete: () => void;
 }) {
   const router = useRouter();
+  const [confirming, setConfirming] = useState(false);
+
+  const spinnerOr = (intent: EditAction, icon: React.ReactNode) =>
+    isPending && action === intent ? (
+      <LoaderCircleIcon className='animate-spin' />
+    ) : (
+      icon
+    );
 
   const saveButton = (
     <Button
       type='submit'
       value='save'
-      variant='secondary'
+      variant='outline'
       disabled={isPending || isMissingRequiredFields}
     >
-      {isPending && action === 'save' ? (
-        <LoaderCircleIcon className='animate-spin' />
-      ) : (
-        <SaveIcon />
-      )}
-      {publishedAt ? 'Revert to Draft' : 'Save Draft'}
+      {spinnerOr('save', <SaveIcon />)}
+      {publishedAt ? 'Unpublish' : 'Save draft'}
     </Button>
   );
 
@@ -55,23 +78,29 @@ export function EditActionButtons({
       type='submit'
       value='publish'
       disabled={isPending || isMissingRequiredFields}
-      // Comes first in the markup when published (see getEditAction), but still shows last
-      className={publishedAt ? 'order-last' : undefined}
+      // Comes after Save draft in the markup for a draft (see getEditAction), but still shows on top
+      className={publishedAt ? undefined : 'order-first'}
     >
-      {isPending && action === 'publish' ? (
-        <LoaderCircleIcon className='animate-spin' />
-      ) : (
-        <SendHorizonalIcon />
-      )}
+      {spinnerOr('publish', <SendHorizonalIcon />)}
       {publishedAt ? 'Update' : 'Publish'}
     </Button>
   );
 
   return (
-    <div className='flex flex-col items-start gap-1 lg:flex-row-reverse lg:items-center lg:justify-between'>
-      {/* Other Action Buttons */}
-      <div className='flex flex-col-reverse items-start justify-end gap-1 sm:flex-row sm:items-center'>
-        {/* Cancel Button */}
+    <div className='flex flex-col gap-2'>
+      {publishedAt ? (
+        <>
+          {publishButton}
+          {saveButton}
+        </>
+      ) : (
+        <>
+          {saveButton}
+          {publishButton}
+        </>
+      )}
+
+      <div className='grid grid-cols-2 gap-2'>
         <Button
           type='button'
           variant='ghost'
@@ -79,36 +108,37 @@ export function EditActionButtons({
           disabled={isPending}
         >
           <ArrowLeftIcon />
-          Cancel
+          Back
         </Button>
-
-        {publishedAt ? (
-          <>
-            {publishButton}
-            {saveButton}
-          </>
-        ) : (
-          <>
-            {saveButton}
-            {publishButton}
-          </>
-        )}
+        <Button
+          type='button'
+          variant='destructive'
+          onClick={() => setConfirming(true)}
+          disabled={isPending}
+        >
+          {spinnerOr('delete', <Trash2Icon />)}
+          Delete
+        </Button>
       </div>
 
-      {/* Delete Button */}
-      <Button
-        type='submit'
-        value='delete'
-        variant='destructive'
-        disabled={isPending}
-      >
-        {isPending && action === 'delete' ? (
-          <LoaderCircleIcon className='animate-spin' />
-        ) : (
-          <Trash2Icon />
-        )}
-        Delete
-      </Button>
+      <AlertDialog open={confirming} onOpenChange={setConfirming}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete “{title}”?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {kind === 'post'
+                ? 'The post, its cover and its comments are deleted. This can’t be undone.'
+                : 'The project and its pictures are deleted. This can’t be undone.'}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant='destructive' onClick={onDelete}>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -9,6 +9,7 @@ import { Project } from '@/generated/prisma/browser';
 import { deleteProject, updateProject } from '@/actions/project';
 
 import { LINKS } from '@/constants/links';
+import { formatShortDate } from '@/lib/utils';
 
 import {
   type AuthorOption,
@@ -19,15 +20,19 @@ import {
   type GalleryImage,
   GalleryField,
 } from '@/components/dashboard/shared/image-fields';
-import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
+import { ProjectDetailFields } from '@/components/dashboard/projects/detail-fields';
 import {
   EditActionButtons,
   getEditAction,
   type EditAction,
 } from '@/components/dashboard/shared/actions-edit';
+import {
+  Field,
+  FormCard,
+  FormColumns,
+  MarkdownField,
+} from '@/components/dashboard/shared/form-parts';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 
 export function EditProjectForm({
   project,
@@ -60,25 +65,6 @@ export function EditProjectForm({
 
     startTransition(async () => {
       try {
-        if (intent === 'delete') {
-          if (
-            !window.confirm(
-              'Are you sure you want to delete this project? This cannot be undone.',
-            )
-          )
-            return;
-          const deleted = await deleteProject(formData);
-          if (deleted.error) {
-            toast.error('The project wasn’t deleted', {
-              description: deleted.error,
-            });
-            return;
-          }
-          toast.success('Project deleted');
-          router.push(LINKS.dashboardProjects.url);
-          return;
-        }
-
         const { error } = await updateProject(formData);
         if (error) {
           toast.error('The project wasn’t saved', { description: error });
@@ -96,153 +82,108 @@ export function EditProjectForm({
     });
   };
 
+  const remove = () => {
+    setAction('delete');
+    startTransition(async () => {
+      try {
+        const formData = new FormData();
+        formData.set('projectId', project.id);
+        const { error } = await deleteProject(formData);
+        if (error) {
+          toast.error('The project wasn’t deleted', { description: error });
+          return;
+        }
+        toast.success('Project deleted');
+        router.push(LINKS.dashboardProjects.url);
+      } catch (error) {
+        toast.error('Something went wrong', {
+          description: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
-      {/* Title & Slug */}
-      <div className='grid gap-4 sm:grid-cols-2'>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='title' className='text-sm font-medium'>
-            Title
-          </label>
-          <Input
-            id='title'
-            name='title'
-            placeholder='My Awesome Project...'
-            defaultValue={project.title}
-            required
-          />
-        </div>
+    <form onSubmit={handleSubmit}>
+      <FormColumns
+        main={
+          <>
+            <FormCard>
+              <div className='grid gap-4 sm:grid-cols-2'>
+                <Field label='Title' htmlFor='title'>
+                  <Input
+                    id='title'
+                    name='title'
+                    placeholder='My project'
+                    defaultValue={project.title}
+                    required
+                  />
+                </Field>
+                <Field label='Slug' htmlFor='slug'>
+                  <Input
+                    id='slug'
+                    name='slug'
+                    placeholder='Leave empty to use the title'
+                    defaultValue={project.slug ?? undefined}
+                  />
+                </Field>
+              </div>
+            </FormCard>
 
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='slug' className='text-sm font-medium'>
-            URL Slug
-          </label>
-          <Input
-            id='slug'
-            name='slug'
-            placeholder='Leave empty to use the title'
-            defaultValue={project.slug ?? undefined}
-          />
-        </div>
-      </div>
-
-      <AuthorsField options={authorOptions} defaultValue={authorIds} />
-
-      <CoverField defaultValue={project.coverUrl} />
-
-      <GalleryField defaultValue={gallery} />
-
-      {/* Description Editor & Preview */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='description' className='text-sm font-medium'>
-          Description
-        </label>
-        <Tabs defaultValue='write' className='w-full'>
-          <div className='mb-1 flex items-center justify-between'>
-            <TabsList className='grid w-full max-w-50 grid-cols-2'>
-              <TabsTrigger value='write'>Write</TabsTrigger>
-              <TabsTrigger value='preview'>Preview</TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value='write'>
-            <Textarea
+            <MarkdownField
               id='description'
-              name='description'
-              placeholder='Write your project description here'
-              className='min-h-100 resize-y'
+              label='Description'
+              placeholder='Describe the project in Markdown'
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
+              onChange={setDescription}
             />
-          </TabsContent>
 
-          <TabsContent value='preview'>
-            <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert border-input min-h-100 w-full max-w-none rounded-md border p-3 text-sm wrap-break-word'>
-              {description ? (
-                <MarkdownViewer content={description} />
-              ) : (
-                <p className='text-muted-foreground italic'>
-                  Nothing to preview yet...
-                </p>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+            <FormCard>
+              <GalleryField defaultValue={gallery} />
+            </FormCard>
 
-      {/* Tags & Technologies */}
-      <div className='grid gap-4 sm:grid-cols-2'>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='tags' className='text-sm font-medium'>
-            Tags
-          </label>
-          <Input
-            id='tags'
-            name='tags'
-            placeholder='Add tags separated by commas'
-            defaultValue={project.tags?.join(',')}
-          />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='technologies' className='text-sm font-medium'>
-            Technologies
-          </label>
-          <Input
-            id='technologies'
-            name='technologies'
-            placeholder='Add technologies separated by commas'
-            defaultValue={project.technologies?.join(',')}
-          />
-        </div>
-      </div>
+            <FormCard title='Details'>
+              <ProjectDetailFields project={project} />
+            </FormCard>
+          </>
+        }
+        side={
+          <>
+            <FormCard
+              title='Publish'
+              description={
+                project.publishedAt
+                  ? `Live since ${formatShortDate(project.publishedAt)}`
+                  : 'A draft, only visible here'
+              }
+              className='order-last xl:order-first'
+            >
+              <Field label='Date' htmlFor='date'>
+                <Input
+                  id='date'
+                  name='date'
+                  type='date'
+                  defaultValue={project.createdAt.toISOString().slice(0, 10)}
+                  required
+                />
+              </Field>
+              <EditActionButtons
+                kind='project'
+                title={project.title}
+                publishedAt={project.publishedAt}
+                isPending={isPending}
+                isMissingRequiredFields={!description.trim()}
+                action={action}
+                onDelete={remove}
+              />
+            </FormCard>
 
-      {/* Repository URL */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='repository' className='text-sm font-medium'>
-          Repository URL
-        </label>
-        <Input
-          id='repository'
-          name='repository'
-          placeholder='https://github.com/username/repository'
-          defaultValue={project.repository ?? undefined}
-        />
-      </div>
-
-      {/* Website URL */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='website' className='text-sm font-medium'>
-          Website URL
-        </label>
-        <Input
-          id='website'
-          name='website'
-          placeholder='https://my-awesome-project.com'
-          defaultValue={project.website ?? undefined}
-        />
-      </div>
-
-      {/* Project Date */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='date' className='text-sm font-medium'>
-          Project Date
-        </label>
-        <Input
-          id='date'
-          name='date'
-          type='date'
-          className='w-fit'
-          defaultValue={project.createdAt.toISOString().slice(0, 10)}
-          required
-        />
-      </div>
-
-      <EditActionButtons
-        publishedAt={project.publishedAt}
-        isPending={isPending}
-        isMissingRequiredFields={!description.trim()}
-        action={action}
+            <FormCard>
+              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <CoverField defaultValue={project.coverUrl} />
+            </FormCard>
+          </>
+        }
       />
     </form>
   );

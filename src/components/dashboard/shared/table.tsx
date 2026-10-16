@@ -68,11 +68,11 @@ export function DataTable<TData extends RowData & { id: string }>({
 
   return (
     <div className='flex flex-col gap-3'>
-      {/* Looks like the search on the projects and posts pages */}
-      <label className='bg-card focus-within:border-primary-text/60 focus-within:ring-primary/20 flex h-12 w-full max-w-md items-center gap-3 rounded-lg border px-4 transition-[border-color,box-shadow] focus-within:ring-3'>
+      {/* Like the search on the projects and posts pages, at the height of a button */}
+      <label className='bg-card focus-within:border-primary-text/60 focus-within:ring-primary/20 flex h-10 w-full max-w-sm items-center gap-2.5 rounded-lg border px-3 transition-[border-color,box-shadow] focus-within:ring-3'>
         <SearchIcon
           aria-hidden
-          className='text-muted-foreground size-4.5 shrink-0'
+          className='text-muted-foreground size-4 shrink-0'
         />
         <span className='sr-only'>{filterPlaceholder}</span>
         <input
@@ -80,14 +80,14 @@ export function DataTable<TData extends RowData & { id: string }>({
           placeholder={filterPlaceholder}
           value={globalFilter ?? ''}
           onChange={(event) => setGlobalFilter(event.target.value)}
-          className='placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-sm outline-none [&::-webkit-search-cancel-button]:hidden'
+          className='placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-[13px] outline-none [&::-webkit-search-cancel-button]:hidden'
         />
         {globalFilter && (
           <button
             type='button'
             aria-label='Clear search'
             onClick={() => setGlobalFilter('')}
-            className='text-muted-foreground hover:text-foreground hover:bg-muted -mr-2 grid size-8 place-items-center rounded-md transition-colors'
+            className='text-muted-foreground hover:text-foreground hover:bg-muted -mr-1.5 grid size-7 place-items-center rounded-md transition-colors'
           >
             <XIcon className='size-4' />
           </button>

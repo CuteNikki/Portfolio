@@ -1,12 +1,9 @@
-import { PresentationIcon } from 'lucide-react';
-
 import { SITE_METADATA } from '@/constants/metadata';
 import { requireWriter } from '@/lib/auth';
 import { getAuthorOptions } from '@/lib/authors';
 
 import { NewProjectForm } from '@/components/dashboard/projects/new';
-import { DashboardHeader } from '@/components/dashboard/shared/header';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
 
 export const { dashboardNewProject: metadata } = SITE_METADATA;
 
@@ -19,20 +16,15 @@ export default async function NewProjectPage() {
   const authorOptions = await getAuthorOptions();
 
   return (
-    <Card className='w-full max-w-5xl'>
-      <CardHeader>
-        <DashboardHeader
-          icon={PresentationIcon}
-          title={'Create new Project'}
-          description={'Draft and publish a new project.'}
-        />
-      </CardHeader>
-      <CardContent>
-        <NewProjectForm
-          authorOptions={authorOptions}
-          authorIds={[session.user.id]}
-        />
-      </CardContent>
-    </Card>
+    <>
+      <DashboardPageHeader
+        title='New project'
+        description='Describe it, then save a draft or publish it.'
+      />
+      <NewProjectForm
+        authorOptions={authorOptions}
+        authorIds={[session.user.id]}
+      />
+    </>
   );
 }

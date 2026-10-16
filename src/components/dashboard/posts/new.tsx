@@ -13,11 +13,14 @@ import {
   AuthorsField,
 } from '@/components/dashboard/shared/authors-field';
 import { CoverField } from '@/components/dashboard/shared/image-fields';
-import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
+import {
+  Field,
+  FormCard,
+  FormColumns,
+  MarkdownField,
+} from '@/components/dashboard/shared/form-parts';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 
 export function NewPostForm({
   authorOptions,
@@ -88,74 +91,60 @@ export function NewPostForm({
   };
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className='flex flex-col gap-6'>
-      {/* Title & Slug */}
-      <div className='grid gap-4 sm:grid-cols-2'>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='title' className='text-sm font-medium'>
-            Title
-          </label>
-          <Input
-            id='title'
-            name='title'
-            placeholder='Why I switched to Linux...'
-            required
-          />
-        </div>
+    <form ref={formRef} onSubmit={handleSubmit}>
+      <FormColumns
+        main={
+          <>
+            <FormCard>
+              <div className='grid gap-4 sm:grid-cols-2'>
+                <Field label='Title' htmlFor='title'>
+                  <Input
+                    id='title'
+                    name='title'
+                    placeholder='Why I switched to Linux'
+                    required
+                  />
+                </Field>
+                <Field label='Slug' htmlFor='slug'>
+                  <Input
+                    id='slug'
+                    name='slug'
+                    placeholder='Leave empty to use the title'
+                  />
+                </Field>
+              </div>
+            </FormCard>
 
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='slug' className='text-sm font-medium'>
-            URL Slug
-          </label>
-          <Input
-            id='slug'
-            name='slug'
-            placeholder='Leave empty to use the title'
-          />
-        </div>
-      </div>
+            <MarkdownField
+              id='content'
+              label='Content'
+              placeholder='Write your post in Markdown'
+              value={content}
+              onChange={setContent}
+            />
+          </>
+        }
+        side={
+          <>
+            <FormCard
+              title='Publish'
+              description='Save a draft first or publish right away'
+              className='order-last xl:order-first'
+            >
+              <NewActionButtons
+                isPending={isPending || isSaved}
+                isMissingRequiredFields={!content.trim()}
+                action={submitAction}
+                setAction={setSubmitAction}
+              />
+            </FormCard>
 
-      <AuthorsField options={authorOptions} defaultValue={authorIds} />
-
-      <CoverField defaultValue={null} />
-
-      {/* The Editor */}
-      <Tabs defaultValue='write' className='w-full'>
-        <TabsList className='mb-1 grid w-full max-w-50 grid-cols-2'>
-          <TabsTrigger value='write'>Write</TabsTrigger>
-          <TabsTrigger value='preview'>Preview</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value='write'>
-          <Textarea
-            aria-label='Post content (Markdown)'
-            name='content'
-            placeholder='Write your post content here using Markdown...'
-            className='min-h-100 resize-y'
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-        </TabsContent>
-
-        <TabsContent value='preview'>
-          <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert min-h-100 w-full max-w-none rounded-lg border p-3 text-sm wrap-break-word'>
-            {content ? (
-              <MarkdownViewer content={content} />
-            ) : (
-              <p className='text-muted-foreground italic'>
-                Nothing to preview yet...
-              </p>
-            )}
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      <NewActionButtons
-        isPending={isPending || isSaved}
-        isMissingRequiredFields={!content.trim()}
-        action={submitAction}
-        setAction={setSubmitAction}
+            <FormCard>
+              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <CoverField defaultValue={null} />
+            </FormCard>
+          </>
+        }
       />
     </form>
   );

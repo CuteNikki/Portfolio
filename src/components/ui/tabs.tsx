@@ -51,11 +51,11 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  'group/tabs-list inline-flex w-fit items-center justify-center p-[3px] text-muted-foreground group-data-horizontal/tabs:h-8 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col',
+  'group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-1 text-muted-foreground group-data-horizontal/tabs:h-10 group-data-vertical/tabs:h-fit group-data-vertical/tabs:flex-col',
   {
     variants: {
       variant: {
-        default: 'bg-muted',
+        default: 'bg-muted/60 border',
         line: 'gap-1 bg-transparent',
       },
     },
@@ -99,7 +99,7 @@ function TabsTrigger({
       data-slot='tabs-trigger'
       value={value}
       className={cn(
-        "text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring data-active:text-foreground relative isolate inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 border border-transparent px-1.5 py-0.5 text-sm font-medium whitespace-nowrap transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring data-active:text-foreground data-active:font-semibold relative isolate inline-flex h-full flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2.5 py-0.5 text-[13px] font-medium whitespace-nowrap transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -113,7 +113,7 @@ function TabsTrigger({
             'pointer-events-none absolute -z-10',
             variant === 'line'
               ? 'bg-foreground inset-x-0 -bottom-1 h-0.5'
-              : 'bg-background dark:border-input dark:bg-input/30 inset-0 shadow-sm dark:border',
+              : 'bg-primary-soft border-primary-text/40 inset-0 rounded-md border',
           )}
         />
       ) : null}

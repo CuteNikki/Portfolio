@@ -16,11 +16,15 @@ import {
   CoverField,
   GalleryField,
 } from '@/components/dashboard/shared/image-fields';
-import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
+import { ProjectDetailFields } from '@/components/dashboard/projects/detail-fields';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
+import {
+  Field,
+  FormCard,
+  FormColumns,
+  MarkdownField,
+} from '@/components/dashboard/shared/form-parts';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 
 export function NewProjectForm({
   authorOptions,
@@ -91,142 +95,75 @@ export function NewProjectForm({
   };
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} className='flex flex-col gap-6'>
-      {/* Title & Slug */}
-      <div className='grid gap-4 sm:grid-cols-2'>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='title' className='text-sm font-medium'>
-            Title
-          </label>
-          <Input
-            id='title'
-            name='title'
-            placeholder='My Awesome Project...'
-            required
-          />
-        </div>
+    <form ref={formRef} onSubmit={handleSubmit}>
+      <FormColumns
+        main={
+          <>
+            <FormCard>
+              <div className='grid gap-4 sm:grid-cols-2'>
+                <Field label='Title' htmlFor='title'>
+                  <Input
+                    id='title'
+                    name='title'
+                    placeholder='My project'
+                    required
+                  />
+                </Field>
+                <Field label='Slug' htmlFor='slug'>
+                  <Input
+                    id='slug'
+                    name='slug'
+                    placeholder='Leave empty to use the title'
+                  />
+                </Field>
+              </div>
+            </FormCard>
 
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='slug' className='text-sm font-medium'>
-            URL Slug
-          </label>
-          <Input
-            id='slug'
-            name='slug'
-            placeholder='Leave empty to use the title'
-          />
-        </div>
-      </div>
-
-      <AuthorsField options={authorOptions} defaultValue={authorIds} />
-
-      <CoverField defaultValue={null} />
-
-      <GalleryField defaultValue={[]} />
-
-      {/* Description Editor & Preview */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='description' className='text-sm font-medium'>
-          Description
-        </label>
-        <Tabs defaultValue='write' className='w-full'>
-          <div className='mb-1 flex items-center justify-between'>
-            <TabsList className='grid w-full max-w-50 grid-cols-2'>
-              <TabsTrigger value='write'>Write</TabsTrigger>
-              <TabsTrigger value='preview'>Preview</TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value='write'>
-            <Textarea
+            <MarkdownField
               id='description'
-              name='description'
-              placeholder='Write your project description here'
-              className='min-h-100 resize-y'
+              label='Description'
+              placeholder='Describe the project in Markdown'
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              required
+              onChange={setDescription}
             />
-          </TabsContent>
 
-          <TabsContent value='preview'>
-            <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert border-input min-h-100 w-full max-w-none rounded-md border p-3 text-sm wrap-break-word'>
-              {description ? (
-                <MarkdownViewer content={description} />
-              ) : (
-                <p className='text-muted-foreground italic'>
-                  Nothing to preview yet...
-                </p>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+            <FormCard>
+              <GalleryField defaultValue={[]} />
+            </FormCard>
 
-      {/* Tags & Technologies */}
-      <div className='grid gap-4 sm:grid-cols-2'>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='tags' className='text-sm font-medium'>
-            Tags
-          </label>
-          <Input
-            id='tags'
-            name='tags'
-            placeholder='Add tags separated by commas'
-          />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='technologies' className='text-sm font-medium'>
-            Technologies
-          </label>
-          <Input
-            id='technologies'
-            name='technologies'
-            placeholder='Add technologies separated by commas'
-          />
-        </div>
-      </div>
+            <FormCard title='Details'>
+              <ProjectDetailFields />
+            </FormCard>
+          </>
+        }
+        side={
+          <>
+            <FormCard
+              title='Publish'
+              description='Save a draft first or publish right away'
+              className='order-last xl:order-first'
+            >
+              <Field
+                label='Date'
+                htmlFor='date'
+                hint='Leave empty to use today’s date.'
+              >
+                <Input id='date' name='date' type='date' />
+              </Field>
+              <NewActionButtons
+                isPending={isPending || isSaved}
+                isMissingRequiredFields={!description.trim()}
+                action={submitAction}
+                setAction={setSubmitAction}
+              />
+            </FormCard>
 
-      {/* Repository URL */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='repository' className='text-sm font-medium'>
-          Repository URL
-        </label>
-        <Input
-          id='repository'
-          name='repository'
-          placeholder='https://github.com/username/repository'
-        />
-      </div>
-
-      {/* Website URL */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='website' className='text-sm font-medium'>
-          Website URL
-        </label>
-        <Input
-          id='website'
-          name='website'
-          placeholder='https://my-awesome-project.com'
-        />
-      </div>
-
-      {/* Project Date */}
-      <div className='flex flex-col gap-2'>
-        <label htmlFor='date' className='text-sm font-medium'>
-          Project Date
-        </label>
-        <Input id='date' name='date' type='date' className='w-fit' />
-        <p className='text-muted-foreground text-xs'>
-          Leave empty to use today&apos;s date.
-        </p>
-      </div>
-
-      <NewActionButtons
-        isPending={isPending || isSaved}
-        isMissingRequiredFields={!description.trim()}
-        action={submitAction}
-        setAction={setSubmitAction}
+            <FormCard>
+              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <CoverField defaultValue={null} />
+            </FormCard>
+          </>
+        }
       />
     </form>
   );

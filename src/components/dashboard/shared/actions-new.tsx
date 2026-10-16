@@ -7,6 +7,8 @@ import {
 
 import { Button } from '@/components/ui/button';
 
+// The buttons of the Publish card on a new post or project, stacked with the main one on top. Save draft comes first
+// in the markup, so pressing Enter in a field saves a draft rather than publishing.
 export function NewActionButtons({
   isPending,
   isMissingRequiredFields,
@@ -19,22 +21,10 @@ export function NewActionButtons({
   setAction: React.Dispatch<React.SetStateAction<'draft' | 'publish'>>;
 }) {
   return (
-    <div className='flex flex-col-reverse items-start justify-end gap-1 sm:flex-row sm:items-center'>
-      {/* Cancel Button */}
-      <Button
-        type='button'
-        variant='ghost'
-        onClick={() => window.history.back()}
-        disabled={isPending}
-      >
-        <ArrowLeftIcon />
-        Cancel
-      </Button>
-
-      {/* Save Draft Button */}
+    <div className='flex flex-col gap-2'>
       <Button
         type='submit'
-        variant='secondary'
+        variant='outline'
         onClick={() => setAction('draft')}
         disabled={isPending || isMissingRequiredFields}
       >
@@ -43,14 +33,14 @@ export function NewActionButtons({
         ) : (
           <SaveIcon />
         )}
-        Save Draft
+        Save draft
       </Button>
 
-      {/* Publish Button */}
       <Button
         type='submit'
         onClick={() => setAction('publish')}
         disabled={isPending || isMissingRequiredFields}
+        className='order-first'
       >
         {isPending && action === 'publish' ? (
           <LoaderCircleIcon className='animate-spin' />
@@ -58,6 +48,16 @@ export function NewActionButtons({
           <SendHorizonalIcon />
         )}
         Publish
+      </Button>
+
+      <Button
+        type='button'
+        variant='ghost'
+        onClick={() => window.history.back()}
+        disabled={isPending}
+      >
+        <ArrowLeftIcon />
+        Back
       </Button>
     </div>
   );

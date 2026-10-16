@@ -1,15 +1,18 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { PencilLineIcon } from 'lucide-react';
+import { ExternalLinkIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
 import { getAuthorOptions } from '@/lib/authors';
 import prisma from '@/lib/prisma';
 
+import { LINKS } from '@/constants/links';
+
 import { EditProjectForm } from '@/components/dashboard/projects/edit';
-import { DashboardHeader } from '@/components/dashboard/shared/header';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
+import { Button } from '@/components/ui/button';
 
 export async function generateMetadata({
   params,
@@ -68,24 +71,25 @@ export default async function EditProjectPage({
   }
 
   return (
-    <Card className='w-full max-w-5xl'>
-      <CardHeader>
-        <DashboardHeader
-          icon={PencilLineIcon}
-          title={'Edit Project'}
-          description={
-            'Make changes to a project or update its publication status.'
-          }
-        />
-      </CardHeader>
-      <CardContent>
-        <EditProjectForm
-          project={project}
-          gallery={project.images.map(({ url, alt }) => ({ url, alt }))}
-          authorOptions={await getAuthorOptions()}
-          authorIds={project.authors.map(({ userId }) => userId)}
-        />
-      </CardContent>
-    </Card>
+    <>
+      <DashboardPageHeader title='Edit project' description={project.title}>
+        {project.publishedAt && (
+          <Button asChild variant='outline'>
+            <Link
+              href={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
+            >
+              <ExternalLinkIcon />
+              View
+            </Link>
+          </Button>
+        )}
+      </DashboardPageHeader>
+      <EditProjectForm
+        project={project}
+        gallery={project.images.map(({ url, alt }) => ({ url, alt }))}
+        authorOptions={await getAuthorOptions()}
+        authorIds={project.authors.map(({ userId }) => userId)}
+      />
+    </>
   );
 }

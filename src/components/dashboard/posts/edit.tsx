@@ -8,21 +8,25 @@ import type { Post } from '@/generated/prisma/client';
 
 import { deletePost, updatePost } from '@/actions/post';
 import { LINKS } from '@/constants/links';
+import { formatShortDate } from '@/lib/utils';
 
 import {
   type AuthorOption,
   AuthorsField,
 } from '@/components/dashboard/shared/authors-field';
 import { CoverField } from '@/components/dashboard/shared/image-fields';
-import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import {
   EditActionButtons,
   getEditAction,
   type EditAction,
 } from '@/components/dashboard/shared/actions-edit';
+import {
+  Field,
+  FormCard,
+  FormColumns,
+  MarkdownField,
+} from '@/components/dashboard/shared/form-parts';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
 
 export function EditPostForm({
   post,
@@ -38,7 +42,7 @@ export function EditPostForm({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     const intent = getEditAction(event);
     setAction(intent);
@@ -52,33 +56,12 @@ export function EditPostForm({
 
     startTransition(async () => {
       try {
-        if (intent === 'delete') {
-          if (
-            !window.confirm(
-              'Are you sure you want to delete this post? This cannot be undone.',
-            )
-          )
-            return;
-          const deleted = await deletePost(formData);
-          if (deleted.error) {
-            toast.error('The post wasn’t deleted', {
-              description: deleted.error,
-            });
-            return;
-          }
-          toast.success('Post deleted');
-          router.push(LINKS.dashboardPosts.url);
-          return;
-        }
-
         const { error } = await updatePost(formData);
         if (error) {
           toast.error('The post wasn’t saved', { description: error });
           return;
         }
-        toast.success(
-          intent === 'publish' ? 'Post published!' : 'Draft saved!',
-        );
+        toast.success(intent === 'publish' ? 'Post published' : 'Draft saved');
         router.refresh();
       } catch (error) {
         toast.error('Something went wrong', {
@@ -88,77 +71,91 @@ export function EditPostForm({
     });
   };
 
+  const remove = () => {
+    setAction('delete');
+    startTransition(async () => {
+      try {
+        const formData = new FormData();
+        formData.set('postId', post.id);
+        const { error } = await deletePost(formData);
+        if (error) {
+          toast.error('The post wasn’t deleted', { description: error });
+          return;
+        }
+        toast.success('Post deleted');
+        router.push(LINKS.dashboardPosts.url);
+      } catch (error) {
+        toast.error('Something went wrong', {
+          description: error instanceof Error ? error.message : 'Unknown error',
+        });
+      }
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
-      {/* Title & Slug */}
-      <div className='grid gap-4 sm:grid-cols-2'>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='title' className='text-sm font-medium'>
-            Title
-          </label>
-          <Input
-            id='title'
-            name='title'
-            placeholder='Why I switched to Linux...'
-            defaultValue={post.title}
-            required
-          />
-        </div>
-        <div className='flex flex-col gap-2'>
-          <label htmlFor='slug' className='text-sm font-medium'>
-            URL Slug
-          </label>
-          <Input
-            id='slug'
-            name='slug'
-            placeholder='Leave empty to use the title'
-            defaultValue={post.slug ?? undefined}
-          />
-        </div>
-      </div>
+    <form onSubmit={handleSubmit}>
+      <FormColumns
+        main={
+          <>
+            <FormCard>
+              <div className='grid gap-4 sm:grid-cols-2'>
+                <Field label='Title' htmlFor='title'>
+                  <Input
+                    id='title'
+                    name='title'
+                    placeholder='Why I switched to Linux'
+                    defaultValue={post.title}
+                    required
+                  />
+                </Field>
+                <Field label='Slug' htmlFor='slug'>
+                  <Input
+                    id='slug'
+                    name='slug'
+                    placeholder='Leave empty to use the title'
+                    defaultValue={post.slug ?? undefined}
+                  />
+                </Field>
+              </div>
+            </FormCard>
 
-      <AuthorsField options={authorOptions} defaultValue={authorIds} />
+            <MarkdownField
+              id='content'
+              label='Content'
+              placeholder='Write your post in Markdown'
+              value={content}
+              onChange={setContent}
+            />
+          </>
+        }
+        side={
+          <>
+            <FormCard
+              title='Publish'
+              description={
+                post.publishedAt
+                  ? `Live since ${formatShortDate(post.publishedAt)}`
+                  : 'A draft, only visible here'
+              }
+              className='order-last xl:order-first'
+            >
+              <EditActionButtons
+                kind='post'
+                title={post.title}
+                publishedAt={post.publishedAt}
+                isPending={isPending}
+                isMissingRequiredFields={!content.trim()}
+                action={action}
+                onDelete={remove}
+              />
+            </FormCard>
 
-      <CoverField defaultValue={post.coverUrl} />
-
-      {/* Markdown Editor */}
-      <Tabs defaultValue='write' className='w-full'>
-        <div className='mb-1 flex items-center justify-between'>
-          <TabsList className='grid w-full max-w-50 grid-cols-2'>
-            <TabsTrigger value='write'>Write</TabsTrigger>
-            <TabsTrigger value='preview'>Preview</TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent value='write'>
-          <Textarea
-            aria-label='Post content (Markdown)'
-            name='content'
-            className='min-h-100 resize-y'
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-        </TabsContent>
-
-        <TabsContent value='preview'>
-          <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert min-h-100 w-full max-w-none rounded-lg border p-3 text-sm wrap-break-word'>
-            {content ? (
-              <MarkdownViewer content={content} />
-            ) : (
-              <p className='text-muted-foreground italic'>
-                Nothing to preview yet...
-              </p>
-            )}
-          </div>
-        </TabsContent>
-      </Tabs>
-
-      <EditActionButtons
-        publishedAt={post.publishedAt}
-        isPending={isPending}
-        isMissingRequiredFields={!content.trim()}
-        action={action}
+            <FormCard>
+              <AuthorsField options={authorOptions} defaultValue={authorIds} />
+              <CoverField defaultValue={post.coverUrl} />
+            </FormCard>
+          </>
+        }
       />
     </form>
   );
