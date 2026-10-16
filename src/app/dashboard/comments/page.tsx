@@ -23,7 +23,12 @@ export default async function CommentsPage() {
       orderBy: { createdAt: 'desc' },
       include: {
         author: {
-          select: { displayName: true, username: true, avatarUrl: true },
+          select: {
+            id: true,
+            displayName: true,
+            username: true,
+            avatarUrl: true,
+          },
         },
         post: { select: { id: true, title: true, slug: true } },
       },
@@ -47,6 +52,7 @@ export default async function CommentsPage() {
           excerpt: toExcerpt(comment.content, 140),
           isReply: comment.parentId !== null,
           author: comment.author.displayName ?? comment.author.username,
+          authorHref: LINKS.dashboardUserWithId(comment.author.id).url,
           avatarUrl: comment.author.avatarUrl,
           postTitle: comment.post.title,
           postSlug: comment.post.slug ?? '',

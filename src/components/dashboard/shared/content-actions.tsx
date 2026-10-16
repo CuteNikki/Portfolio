@@ -7,14 +7,16 @@ import { useRouter } from 'next/navigation';
 import {
   EllipsisIcon,
   ExternalLinkIcon,
+  EyeOffIcon,
   LinkIcon,
   PencilLineIcon,
+  SendHorizonalIcon,
   Trash2Icon,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { deletePost } from '@/actions/post';
-import { deleteProject } from '@/actions/project';
+import { deletePost, setPostPublished } from '@/actions/post';
+import { deleteProject, setProjectPublished } from '@/actions/project';
 
 import {
   AlertDialog,
@@ -60,6 +62,30 @@ export function ContentActions({
       .writeText(`${window.location.origin}${publicHref}`)
       .then(() => toast.success('Link copied'))
       .catch(() => toast.error('The link couldn’t be copied'));
+
+  // Publishes a draft or takes a published entry back to a draft
+  const togglePublished = () =>
+    startTransition(async () => {
+      const publish = !isPublished;
+      try {
+        const { error } = await (kind === 'post'
+          ? setPostPublished(id, publish)
+          : setProjectPublished(id, publish));
+        if (error) {
+          toast.error(
+            `The ${kind} couldn’t be ${publish ? 'published' : 'unpublished'}`,
+            { description: error },
+          );
+          return;
+        }
+        toast.success(
+          `${kind === 'post' ? 'Post' : 'Project'} ${publish ? 'published' : 'back to a draft'}`,
+        );
+        router.refresh();
+      } catch {
+        toast.error('Something went wrong. Please try again.');
+      }
+    });
 
   const remove = () =>
     startTransition(async () => {
@@ -127,6 +153,11 @@ export function ContentActions({
               </DropdownMenuItem>
             </>
           )}
+          <DropdownMenuSeparator />
+          <DropdownMenuItem disabled={pending} onSelect={togglePublished}>
+            {isPublished ? <EyeOffIcon /> : <SendHorizonalIcon />}
+            {isPublished ? 'Unpublish' : 'Publish'}
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
             variant='destructive'

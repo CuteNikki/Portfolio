@@ -118,6 +118,13 @@ export const LINKS = {
     requiresAuth: true,
     requiresAdmin: true,
   },
+  // Someone's posts, projects and comments. Writers can open it too; only admins get the user list.
+  dashboardUserWithId: (id: string) => ({
+    label: 'User',
+    url: `/dashboard/users/${id}#top`,
+    icon: Users2Icon,
+    requiresAuth: true,
+  }),
   dashboardComments: {
     label: 'Comments',
     url: '/dashboard/comments#top',

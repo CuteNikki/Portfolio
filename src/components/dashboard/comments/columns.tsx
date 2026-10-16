@@ -39,6 +39,7 @@ export interface CommentRow {
   excerpt: string;
   isReply: boolean;
   author: string;
+  authorHref: string;
   avatarUrl: string;
   postTitle: string;
   postSlug: string;
@@ -46,7 +47,15 @@ export interface CommentRow {
   createdAt: Date;
 }
 
-function CommentActions({ comment }: { comment: CommentRow }) {
+// The ⋯ menu of a comment: open it on its post, or delete it. On the comments table and on a user's page.
+export function CommentActions({
+  comment,
+}: {
+  comment: Pick<
+    CommentRow,
+    'id' | 'author' | 'postTitle' | 'postSlug' | 'postHref'
+  >;
+}) {
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -133,7 +142,10 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
     accessorKey: 'author',
     header: sortableHeader('Author'),
     cell: ({ row }) => (
-      <span className='flex items-center gap-2.5'>
+      <Link
+        href={row.original.authorHref}
+        className='group flex items-center gap-2.5'
+      >
         <Image
           src={proxiedAvatarUrl(row.original.avatarUrl)}
           alt=''
@@ -141,8 +153,10 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
           height={24}
           className='size-6 shrink-0 rounded-md'
         />
-        <span className='font-semibold'>{row.original.author}</span>
-      </span>
+        <span className='group-hover:text-primary-text font-semibold transition-colors'>
+          {row.original.author}
+        </span>
+      </Link>
     ),
   },
   {

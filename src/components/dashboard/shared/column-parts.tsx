@@ -8,6 +8,8 @@ import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from 'lucide-react';
 import type { PublicUser } from '@/lib/data';
 import { proxiedAvatarUrl } from '@/lib/utils';
 
+import { LINKS } from '@/constants/links';
+
 import { StoredImage } from '@/components/common/stored-image';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -105,22 +107,36 @@ export function AuthorsCell({ authors }: { authors: PublicUser[] }) {
   if (authors.length === 0)
     return <span className='text-muted-foreground'>—</span>;
 
+  const nameOf = (author: PublicUser) => author.displayName ?? author.username;
+
   return (
     <div className='flex items-center gap-2'>
       <div className='flex -space-x-2'>
         {authors.slice(0, 3).map((author) => (
-          <Image
+          <Link
             key={author.id}
-            src={proxiedAvatarUrl(author.avatarUrl)}
-            alt=''
-            className='ring-card size-6 shrink-0 rounded-md ring-2'
-            width={24}
-            height={24}
-          />
+            href={LINKS.dashboardUserWithId(author.id).url}
+            aria-label={nameOf(author)}
+            title={nameOf(author)}
+            className='ring-card hover:ring-primary/40 relative shrink-0 rounded-md ring-2 transition-shadow hover:z-10'
+          >
+            <Image
+              src={proxiedAvatarUrl(author.avatarUrl)}
+              alt=''
+              className='size-6 rounded-md'
+              width={24}
+              height={24}
+            />
+          </Link>
         ))}
       </div>
       <span className='truncate'>
-        {authors[0].displayName ?? authors[0].username}
+        <Link
+          href={LINKS.dashboardUserWithId(authors[0].id).url}
+          className='hover:text-primary-text transition-colors'
+        >
+          {nameOf(authors[0])}
+        </Link>
         {authors.length > 1 && (
           <span className='text-muted-foreground'> +{authors.length - 1}</span>
         )}

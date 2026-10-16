@@ -236,6 +236,34 @@ function parseProjectDate(value: FormDataEntryValue | null) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+/**
+ * Publishes a project or takes it back to a draft without opening it, e.g. from a row's menu.
+ */
+export async function setProjectPublished(
+  projectId: string,
+  published: boolean,
+): Promise<ActionResult> {
+  const session = await getCurrentSession();
+  if (!canWrite(session)) return fail('Only writers and admins can do that.');
+
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: { slug: true, publishedAt: true },
+  });
+  if (!project) return fail('That project doesn’t exist any more.');
+
+  // Already as asked, e.g. after a second click in another tab
+  if (!!project.publishedAt === published) return {};
+
+  await prisma.project.update({
+    where: { id: projectId },
+    data: { publishedAt: published ? new Date() : null },
+  });
+
+  revalidateProjectPaths(projectId, project.slug);
+  return {};
+}
+
 function revalidateProjectPaths(projectId: string, slug: string | null) {
   updateTag('projects');
   revalidatePath('/dashboard/projects');

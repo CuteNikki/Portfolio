@@ -1,34 +1,29 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useOptimistic, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import {
   ClipboardCopyIcon,
+  EllipsisIcon,
   LoaderCircleIcon,
-  MoreHorizontalIcon,
-  TrashIcon,
+  Trash2Icon,
+  UserRoundIcon,
 } from 'lucide-react';
 
 import type { Role, User as UserModel } from '@/generated/prisma/client';
 
 import { proxiedAvatarUrl } from '@/lib/utils';
 
-import { deleteUser, updateUserRole } from '@/actions/user';
+import { LINKS } from '@/constants/links';
+
+import { updateUserRole } from '@/actions/user';
 
 import { sortableHeader } from '@/components/dashboard/shared/column-parts';
 import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { DeleteUserDialog } from '@/components/dashboard/users/delete-user';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -53,16 +48,21 @@ const userColumn: DashboardColumnDef<User> = {
   accessorKey: 'username',
   header: sortableHeader('User'),
   cell: ({ row }) => (
-    <div className='flex flex-row items-center gap-2'>
+    <Link
+      href={LINKS.dashboardUserWithId(row.original.id).url}
+      className='group flex flex-row items-center gap-2.5'
+    >
       <Image
         src={proxiedAvatarUrl(row.original.avatarUrl)}
-        alt='Avatar'
-        className='min-h-6 min-w-6 shrink-0 rounded-full'
+        alt=''
+        className='size-6 shrink-0 rounded-md'
         width={24}
         height={24}
       />
-      <span>{row.original.username}</span>
-    </div>
+      <span className='group-hover:text-primary-text font-semibold transition-colors'>
+        {row.original.username}
+      </span>
+    </Link>
   ),
 };
 
@@ -71,7 +71,15 @@ const nameColumn: DashboardColumnDef<User> = {
   header: sortableHeader('Name'),
 };
 
-const RoleSelectCell = ({ user }: { user: User }) => {
+// Changes someone's role right away; on the users table and on a user's page
+export const RoleSelect = ({
+  user,
+  size = 'sm',
+}: {
+  user: Pick<User, 'id' | 'username' | 'role'>;
+  // Small in table rows, button height on a user's page
+  size?: 'sm' | 'default';
+}) => {
   const [isPending, startTransition] = useTransition();
   // Shows the picked role while it saves, then the role from the server, so a failed change goes back by itself
   const [optimisticRole, setOptimisticRole] = useOptimistic(user.role);
@@ -111,8 +119,8 @@ const RoleSelectCell = ({ user }: { user: User }) => {
       disabled={isPending}
     >
       <SelectTrigger
-        size='sm'
-        className='w-24'
+        size={size}
+        className={size === 'sm' ? 'w-24' : 'w-28'}
         aria-label={`Role of ${user.username}`}
       >
         <SelectValue placeholder='Role' />
@@ -138,96 +146,57 @@ const roleColumn: DashboardColumnDef<User> = {
   accessorKey: 'role',
   sortFn: (a, b) => ROLE_RANK[a.original.role] - ROLE_RANK[b.original.role],
   header: sortableHeader('Role'),
-  cell: ({ row }) => <RoleSelectCell user={row.original} />,
+  cell: ({ row }) => <RoleSelect user={row.original} />,
 };
 
 const UserActions = ({ user }: { user: User }) => {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [confirming, setConfirming] = useState(false);
 
-  const handleDelete = () => {
-    const formData = new FormData();
-    formData.append('userId', user.id);
-
-    deleteUser(formData)
-      .then(({ error }) => {
-        if (error)
-          toast.error('The user wasn’t deleted', { description: error });
-        else toast.success('User deleted');
-        setShowDeleteDialog(false);
-      })
-      .catch((error) => {
-        toast.error('Failed to delete user', {
-          description:
-            error instanceof Error
-              ? error.message
-              : 'An unknown error occurred',
-        });
-        setShowDeleteDialog(false);
-      });
-  };
+  const copyId = () =>
+    navigator.clipboard
+      .writeText(user.discordId)
+      .then(() => toast.success('Discord ID copied'))
+      .catch(() => toast.error('The ID couldn’t be copied'));
 
   return (
     <div className='flex justify-end'>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' size='sm'>
-            <span className='sr-only'>Open menu</span>
-            <MoreHorizontalIcon />
+          <Button
+            variant='ghost'
+            size='icon-sm'
+            aria-label={`More actions for ${user.username}`}
+          >
+            <EllipsisIcon />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          <DropdownMenuItem
-            onClick={() => {
-              navigator.clipboard
-                .writeText(user.discordId)
-                .then(() => {
-                  toast.success('User ID copied to clipboard');
-                })
-                .catch(() => {
-                  toast.error('Failed to copy User ID');
-                });
-            }}
-          >
-            <ClipboardCopyIcon />
-            Copy ID
+        <DropdownMenuContent align='end' className='w-52'>
+          <DropdownMenuItem asChild>
+            <Link href={LINKS.dashboardUserWithId(user.id).url}>
+              <UserRoundIcon />
+              Open
+            </Link>
           </DropdownMenuItem>
-
+          <DropdownMenuItem onSelect={copyId}>
+            <ClipboardCopyIcon />
+            Copy Discord ID
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
-
           <DropdownMenuItem
             variant='destructive'
-            onSelect={(e) => {
-              e.preventDefault();
-              setShowDeleteDialog(true);
-            }}
+            onSelect={() => setConfirming(true)}
           >
-            <TrashIcon />
-            Delete User
+            <Trash2Icon />
+            Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              user{' '}
-              <span className='text-foreground font-semibold'>
-                {user.username}
-              </span>{' '}
-              and remove their access to the system.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction variant='destructive' onClick={handleDelete}>
-              Delete User
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <DeleteUserDialog
+        user={user}
+        open={confirming}
+        onOpenChange={setConfirming}
+      />
     </div>
   );
 };

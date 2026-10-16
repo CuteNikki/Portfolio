@@ -5,22 +5,21 @@ import { PlusIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { cn, formatShortDate, toExcerpt } from '@/lib/utils';
+import { cn, toExcerpt } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
 
-import { StoredImage } from '@/components/common/stored-image';
 import { UserHover } from '@/components/common/user-hover';
-import { ContentActions } from '@/components/dashboard/shared/content-actions';
+import { ContentRow } from '@/components/dashboard/shared/content-row';
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
+import { Panel, PanelEmpty } from '@/components/dashboard/shared/panel';
 import {
   StatTile,
   StorageTile,
   TILE_HEIGHT,
 } from '@/components/dashboard/shared/stat-tile';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -188,69 +187,14 @@ export default async function DashboardPage() {
           linkLabel='all posts'
         >
           {recent.length === 0 ? (
-            <Empty>Nothing yet. Start with a post or a project.</Empty>
+            <PanelEmpty>
+              Nothing yet. Start with a post or a project.
+            </PanelEmpty>
           ) : (
             <ul className='divide-y'>
-              {recent.map((item) => {
-                const isPost = item.kind === 'post';
-                const slugOrId = item.slug ?? item.id;
-                return (
-                  <li
-                    key={`${item.kind}-${item.id}`}
-                    className='flex items-center gap-4 px-5 py-3'
-                  >
-                    <span className='bg-muted relative h-9 w-14 shrink-0 overflow-hidden rounded-md'>
-                      {item.coverUrl && (
-                        <StoredImage
-                          url={item.coverUrl}
-                          alt=''
-                          sizes='56px'
-                          fill
-                          className='object-cover'
-                        />
-                      )}
-                    </span>
-                    <span className='min-w-0 flex-1'>
-                      <Link
-                        href={
-                          isPost
-                            ? LINKS.dashboardPostEditWithId(item.id).url
-                            : LINKS.dashboardProjectEditWithId(item.id).url
-                        }
-                        className='hover:text-primary-text block truncate text-sm font-semibold transition-colors'
-                      >
-                        {item.title}
-                      </Link>
-                      <span className='text-muted-foreground text-xs'>
-                        {isPost ? 'Post' : 'Project'} · updated{' '}
-                        {formatShortDate(item.updatedAt)}
-                      </span>
-                    </span>
-                    <Badge
-                      variant={item.publishedAt ? 'secondary' : 'outline'}
-                      className='hidden sm:inline-flex'
-                    >
-                      {item.publishedAt ? 'Published' : 'Draft'}
-                    </Badge>
-                    <ContentActions
-                      kind={item.kind}
-                      id={item.id}
-                      title={item.title}
-                      isPublished={!!item.publishedAt}
-                      editHref={
-                        isPost
-                          ? LINKS.dashboardPostEditWithId(item.id).url
-                          : LINKS.dashboardProjectEditWithId(item.id).url
-                      }
-                      publicHref={
-                        isPost
-                          ? LINKS.postWithSlugOrId(slugOrId).url
-                          : LINKS.projectWithSlugOrId(slugOrId).url
-                      }
-                    />
-                  </li>
-                );
-              })}
+              {recent.map((item) => (
+                <ContentRow key={`${item.kind}-${item.id}`} item={item} />
+              ))}
             </ul>
           )}
         </Panel>
@@ -258,7 +202,7 @@ export default async function DashboardPage() {
         <div className='flex flex-col gap-4'>
           <Panel title='Most read posts'>
             {topPosts.length === 0 ? (
-              <Empty>No published posts yet.</Empty>
+              <PanelEmpty>No published posts yet.</PanelEmpty>
             ) : (
               <ol className='flex flex-col gap-3.5 px-5 py-4'>
                 {topPosts.map((post) => (
@@ -295,7 +239,7 @@ export default async function DashboardPage() {
             linkLabel='all comments'
           >
             {latestComments.length === 0 ? (
-              <Empty>No comments yet.</Empty>
+              <PanelEmpty>No comments yet.</PanelEmpty>
             ) : (
               <ul className='divide-y'>
                 {latestComments.map((comment) => (
@@ -314,10 +258,15 @@ export default async function DashboardPage() {
                     </UserHover>
                     <div className='min-w-0'>
                       <p className='text-muted-foreground truncate text-xs'>
-                        <span className='text-foreground'>
+                        <Link
+                          href={
+                            LINKS.dashboardUserWithId(comment.author.id).url
+                          }
+                          className='text-foreground hover:text-primary-text'
+                        >
                           {comment.author.displayName ??
                             comment.author.username}
-                        </span>{' '}
+                        </Link>{' '}
                         on{' '}
                         <Link
                           href={`${LINKS.postWithSlugOrId(comment.post.slug ?? comment.post.id).url}#comments`}
@@ -343,38 +292,3 @@ export default async function DashboardPage() {
 
 const plural = (count: number, word: string) =>
   `${count} ${word}${count === 1 ? '' : 's'}`;
-
-function Panel({
-  title,
-  href,
-  linkLabel,
-  children,
-}: {
-  title: string;
-  href?: string;
-  linkLabel?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className='bg-card min-w-0 overflow-hidden rounded-xl border'>
-      <div className='flex items-center justify-between gap-3 border-b px-5 py-3.5'>
-        <h2 className='text-[15px] font-bold'>{title}</h2>
-        {href && (
-          <Link
-            href={href}
-            className='nav-underline text-muted-foreground hover:text-foreground text-xs transition-colors'
-          >
-            {linkLabel}
-          </Link>
-        )}
-      </div>
-      {children}
-    </section>
-  );
-}
-
-function Empty({ children }: { children: React.ReactNode }) {
-  return (
-    <p className='text-muted-foreground px-5 py-6 text-[13px]'>{children}</p>
-  );
-}

@@ -330,6 +330,41 @@ export async function addView(formData: FormData): Promise<ActionResult> {
   return {};
 }
 
+/**
+ * Publishes a post or takes it back to a draft without opening it, e.g. from a row's menu. Like the form, a post
+ * published again gets today's date.
+ */
+export async function setPostPublished(
+  postId: string,
+  published: boolean,
+): Promise<ActionResult> {
+  const session = await getCurrentSession();
+
+  if (
+    !session ||
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
+  ) {
+    return fail('Only writers and admins can do that.');
+  }
+
+  const post = await prisma.post.findUnique({
+    where: { id: postId },
+    select: { slug: true, publishedAt: true },
+  });
+  if (!post) return fail('That post doesn’t exist any more.');
+
+  // Already as asked, e.g. after a second click in another tab
+  if (!!post.publishedAt === published) return {};
+
+  await prisma.post.update({
+    where: { id: postId },
+    data: { publishedAt: published ? new Date() : null },
+  });
+
+  revalidatePostPaths(postId, post.slug);
+  return {};
+}
+
 function revalidatePostPaths(postId: string, slug: string | null) {
   updateTag('posts');
   revalidatePath('/dashboard/posts');
