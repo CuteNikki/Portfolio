@@ -4,18 +4,17 @@ export function PageHeader({
   eyebrow,
   title,
   description,
+  backdrop = true,
 }: {
   eyebrow: string;
   title: string;
   description: string;
+  // Leave out the grid where the page draws its own, e.g. when the header isn't at the top
+  backdrop?: boolean;
 }) {
   return (
     <header className='relative isolate flex flex-col gap-4 pt-6 pb-2 sm:pt-10'>
-      {/* Reaches out of the page's column to the window's edges, and up behind the navbar */}
-      <div
-        aria-hidden
-        className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'
-      />
+      {backdrop && <GridBackdrop />}
       <p className='animate-hero-in text-primary-text text-[13px] font-semibold tracking-[0.14em] uppercase'>
         {eyebrow}
       </p>
@@ -26,5 +25,16 @@ export function PageHeader({
         {description}
       </p>
     </header>
+  );
+}
+
+// Reaches out of the page's column to the window's edges, and up behind the navbar. Its parent must be at the top of
+// the page and isolated, so it sits in front of the page background.
+export function GridBackdrop() {
+  return (
+    <div
+      aria-hidden
+      className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'
+    />
   );
 }

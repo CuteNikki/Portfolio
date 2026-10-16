@@ -13,8 +13,7 @@ import { AccountMenu } from '@/components/navigation/account-menu';
 import { NavLinks } from '@/components/navigation/nav-links';
 import { ThemeSwitcher } from '@/components/theme/switcher';
 
-// `showAccount` adds the account menu, which reads the session. The global 404 page leaves it out: it also renders
-// for missing dashboard pages, where Next checks it can show without waiting on the session.
+// `showAccount` adds the account menu, which reads the session. Leave it out only where the session can't be read.
 // `wide` spans the whole window instead of the page column, so the dashboard's navbar lines up with its sidebar.
 export function Navbar({
   showAccount = true,
