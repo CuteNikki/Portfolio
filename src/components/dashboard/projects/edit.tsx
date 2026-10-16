@@ -193,7 +193,7 @@ export function EditProjectForm({
             <FormCard>
               <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={project.coverUrl} />
-              <CoverField defaultValue={project.coverDarkUrl} dark />
+              <CoverField defaultValue={project.coverDarkUrl} kind='dark' />
             </FormCard>
           </>
         }

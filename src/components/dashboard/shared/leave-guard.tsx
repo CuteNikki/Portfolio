@@ -17,10 +17,11 @@ function entriesOf(form: HTMLFormElement): Entries {
   ]);
 }
 
-// The pictures a form holds: its cover and, for projects, the dark cover and the JSON list of further pictures
+// The pictures a form holds: its cover, a post's thumbnail, and for projects the dark cover and the JSON list of
+// further pictures
 function imagesIn(entries: Entries) {
   return entries.flatMap(([key, value]) => {
-    if (key === 'coverUrl' || key === 'coverDarkUrl')
+    if (key === 'coverUrl' || key === 'coverDarkUrl' || key === 'thumbnailUrl')
       return value ? [value] : [];
     if (key !== 'gallery') return [];
     try {

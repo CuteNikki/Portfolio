@@ -36,6 +36,7 @@ export default async function Image({
     eyebrow: 'Post',
     title: post?.title ?? 'Posts',
     subtitle: post ? formatDate(post.createdAt, true) : undefined,
-    coverUrl: post?.coverUrl,
+    // Link previews are shown small, so they use the thumbnail where there is one
+    coverUrl: post?.thumbnailUrl ?? post?.coverUrl,
   });
 }

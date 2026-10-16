@@ -154,6 +154,7 @@ export function NewPostForm({
             <FormCard>
               <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={null} />
+              <CoverField defaultValue={null} kind='thumbnail' />
             </FormCard>
           </>
         }

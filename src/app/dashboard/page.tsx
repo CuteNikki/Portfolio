@@ -84,6 +84,7 @@ export default async function DashboardPage() {
         title: true,
         slug: true,
         coverUrl: true,
+        thumbnailUrl: true,
         publishedAt: true,
         updatedAt: true,
       },
@@ -122,7 +123,12 @@ export default async function DashboardPage() {
 
   // Posts and projects together, most recently changed first
   const recent = [
-    ...recentPosts.map((post) => ({ ...post, kind: 'post' as const })),
+    // Posts show their thumbnail where there is one, as in the post lists
+    ...recentPosts.map(({ thumbnailUrl, ...post }) => ({
+      ...post,
+      coverUrl: thumbnailUrl ?? post.coverUrl,
+      kind: 'post' as const,
+    })),
     ...recentProjects.map((project) => ({
       ...project,
       kind: 'project' as const,

@@ -57,6 +57,7 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
       content,
       slug,
       coverUrl: readCover(formData) ?? null,
+      thumbnailUrl: readCover(formData, 'thumbnailUrl') ?? null,
       publishedAt: isPublished ? new Date() : null,
       // The picked authors, or else whoever creates it
       authors: {
@@ -96,11 +97,11 @@ export async function deletePost(formData: FormData): Promise<ActionResult> {
     where: { id: post.id },
   });
 
-  // Its cover goes too, once the response is sent
-  if (deletedPost.coverUrl) {
-    const { coverUrl } = deletedPost;
-    after(() => deleteImages([coverUrl]));
-  }
+  // Its cover and thumbnail go too, once the response is sent
+  const pictures = [deletedPost.coverUrl, deletedPost.thumbnailUrl].filter(
+    (url): url is string => !!url,
+  );
+  if (pictures.length > 0) after(() => deleteImages(pictures));
 
   revalidatePostPaths(deletedPost.id, deletedPost.slug);
   return {};
@@ -127,7 +128,7 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
 
   const currentPost = await prisma.post.findFirst({
     where: { id },
-    select: { publishedAt: true, coverUrl: true },
+    select: { publishedAt: true, coverUrl: true, thumbnailUrl: true },
   });
 
   if (!currentPost) {
@@ -143,6 +144,7 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
   // A form without authors or a cover field keeps the current ones
   const authors = await readAuthors(formData);
   const coverUrl = readCover(formData);
+  const thumbnailUrl = readCover(formData, 'thumbnailUrl');
 
   await prisma.post.update({
     where: { id },
@@ -151,6 +153,7 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
         authors: { deleteMany: {}, create: authorRows(authors) },
       }),
       ...(coverUrl !== undefined && { coverUrl }),
+      ...(thumbnailUrl !== undefined && { thumbnailUrl }),
       title,
       slug,
       content,
@@ -159,11 +162,15 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
     },
   });
 
-  // A replaced or removed cover goes once the response is sent
-  if (coverUrl !== undefined) {
-    const removed = removedImages([currentPost.coverUrl], [coverUrl]);
-    if (removed.length > 0) after(() => deleteImages(removed));
-  }
+  // A replaced or removed cover or thumbnail goes once the response is sent
+  const removed = removedImages(
+    [currentPost.coverUrl, currentPost.thumbnailUrl],
+    [
+      coverUrl === undefined ? currentPost.coverUrl : coverUrl,
+      thumbnailUrl === undefined ? currentPost.thumbnailUrl : thumbnailUrl,
+    ],
+  );
+  if (removed.length > 0) after(() => deleteImages(removed));
 
   revalidatePostPaths(id, slug);
   return {};

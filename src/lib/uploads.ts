@@ -128,8 +128,8 @@ export async function deleteImages(urls: string[]) {
   );
 }
 
-// The given pictures that something still uses: a cover (a project's dark one too), a project's picture, or an address
-// written into a text
+// The given pictures that something still uses: a cover (a project's dark one and a post's thumbnail too), a project's
+// picture, or an address written into a text
 async function usedImages(urls: string[]) {
   const keys = urls.flatMap((url) => ownImageKey(url) ?? []);
   const inText = (field: 'content' | 'description') =>
@@ -137,8 +137,10 @@ async function usedImages(urls: string[]) {
 
   const [posts, projects, images, postTexts, projectTexts] = await Promise.all([
     prisma.post.findMany({
-      where: { coverUrl: { in: urls } },
-      select: { coverUrl: true },
+      where: {
+        OR: [{ coverUrl: { in: urls } }, { thumbnailUrl: { in: urls } }],
+      },
+      select: { coverUrl: true, thumbnailUrl: true },
     }),
     prisma.project.findMany({
       where: {
@@ -165,7 +167,7 @@ async function usedImages(urls: string[]) {
     ...projectTexts.map(({ description }) => description),
   ];
   return new Set([
-    ...posts.map(({ coverUrl }) => coverUrl),
+    ...posts.flatMap(({ coverUrl, thumbnailUrl }) => [coverUrl, thumbnailUrl]),
     ...projects.flatMap(({ coverUrl, coverDarkUrl }) => [
       coverUrl,
       coverDarkUrl,
@@ -195,8 +197,8 @@ export async function discardUnusedImages(urls: string[]) {
 }
 
 /**
- * Everything that uses one picture: as a post's cover, a project's cover or dark cover, a project's picture, or an
- * address written into a post's or project's text.
+ * Everything that uses one picture: as a post's cover or thumbnail, a project's cover or dark cover, a project's
+ * picture, or an address written into a post's or project's text.
  */
 export async function pictureUses(url: string) {
   const key = ownImageKey(url);
@@ -204,7 +206,7 @@ export async function pictureUses(url: string) {
 
   const [posts, projects, images, postTexts, projectTexts] = await Promise.all([
     prisma.post.findMany({
-      where: { coverUrl: url },
+      where: { OR: [{ coverUrl: url }, { thumbnailUrl: url }] },
       select: { id: true, slug: true, title: true },
     }),
     prisma.project.findMany({

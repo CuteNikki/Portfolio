@@ -27,6 +27,7 @@ interface PostLike {
   publishedAt: Date | null;
   createdAt: Date;
   coverUrl?: string | null;
+  thumbnailUrl?: string | null;
 }
 
 // Turns database rows into the plain data the cards and rows render, which can also be handed to Client Components
@@ -62,7 +63,8 @@ export function toPostRow(post: PostLike): PostRowData {
     time: date.getTime(),
     views: post.views,
     minutes: readingMinutes(post.content),
-    coverUrl: post.coverUrl ?? null,
+    // Cards are small, so they show the thumbnail where there is one
+    coverUrl: post.thumbnailUrl ?? post.coverUrl ?? null,
     isDraft: post.publishedAt === null,
   };
 }

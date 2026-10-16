@@ -54,13 +54,15 @@ model Session {
 }
 
 model Post {
-  id       String  @id @default(cuid())
-  title    String
-  slug     String? @unique
-  content  String  @db.Text
-  views    Int     @default(0)
+  id           String  @id @default(cuid())
+  title        String
+  slug         String? @unique
+  content      String  @db.Text
+  views        Int     @default(0)
   // The cover picture, stored on our own image server (see src/lib/images.ts)
-  coverUrl String?
+  coverUrl     String?
+  // A simpler picture for small places, the post's card in lists and its link preview; the cover when empty
+  thumbnailUrl String?
 
   publishedAt DateTime?
   createdAt   DateTime  @default(now())

@@ -33,7 +33,7 @@ export const columns: DashboardColumnDef<Row>[] = [
     cell: ({ row }) => (
       <TitleCell
         title={row.original.title}
-        coverUrl={row.original.coverUrl}
+        coverUrl={row.original.thumbnailUrl ?? row.original.coverUrl}
         editHref={LINKS.dashboardPostEditWithId(row.original.id).url}
       />
     ),

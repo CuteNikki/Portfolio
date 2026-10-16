@@ -43,8 +43,10 @@ export default async function MediaPage() {
 
   const [posts, projects, images] = await Promise.all([
     prisma.post.findMany({
-      where: { coverUrl: { not: null } },
-      select: { id: true, title: true, coverUrl: true },
+      where: {
+        OR: [{ coverUrl: { not: null } }, { thumbnailUrl: { not: null } }],
+      },
+      select: { id: true, title: true, coverUrl: true, thumbnailUrl: true },
     }),
     prisma.project.findMany({
       where: {
@@ -59,7 +61,12 @@ export default async function MediaPage() {
   ]);
 
   const projectCount = new Set(images.map(({ projectId }) => projectId)).size;
-  // Dark theme covers count as covers too
+  // Thumbnails and dark theme covers count as covers too
+  const postCovers = posts.reduce(
+    (sum, { coverUrl, thumbnailUrl }) =>
+      sum + (coverUrl ? 1 : 0) + (thumbnailUrl ? 1 : 0),
+    0,
+  );
   const projectCovers = projects.reduce(
     (sum, { coverUrl, coverDarkUrl }) =>
       sum + (coverUrl ? 1 : 0) + (coverDarkUrl ? 1 : 0),
@@ -67,13 +74,30 @@ export default async function MediaPage() {
   );
 
   const pictures: Picture[] = [
-    ...posts.map((post) => ({
-      url: post.coverUrl!,
-      alt: `Cover of ${post.title}`,
-      usedBy: post.title,
-      usage: 'Post cover',
-      editHref: LINKS.dashboardPostEditWithId(post.id).url,
-    })),
+    ...posts.flatMap((post) => [
+      ...(post.coverUrl
+        ? [
+            {
+              url: post.coverUrl,
+              alt: `Cover of ${post.title}`,
+              usedBy: post.title,
+              usage: 'Post cover',
+              editHref: LINKS.dashboardPostEditWithId(post.id).url,
+            },
+          ]
+        : []),
+      ...(post.thumbnailUrl
+        ? [
+            {
+              url: post.thumbnailUrl,
+              alt: `Thumbnail of ${post.title}`,
+              usedBy: post.title,
+              usage: 'Post thumbnail',
+              editHref: LINKS.dashboardPostEditWithId(post.id).url,
+            },
+          ]
+        : []),
+    ]),
     ...projects.flatMap((project) => [
       ...(project.coverUrl
         ? [
@@ -124,8 +148,8 @@ export default async function MediaPage() {
         </div>
         <StatTile
           label='Covers'
-          value={posts.length + projectCovers}
-          note={`${posts.length} on posts · ${projectCovers} on projects`}
+          value={postCovers + projectCovers}
+          note={`${postCovers} on posts · ${projectCovers} on projects`}
         />
         <StatTile
           label='Project pictures'

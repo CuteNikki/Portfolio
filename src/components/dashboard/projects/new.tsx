@@ -173,7 +173,7 @@ export function NewProjectForm({
             <FormCard>
               <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={null} />
-              <CoverField defaultValue={null} dark />
+              <CoverField defaultValue={null} kind='dark' />
             </FormCard>
           </>
         }

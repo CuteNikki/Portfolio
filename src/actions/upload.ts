@@ -130,9 +130,9 @@ export async function deleteUnusedImage(
 }
 
 /**
- * Takes a picture off every post and project that shows it, as a cover, dark cover or project picture, then deletes
- * it from storage. A picture written into a post's or project's text stays, since removing it there would leave a
- * broken image in the middle of the text.
+ * Takes a picture off every post and project that shows it, as a cover, thumbnail, dark cover or project picture, then
+ * deletes it from storage. A picture written into a post's or project's text stays, since removing it there would
+ * leave a broken image in the middle of the text.
  */
 export async function removePicture(
   url: string,
@@ -157,6 +157,10 @@ export async function removePicture(
     prisma.post.updateMany({
       where: { coverUrl: url },
       data: { coverUrl: null },
+    }),
+    prisma.post.updateMany({
+      where: { thumbnailUrl: url },
+      data: { thumbnailUrl: null },
     }),
     prisma.project.updateMany({
       where: { coverUrl: url },

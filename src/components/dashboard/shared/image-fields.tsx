@@ -114,15 +114,40 @@ function Progress({ value }: { value: number }) {
 const message = (error: unknown) =>
   error instanceof Error ? error.message : 'Unknown error';
 
-// A post's or project's cover picture. The address goes to the form in a hidden field, `coverUrl` unless `dark` makes
-// it a project's cover for dark themes (`coverDarkUrl`).
+// The words and form field for each kind of cover picture
+const COVER_KINDS = {
+  cover: {
+    field: 'coverUrl',
+    label: 'Cover picture',
+    upload: 'Upload a cover',
+    hint: 'Drop a picture or click. Shown on cards and in link previews.',
+  },
+  // A project's cover for dark themes
+  dark: {
+    field: 'coverDarkUrl',
+    label: 'Cover for dark themes',
+    upload: 'Upload a dark cover',
+    hint: 'Optional. Shown instead of the cover in dark themes.',
+  },
+  // A post's simpler picture for small places
+  thumbnail: {
+    field: 'thumbnailUrl',
+    label: 'Thumbnail',
+    upload: 'Upload a thumbnail',
+    hint: 'Optional. Shown instead of the cover in post lists and link previews, where pictures are small.',
+  },
+} as const;
+
+// A post's or project's cover picture, or one of its variants (see COVER_KINDS). The address goes to the form in a
+// hidden field named after the kind.
 export function CoverField({
   defaultValue,
-  dark,
+  kind = 'cover',
 }: {
   defaultValue: string | null;
-  dark?: boolean;
+  kind?: keyof typeof COVER_KINDS;
 }) {
+  const words = COVER_KINDS[kind];
   const [url, setUrl] = useState(defaultValue);
   const [progress, setProgress] = useState<number | null>(null);
   const labelId = useId();
@@ -151,13 +176,9 @@ export function CoverField({
   return (
     <div className='flex flex-col gap-2'>
       <span id={labelId} className='text-sm font-medium'>
-        {dark ? 'Cover for dark themes' : 'Cover picture'}
+        {words.label}
       </span>
-      <input
-        type='hidden'
-        name={dark ? 'coverDarkUrl' : 'coverUrl'}
-        value={url ?? ''}
-      />
+      <input type='hidden' name={words.field} value={url ?? ''} />
       {url && progress === null ? (
         <figure aria-labelledby={labelId} className='flex flex-col gap-2'>
           <div className='bg-muted relative aspect-2/1 overflow-hidden rounded-xl border'>
@@ -194,13 +215,9 @@ export function CoverField({
                 <ImageUpIcon className='size-5' />
               </span>
               <span className='text-foreground font-semibold'>
-                {dark ? 'Upload a dark cover' : 'Upload a cover'}
+                {words.upload}
               </span>
-              <span className='text-xs text-balance'>
-                {dark
-                  ? 'Optional. Shown instead of the cover in dark themes.'
-                  : 'Drop a picture or click. Shown on cards and in link previews.'}
-              </span>
+              <span className='text-xs text-balance'>{words.hint}</span>
             </>
           )}
         </DropArea>
