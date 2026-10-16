@@ -1,26 +1,15 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
 
-import { MenuIcon } from 'lucide-react';
-
 import { LINKS } from '@/constants/links';
 
 import {
   AccountButton,
   AccountButtonPlaceholder,
 } from '@/components/navigation/account-button';
+import { MobileMenu } from '@/components/navigation/mobile-menu';
 import { NavLinks } from '@/components/navigation/nav-links';
 import { ThemeSwitcher } from '@/components/theme/switcher';
-import { Button } from '@/components/ui/button';
-import {
-  Sheet,
-  SheetBody,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
 
 // `showAccount` adds the account menu, which reads the session. The global 404 page leaves it out: it also renders
 // for missing dashboard pages, where Next checks it can show without waiting on the session.
@@ -41,36 +30,15 @@ export function Navbar({ showAccount = true }: { showAccount?: boolean }) {
 
         <div className='flex items-center gap-2'>
           <ThemeSwitcher />
-          {showAccount && (
-            // The account menu reads the session, so it streams in after the prerendered page. Until then a
-            // placeholder of the same size holds its place.
+          {showAccount ? (
+            // Reads the session, so it streams in after the prerendered page; placeholders of the same size hold
+            // its place until then. On phones it is one button for both the page links and the account.
             <Suspense fallback={<AccountButtonPlaceholder />}>
               <AccountButton />
             </Suspense>
+          ) : (
+            <MobileMenu user={null} showAccount={false} className='sm:hidden' />
           )}
-
-          <Sheet>
-            <SheetTrigger className='sm:hidden' asChild>
-              <Button size='icon-lg' variant='outline' aria-label='Open menu'>
-                <MenuIcon className='size-5' />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side='left'>
-              <SheetHeader>
-                <SheetTitle>
-                  niso<span className='text-primary-text'>.moe</span>
-                </SheetTitle>
-                <SheetDescription>
-                  Navigate to different sections
-                </SheetDescription>
-              </SheetHeader>
-              <SheetBody>
-                <nav aria-label='Main'>
-                  <NavLinks isMobile />
-                </nav>
-              </SheetBody>
-            </SheetContent>
-          </Sheet>
         </div>
       </div>
     </header>

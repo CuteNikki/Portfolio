@@ -166,16 +166,11 @@ export const LINKS = {
   }),
 };
 
-export const FOOTER_LINKS: Link[] = [
-  LINKS.imprint,
-  LINKS.privacyShort,
-  LINKS.impressum,
-  LINKS.datenschutz,
-];
+// The German Impressum and Datenschutz pages are linked from the English ones, so the footer lists only one of each
+export const FOOTER_LINKS: Link[] = [LINKS.imprint, LINKS.privacyShort];
 
-// The dashboard and account pages are in the account menu instead
+// The site name links home, and the dashboard and account pages are in the account menu
 export const NAVBAR_LINKS: Link[] = [
-  LINKS.home,
   LINKS.projects,
   LINKS.posts,
   LINKS.contact,

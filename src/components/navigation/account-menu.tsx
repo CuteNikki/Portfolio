@@ -8,6 +8,7 @@ import {
   LayoutDashboardIcon,
   LogInIcon,
   LogOutIcon,
+  type LucideIcon,
   MessageSquareIcon,
   SquarePenIcon,
   UserIcon,
@@ -38,20 +39,92 @@ export interface AccountMenuUser {
   canWrite: boolean;
 }
 
-const ROLE_LABELS: Record<Role, string> = {
+export const ROLE_LABELS: Record<Role, string> = {
   USER: 'User',
   WRITER: 'Writer',
   ADMIN: 'Admin',
 };
 
-export function AccountMenu({ user }: { user: AccountMenuUser | null }) {
+// The account links, in groups that menus separate with a line. Writers and admins also get the dashboard.
+export function accountLinkGroups(user: AccountMenuUser) {
+  const groups: { label: string; url: string; icon: LucideIcon }[][] = [];
+
+  if (user.canWrite) {
+    groups.push([
+      {
+        label: 'Dashboard',
+        url: LINKS.dashboard.url,
+        icon: LayoutDashboardIcon,
+      },
+      {
+        label: 'New post',
+        url: LINKS.dashboardPostNew.url,
+        icon: SquarePenIcon,
+      },
+    ]);
+  }
+  groups.push([
+    { label: 'Account settings', url: LINKS.account.url, icon: UserIcon },
+    {
+      label: 'Your comments',
+      url: LINKS.accountComments.url,
+      icon: MessageSquareIcon,
+    },
+  ]);
+
+  return groups;
+}
+
+// A menu item styled as the primary button. The item's own focus highlight would replace the violet, so focus
+// (which is also how menus show hover) gets the button's hover look instead.
+export const SIGN_IN_ITEM_CLASS = cn(
+  buttonVariants(),
+  'focus:bg-primary focus:text-primary-foreground not-data-[variant=destructive]:focus:**:text-primary-foreground w-full cursor-pointer justify-center focus:-translate-y-px focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)]',
+);
+
+// Signing in returns to the page it started from
+export function useLoginHref() {
   const pathname = usePathname();
+  return `/api/auth/login?next=${encodeURIComponent(pathname)}`;
+}
+
+export function UserAvatar({
+  user,
+  className,
+}: {
+  user: AccountMenuUser;
+  className?: string;
+}) {
+  return (
+    <Avatar className={cn('rounded-[9px] after:rounded-[inherit]', className)}>
+      <AvatarImage src={user.avatarUrl} alt='' className='rounded-[inherit]' />
+      <AvatarFallback className='rounded-[inherit] text-xs'>
+        {user.name.slice(0, 2).toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+  );
+}
+
+// The account dropdown on larger screens. On phones the mobile menu holds the same links.
+export function AccountMenu({
+  user,
+  className,
+}: {
+  user: AccountMenuUser | null;
+  className?: string;
+}) {
+  const loginHref = useLoginHref();
 
   if (!user) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='outline' size='icon-lg' aria-label='Account'>
+          <Button
+            variant='outline'
+            size='icon-lg'
+            aria-label='Account'
+            className={className}
+          >
             <CircleUserRoundIcon className='size-4.5' />
           </Button>
         </DropdownMenuTrigger>
@@ -60,17 +133,9 @@ export function AccountMenu({ user }: { user: AccountMenuUser | null }) {
           <p className='text-muted-foreground mt-1 mb-3.5 text-[13px] leading-relaxed'>
             Sign in with Discord to comment on posts and manage your account.
           </p>
-          {/* A menu item styled as the primary button. The item's own focus highlight would replace the violet, so
-              focus (which is also how the menu shows hover) gets the button's hover look instead. */}
-          <DropdownMenuItem
-            asChild
-            className={cn(
-              buttonVariants(),
-              'focus:bg-primary focus:text-primary-foreground not-data-[variant=destructive]:focus:**:text-primary-foreground w-full cursor-pointer justify-center focus:-translate-y-px focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)]',
-            )}
-          >
+          <DropdownMenuItem asChild className={SIGN_IN_ITEM_CLASS}>
             {/* A plain link: a prefetch of the login route would start a new login and replace one in progress */}
-            <a href={`/api/auth/login?next=${encodeURIComponent(pathname)}`}>
+            <a href={loginHref}>
               <LogInIcon />
               Sign in
             </a>
@@ -80,8 +145,6 @@ export function AccountMenu({ user }: { user: AccountMenuUser | null }) {
     );
   }
 
-  const initials = user.name.slice(0, 2).toUpperCase();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -89,31 +152,14 @@ export function AccountMenu({ user }: { user: AccountMenuUser | null }) {
           variant='outline'
           size='icon-lg'
           aria-label={`Account menu for ${user.name}`}
+          className={className}
         >
-          <Avatar className='size-8 rounded-[9px] after:rounded-[9px]'>
-            <AvatarImage
-              src={user.avatarUrl}
-              alt=''
-              className='rounded-[9px]'
-            />
-            <AvatarFallback className='rounded-[9px] text-xs'>
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} className='size-8' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-68'>
         <DropdownMenuLabel className='flex items-center gap-3 px-2.5 py-2.5 font-normal'>
-          <Avatar className='size-10 rounded-[10px] after:rounded-[10px]'>
-            <AvatarImage
-              src={user.avatarUrl}
-              alt=''
-              className='rounded-[10px]'
-            />
-            <AvatarFallback className='rounded-[10px]'>
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar user={user} className='size-10 rounded-[10px]' />
           <span className='min-w-0 leading-snug'>
             <span className='text-foreground block truncate text-sm font-bold'>
               {user.name}
@@ -124,39 +170,21 @@ export function AccountMenu({ user }: { user: AccountMenuUser | null }) {
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/* Writers and admins manage posts and projects in the dashboard */}
-        {user.canWrite && (
-          <>
-            <DropdownMenuItem asChild>
-              <Link href={LINKS.dashboard.url}>
-                <LayoutDashboardIcon />
-                Dashboard
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link href={LINKS.dashboardPostNew.url}>
-                <SquarePenIcon />
-                New post
-              </Link>
-            </DropdownMenuItem>
+        {accountLinkGroups(user).map((group) => (
+          <div key={group[0].url}>
+            {group.map(({ label, url, icon: Icon }) => (
+              <DropdownMenuItem key={url} asChild>
+                <Link href={url}>
+                  <Icon />
+                  {label}
+                </Link>
+              </DropdownMenuItem>
+            ))}
             <DropdownMenuSeparator />
-          </>
-        )}
-        <DropdownMenuItem asChild>
-          <Link href={LINKS.account.url}>
-            <UserIcon />
-            Account settings
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href={LINKS.accountComments.url}>
-            <MessageSquareIcon />
-            Your comments
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+          </div>
+        ))}
         <form action='/api/auth/logout' method='POST'>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem asChild variant='destructive'>
             <button type='submit' className='w-full'>
               <LogOutIcon />
               Sign out

@@ -1,41 +1,51 @@
-import { CircleUserRoundIcon } from 'lucide-react';
+import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
 
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 
 import { AccountMenu } from '@/components/navigation/account-menu';
+import { MobileMenu } from '@/components/navigation/mobile-menu';
 
-// Reads the session, so it has to sit behind a Suspense boundary. Only the fields the menu shows reach the browser:
+// Reads the session, so it has to sit behind a Suspense boundary. Only the fields the menus show reach the browser:
 // the full user also holds the Discord access and refresh tokens.
 export async function AccountButton() {
   const session = await getCurrentSession();
-
-  if (!session) return <AccountMenu user={null} />;
-
-  const { user } = session;
+  const user = session
+    ? {
+        name: session.user.displayName ?? session.user.username,
+        username: session.user.username,
+        avatarUrl: session.user.avatarUrl,
+        role: session.user.role,
+        canWrite:
+          session.user.role === Role.ADMIN || session.user.role === Role.WRITER,
+      }
+    : null;
 
   return (
-    <AccountMenu
-      user={{
-        name: user.displayName ?? user.username,
-        username: user.username,
-        avatarUrl: user.avatarUrl,
-        role: user.role,
-        canWrite: user.role === Role.ADMIN || user.role === Role.WRITER,
-      }}
-    />
+    <>
+      <AccountMenu user={user} className='hidden sm:inline-flex' />
+      <MobileMenu user={user} className='sm:hidden' />
+    </>
   );
 }
 
-// Same size and look as the signed-out button, so nothing moves when the menu streams in
+// Same size and look as the buttons above, so nothing moves when they stream in
 export function AccountButtonPlaceholder() {
   return (
-    <span
-      aria-hidden
-      className='border-border bg-card text-muted-foreground grid size-11 place-items-center rounded-lg border'
-    >
-      <CircleUserRoundIcon className='size-4.5' />
-    </span>
+    <>
+      <span
+        aria-hidden
+        className='border-border bg-card text-muted-foreground hidden size-11 place-items-center rounded-lg border sm:grid'
+      >
+        <CircleUserRoundIcon className='size-4.5' />
+      </span>
+      <span
+        aria-hidden
+        className='border-border bg-card text-muted-foreground grid size-11 place-items-center rounded-lg border sm:hidden'
+      >
+        <MenuIcon className='size-5' />
+      </span>
+    </>
   );
 }

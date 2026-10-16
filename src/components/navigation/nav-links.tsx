@@ -8,25 +8,19 @@ import { NAVBAR_LINKS } from '@/constants/links';
 import { cn } from '@/lib/utils';
 
 // A link counts as current on its own page and on the pages below it, so /projects/ludo still marks "projects"
-function isCurrent(pathname: string, url: string) {
+export function isCurrent(pathname: string, url: string) {
   const path = url.split('#')[0] || '/';
   return path === '/' ? pathname === '/' : pathname.startsWith(path);
 }
 
-// Imports the links itself rather than taking them as a prop: their icons are components, which a Server Component
-// can't pass to a Client Component
-export function NavLinks({ isMobile }: { isMobile?: boolean }) {
+// The navbar's page links on larger screens; on phones they are in the mobile menu. Imports the links itself rather
+// than taking them as a prop: their icons are components, which a Server Component can't pass to a Client Component.
+export function NavLinks() {
   const pathname = usePathname();
 
   return (
-    <ul
-      className={
-        isMobile
-          ? 'flex flex-col gap-1 py-4'
-          : 'flex items-center gap-8 text-sm'
-      }
-    >
-      {NAVBAR_LINKS.map(({ url, label, icon: Icon }) => {
+    <ul className='flex items-center gap-8 text-sm'>
+      {NAVBAR_LINKS.map(({ url, label }) => {
         const current = isCurrent(pathname, url);
 
         return (
@@ -35,21 +29,10 @@ export function NavLinks({ isMobile }: { isMobile?: boolean }) {
               href={url}
               aria-current={current ? 'page' : undefined}
               className={cn(
-                'lowercase transition-colors',
-                isMobile
-                  ? 'hover:bg-muted flex h-12 items-center gap-3 rounded-lg px-3 text-base'
-                  : 'nav-underline hover:text-foreground',
-                current
-                  ? 'text-foreground'
-                  : isMobile
-                    ? 'text-body'
-                    : 'text-muted-foreground',
-                isMobile && current && 'bg-primary-soft',
+                'nav-underline hover:text-foreground lowercase transition-colors',
+                current ? 'text-foreground' : 'text-muted-foreground',
               )}
             >
-              {isMobile && Icon && (
-                <Icon className='text-muted-foreground size-5 shrink-0' />
-              )}
               {label}
             </Link>
           </li>
