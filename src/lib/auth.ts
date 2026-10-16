@@ -10,6 +10,22 @@ import prisma from '@/lib/prisma';
 
 export const SESSION_COOKIE = 'auth_session';
 export const OAUTH_STATE_COOKIE = 'oauth_state';
+export const RETURN_TO_COOKIE = 'auth_return_to';
+
+// Where to send someone after signing in. Only paths on this site count, so a crafted link can't use the login to
+// send people elsewhere ("//evil.example" and "/\\evil.example" are other hosts to a browser).
+export function safeReturnPath(value: string | null | undefined) {
+  if (
+    !value ||
+    !value.startsWith('/') ||
+    value.startsWith('//') ||
+    value.startsWith('/\\')
+  ) {
+    return null;
+  }
+  if (value.startsWith('/api/')) return null;
+  return value;
+}
 
 // The database keeps only a hash of each session token, so a leaked copy of it can't be used to sign in
 export function hashSessionToken(token: string) {

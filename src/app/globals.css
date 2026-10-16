@@ -21,6 +21,10 @@
   --color-primary: var(--primary);
   --color-primary-text: var(--primary-text);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-body: var(--body);
+  --color-line-strong: var(--line-strong);
+  --color-grid: var(--grid);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -51,27 +55,33 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(0.99 0.002 286);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.56 0.25 302);
-  --primary-text: oklch(0.51 0.24 299);
-  --primary-foreground: oklch(0.98 0.01 308);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.5 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --background: #fbfaf8;
+  --foreground: #17161a;
+  --body: #4a4752;
+  --card: #ffffff;
+  --card-foreground: #17161a;
+  --popover: #ffffff;
+  --popover-foreground: #17161a;
+  /* Buttons are filled with --primary; --primary-text is the accent for text and icons on the page background */
+  --primary: #a78bfa;
+  --primary-text: #6d28d9;
+  --primary-foreground: #17161a;
+  --primary-soft: #eee8f7;
+  --secondary: #f3f1ec;
+  --secondary-foreground: #17161a;
+  --muted: #f3f1ec;
+  --muted-foreground: #5e5b66;
+  --accent: #f3f1ec;
+  --accent-foreground: #17161a;
   --destructive: oklch(0.51 0.21 27);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.705 0.015 286.067);
+  --border: #e6e3de;
+  --line-strong: #d3cec6;
+  --input: #e6e3de;
+  --ring: #a78bfa;
+  --grid: rgb(23 22 26 / 6%);
   --radius: 0.75rem;
-  --code-background: oklch(0.21 0.006 285.885);
+  --code-background: #1b1a1f;
   --chart-1: oklch(0.56 0.25 302);
   --chart-2: oklch(0.6 0.17 250);
   --chart-3: oklch(0.65 0.14 175);
@@ -90,25 +100,29 @@
   --sidebar-ring: var(--ring);
 }
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.19 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.55 0.22 303);
-  --primary-text: oklch(0.68 0.21 303);
-  --primary-foreground: oklch(0.98 0.01 308);
-  --secondary: oklch(0.24 0.006 286);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.24 0.006 286);
-  --muted-foreground: oklch(0.705 0.015 286);
-  --accent: oklch(0.24 0.006 286);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: #0b0b0f;
+  --foreground: #ededf2;
+  --body: #b9b8c3;
+  --card: #121218;
+  --card-foreground: #ededf2;
+  --popover: #16161d;
+  --popover-foreground: #ededf2;
+  --primary: #a78bfa;
+  --primary-text: #a78bfa;
+  --primary-foreground: #0b0b0f;
+  --primary-soft: #2a1f47;
+  --secondary: #1a1a21;
+  --secondary-foreground: #ededf2;
+  --muted: #1a1a21;
+  --muted-foreground: #9b9aa6;
+  --accent: #1f1f27;
+  --accent-foreground: #ededf2;
   --destructive: oklch(0.704 0.191 22);
-  --border: oklch(1 0 0 / 11%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.552 0.016 286);
+  --border: rgb(255 255 255 / 9%);
+  --line-strong: rgb(255 255 255 / 18%);
+  --input: rgb(255 255 255 / 12%);
+  --ring: #a78bfa;
+  --grid: rgb(255 255 255 / 5%);
   --code-background: var(--muted);
   --chart-1: oklch(0.68 0.21 303);
   --chart-2: oklch(0.7 0.14 250);
@@ -126,6 +140,10 @@
   --primary: hsl(266 44% 49%);
   --primary-text: hsl(266 44% 39%);
   --primary-foreground: hsl(220 23% 95%);
+  --primary-soft: hsl(266 60% 90%);
+  --body: hsl(233 10% 38%);
+  --line-strong: hsl(228 12% 62%);
+  --grid: hsl(231 11% 36% / 7%);
   --secondary: hsl(225 18% 83%);
   --secondary-foreground: hsl(231 11% 36%);
   --muted: hsl(223 16% 88%);
@@ -153,6 +171,10 @@
   --primary: hsl(267 83% 80%);
   --primary-text: hsl(267 63% 70%);
   --primary-foreground: hsl(232 23% 18%);
+  --primary-soft: hsl(267 35% 30%);
+  --body: hsl(228 39% 80%);
+  --line-strong: hsl(230 14% 52%);
+  --grid: hsl(227 68% 88% / 5%);
   --secondary: hsl(230 19% 26%);
   --secondary-foreground: hsl(227 68% 88%);
   --muted: hsl(230 19% 26%);
@@ -222,12 +244,86 @@
   .delay-3 {
     animation-delay: 300ms;
   }
-  .site-shell {
-    background-image: linear-gradient(
-      to bottom,
-      color-mix(in oklab, var(--primary) 4%, transparent),
-      transparent 22rem
+  /* The faded grid behind page headers; it fades out towards the bottom and the sides */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-position: center top;
+    mask-image: radial-gradient(75% 85% at 50% 0%, #000 25%, transparent 78%);
+  }
+  /* Navigation links: an underline grows in from the left on hover and stays on the current page */
+  .nav-underline {
+    position: relative;
+  }
+  .nav-underline::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -6px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 350ms var(--ease-out-soft);
+  }
+  .nav-underline:hover::after,
+  .nav-underline[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+  /* A title's underline sweeps in while its card or row is hovered */
+  .title-sweep {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 500ms var(--ease-out-soft);
+  }
+  .group:hover .title-sweep,
+  .group:focus-visible .title-sweep {
+    background-size: 100% 1px;
+  }
+  /* Project cards lift, and a short violet line lights up along their top edge */
+  .card-lift {
+    position: relative;
+    transition:
+      border-color 350ms,
+      transform 500ms var(--ease-out-soft);
+  }
+  .card-lift::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    inset-inline: 20%;
+    top: -1px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--primary-text),
+      transparent
     );
+    opacity: 0;
+    transition: opacity 400ms;
+  }
+  .card-lift:hover,
+  .card-lift:focus-visible {
+    border-color: color-mix(in oklab, var(--primary-text) 38%, transparent);
+    transform: translateY(-3px);
+  }
+  .card-lift:hover::before,
+  .card-lift:focus-visible::before {
+    opacity: 1;
+  }
+  .animate-pop-in {
+    animation: pop-in 180ms var(--ease-out-soft) both;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
   }
 }
 /* Without JavaScript nothing reveals the content, so it stays visible */
@@ -243,6 +339,10 @@
     opacity: 1;
     transform: none;
     animation: none !important;
+  }
+  .card-lift:hover,
+  .card-lift:focus-visible {
+    transform: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,9 +1,13 @@
 import { cookies } from 'next/headers';
-import { connection, NextResponse } from 'next/server';
+import { connection, NextRequest, NextResponse } from 'next/server';
 
-import { OAUTH_STATE_COOKIE } from '@/lib/auth';
+import {
+  OAUTH_STATE_COOKIE,
+  RETURN_TO_COOKIE,
+  safeReturnPath,
+} from '@/lib/auth';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   // Each login needs its own state, so this can't be prerendered
   await connection();
 
@@ -30,6 +34,20 @@ export async function GET() {
     path: '/api/auth',
     sameSite: 'lax',
   });
+
+  // Signing in from a post brings you back to that post
+  const returnTo = safeReturnPath(req.nextUrl.searchParams.get('next'));
+  if (returnTo) {
+    cookieStore.set(RETURN_TO_COOKIE, returnTo, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 10 * 60,
+      path: '/api/auth',
+      sameSite: 'lax',
+    });
+  } else {
+    cookieStore.delete({ name: RETURN_TO_COOKIE, path: '/api/auth' });
+  }
 
   const discordAuthUrl = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code&scope=${encodeURIComponent(scopes.join(' '))}&state=${state}`;
 

@@ -1,32 +1,30 @@
 import { cacheLife } from 'next/cache';
 import Link from 'next/link';
 
-import { ThemeSwitcher } from '@/components/theme/switcher';
-
 import { FOOTER_LINKS } from '@/constants/links';
 
 export function Footer() {
   return (
-    <footer className='bg-background/95 w-full border-t'>
-      <div className='container mx-auto flex items-center justify-between gap-3 overflow-x-auto px-4 py-6 tracking-tight sm:px-6 lg:px-8'>
-        <p className='text-muted-foreground shrink-0 text-sm whitespace-nowrap'>
+    <footer className='w-full border-t'>
+      <div className='text-muted-foreground container mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-8 gap-y-4 px-4 py-7 text-[13px] sm:px-6 lg:px-8'>
+        <p>
           &copy; <CurrentYear /> niso.moe
         </p>
-        <div className='text-muted-foreground shrink-0 text-sm font-medium whitespace-nowrap'>
-          <ul className='flex flex-wrap gap-4'>
-            {FOOTER_LINKS.map(({ url, label }) => (
+        <nav aria-label='Legal'>
+          <ul className='flex flex-wrap gap-x-5 gap-y-2'>
+            {FOOTER_LINKS.map(({ url, label, lang }) => (
               <li key={url}>
                 <Link
                   href={url}
-                  className='hover:text-primary-text lowercase transition-colors'
+                  lang={lang}
+                  className='hover:text-foreground lowercase transition-colors'
                 >
                   {label}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
-        <ThemeSwitcher className='hidden sm:flex' />
+        </nav>
       </div>
     </footer>
   );

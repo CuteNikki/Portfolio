@@ -13,6 +13,8 @@ import {
 
 export interface Link {
   icon?: LucideIcon;
+  // For links to pages in another language, e.g. the German Impressum
+  lang?: string;
   requiresAuth?: boolean;
   label: string;
   url: string;
@@ -33,6 +35,7 @@ export const LINKS = {
     label: 'Datenschutz',
     url: '/datenschutz#top',
     icon: ShieldCheckIcon,
+    lang: 'de',
   },
   imprint: {
     label: 'Imprint',
@@ -43,6 +46,7 @@ export const LINKS = {
     label: 'Impressum',
     url: '/impressum#top',
     icon: ScaleIcon,
+    lang: 'de',
   },
   home: {
     label: 'Home',
@@ -70,7 +74,7 @@ export const LINKS = {
     icon: MailIcon,
   },
   posts: {
-    label: 'Blog',
+    label: 'Posts',
     url: '/posts#top',
     icon: NewspaperIcon,
   },
@@ -79,6 +83,18 @@ export const LINKS = {
     url: `/posts/${id}`,
     icon: NewspaperIcon,
   }),
+  account: {
+    label: 'Account',
+    url: '/account#top',
+    icon: User2Icon,
+    requiresAuth: true,
+  },
+  accountComments: {
+    label: 'Your comments',
+    url: '/account#comments',
+    icon: User2Icon,
+    requiresAuth: true,
+  },
   dashboard: {
     label: 'Dashboard',
     url: '/dashboard#top',
@@ -147,14 +163,19 @@ export const LINKS = {
   }),
 };
 
-export const FOOTER_LINKS: Link[] = [LINKS.privacyShort, LINKS.imprint];
+export const FOOTER_LINKS: Link[] = [
+  LINKS.imprint,
+  LINKS.privacyShort,
+  LINKS.impressum,
+  LINKS.datenschutz,
+];
 
+// The dashboard and account pages are in the account menu instead
 export const NAVBAR_LINKS: Link[] = [
-  LINKS.about,
+  LINKS.home,
   LINKS.projects,
   LINKS.posts,
   LINKS.contact,
-  LINKS.dashboard,
 ];
 
 export const SIDEBAR_LINKS: Link[] = [

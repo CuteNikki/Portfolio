@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   hashSessionToken,
   OAUTH_STATE_COOKIE,
+  RETURN_TO_COOKIE,
+  safeReturnPath,
   SESSION_COOKIE,
 } from '@/lib/auth';
 import prisma from '@/lib/prisma';
@@ -160,8 +162,11 @@ export async function GET(req: NextRequest) {
       sameSite: 'lax',
     });
 
-    // 6. Redirect back!
-    return NextResponse.redirect(new URL(LINKS.home.url, req.url));
+    // 6. Redirect back to the page the login started from
+    const returnTo = safeReturnPath(cookieStore.get(RETURN_TO_COOKIE)?.value);
+    cookieStore.delete({ name: RETURN_TO_COOKIE, path: '/api/auth' });
+
+    return NextResponse.redirect(new URL(returnTo ?? LINKS.home.url, req.url));
   } catch (error) {
     console.error('OAuth Callback Exception:', error);
 

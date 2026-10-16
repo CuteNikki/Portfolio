@@ -11,8 +11,8 @@ export const { notFound: metadata } = SITE_METADATA;
 
 export default function NotFound() {
   return (
-    <div className='site-shell flex min-h-svh flex-col'>
-      <Navbar showWriterLinks={false} />
+    <div className='flex min-h-svh flex-col'>
+      <Navbar showAccount={false} />
       <main className='flex flex-1'>
         <div className='container mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center gap-10 px-4 py-10 sm:px-6 sm:py-16 lg:px-8'>
           <ScrollReveal className='scroll-reveal'>
