@@ -47,26 +47,40 @@ export const ROLE_LABELS: Record<Role, string> = {
 
 // The account links, in groups that menus separate with a line. Writers and admins also get the dashboard.
 export function accountLinkGroups(user: AccountMenuUser) {
-  const groups: { label: string; url: string; icon: LucideIcon }[][] = [];
+  // `short` labels fit the two-column grid in the phone menu
+  const groups: {
+    label: string;
+    short: string;
+    url: string;
+    icon: LucideIcon;
+  }[][] = [];
 
   if (user.canWrite) {
     groups.push([
       {
         label: 'Dashboard',
+        short: 'Dashboard',
         url: LINKS.dashboard.url,
         icon: LayoutDashboardIcon,
       },
       {
         label: 'New post',
+        short: 'New post',
         url: LINKS.dashboardPostNew.url,
         icon: SquarePenIcon,
       },
     ]);
   }
   groups.push([
-    { label: 'Account settings', url: LINKS.account.url, icon: UserIcon },
+    {
+      label: 'Account settings',
+      short: 'Account',
+      url: LINKS.account.url,
+      icon: UserIcon,
+    },
     {
       label: 'Your comments',
+      short: 'Comments',
       url: LINKS.accountComments.url,
       icon: MessageSquareIcon,
     },

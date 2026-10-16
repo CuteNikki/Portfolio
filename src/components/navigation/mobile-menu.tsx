@@ -60,19 +60,42 @@ export function MobileMenu({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-68'>
-        <DropdownMenuGroup>
+      <DropdownMenuContent align='end' className='w-72'>
+        {showAccount && user && (
+          <>
+            <DropdownMenuLabel className='flex items-center gap-3 px-2.5 py-2.5 font-normal'>
+              <UserAvatar user={user} className='size-10 rounded-[10px]' />
+              <span className='min-w-0 leading-snug'>
+                <span className='text-foreground block truncate text-sm font-bold'>
+                  {user.name}
+                </span>
+                <span className='text-muted-foreground block truncate text-xs'>
+                  @{user.username} · {ROLE_LABELS[user.role]}
+                </span>
+              </span>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+          </>
+        )}
+
+        {/* The pages as three tiles in a row */}
+        <DropdownMenuGroup className='grid grid-cols-3 gap-1.5'>
           {NAVBAR_LINKS.map(({ url, label, icon: Icon }) => {
             const current = isCurrent(pathname, url);
             return (
               <DropdownMenuItem
                 key={url}
                 asChild
-                className={cn(current && 'bg-primary-soft')}
+                className={cn(
+                  'h-17 flex-col justify-center gap-1.5 rounded-xl border px-1 text-xs lowercase',
+                  current
+                    ? 'border-primary-text/40 bg-primary-soft'
+                    : 'bg-muted/50',
+                )}
               >
                 <Link href={url} aria-current={current ? 'page' : undefined}>
-                  {Icon && <Icon />}
-                  <span className='lowercase'>{label}</span>
+                  {Icon && <Icon className='size-5' />}
+                  {label}
                 </Link>
               </DropdownMenuItem>
             );
@@ -99,27 +122,18 @@ export function MobileMenu({
 
         {showAccount && user && (
           <>
-            <DropdownMenuLabel className='flex items-center gap-3 px-2.5 py-2.5 font-normal'>
-              <UserAvatar user={user} className='size-10 rounded-[10px]' />
-              <span className='min-w-0 leading-snug'>
-                <span className='text-foreground block truncate text-sm font-bold'>
-                  {user.name}
-                </span>
-                <span className='text-muted-foreground block truncate text-xs'>
-                  @{user.username} · {ROLE_LABELS[user.role]}
-                </span>
-              </span>
-            </DropdownMenuLabel>
-            {accountLinkGroups(user)
-              .flat()
-              .map(({ label, url, icon: Icon }) => (
-                <DropdownMenuItem key={url} asChild>
-                  <Link href={url}>
-                    <Icon />
-                    {label}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
+            <DropdownMenuGroup className='grid grid-cols-2'>
+              {accountLinkGroups(user)
+                .flat()
+                .map(({ label, short, url, icon: Icon }) => (
+                  <DropdownMenuItem key={url} asChild>
+                    <Link href={url} aria-label={label}>
+                      <Icon />
+                      {short}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+            </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <form action='/api/auth/logout' method='POST'>
               <DropdownMenuItem asChild variant='destructive'>
