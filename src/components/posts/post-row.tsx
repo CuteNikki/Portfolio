@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import { cn, toneFor } from '@/lib/utils';
 
+import { Badge } from '@/components/ui/badge';
+
 export interface PostRowData {
   id: string;
   href: string;
@@ -12,6 +14,8 @@ export interface PostRowData {
   time: number;
   views: number;
   coverUrl: string | null;
+  // Unpublished posts only writers see
+  isDraft: boolean;
 }
 
 // A post in a list: its cover on the left, then the date, title and excerpt. The title's underline sweeps in on hover.
@@ -46,12 +50,10 @@ export function PostRow({ post }: { post: PostRowData }) {
         )}
       </div>
       <div className='flex min-w-0 flex-col gap-2'>
-        <time
-          dateTime={new Date(post.time).toISOString()}
-          className='text-muted-foreground text-xs'
-        >
-          {post.date}
-        </time>
+        <span className='text-muted-foreground flex items-center gap-2 text-xs'>
+          {post.isDraft && <Badge>Draft</Badge>}
+          <time dateTime={new Date(post.time).toISOString()}>{post.date}</time>
+        </span>
         <h3 className='text-xl leading-snug font-bold tracking-[-0.04em] text-balance'>
           <span className='title-sweep'>{post.title}</span>
         </h3>

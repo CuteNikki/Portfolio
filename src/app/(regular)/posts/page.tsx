@@ -1,43 +1,65 @@
 import { Suspense } from 'react';
 
-import { NewspaperIcon } from 'lucide-react';
+import { toPostRow } from '@/lib/cards';
+import { getDraftPosts, getPublishedPosts } from '@/lib/data';
 
 import { SITE_METADATA } from '@/constants/metadata';
 
-import { ScrollReveal } from '@/components/common/scroll-reveal';
-import {
-  DraftPostList,
-  PostList,
-  PostListSkeleton,
-} from '@/components/dashboard/posts/view';
+import { PageHeader } from '@/components/common/page-header';
+import { PostBrowser } from '@/components/posts/post-browser';
+import { PostRow } from '@/components/posts/post-row';
 
 export const { posts: metadata } = SITE_METADATA;
 
 export default function PostsPage() {
   return (
-    <section className='animate-rise-in flex w-full flex-col gap-8'>
-      <header className='flex flex-col gap-4 border-b pb-8 sm:flex-row sm:items-end sm:justify-between'>
-        <div className='flex flex-col gap-2'>
-          <p className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-widest uppercase'>
-            <NewspaperIcon className='size-4 shrink-0' /> Notes & thinking
-          </p>
-          <h1 className='text-5xl font-bold tracking-tighter sm:text-7xl'>
-            Writing.
-          </h1>
-          <p className='text-muted-foreground max-w-xl leading-relaxed text-pretty'>
-            Notes on building products, learning in public, and the details that
-            make the work better.
-          </p>
-        </div>
-      </header>
-      <ScrollReveal className='scroll-reveal flex flex-col gap-4'>
-        <Suspense fallback={null}>
-          <DraftPostList />
-        </Suspense>
-        <Suspense fallback={<PostListSkeleton />}>
-          <PostList />
-        </Suspense>
-      </ScrollReveal>
+    <div className='flex w-full flex-col gap-10'>
+      <PageHeader
+        eyebrow='Notes & thinking'
+        title='Writing.'
+        description='Notes on building products, learning in public, and the details that make the work better.'
+      />
+      {/* Drafts read the session, so they stream in after the prerendered list */}
+      <Suspense fallback={null}>
+        <Drafts />
+      </Suspense>
+      <PublishedPosts />
+    </div>
+  );
+}
+
+async function PublishedPosts() {
+  const posts = await getPublishedPosts();
+
+  if (posts.length === 0) {
+    return (
+      <p className='text-muted-foreground py-20 text-center'>
+        No posts yet. Check back later!
+      </p>
+    );
+  }
+
+  return <PostBrowser posts={posts.map(toPostRow)} />;
+}
+
+// Only writers see unpublished posts
+async function Drafts() {
+  const drafts = await getDraftPosts();
+  if (drafts.length === 0) return null;
+
+  return (
+    <section aria-labelledby='drafts-heading' className='flex flex-col gap-2'>
+      <h2 id='drafts-heading' className='text-lg font-bold tracking-[-0.03em]'>
+        Drafts{' '}
+        <span className='text-muted-foreground font-normal'>
+          · only writers see these
+        </span>
+      </h2>
+      <div className='flex flex-col gap-2'>
+        {drafts.map((post) => (
+          <PostRow key={post.id} post={toPostRow(post)} />
+        ))}
+      </div>
     </section>
   );
 }

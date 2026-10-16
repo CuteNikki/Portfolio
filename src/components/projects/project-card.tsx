@@ -5,6 +5,7 @@ import { ArrowUpRightIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 import { ProjectThumbnail } from '@/components/projects/project-thumbnail';
+import { Badge } from '@/components/ui/badge';
 
 // Plain data, so the cards can also be rendered by Client Components such as the filterable lists
 export interface ProjectCardData {
@@ -18,6 +19,8 @@ export interface ProjectCardData {
   technologies: string[];
   tags: string[];
   coverUrl: string | null;
+  // Unpublished projects only writers see
+  isDraft: boolean;
 }
 
 export function ProjectCard({
@@ -51,8 +54,9 @@ export function ProjectCard({
       />
       <div className='flex flex-1 flex-col gap-1.5 border-t px-5 pt-4.5 pb-5'>
         <div className='flex items-center justify-between gap-3'>
-          <h3 className='text-[17px] font-bold tracking-[-0.04em]'>
-            {project.title}
+          <h3 className='flex min-w-0 items-center gap-2 text-[17px] font-bold tracking-[-0.04em]'>
+            <span className='truncate'>{project.title}</span>
+            {project.isDraft && <Badge>Draft</Badge>}
           </h3>
           <ArrowUpRightIcon
             aria-hidden

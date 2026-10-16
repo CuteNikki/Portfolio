@@ -43,6 +43,7 @@ export function toProjectCard(project: ProjectLike): ProjectCardData {
     technologies: project.technologies,
     tags: project.tags,
     coverUrl: project.coverUrl ?? null,
+    isDraft: project.publishedAt === null,
   };
 }
 
@@ -58,5 +59,6 @@ export function toPostRow(post: PostLike): PostRowData {
     time: date.getTime(),
     views: post.views,
     coverUrl: post.coverUrl ?? null,
+    isDraft: post.publishedAt === null,
   };
 }
