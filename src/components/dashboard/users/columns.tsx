@@ -136,7 +136,11 @@ const RoleSelectCell = ({ user }: { user: User }) => {
       onValueChange={handleRoleChange}
       disabled={isPending}
     >
-      <SelectTrigger size='sm' className='w-24'>
+      <SelectTrigger
+        size='sm'
+        className='w-24'
+        aria-label={`Role of ${user.username}`}
+      >
         <SelectValue placeholder='Role' />
         {isPending && (
           <LoaderCircleIcon className='size-4 shrink-0 animate-spin' />
