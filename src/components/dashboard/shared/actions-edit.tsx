@@ -42,6 +42,7 @@ export function EditActionButtons({
   isMissingRequiredFields,
   action,
   onDelete,
+  onBack,
 }: {
   kind: 'post' | 'project';
   title: string;
@@ -50,6 +51,8 @@ export function EditActionButtons({
   isMissingRequiredFields: boolean;
   action: EditAction;
   onDelete: () => void;
+  // Asks first when there are unsaved changes
+  onBack: (back: () => void) => void;
 }) {
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
@@ -104,7 +107,7 @@ export function EditActionButtons({
         <Button
           type='button'
           variant='ghost'
-          onClick={() => router.back()}
+          onClick={() => onBack(() => router.back())}
           disabled={isPending}
         >
           <ArrowLeftIcon />

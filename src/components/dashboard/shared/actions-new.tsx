@@ -14,11 +14,14 @@ export function NewActionButtons({
   isMissingRequiredFields,
   action,
   setAction,
+  onBack,
 }: {
   isPending: boolean;
   isMissingRequiredFields: boolean;
   action: 'draft' | 'publish';
   setAction: React.Dispatch<React.SetStateAction<'draft' | 'publish'>>;
+  // Asks first when there are unsaved changes
+  onBack: (back: () => void) => void;
 }) {
   return (
     <div className='flex flex-col gap-2'>
@@ -53,7 +56,7 @@ export function NewActionButtons({
       <Button
         type='button'
         variant='ghost'
-        onClick={() => window.history.back()}
+        onClick={() => onBack(() => window.history.back())}
         disabled={isPending}
       >
         <ArrowLeftIcon />

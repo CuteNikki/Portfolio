@@ -9,6 +9,7 @@ import {
   type ImageType,
   MAX_IMAGE_BYTES,
 } from '@/lib/images';
+import prisma from '@/lib/prisma';
 import {
   deleteObject,
   IMAGE_PUBLIC_URL,
@@ -125,4 +126,156 @@ export async function deleteImages(urls: string[]) {
       }
     }),
   );
+}
+
+// The given pictures that something still uses: a cover, a project's picture, or an address written into a text
+async function usedImages(urls: string[]) {
+  const keys = urls.flatMap((url) => ownImageKey(url) ?? []);
+  const inText = (field: 'content' | 'description') =>
+    keys.map((key) => ({ [field]: { contains: key } }));
+
+  const [posts, projects, images, postTexts, projectTexts] = await Promise.all([
+    prisma.post.findMany({
+      where: { coverUrl: { in: urls } },
+      select: { coverUrl: true },
+    }),
+    prisma.project.findMany({
+      where: { coverUrl: { in: urls } },
+      select: { coverUrl: true },
+    }),
+    prisma.projectImage.findMany({
+      where: { url: { in: urls } },
+      select: { url: true },
+    }),
+    prisma.post.findMany({
+      where: { OR: inText('content') },
+      select: { content: true },
+    }),
+    prisma.project.findMany({
+      where: { OR: inText('description') },
+      select: { description: true },
+    }),
+  ]);
+
+  const texts = [
+    ...postTexts.map(({ content }) => content),
+    ...projectTexts.map(({ description }) => description),
+  ];
+  return new Set([
+    ...posts.map(({ coverUrl }) => coverUrl),
+    ...projects.map(({ coverUrl }) => coverUrl),
+    ...images.map(({ url }) => url),
+    ...urls.filter((url) => {
+      const key = ownImageKey(url);
+      return key && texts.some((text) => text.includes(key));
+    }),
+  ]);
+}
+
+/**
+ * Deletes the given pictures unless something still uses them, e.g. ones uploaded in a form that was then left
+ * without saving. Addresses that aren't this site's uploads are ignored.
+ */
+export async function discardUnusedImages(urls: string[]) {
+  const candidates = [...new Set(urls)].filter(
+    (url) => ownImageKey(url) !== null,
+  );
+  if (candidates.length === 0) return;
+
+  const used = await usedImages(candidates);
+  await deleteImages(candidates.filter((url) => !used.has(url)));
+}
+
+// Uploads younger than this may belong to a form someone is still filling in
+const SWEEP_AFTER_MS = 24 * 60 * 60 * 1000;
+// A sweep lists the whole folder, so one an hour per server is plenty
+const SWEEP_EVERY_MS = 60 * 60 * 1000;
+let lastSweep = 0;
+
+/**
+ * The pictures in storage that no post or project uses, uploaded at least `minAgeMs` ago: their addresses, and the
+ * files of uploads that never finished, which nothing can point at. Null when storage isn't set up.
+ */
+export async function findUnusedImages(minAgeMs = 0) {
+  if (!process.env.STORAGE_ACCESS_KEY_ID) return null;
+  const now = Date.now();
+  const files = await listObjects(`${uploadFolder()}/`);
+
+  // Each picture is a folder of copies; its age is its newest copy's
+  const folders = new Map<
+    string,
+    { newest: number; copies: Set<string>; large?: string }
+  >();
+  for (const file of files) {
+    const folder = file.key.split('/').slice(0, 3).join('/');
+    const entry = folders.get(folder) ?? { newest: 0, copies: new Set() };
+    entry.newest = Math.max(entry.newest, file.lastModified.getTime());
+    entry.copies.add(file.key.slice(folder.length + 1).split('.')[0]);
+    if (/\/large\.(webp|jpg)$/.test(file.key)) entry.large = file.key;
+    folders.set(folder, entry);
+  }
+
+  const old = [...folders].filter(([, { newest }]) => now - newest >= minAgeMs);
+  const unfinished = old
+    .filter(([, { large }]) => !large)
+    .map(([folder]) => folder);
+  const urls = old.flatMap(([, { large }]) =>
+    large ? [`${IMAGE_PUBLIC_URL}/${large}`] : [],
+  );
+  const used = urls.length > 0 ? await usedImages(urls) : new Set<string>();
+  // Pictures with every copy, which can be shown as a thumbnail
+  const complete = new Set(
+    old
+      .filter(([, { copies }]) =>
+        IMAGE_SIZE_NAMES.every((size) => copies.has(size)),
+      )
+      .flatMap(([, { large }]) =>
+        large ? [`${IMAGE_PUBLIC_URL}/${large}`] : [],
+      ),
+  );
+
+  const unused = urls.filter((url) => !used.has(url));
+  return {
+    urls: unused,
+    previews: unused.filter((url) => complete.has(url)),
+    unfinishedFiles: files
+      .filter((file) =>
+        unfinished.some((folder) => file.key.startsWith(`${folder}/`)),
+      )
+      .map((file) => file.key),
+  };
+}
+
+/**
+ * Deletes every picture nothing uses, however new, and returns how many went. For the Media page's Clean up button.
+ */
+export async function removeUnusedImages(minAgeMs = 0) {
+  const unused = await findUnusedImages(minAgeMs);
+  if (!unused) return 0;
+
+  await Promise.all(
+    unused.unfinishedFiles.map((key) =>
+      deleteObject(key).catch((error) =>
+        console.error(`Couldn't delete ${key}:`, error),
+      ),
+    ),
+  );
+  await deleteImages(unused.urls);
+  return unused.urls.length;
+}
+
+/**
+ * Deletes pictures nothing uses that were uploaded over a day ago: left behind when a tab closed mid-edit, or by
+ * uploads that never finished. Run it after a response, e.g. when the Media page opens.
+ */
+export async function sweepUnusedImages() {
+  const now = Date.now();
+  if (now - lastSweep < SWEEP_EVERY_MS) return;
+  lastSweep = now;
+
+  try {
+    await removeUnusedImages(SWEEP_AFTER_MS);
+  } catch (error) {
+    console.error('Could not sweep unused pictures:', error);
+  }
 }

@@ -19,6 +19,7 @@ import {
 } from '@/components/dashboard/shared/image-fields';
 import { ProjectDetailFields } from '@/components/dashboard/projects/detail-fields';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
+import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
 import {
   Field,
   FormCard,
@@ -40,6 +41,13 @@ export function NewProjectForm({
   // Stays set once saved: the transition ends before the edit page has loaded, and a second click would save a copy
   const [isSaved, setIsSaved] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  // Changes after a save or when leaving without saving, so the fields start over with their defaults: authors,
+  // cover and pictures included
+  const [resetKey, setResetKey] = useState(0);
+  const { confirmLeave } = useLeaveGuard(formRef, () => {
+    setDescription('');
+    setResetKey((key) => key + 1);
+  });
 
   // Next keeps this page alive in the background and restores its state when coming back. After a save, start with an
   // empty, enabled form next time instead of the saved entry.
@@ -49,6 +57,7 @@ export function NewProjectForm({
     const form = formRef.current;
     return () => {
       setIsSaved(false);
+      setResetKey((key) => key + 1);
       setDescription('');
       form?.reset();
     };
@@ -98,6 +107,7 @@ export function NewProjectForm({
   return (
     <form ref={formRef} onSubmit={handleSubmit}>
       <FormColumns
+        key={resetKey}
         main={
           <>
             <FormCard>
@@ -156,6 +166,7 @@ export function NewProjectForm({
                 isMissingRequiredFields={!description.trim()}
                 action={submitAction}
                 setAction={setSubmitAction}
+                onBack={confirmLeave}
               />
             </FormCard>
 

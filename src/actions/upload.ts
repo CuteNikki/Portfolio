@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
@@ -9,12 +11,11 @@ import {
   type ImageSize,
   type ImageType,
 } from '@/lib/images';
-import prisma from '@/lib/prisma';
 import {
-  deleteImages,
+  discardUnusedImages,
   isValidUploadSize,
   newUpload,
-  ownImageKey,
+  removeUnusedImages,
 } from '@/lib/uploads';
 
 async function requireWriterSession() {
@@ -66,29 +67,30 @@ export async function requestImageUpload(
  */
 export async function discardImages(urls: string[]) {
   await requireWriterSession();
+  await discardUnusedImages(urls);
+}
 
-  const candidates = urls.filter((url) => ownImageKey(url) !== null);
-  if (candidates.length === 0) return;
+/**
+ * Deletes every picture in storage that no post or project uses, from the Media page. A picture someone has just
+ * added in a form they haven't saved yet goes too, which the page warns about.
+ */
+export async function cleanUpImages(): Promise<
+  { error: string } | { removed: number }
+> {
+  const session = await getCurrentSession();
+  if (
+    !session ||
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
+  ) {
+    return { error: 'Only writers can clean up pictures.' };
+  }
 
-  const [posts, projects, images] = await Promise.all([
-    prisma.post.findMany({
-      where: { coverUrl: { in: candidates } },
-      select: { coverUrl: true },
-    }),
-    prisma.project.findMany({
-      where: { coverUrl: { in: candidates } },
-      select: { coverUrl: true },
-    }),
-    prisma.projectImage.findMany({
-      where: { url: { in: candidates } },
-      select: { url: true },
-    }),
-  ]);
-  const used = new Set([
-    ...posts.map((p) => p.coverUrl),
-    ...projects.map((p) => p.coverUrl),
-    ...images.map((i) => i.url),
-  ]);
-
-  await deleteImages(candidates.filter((url) => !used.has(url)));
+  try {
+    const removed = await removeUnusedImages();
+    revalidatePath('/dashboard/media');
+    return { removed };
+  } catch (error) {
+    console.error('Could not clean up pictures:', error);
+    return { error: 'Storage couldn’t be reached. Please try again.' };
+  }
 }

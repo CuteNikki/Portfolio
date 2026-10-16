@@ -99,6 +99,8 @@ export function MarkdownField({
 }) {
   return (
     <FormCard>
+      {/* The value goes to the form from here, since the textarea is gone while the preview shows */}
+      <input type='hidden' name={id} value={value} />
       <Tabs defaultValue='write' className='flex flex-col gap-3'>
         <div className='flex items-center justify-between gap-3'>
           <label htmlFor={id} className='text-sm font-medium'>
@@ -113,8 +115,6 @@ export function MarkdownField({
         <TabsContent value='write'>
           <Textarea
             id={id}
-            // The form reads the value from state, since the textarea is gone while the preview shows
-            name={id}
             placeholder={placeholder}
             className='min-h-112 resize-y'
             value={value}

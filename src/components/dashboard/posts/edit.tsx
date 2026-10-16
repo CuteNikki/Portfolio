@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import type { Post } from '@/generated/prisma/client';
@@ -21,6 +21,7 @@ import {
   getEditAction,
   type EditAction,
 } from '@/components/dashboard/shared/actions-edit';
+import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
 import {
   Field,
   FormCard,
@@ -42,6 +43,13 @@ export function EditPostForm({
   const [action, setAction] = useState<EditAction>('save');
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
+  // Changes when leaving without saving, so the fields start over from what was saved
+  const [resetKey, setResetKey] = useState(0);
+  const { markSaved, confirmLeave } = useLeaveGuard(formRef, () => {
+    setContent(post.content);
+    setResetKey((key) => key + 1);
+  });
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -63,6 +71,7 @@ export function EditPostForm({
           return;
         }
         toast.success(intent === 'publish' ? 'Post published' : 'Draft saved');
+        markSaved();
         router.refresh();
       } catch (error) {
         toast.error('Something went wrong', {
@@ -94,8 +103,9 @@ export function EditPostForm({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form ref={formRef} onSubmit={handleSubmit}>
       <FormColumns
+        key={resetKey}
         main={
           <>
             <FormCard>
@@ -148,6 +158,7 @@ export function EditPostForm({
                 isMissingRequiredFields={!content.trim()}
                 action={action}
                 onDelete={remove}
+                onBack={confirmLeave}
               />
             </FormCard>
 
