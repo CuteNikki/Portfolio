@@ -46,6 +46,13 @@ export function RevealOnScroll() {
       if (pending && tries++ < 50) retry = setTimeout(hold, 100);
     };
 
+    // Elements an earlier run held back still need watching: the effect can start again while they wait, e.g. when
+    // React pauses it for a page kept in the background, or Fast Refresh replaces it. Without this they'd stay hidden.
+    for (const element of document.querySelectorAll(
+      '[data-reveal="waiting"]',
+    )) {
+      reveal.observe(element);
+    }
     hold();
     const added = new MutationObserver(hold);
     added.observe(document.body, { childList: true, subtree: true });
