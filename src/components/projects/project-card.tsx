@@ -73,7 +73,7 @@ export function ProjectCard({
           />
         </div>
         <p className='text-body line-clamp-3 text-[13px]'>{project.excerpt}</p>
-        <div className='text-muted-foreground mt-auto flex flex-wrap gap-x-3.5 gap-y-1 pt-2 text-xs'>
+        <div className='text-muted-foreground mt-auto flex flex-col gap-1 pt-2 text-xs'>
           <time dateTime={new Date(project.time).toISOString()}>
             {project.date}
           </time>

@@ -31,7 +31,8 @@ interface PostLike {
 // Turns database rows into the plain data the cards and rows render, which can also be handed to Client Components
 
 export function toProjectCard(project: ProjectLike): ProjectCardData {
-  const date = project.publishedAt ?? project.createdAt;
+  // The project's own date from its form, not when it went up on this site
+  const date = project.createdAt;
 
   return {
     id: project.id,

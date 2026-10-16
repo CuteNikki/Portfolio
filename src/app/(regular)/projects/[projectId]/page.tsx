@@ -99,7 +99,8 @@ async function ProjectContent({
   }
 
   const authors = authorsOf(project);
-  const date = project.publishedAt ?? project.createdAt;
+  // The project's own date from its form, not when it went up on this site
+  const date = project.createdAt;
   const headings = headingsOf(project.description);
 
   return (
@@ -182,7 +183,7 @@ async function ProjectContent({
 
         <dl className='animate-hero-in bg-card grid gap-x-8 gap-y-5 rounded-xl border p-6 text-[13px] delay-3 sm:grid-cols-2 lg:grid-cols-4'>
           <div className='flex flex-col gap-1.5'>
-            <dt className='text-muted-foreground'>Published</dt>
+            <dt className='text-muted-foreground'>Date</dt>
             <dd>
               <time dateTime={date.toISOString()}>{formatShortDate(date)}</time>
             </dd>
