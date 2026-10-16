@@ -118,8 +118,10 @@ model Project {
   website    String?
 
   // The cover picture and further pictures, stored on our own image server (see src/lib/images.ts)
-  coverUrl String?
-  images   ProjectImage[]
+  coverUrl     String?
+  // The cover for dark themes, if the project has one; the cover above is used everywhere else
+  coverDarkUrl String?
+  images       ProjectImage[]
 
   publishedAt DateTime?
   createdAt   DateTime  @default(now())

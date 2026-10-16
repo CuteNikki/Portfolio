@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 // component only builds a `srcset` when it optimizes images itself, which this site turns off.
 export function StoredImage({
   url,
+  darkUrl,
   alt,
   sizes,
   priority,
@@ -14,6 +15,8 @@ export function StoredImage({
 }: {
   // The large copy's address, as saved in the database
   url: string;
+  // A version for dark themes, shown instead while one is active. Lazy pictures only download the one in view.
+  darkUrl?: string | null;
   alt: string;
   // How wide the picture is shown, e.g. "(min-width: 1024px) 380px, 100vw"
   sizes: string;
@@ -23,19 +26,32 @@ export function StoredImage({
   fill?: boolean;
   className?: string;
 }) {
-  return (
+  const picture = (address: string, themeClass?: string) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={imageUrl(url, 'large')}
+      src={imageUrl(address, 'large')}
       srcSet={IMAGE_SIZE_NAMES.map(
-        (size) => `${imageUrl(url, size)} ${IMAGE_SIZES[size]}w`,
+        (size) => `${imageUrl(address, size)} ${IMAGE_SIZES[size]}w`,
       ).join(', ')}
       sizes={sizes}
       alt={alt}
       loading={priority ? 'eager' : 'lazy'}
       fetchPriority={priority ? 'high' : undefined}
       decoding='async'
-      className={cn(fill && 'absolute inset-0 size-full', className)}
+      className={cn(
+        fill && 'absolute inset-0 size-full',
+        className,
+        themeClass,
+      )}
     />
+  );
+
+  if (!darkUrl) return picture(url);
+
+  return (
+    <>
+      {picture(url, 'dark:hidden')}
+      {picture(darkUrl, 'hidden dark:block')}
+    </>
   );
 }

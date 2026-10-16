@@ -114,8 +114,15 @@ function Progress({ value }: { value: number }) {
 const message = (error: unknown) =>
   error instanceof Error ? error.message : 'Unknown error';
 
-// A post's or project's cover picture. The address goes to the form in a hidden `coverUrl` field.
-export function CoverField({ defaultValue }: { defaultValue: string | null }) {
+// A post's or project's cover picture. The address goes to the form in a hidden field, `coverUrl` unless `dark` makes
+// it a project's cover for dark themes (`coverDarkUrl`).
+export function CoverField({
+  defaultValue,
+  dark,
+}: {
+  defaultValue: string | null;
+  dark?: boolean;
+}) {
   const [url, setUrl] = useState(defaultValue);
   const [progress, setProgress] = useState<number | null>(null);
   const labelId = useId();
@@ -144,9 +151,13 @@ export function CoverField({ defaultValue }: { defaultValue: string | null }) {
   return (
     <div className='flex flex-col gap-2'>
       <span id={labelId} className='text-sm font-medium'>
-        Cover picture
+        {dark ? 'Cover for dark themes' : 'Cover picture'}
       </span>
-      <input type='hidden' name='coverUrl' value={url ?? ''} />
+      <input
+        type='hidden'
+        name={dark ? 'coverDarkUrl' : 'coverUrl'}
+        value={url ?? ''}
+      />
       {url && progress === null ? (
         <figure aria-labelledby={labelId} className='flex flex-col gap-2'>
           <div className='bg-muted relative aspect-video overflow-hidden rounded-xl border'>
@@ -183,10 +194,12 @@ export function CoverField({ defaultValue }: { defaultValue: string | null }) {
                 <ImageUpIcon className='size-5' />
               </span>
               <span className='text-foreground font-semibold'>
-                Upload a cover
+                {dark ? 'Upload a dark cover' : 'Upload a cover'}
               </span>
               <span className='text-xs text-balance'>
-                Drop a picture or click. Shown on cards and in link previews.
+                {dark
+                  ? 'Optional. Shown instead of the cover in dark themes.'
+                  : 'Drop a picture or click. Shown on cards and in link previews.'}
               </span>
             </>
           )}

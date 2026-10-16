@@ -15,6 +15,7 @@ interface ProjectLike {
   publishedAt: Date | null;
   createdAt: Date;
   coverUrl?: string | null;
+  coverDarkUrl?: string | null;
 }
 
 interface PostLike {
@@ -44,6 +45,7 @@ export function toProjectCard(project: ProjectLike): ProjectCardData {
     technologies: project.technologies,
     tags: project.tags,
     coverUrl: project.coverUrl ?? null,
+    coverDarkUrl: project.coverDarkUrl ?? null,
     isDraft: project.publishedAt === null,
   };
 }

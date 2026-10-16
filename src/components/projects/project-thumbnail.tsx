@@ -9,12 +9,15 @@ import { StoredImage } from '@/components/common/stored-image';
 export function ProjectThumbnail({
   title,
   coverUrl,
+  coverDarkUrl,
   sizes,
   priority,
   className,
 }: {
   title: string;
   coverUrl?: string | null;
+  // Shown instead in dark themes
+  coverDarkUrl?: string | null;
   // Passed to the image so the browser picks a fitting width, e.g. "(min-width: 1024px) 66vw, 100vw"
   sizes: string;
   priority?: boolean;
@@ -42,6 +45,7 @@ export function ProjectThumbnail({
         {coverUrl ? (
           <StoredImage
             url={coverUrl}
+            darkUrl={coverDarkUrl}
             alt=''
             sizes={sizes}
             priority={priority}

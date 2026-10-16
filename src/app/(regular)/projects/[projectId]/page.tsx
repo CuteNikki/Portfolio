@@ -231,6 +231,7 @@ async function ProjectContent({
           <ProjectThumbnail
             title={project.title}
             coverUrl={project.coverUrl}
+            coverDarkUrl={project.coverDarkUrl}
             priority
             sizes='(min-width: 1200px) 990px, calc(86vw - 28px)'
             className='aspect-2/1 rounded-xl border'
@@ -323,6 +324,7 @@ function NeighbourCard({
       <ProjectThumbnail
         title={project.title}
         coverUrl={project.coverUrl}
+        coverDarkUrl={project.coverDarkUrl}
         sizes='(min-width: 640px) 200px, calc(100vw - 56px)'
         className='aspect-16/10 shrink-0 rounded-lg sm:w-50'
       />

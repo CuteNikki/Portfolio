@@ -46,8 +46,10 @@ export default async function MediaPage() {
       select: { id: true, title: true, coverUrl: true },
     }),
     prisma.project.findMany({
-      where: { coverUrl: { not: null } },
-      select: { id: true, title: true, coverUrl: true },
+      where: {
+        OR: [{ coverUrl: { not: null } }, { coverDarkUrl: { not: null } }],
+      },
+      select: { id: true, title: true, coverUrl: true, coverDarkUrl: true },
     }),
     prisma.projectImage.findMany({
       orderBy: [{ projectId: 'asc' }, { position: 'asc' }],
@@ -56,6 +58,12 @@ export default async function MediaPage() {
   ]);
 
   const projectCount = new Set(images.map(({ projectId }) => projectId)).size;
+  // Dark theme covers count as covers too
+  const projectCovers = projects.reduce(
+    (sum, { coverUrl, coverDarkUrl }) =>
+      sum + (coverUrl ? 1 : 0) + (coverDarkUrl ? 1 : 0),
+    0,
+  );
 
   const pictures: Picture[] = [
     ...posts.map((post) => ({
@@ -65,13 +73,30 @@ export default async function MediaPage() {
       usage: 'Post cover',
       editHref: LINKS.dashboardPostEditWithId(post.id).url,
     })),
-    ...projects.map((project) => ({
-      url: project.coverUrl!,
-      alt: `Cover of ${project.title}`,
-      usedBy: project.title,
-      usage: 'Project cover',
-      editHref: LINKS.dashboardProjectEditWithId(project.id).url,
-    })),
+    ...projects.flatMap((project) => [
+      ...(project.coverUrl
+        ? [
+            {
+              url: project.coverUrl,
+              alt: `Cover of ${project.title}`,
+              usedBy: project.title,
+              usage: 'Project cover',
+              editHref: LINKS.dashboardProjectEditWithId(project.id).url,
+            },
+          ]
+        : []),
+      ...(project.coverDarkUrl
+        ? [
+            {
+              url: project.coverDarkUrl,
+              alt: `Dark theme cover of ${project.title}`,
+              usedBy: project.title,
+              usage: 'Project cover, dark themes',
+              editHref: LINKS.dashboardProjectEditWithId(project.id).url,
+            },
+          ]
+        : []),
+    ]),
     ...images.map((image) => ({
       url: image.url,
       alt: image.alt || `Picture from ${image.project.title}`,
@@ -98,8 +123,8 @@ export default async function MediaPage() {
         </div>
         <StatTile
           label='Covers'
-          value={posts.length + projects.length}
-          note={`${posts.length} on posts · ${projects.length} on projects`}
+          value={posts.length + projectCovers}
+          note={`${posts.length} on posts · ${projectCovers} on projects`}
         />
         <StatTile
           label='Project pictures'

@@ -19,6 +19,8 @@ export interface ProjectCardData {
   technologies: string[];
   tags: string[];
   coverUrl: string | null;
+  // Shown instead in dark themes
+  coverDarkUrl: string | null;
   // Unpublished projects only writers see
   isDraft: boolean;
 }
@@ -53,6 +55,7 @@ export function ProjectCard({
       <ProjectThumbnail
         title={project.title}
         coverUrl={project.coverUrl}
+        coverDarkUrl={project.coverDarkUrl}
         priority={priority}
         // The window inside is about 86% of the card's width
         sizes={

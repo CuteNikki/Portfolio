@@ -128,7 +128,8 @@ export async function deleteImages(urls: string[]) {
   );
 }
 
-// The given pictures that something still uses: a cover, a project's picture, or an address written into a text
+// The given pictures that something still uses: a cover (a project's dark one too), a project's picture, or an address
+// written into a text
 async function usedImages(urls: string[]) {
   const keys = urls.flatMap((url) => ownImageKey(url) ?? []);
   const inText = (field: 'content' | 'description') =>
@@ -140,8 +141,10 @@ async function usedImages(urls: string[]) {
       select: { coverUrl: true },
     }),
     prisma.project.findMany({
-      where: { coverUrl: { in: urls } },
-      select: { coverUrl: true },
+      where: {
+        OR: [{ coverUrl: { in: urls } }, { coverDarkUrl: { in: urls } }],
+      },
+      select: { coverUrl: true, coverDarkUrl: true },
     }),
     prisma.projectImage.findMany({
       where: { url: { in: urls } },
@@ -163,7 +166,10 @@ async function usedImages(urls: string[]) {
   ];
   return new Set([
     ...posts.map(({ coverUrl }) => coverUrl),
-    ...projects.map(({ coverUrl }) => coverUrl),
+    ...projects.flatMap(({ coverUrl, coverDarkUrl }) => [
+      coverUrl,
+      coverDarkUrl,
+    ]),
     ...images.map(({ url }) => url),
     ...urls.filter((url) => {
       const key = ownImageKey(url);

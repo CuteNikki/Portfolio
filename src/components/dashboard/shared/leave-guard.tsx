@@ -17,10 +17,11 @@ function entriesOf(form: HTMLFormElement): Entries {
   ]);
 }
 
-// The pictures a form holds: its cover and, for projects, the JSON list of further pictures
+// The pictures a form holds: its cover and, for projects, the dark cover and the JSON list of further pictures
 function imagesIn(entries: Entries) {
   return entries.flatMap(([key, value]) => {
-    if (key === 'coverUrl') return value ? [value] : [];
+    if (key === 'coverUrl' || key === 'coverDarkUrl')
+      return value ? [value] : [];
     if (key !== 'gallery') return [];
     try {
       return (JSON.parse(value) as { url: string }[]).map(({ url }) => url);

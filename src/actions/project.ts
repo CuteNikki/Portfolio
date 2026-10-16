@@ -83,6 +83,7 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
       tags,
       createdAt,
       coverUrl: readCover(formData) ?? null,
+      coverDarkUrl: readCover(formData, 'coverDarkUrl') ?? null,
       images: { create: readGallery(formData) ?? [] },
       // The picked authors, or else whoever creates it
       authors: {
@@ -126,6 +127,7 @@ export async function deleteProject(formData: FormData): Promise<ActionResult> {
     deleteImages(
       [
         deletedProject.coverUrl,
+        deletedProject.coverDarkUrl,
         ...deletedProject.images.map(({ url }) => url),
       ].filter((url): url is string => !!url),
     ),
@@ -175,6 +177,7 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
     select: {
       publishedAt: true,
       coverUrl: true,
+      coverDarkUrl: true,
       images: { select: { url: true } },
     },
   });
@@ -192,6 +195,7 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
   // A form without authors or pictures keeps the current ones
   const authors = await readAuthors(formData);
   const coverUrl = readCover(formData);
+  const coverDarkUrl = readCover(formData, 'coverDarkUrl');
   const gallery = readGallery(formData);
 
   await prisma.project.update({
@@ -201,6 +205,7 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
         authors: { deleteMany: {}, create: authorRows(authors) },
       }),
       ...(coverUrl !== undefined && { coverUrl }),
+      ...(coverDarkUrl !== undefined && { coverDarkUrl }),
       ...(gallery && { images: { deleteMany: {}, create: gallery } }),
       title,
       slug,
@@ -220,10 +225,12 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
   // Pictures that were replaced or removed go once the response is sent
   const before = [
     currentProject.coverUrl,
+    currentProject.coverDarkUrl,
     ...currentProject.images.map(({ url }) => url),
   ];
   const now = [
     coverUrl === undefined ? currentProject.coverUrl : coverUrl,
+    coverDarkUrl === undefined ? currentProject.coverDarkUrl : coverDarkUrl,
     ...(gallery
       ? gallery.map(({ url }) => url)
       : currentProject.images.map(({ url }) => url)),

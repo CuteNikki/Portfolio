@@ -9,9 +9,13 @@ const MAX_ALT_LENGTH = 300;
  * The cover picture a dashboard form sent: its address if it's one of this site's uploads, null if it was removed,
  * or undefined if the form had no cover field (then the saved one stays).
  */
-export function readCover(formData: FormData): string | null | undefined {
-  if (!formData.has('coverUrl')) return undefined;
-  const url = formData.get('coverUrl');
+export function readCover(
+  formData: FormData,
+  // `coverDarkUrl` for a project's cover for dark themes
+  field: 'coverUrl' | 'coverDarkUrl' = 'coverUrl',
+): string | null | undefined {
+  if (!formData.has(field)) return undefined;
+  const url = formData.get(field);
   return ownImageKey(url) ? (url as string) : null;
 }
 
