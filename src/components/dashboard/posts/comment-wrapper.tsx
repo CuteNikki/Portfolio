@@ -22,14 +22,14 @@ export function CommentWrapper({
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
 
   return (
-    <div className='flex flex-col gap-4'>
-      <h2 className='scroll-mt-20 text-2xl font-bold' id='comments'>
-        Comments
-      </h2>
+    // The page's comments section has the heading; `id` is where links to the comments jump to
+    <div id='comments' className='flex scroll-mt-24 flex-col gap-4'>
       {post.comments.length === 0 ? (
-        <p className='text-muted-foreground'>There are no comments yet.</p>
+        <p className='text-muted-foreground text-sm'>
+          No comments yet. Be the first!
+        </p>
       ) : (
-        <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-5'>
           {post.comments
             .filter((comment) => !comment.parentId)
             .map((comment) => (

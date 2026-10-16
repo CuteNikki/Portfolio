@@ -72,7 +72,6 @@ export function CommentForm({
             {(content.trim().length > 0 || setShowReplyFormAction) && (
               <Button
                 variant='outline'
-                size='xs'
                 onClick={() => {
                   setContent('');
                   if (setShowReplyFormAction) {
@@ -83,12 +82,8 @@ export function CommentForm({
                 Cancel
               </Button>
             )}
-            <Button
-              type='submit'
-              size='xs'
-              disabled={content.trim().length === 0}
-            >
-              {setShowReplyFormAction ? 'Post Reply' : 'Post Comment'}
+            <Button type='submit' disabled={content.trim().length === 0}>
+              {setShowReplyFormAction ? 'Reply' : 'Comment'}
             </Button>
           </div>
         </div>

@@ -12,6 +12,8 @@ import { editComment } from '@/actions/post';
 import { UserHover } from '@/components/common/user-hover';
 import { CommentActions } from '@/components/dashboard/posts/comment-actions';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
+import { formatShortDate } from '@/lib/utils';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
@@ -46,17 +48,19 @@ export function Comment({
 
   return (
     <div className='flex flex-col'>
-      <div className='relative flex items-start gap-4'>
+      <div className='relative flex items-start gap-3'>
         {(replies?.length ?? 0) > 0 && (
-          <div className='border-border absolute top-10 bottom-0 left-2 border-l-2 sm:left-6' />
+          // The thread line runs down from the middle of the 36px avatar
+          <div className='border-border absolute top-9 bottom-0 left-[17px] border-l-2' />
         )}
 
-        <Avatar className='z-10 h-12 w-12'>
+        <Avatar className='z-10 size-9 rounded-lg after:rounded-lg'>
           <AvatarImage
             src={comment.author.avatarUrl}
-            alt={comment.author.username}
+            alt=''
+            className='rounded-lg'
           />
-          <AvatarFallback>
+          <AvatarFallback className='rounded-lg'>
             {comment.author.username.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
@@ -64,18 +68,17 @@ export function Comment({
         <div className='flex w-full min-w-0 flex-col'>
           <div className='xs:gap-2 xs:flex-row xs:items-center flex flex-col justify-between'>
             <UserHover user={comment.author}>
-              <span className='truncate text-lg font-medium'>
+              <span className='truncate text-sm font-bold'>
                 {comment.author.displayName || `@${comment.author.username}`}
               </span>
             </UserHover>
             <div className='flex items-center gap-2'>
-              <span className='text-muted-foreground text-sm'>
-                {new Date(comment.createdAt).toLocaleDateString('en-US', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  timeZone: 'UTC',
-                })}
-              </span>
+              <time
+                dateTime={new Date(comment.createdAt).toISOString()}
+                className='text-muted-foreground text-xs'
+              >
+                {formatShortDate(comment.createdAt)}
+              </time>
               <CommentActions
                 commentId={comment.id}
                 commentAuthorId={comment.authorId}
@@ -135,7 +138,7 @@ export function Comment({
                   {content.trim().length > 0 && (
                     <Button
                       variant='outline'
-                      size='sm'
+
                       onClick={() => setEditingCommentIdAction(null)}
                     >
                       Cancel
@@ -143,7 +146,7 @@ export function Comment({
                   )}
                   <Button
                     type='submit'
-                    size='sm'
+
                     disabled={content.trim().length === 0}
                   >
                     Edit Comment
@@ -152,7 +155,7 @@ export function Comment({
               </form>
             </div>
           ) : (
-            <p className='text-sm wrap-break-word whitespace-pre-wrap'>
+            <p className='text-body mt-1 text-sm wrap-break-word whitespace-pre-wrap'>
               {comment.content}
             </p>
           )}
@@ -170,20 +173,20 @@ export function Comment({
       </div>
 
       {(replies?.length ?? 0) > 0 && (
-        <div className='ml-2 flex flex-col sm:ml-6'>
+        <div className='ml-[17px] flex flex-col'>
           {replies?.map((reply, index) => {
             const isLast = index === replies.length - 1;
             return (
-              <div key={reply.id} className='relative pt-4 pl-3 sm:pl-6'>
+              <div key={reply.id} className='relative pt-4 pl-5'>
                 {!isLast && (
                   <>
                     <div className='border-border absolute top-0 bottom-0 left-0 border-l-2' />
-                    <div className='border-border absolute top-0 left-0 h-10 w-6 border-b-2' />
+                    <div className='border-border absolute top-0 left-0 h-[34px] w-5 border-b-2' />
                   </>
                 )}
 
                 {isLast && (
-                  <div className='border-border absolute top-0 left-0 h-10 w-6 rounded-bl-xl border-b-2 border-l-2' />
+                  <div className='border-border absolute top-0 left-0 h-[34px] w-5 rounded-bl-xl border-b-2 border-l-2' />
                 )}
 
                 <Comment

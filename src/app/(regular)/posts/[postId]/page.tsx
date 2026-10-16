@@ -3,17 +3,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-import {
-  CalendarIcon,
-  ChevronLeftIcon,
-  PencilLineIcon,
-  SendHorizontalIcon,
-  UserIcon,
-} from 'lucide-react';
+import { LogInIcon, PencilLineIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
-import { PERSONAL_DETAILS } from '@/constants/personal';
 import { getCurrentSession } from '@/lib/auth';
 import {
   getDraftPost,
@@ -21,9 +14,11 @@ import {
   getPublishedPosts,
   authorsOf,
 } from '@/lib/data';
-import { toExcerpt } from '@/lib/utils';
+import { headingsOf } from '@/lib/toc';
+import { formatShortDate, readingMinutes, toExcerpt } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
+import { StoredImage } from '@/components/common/stored-image';
 import { UserHover } from '@/components/common/user-hover';
 import { WriterOnly } from '@/components/common/writer-only';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
@@ -68,7 +63,9 @@ export async function generateMetadata({
       type: 'article',
       publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
-      authors: [PERSONAL_DETAILS.fullName],
+      authors: authorsOf(post).map(
+        (author) => author.displayName ?? author.username,
+      ),
     },
   };
 }
@@ -79,19 +76,9 @@ export default function PostPage({
   params: Promise<{ postId: string }>;
 }) {
   return (
-    <article className='mx-auto w-full max-w-3xl py-8'>
-      {/* Back Button */}
-      <Button variant='ghost' size='lg' asChild className='mb-4'>
-        <Link href={LINKS.posts.url}>
-          <ChevronLeftIcon />
-          Back to Overview
-        </Link>
-      </Button>
-
-      <Suspense fallback={<PostSkeleton />}>
-        <PostContent params={params} />
-      </Suspense>
-    </article>
+    <Suspense fallback={<PostSkeleton />}>
+      <PostContent params={params} />
+    </Suspense>
   );
 }
 
@@ -113,103 +100,164 @@ async function PostContent({
     notFound();
   }
 
+  const authors = authorsOf(post);
+  const date = post.publishedAt ?? post.createdAt;
+  const headings = headingsOf(post.content);
+  const path = LINKS.postWithSlugOrId(post.slug ?? post.id).url;
+
   return (
-    <>
+    <article className='flex w-full flex-col gap-10'>
       {/* Drafts aren't read by anyone but their writers, so they don't count views */}
       {post.publishedAt && <ViewTracker postId={post.id} />}
 
-      <ScrollReveal className='scroll-reveal'>
-        {/* Title (Triggers instantly) */}
-        <h1
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='mb-4 line-clamp-6 text-4xl font-extrabold tracking-tight text-ellipsis lg:text-5xl'
+      <header className='relative isolate mx-auto flex w-full max-w-3xl flex-col gap-6 pt-2 sm:pt-6'>
+        <div
+          aria-hidden
+          className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'
+        />
+        <nav
+          aria-label='Breadcrumb'
+          className='animate-hero-in text-muted-foreground text-[13px]'
         >
+          <ol className='flex flex-wrap items-center gap-2'>
+            <li>
+              <Link
+                href={LINKS.posts.url}
+                className='nav-underline hover:text-foreground lowercase transition-colors'
+              >
+                posts
+              </Link>
+            </li>
+            <li aria-hidden>/</li>
+            <li
+              aria-current='page'
+              className='text-foreground truncate lowercase'
+            >
+              {post.slug ?? post.title}
+            </li>
+          </ol>
+        </nav>
+
+        <h1 className='animate-hero-in text-[36px] leading-[1.1] font-bold tracking-[-0.05em] text-balance delay-1 sm:text-5xl'>
           {post.title}
         </h1>
 
-        {/* Metadata & Actions (Cascades next) */}
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 1 } as React.CSSProperties}
-          className='text-muted-foreground mb-10 flex flex-wrap items-center gap-4 border-b pb-8'
-        >
-          {authorsOf(post).length > 0 && (
-            <div className='flex flex-wrap items-center gap-2'>
-              <UserIcon className='size-4' />
-              {authorsOf(post).map((author, index, all) => (
-                <span key={author.id} className='flex items-center'>
-                  <UserHover user={author}>
-                    <span className='text-foreground font-medium'>
-                      {author.displayName || `@${author.username}`}
+        <div className='animate-hero-in flex flex-col gap-5 delay-2 sm:flex-row sm:items-center sm:justify-between'>
+          <div className='text-muted-foreground flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px]'>
+            {authors.length > 0 && (
+              <span className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
+                {authors.map((author) => (
+                  <UserHover key={author.id} user={author}>
+                    <span className='text-foreground flex items-center gap-2'>
+                      <Avatar className='size-6 rounded-md after:rounded-md'>
+                        <AvatarImage
+                          src={author.avatarUrl}
+                          alt=''
+                          className='rounded-md'
+                        />
+                        <AvatarFallback className='rounded-md text-[10px]'>
+                          {author.username.slice(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      {author.displayName ?? author.username}
                     </span>
                   </UserHover>
-                  {index < all.length - 1 && <span aria-hidden>,</span>}
-                </span>
-              ))}
-            </div>
-          )}
-          <div className='flex items-center gap-2'>
-            <CalendarIcon className='size-4' />
-            <time dateTime={post.createdAt.toISOString()}>
-              {new Date(post.createdAt).toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
-                timeZone: 'UTC',
-              })}
-            </time>
-          </div>
-
-          {/* Own row, starting on the left, on small screens. Next to the author and date from sm up. */}
-          <div className='flex w-full flex-wrap items-center gap-2 sm:ml-auto sm:w-auto'>
-            <ShareButton
-              path={LINKS.postWithSlugOrId(post.slug ?? post.id).url}
-              label='Post'
-            />
-            <WriterOnly>
-              <Button variant='outline' size='xs' asChild>
-                <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
-                  <PencilLineIcon />
-                  Edit Post
-                </Link>
-              </Button>
-            </WriterOnly>
+                ))}
+              </span>
+            )}
+            <time dateTime={date.toISOString()}>{formatShortDate(date)}</time>
+            <span>{readingMinutes(post.content)} min read</span>
+            {post.publishedAt && (
+              <span>
+                {post.views} {post.views === 1 ? 'view' : 'views'}
+              </span>
+            )}
             {!post.publishedAt && (
               <Badge variant='destructive' size='lg'>
                 Unpublished
               </Badge>
             )}
           </div>
+          <div className='flex flex-wrap items-center gap-2.5'>
+            <ShareButton path={path} label='Post' size='default' />
+            <WriterOnly>
+              <Button asChild variant='outline'>
+                <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
+                  <PencilLineIcon />
+                  Edit
+                </Link>
+              </Button>
+            </WriterOnly>
+          </div>
         </div>
+      </header>
 
-        {/* Post Content Body (Cascades last with a distinct step) */}
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 2 } as React.CSSProperties}
-        >
+      {post.coverUrl && (
+        <div className='bg-muted relative mx-auto aspect-video w-full max-w-4xl overflow-hidden rounded-xl border sm:aspect-2/1'>
+          <StoredImage
+            url={post.coverUrl}
+            alt={`${post.title}'s cover picture`}
+            fill
+            priority
+            sizes='(min-width: 928px) 896px, calc(100vw - 32px)'
+            className='object-cover'
+          />
+        </div>
+      )}
+
+      <div className='mx-auto grid w-full max-w-3xl gap-10 xl:max-w-none xl:grid-cols-[1fr_minmax(0,48rem)_1fr]'>
+        <div className='min-w-0 xl:col-start-2'>
           <MarkdownViewer content={post.content} />
         </div>
-      </ScrollReveal>
+        {headings.length > 1 && (
+          <nav
+            aria-label='On this page'
+            className='order-first xl:order-none xl:col-start-3'
+          >
+            <div className='flex flex-col gap-2.5 text-[13px] xl:sticky xl:top-28 xl:pl-6'>
+              <span className='text-muted-foreground'>On this page</span>
+              <ul className='flex flex-col gap-2'>
+                {headings.map(({ id, text, level }) => (
+                  <li key={id} className={level === 3 ? 'pl-3' : undefined}>
+                    <a
+                      href={`#${id}`}
+                      className='text-body hover:text-primary-text transition-colors'
+                    >
+                      {text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </nav>
+        )}
+      </div>
 
-      {/* Comments Section (Isolated ScrollReveal so it triggers when scrolled into view) */}
-      <ScrollReveal className='scroll-reveal'>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='mt-8 flex flex-col gap-4 border-t pt-10'
+      <ScrollReveal className='scroll-reveal mx-auto w-full max-w-3xl'>
+        <section
+          aria-labelledby='comments-heading'
+          className='bg-card mt-6 flex flex-col gap-6 rounded-xl border p-6 sm:p-8'
         >
+          <h2
+            id='comments-heading'
+            className='text-2xl font-bold tracking-[-0.04em]'
+          >
+            Comments{' '}
+            <span className='text-muted-foreground font-normal'>
+              {post.comments.length}
+            </span>
+          </h2>
           <Suspense fallback={<CommentsSkeleton />}>
-            <Comments post={post} />
+            <Comments post={post} path={path} />
           </Suspense>
-        </div>
+        </section>
       </ScrollReveal>
-    </>
+    </article>
   );
 }
 
 // Depends on who is signed in, so it streams in after the prerendered post
-async function Comments({ post }: { post: Post }) {
+async function Comments({ post, path }: { post: Post; path: string }) {
   const session = await getCurrentSession();
   const viewer = session
     ? { id: session.user.id, role: session.user.role }
@@ -217,53 +265,41 @@ async function Comments({ post }: { post: Post }) {
 
   return (
     <>
-      {/* Write a Comment */}
       {session?.user ? (
-        <div className='flex flex-col gap-2'>
-          <h2 className='text-2xl font-bold'>Write a comment</h2>
-          <div className='flex items-center gap-2'>
-            <Avatar className='h-6 w-6'>
+        <div className='flex flex-col gap-3'>
+          <p className='text-muted-foreground flex items-center gap-2 text-[13px]'>
+            <Avatar className='size-6 rounded-md after:rounded-md'>
               <AvatarImage
                 src={session.user.avatarUrl}
-                alt={session.user.username}
+                alt=''
+                className='rounded-md'
               />
-              <AvatarFallback>
-                {session.user.username.charAt(0).toUpperCase()}
+              <AvatarFallback className='rounded-md text-[10px]'>
+                {session.user.username.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <div className='flex items-center gap-4'>
-              <span className='text-sm'>
-                Signed in as{' '}
-                {session.user.displayName || `@${session.user.username}`}
-              </span>
-              <form action='/api/auth/logout' method='POST'>
-                <Button type='submit' variant='destructive' size='xs'>
-                  Sign Out
-                </Button>
-              </form>
-            </div>
-          </div>
+            Commenting as{' '}
+            <span className='text-foreground'>
+              {session.user.displayName || `@${session.user.username}`}
+            </span>
+          </p>
           <CommentForm postId={post.id} slug={post.slug || ''} />
         </div>
       ) : (
-        <div>
-          <h2 className='text-2xl font-bold'>Write a comment</h2>
-          <div className='flex flex-col items-start justify-between gap-2 sm:flex-row sm:items-center'>
-            <p className='text-muted-foreground'>
-              You must be logged in to post a comment.
-            </p>
-            <Button asChild>
-              {/* A plain link: a prefetch of the login route would start a new login and replace one in progress */}
-              <a href='/api/auth/login'>
-                <SendHorizontalIcon className='mr-2 size-4' />
-                Log In
-              </a>
-            </Button>
-          </div>
+        <div className='bg-background flex flex-col items-start justify-between gap-4 rounded-xl border p-5 sm:flex-row sm:items-center'>
+          <p className='text-body text-sm'>
+            Sign in with Discord to join the conversation.
+          </p>
+          <Button asChild>
+            {/* A plain link: a prefetch of the login route would start a new login and replace one in progress */}
+            <a href={`/api/auth/login?next=${encodeURIComponent(path)}`}>
+              <LogInIcon />
+              Sign in
+            </a>
+          </Button>
         </div>
       )}
 
-      {/* Comments List */}
       <CommentWrapper
         post={{ slug: post.slug, comments: post.comments }}
         viewer={viewer}
@@ -274,10 +310,11 @@ async function Comments({ post }: { post: Post }) {
 
 function PostSkeleton() {
   return (
-    <div className='flex flex-col gap-4'>
+    <div className='mx-auto flex w-full max-w-3xl flex-col gap-6 pt-6'>
+      <Skeleton className='h-4 w-40' />
       <Skeleton className='h-12 w-3/4' />
-      <Skeleton className='mb-10 h-6 w-1/2' />
-      <Skeleton className='h-64 w-full' />
+      <Skeleton className='h-6 w-1/2' />
+      <Skeleton className='h-64 w-full rounded-xl' />
     </div>
   );
 }

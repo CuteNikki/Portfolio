@@ -136,3 +136,16 @@ export function toneFor(text: string): string {
   for (const char of text) hash = (hash * 31 + char.charCodeAt(0)) | 0;
   return `var(--chart-${(Math.abs(hash) % 5) + 1})`;
 }
+
+/**
+ * Roughly how long a text takes to read, at about 220 words a minute.
+ *
+ * @param markdown - The text, as markdown.
+ * @returns The reading time in whole minutes, at least 1.
+ */
+export function readingMinutes(markdown: string): number {
+  const words = toExcerpt(markdown, Number.MAX_SAFE_INTEGER)
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return Math.max(1, Math.round(words / 220));
+}
