@@ -266,7 +266,9 @@ export default function Home() {
                   key={category}
                   data-reveal-item
                   style={{ '--reveal-index': index } as React.CSSProperties}
-                  className='flex flex-col gap-2'
+                  // Each column's rise-in animation makes it a layer of its own, so the hovered one comes to the front,
+                  // or the columns after it would cover its tooltips
+                  className='flex flex-col gap-2 hover:z-10'
                 >
                   <h3 className='text-sm font-bold capitalize'>{category}</h3>
                   <div className='flex flex-wrap gap-1.5'>
