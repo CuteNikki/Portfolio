@@ -8,7 +8,6 @@ import { ErrorToast } from '@/components/common/error-toast';
 import { PostChartPie } from '@/components/dashboard/posts/chart';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { SidebarInset } from '@/components/ui/sidebar';
 
 export const { dashboard: metadata } = SITE_METADATA;
 
@@ -35,7 +34,7 @@ export default async function DashboardPage() {
   //   });
 
   return (
-    <SidebarInset>
+    <>
       {/* {hasProjectsError && (
         <ErrorToast
           title='Error fetching projects'
@@ -98,6 +97,6 @@ export default async function DashboardPage() {
           />
         )}
       </div>
-    </SidebarInset>
+    </>
   );
 }

@@ -1,5 +1,7 @@
 import {
   HomeIcon,
+  ImagesIcon,
+  MessageSquareIcon,
   LucideIcon,
   MailIcon,
   NewspaperIcon,
@@ -116,6 +118,18 @@ export const LINKS = {
     requiresAuth: true,
     requiresAdmin: true,
   },
+  dashboardComments: {
+    label: 'Comments',
+    url: '/dashboard/comments#top',
+    icon: MessageSquareIcon,
+    requiresAuth: true,
+  },
+  dashboardMedia: {
+    label: 'Media',
+    url: '/dashboard/media#top',
+    icon: ImagesIcon,
+    requiresAuth: true,
+  },
   dashboardPosts: {
     label: 'Posts',
     url: '/dashboard/posts#top',
@@ -176,16 +190,12 @@ export const NAVBAR_LINKS: Link[] = [
   LINKS.contact,
 ];
 
-export const SIDEBAR_LINKS: Link[] = [
-  LINKS.home,
-  LINKS.projects,
-  LINKS.posts,
-  LINKS.contact,
-];
-
+// The dashboard sidebar's sections. The users page is only for admins.
 export const DASHBOARD_LINKS: Link[] = [
   LINKS.dashboardOverview,
-  LINKS.dashboardUsers,
   LINKS.dashboardPosts,
   LINKS.dashboardProjects,
+  LINKS.dashboardComments,
+  LINKS.dashboardMedia,
 ];
+export const DASHBOARD_ADMIN_LINKS: Link[] = [LINKS.dashboardUsers];

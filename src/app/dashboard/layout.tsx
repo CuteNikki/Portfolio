@@ -1,13 +1,17 @@
+import { Role } from '@/generated/prisma/enums';
+
 import { requireWriter } from '@/lib/auth';
+import prisma from '@/lib/prisma';
 
 import { SITE_METADATA } from '@/constants/metadata';
 
-import { AuthProvider } from '@/providers/auth';
-
-import { AppSidebar } from '@/components/dashboard/sidebar';
+import {
+  DashboardSidebar,
+  DashboardTabs,
+} from '@/components/dashboard/sidebar/dashboard-nav';
 import { Footer } from '@/components/navigation/footer';
-import { ThemeSwitcher } from '@/components/theme/switcher';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { Navbar } from '@/components/navigation/navbar';
+import { AuthProvider } from '@/providers/auth';
 
 export const { dashboard: metadata } = SITE_METADATA;
 
@@ -21,6 +25,21 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const { user } = await requireWriter();
+  const isAdmin = user.role === Role.ADMIN;
+
+  // The numbers next to the sidebar's links
+  const [posts, projects, comments, users] = await Promise.all([
+    prisma.post.count(),
+    prisma.project.count(),
+    prisma.comment.count(),
+    isAdmin ? prisma.user.count() : undefined,
+  ]);
+  const counts = {
+    '/dashboard/posts': posts,
+    '/dashboard/projects': projects,
+    '/dashboard/comments': comments,
+    '/dashboard/users': users,
+  };
 
   return (
     <AuthProvider
@@ -36,21 +55,17 @@ export default async function DashboardLayout({
         },
       }}
     >
-      <SidebarProvider>
-        <AppSidebar />
-
-        <div className='flex min-w-0 flex-1 flex-col'>
-          <header className='bg-background/95 supports-backdrop-filter:bg-background/60 sticky top-0 z-10 flex h-14 items-center gap-4 border-b px-4 backdrop-blur'>
-            <SidebarTrigger />
-            <div className='flex flex-1 items-center justify-end gap-2'>
-              <ThemeSwitcher />
-            </div>
-          </header>
-
-          <main className='flex-1 p-4 md:p-8'>{children}</main>
-          <Footer />
+      <div className='flex min-h-svh flex-col'>
+        <Navbar wide />
+        <div className='flex flex-1'>
+          <DashboardSidebar counts={counts} isAdmin={isAdmin} />
+          <main className='flex min-w-0 flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10 lg:py-8'>
+            <DashboardTabs counts={counts} isAdmin={isAdmin} />
+            {children}
+          </main>
         </div>
-      </SidebarProvider>
+        <Footer wide />
+      </div>
     </AuthProvider>
   );
 }
