@@ -4,7 +4,7 @@ import { NewspaperIcon, PlusIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
-import { requireAdmin } from '@/lib/auth';
+import { requireWriter } from '@/lib/auth';
 import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
 
@@ -26,7 +26,7 @@ export const { dashboardPosts: metadata } = SITE_METADATA;
 export const instant = false;
 
 export default async function PostsPage() {
-  await requireAdmin();
+  await requireWriter();
 
   const { posts, hasError } = await prisma.post
     .findMany({

@@ -1,7 +1,7 @@
 import { NewspaperIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
-import { requireAdmin } from '@/lib/auth';
+import { requireWriter } from '@/lib/auth';
 
 import { NewPostForm } from '@/components/dashboard/posts/new';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
@@ -14,7 +14,7 @@ export const { dashboardNewPost: metadata } = SITE_METADATA;
 export const instant = false;
 
 export default async function NewPostPage() {
-  await requireAdmin();
+  await requireWriter();
 
   return (
     <Card className='w-full max-w-5xl'>

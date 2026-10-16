@@ -76,6 +76,21 @@ export async function requireAdmin() {
   return session;
 }
 
+// The dashboard is for writers and admins, who both manage every post and project there. Only admins see the users
+// page. Like requireAdmin, call it at the top of every dashboard page.
+export async function requireWriter() {
+  const session = await getCurrentSession();
+
+  if (
+    !session ||
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
+  ) {
+    redirect('/');
+  }
+
+  return session;
+}
+
 export async function isWriter() {
   const session = await getCurrentSession();
   return (

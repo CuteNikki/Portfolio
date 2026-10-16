@@ -8,6 +8,15 @@ import { getCurrentSession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { resolveSlug } from '@/lib/slug';
 
+function canWrite(
+  session: Awaited<ReturnType<typeof getCurrentSession>>,
+): session is NonNullable<typeof session> {
+  return (
+    !!session &&
+    (session.user.role === Role.ADMIN || session.user.role === Role.WRITER)
+  );
+}
+
 function isProjectSlugTaken(exceptId?: string) {
   return async (slug: string) =>
     (await prisma.project.count({
@@ -18,7 +27,7 @@ function isProjectSlugTaken(exceptId?: string) {
 export async function createProject(formData: FormData) {
   const session = await getCurrentSession();
 
-  if (!session || session.user.role !== Role.ADMIN) {
+  if (!canWrite(session)) {
     throw new Error(
       'Unauthorized: You do not have permission to publish projects.',
     );
@@ -74,14 +83,23 @@ export async function createProject(formData: FormData) {
 export async function deleteProject(formData: FormData) {
   const session = await getCurrentSession();
 
-  if (!session || session.user.role !== Role.ADMIN) {
+  if (!canWrite(session)) {
     throw new Error('Unauthorized');
   }
 
   const projectId = formData.get('projectId') as string;
 
-  const deletedProject = await prisma.project.delete({
+  const project = await prisma.project.findFirst({
     where: { id: projectId },
+    select: { id: true },
+  });
+
+  if (!project) {
+    throw new Error('Project not found.');
+  }
+
+  const deletedProject = await prisma.project.delete({
+    where: { id: project.id },
   });
 
   revalidateProjectPaths(deletedProject.id, deletedProject.slug);
@@ -90,7 +108,7 @@ export async function deleteProject(formData: FormData) {
 export async function updateProject(formData: FormData) {
   const session = await getCurrentSession();
 
-  if (!session || session.user.role !== Role.ADMIN) {
+  if (!canWrite(session)) {
     throw new Error('Unauthorized');
   }
 
@@ -118,7 +136,7 @@ export async function updateProject(formData: FormData) {
     throw new Error('Some required fields are missing.');
   }
 
-  const currentProject = await prisma.project.findUnique({
+  const currentProject = await prisma.project.findFirst({
     where: { id },
     select: { publishedAt: true },
   });

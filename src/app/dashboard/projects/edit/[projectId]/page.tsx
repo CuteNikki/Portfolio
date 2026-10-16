@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { PencilLineIcon } from 'lucide-react';
 
-import { requireAdmin } from '@/lib/auth';
+import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { EditProjectForm } from '@/components/dashboard/projects/edit';
@@ -15,7 +15,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ projectId: string }>;
 }): Promise<Metadata> {
-  await requireAdmin();
+  await requireWriter();
 
   const { projectId } = await params;
 
@@ -45,7 +45,7 @@ export default async function EditProjectPage({
 }: {
   params: Promise<{ projectId: string }>;
 }) {
-  await requireAdmin();
+  await requireWriter();
 
   const { projectId } = await params;
 

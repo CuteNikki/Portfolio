@@ -1,7 +1,7 @@
 import { MedalIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
-import { requireAdmin } from '@/lib/auth';
+import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 import { ErrorToast } from '@/components/common/error-toast';
@@ -17,7 +17,7 @@ export const { dashboard: metadata } = SITE_METADATA;
 export const instant = false;
 
 export default async function DashboardPage() {
-  await requireAdmin();
+  await requireWriter();
 
   const { posts, hasPostsError } = await prisma.post
     .findMany({ orderBy: { views: 'desc' }, take: 5 })

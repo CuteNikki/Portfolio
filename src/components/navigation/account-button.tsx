@@ -22,7 +22,7 @@ export async function AccountButton() {
         username: user.username,
         avatarUrl: user.avatarUrl,
         role: user.role,
-        isAdmin: user.role === Role.ADMIN,
+        canWrite: user.role === Role.ADMIN || user.role === Role.WRITER,
       }}
     />
   );

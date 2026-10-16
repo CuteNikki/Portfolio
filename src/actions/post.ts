@@ -10,11 +10,6 @@ import prisma from '@/lib/prisma';
 import { hit, visitorHash } from '@/lib/rate-limit';
 import { resolveSlug } from '@/lib/slug';
 
-// Writers manage their own posts, admins every post. The dashboard is admin-only, but actions can be called directly.
-function editablePosts(user: { id: string; role: Role }) {
-  return user.role === Role.ADMIN ? {} : { writerId: user.id };
-}
-
 function isPostSlugTaken(exceptId?: string) {
   return async (slug: string) =>
     (await prisma.post.count({
@@ -76,7 +71,7 @@ export async function deletePost(formData: FormData) {
   const postId = formData.get('postId') as string;
 
   const post = await prisma.post.findFirst({
-    where: { id: postId, ...editablePosts(session.user) },
+    where: { id: postId },
     select: { id: true },
   });
 
@@ -111,7 +106,7 @@ export async function updatePost(formData: FormData) {
   }
 
   const currentPost = await prisma.post.findFirst({
-    where: { id, ...editablePosts(session.user) },
+    where: { id },
     select: { publishedAt: true },
   });
 

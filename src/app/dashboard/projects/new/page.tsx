@@ -1,7 +1,7 @@
 import { PresentationIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
-import { requireAdmin } from '@/lib/auth';
+import { requireWriter } from '@/lib/auth';
 
 import { NewProjectForm } from '@/components/dashboard/projects/new';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
@@ -14,7 +14,7 @@ export const { dashboardNewProject: metadata } = SITE_METADATA;
 export const instant = false;
 
 export default async function NewProjectPage() {
-  await requireAdmin();
+  await requireWriter();
 
   return (
     <Card className='w-full max-w-5xl'>

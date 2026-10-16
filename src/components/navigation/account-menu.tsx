@@ -35,7 +35,7 @@ export interface AccountMenuUser {
   username: string;
   avatarUrl: string;
   role: Role;
-  isAdmin: boolean;
+  canWrite: boolean;
 }
 
 const ROLE_LABELS: Record<Role, string> = {
@@ -124,8 +124,8 @@ export function AccountMenu({ user }: { user: AccountMenuUser | null }) {
           </span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/* The dashboard only lets admins in, so writers don't get links that would send them back home */}
-        {user.isAdmin && (
+        {/* Writers and admins manage posts and projects in the dashboard */}
+        {user.canWrite && (
           <>
             <DropdownMenuItem asChild>
               <Link href={LINKS.dashboard.url}>

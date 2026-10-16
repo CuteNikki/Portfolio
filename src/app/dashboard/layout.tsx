@@ -1,4 +1,4 @@
-import { requireAdmin } from '@/lib/auth';
+import { requireWriter } from '@/lib/auth';
 
 import { SITE_METADATA } from '@/constants/metadata';
 
@@ -20,7 +20,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = await requireAdmin();
+  const { user } = await requireWriter();
 
   return (
     <AuthProvider

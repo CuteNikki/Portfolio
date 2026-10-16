@@ -13,6 +13,8 @@ import {
 
 export interface Link {
   icon?: LucideIcon;
+  // Shown to admins only, e.g. the users page
+  requiresAdmin?: boolean;
   // For links to pages in another language, e.g. the German Impressum
   lang?: string;
   requiresAuth?: boolean;
@@ -112,6 +114,7 @@ export const LINKS = {
     url: '/dashboard/users#top',
     icon: Users2Icon,
     requiresAuth: true,
+    requiresAdmin: true,
   },
   dashboardPosts: {
     label: 'Posts',
