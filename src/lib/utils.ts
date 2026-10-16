@@ -62,7 +62,8 @@ export function toExcerpt(markdown: string, maxLength = 160): string {
     .replace(/<[^>]+>/g, ' ') // html tags
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ') // images
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links
-    .replace(/^\s{0,3}(#{1,6}|>|[-*+]|\d+\.)\s+/gm, '') // headings, quotes, lists
+    .replace(/^\s{0,3}#{1,6}\s.*$/gm, ' ') // headings, which aren't part of the summary
+    .replace(/^\s{0,3}(>|[-*+]|\d+\.)\s+/gm, '') // quotes, lists
     .replace(/[*_~`|]/g, '') // emphasis, inline code, tables
     .replace(/\s+/g, ' ')
     .trim();
