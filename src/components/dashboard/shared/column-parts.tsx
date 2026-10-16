@@ -77,14 +77,14 @@ export function TitleCell({
 }) {
   return (
     <Link href={editHref} className='group flex min-w-0 items-center gap-3'>
-      <span className='bg-muted relative h-8 w-12 shrink-0 overflow-hidden rounded-md'>
+      <span className='bg-muted relative h-6 w-12 shrink-0 overflow-hidden rounded-md'>
         {coverUrl && (
           <StoredImage
             url={coverUrl}
             alt=''
             sizes='48px'
             fill
-            className='object-cover'
+            className='object-cover object-top'
           />
         )}
       </span>

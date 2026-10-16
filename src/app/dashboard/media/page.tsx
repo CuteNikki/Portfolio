@@ -149,13 +149,13 @@ export default async function MediaPage() {
                 href={picture.editHref}
                 className='group bg-card hover:border-line-strong flex flex-col overflow-hidden rounded-xl border transition-colors'
               >
-                <span className='bg-muted relative aspect-16/10'>
+                <span className='bg-muted relative aspect-2/1'>
                   <StoredImage
                     url={picture.url}
                     alt={picture.alt}
                     fill
                     sizes='(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 46vw'
-                    className='object-cover'
+                    className='object-cover object-top'
                   />
                 </span>
                 <span className='flex flex-col gap-0.5 px-3.5 py-3'>
@@ -191,14 +191,14 @@ async function UnusedPictures() {
         {unused.previews.slice(0, 4).map((url) => (
           <li
             key={url}
-            className='bg-muted ring-card relative h-10 w-14 overflow-hidden rounded-md ring-2'
+            className='bg-muted ring-card relative h-7 w-14 overflow-hidden rounded-md ring-2'
           >
             <StoredImage
               url={url}
               alt=''
               fill
               sizes='56px'
-              className='object-cover'
+              className='object-cover object-top'
             />
           </li>
         ))}
