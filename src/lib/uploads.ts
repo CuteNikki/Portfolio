@@ -194,6 +194,50 @@ export async function discardUnusedImages(urls: string[]) {
   return unused.length;
 }
 
+/**
+ * Everything that uses one picture: as a post's cover, a project's cover or dark cover, a project's picture, or an
+ * address written into a post's or project's text.
+ */
+export async function pictureUses(url: string) {
+  const key = ownImageKey(url);
+  if (!key) return null;
+
+  const [posts, projects, images, postTexts, projectTexts] = await Promise.all([
+    prisma.post.findMany({
+      where: { coverUrl: url },
+      select: { id: true, slug: true, title: true },
+    }),
+    prisma.project.findMany({
+      where: { OR: [{ coverUrl: url }, { coverDarkUrl: url }] },
+      select: { id: true, slug: true, title: true },
+    }),
+    prisma.projectImage.findMany({
+      where: { url },
+      select: { project: { select: { id: true, slug: true, title: true } } },
+    }),
+    prisma.post.findMany({
+      where: { content: { contains: key } },
+      select: { title: true },
+    }),
+    prisma.project.findMany({
+      where: { description: { contains: key } },
+      select: { title: true },
+    }),
+  ]);
+
+  return {
+    posts,
+    projects: [
+      ...new Map(
+        [...projects, ...images.map(({ project }) => project)].map(
+          (project) => [project.id, project],
+        ),
+      ).values(),
+    ],
+    inText: [...postTexts, ...projectTexts].map(({ title }) => title),
+  };
+}
+
 // Uploads younger than this may belong to a form someone is still filling in
 const SWEEP_AFTER_MS = 24 * 60 * 60 * 1000;
 // A sweep lists the whole folder, so one an hour per server is plenty

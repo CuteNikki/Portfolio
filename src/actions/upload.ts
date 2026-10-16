@@ -1,6 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 
 import { Role } from '@/generated/prisma/enums';
 
@@ -11,11 +11,14 @@ import {
   type ImageSize,
   type ImageType,
 } from '@/lib/images';
+import prisma from '@/lib/prisma';
 import {
+  deleteImages,
   discardUnusedImages,
   isValidUploadSize,
   newUpload,
   ownImageKey,
+  pictureUses,
   removeUnusedImages,
 } from '@/lib/uploads';
 
@@ -124,4 +127,72 @@ export async function deleteUnusedImage(
     console.error('Could not delete an unused picture:', error);
     return { error: 'Storage couldn’t be reached. Please try again.' };
   }
+}
+
+/**
+ * Takes a picture off every post and project that shows it, as a cover, dark cover or project picture, then deletes
+ * it from storage. A picture written into a post's or project's text stays, since removing it there would leave a
+ * broken image in the middle of the text.
+ */
+export async function removePicture(
+  url: string,
+): Promise<{ error: string } | { removed: true }> {
+  const session = await getCurrentSession();
+  if (
+    !session ||
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
+  ) {
+    return { error: 'Only writers can delete pictures.' };
+  }
+
+  const uses = typeof url === 'string' ? await pictureUses(url) : null;
+  if (!uses) return { error: 'That isn’t one of this site’s pictures.' };
+  if (uses.inText.length > 0) {
+    return {
+      error: `It’s also in the text of ${uses.inText.map((title) => `“${title}”`).join(', ')}. Take it out there first.`,
+    };
+  }
+
+  await prisma.$transaction([
+    prisma.post.updateMany({
+      where: { coverUrl: url },
+      data: { coverUrl: null },
+    }),
+    prisma.project.updateMany({
+      where: { coverUrl: url },
+      data: { coverUrl: null },
+    }),
+    prisma.project.updateMany({
+      where: { coverDarkUrl: url },
+      data: { coverDarkUrl: null },
+    }),
+    prisma.projectImage.deleteMany({ where: { url } }),
+  ]);
+  await deleteImages([url]);
+
+  // The same pages a post's or project's own save refreshes
+  if (uses.posts.length > 0) {
+    updateTag('posts');
+    revalidatePath('/posts');
+    revalidatePath('/dashboard/posts');
+  }
+  if (uses.projects.length > 0) {
+    updateTag('projects');
+    revalidatePath('/projects');
+    revalidatePath('/dashboard/projects');
+  }
+  for (const [kind, items] of [
+    ['posts', uses.posts],
+    ['projects', uses.projects],
+  ] as const) {
+    for (const { id, slug } of items) {
+      for (const idOrSlug of slug ? [id, slug] : [id]) {
+        revalidatePath(`/${kind}/${idOrSlug}`);
+        revalidatePath(`/dashboard/${kind}/edit/${idOrSlug}`);
+      }
+    }
+  }
+  revalidatePath('/');
+  revalidatePath('/dashboard/media');
+  return { removed: true };
 }

@@ -11,6 +11,7 @@ import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
 
 import { StoredImage } from '@/components/common/stored-image';
+import { RemovePictureButton } from '@/components/dashboard/media/remove-picture';
 import { UnusedPictures as UnusedPictureList } from '@/components/dashboard/media/unused-pictures';
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
 import {
@@ -144,7 +145,7 @@ export default async function MediaPage() {
       ) : (
         <ul className='grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4'>
           {pictures.map((picture) => (
-            <li key={picture.url}>
+            <li key={picture.url} className='group/picture relative'>
               <Link
                 href={picture.editHref}
                 className='group bg-card hover:border-line-strong flex flex-col overflow-hidden rounded-xl border transition-colors'
@@ -167,6 +168,11 @@ export default async function MediaPage() {
                   </span>
                 </span>
               </Link>
+              <RemovePictureButton
+                url={picture.url}
+                usedBy={picture.usedBy}
+                usage={picture.usage}
+              />
             </li>
           ))}
         </ul>
