@@ -71,7 +71,7 @@ export function DeleteAccount({
   return (
     <AlertDialog onOpenChange={() => setTyped('')}>
       <AlertDialogTrigger asChild>
-        <Button variant='destructive'>Delete…</Button>
+        <Button variant='destructive'>Delete</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

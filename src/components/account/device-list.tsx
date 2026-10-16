@@ -73,7 +73,7 @@ export function DeviceList({ devices }: { devices: Device[] }) {
               </div>
               {!device.current && (
                 <Button
-                  variant='outline'
+                  variant='destructive'
                   size='sm'
                   disabled={pending}
                   aria-label={`Sign out ${device.name}, last used ${device.lastUsed}`}
@@ -93,7 +93,7 @@ export function DeviceList({ devices }: { devices: Device[] }) {
       </ul>
       {others > 0 && (
         <Button
-          variant='outline'
+          variant='destructive'
           className='self-start'
           disabled={pending}
           onClick={() =>
