@@ -62,7 +62,7 @@ const reveal = (index: number) =>
 
 export default function Home() {
   return (
-    <div className='flex w-full flex-col gap-24 sm:gap-30'>
+    <div className='flex w-full flex-col gap-12 sm:gap-14 lg:gap-16'>
       <section className='relative isolate flex flex-col gap-6'>
         {/* Reaches out of the page's column to the window's edges, and up behind the navbar. `isolate` above keeps it in
             front of the page background. */}
@@ -96,7 +96,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollReveal className='bg-card -mt-6 grid gap-8 rounded-xl border p-7 sm:-mt-12 sm:p-8 lg:grid-cols-2 lg:gap-0'>
+      <ScrollReveal className='bg-card -mt-6 grid gap-8 rounded-xl border p-7 sm:-mt-8 sm:p-8 lg:-mt-12 lg:grid-cols-2 lg:gap-0'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 1 } as React.CSSProperties}

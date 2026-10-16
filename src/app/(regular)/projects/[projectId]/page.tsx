@@ -293,7 +293,11 @@ async function Neighbours({ projectId }: { projectId: string }) {
   if (!newer && !older) return null;
 
   return (
-    <nav aria-label='More projects' className='mt-10 grid gap-4 md:grid-cols-2'>
+    // With the article's gap, as far from the text as the home page's sections are from each other
+    <nav
+      aria-label='More projects'
+      className='mt-2 grid gap-4 sm:mt-4 md:grid-cols-2 lg:mt-6'
+    >
       {newer ? <NeighbourCard project={newer} direction='newer' /> : <div />}
       {older && <NeighbourCard project={older} direction='older' />}
     </nav>
