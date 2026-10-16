@@ -19,7 +19,7 @@ export function NewActionButtons({
   setAction: React.Dispatch<React.SetStateAction<'draft' | 'publish'>>;
 }) {
   return (
-    <div className='flex flex-col-reverse items-center justify-end gap-1 sm:flex-row'>
+    <div className='flex flex-col-reverse items-start justify-end gap-1 sm:flex-row sm:items-center'>
       {/* Cancel Button */}
       <Button
         type='button'

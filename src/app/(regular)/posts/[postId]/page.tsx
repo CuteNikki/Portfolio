@@ -149,7 +149,8 @@ async function PostContent({
             </time>
           </div>
 
-          <div className='ml-auto flex items-center gap-2'>
+          {/* Own row, starting on the left, on small screens. Next to the author and date from sm up. */}
+          <div className='flex w-full flex-wrap items-center gap-2 sm:ml-auto sm:w-auto'>
             <ShareButton
               path={LINKS.postWithSlugOrId(post.slug ?? post.id).url}
               label='Post'

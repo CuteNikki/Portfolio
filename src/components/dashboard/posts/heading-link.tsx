@@ -17,7 +17,8 @@ export function HeadingLink({ id }: { id: string }) {
     <button
       type='button'
       onClick={copyLink}
-      className='text-muted-foreground hover:text-primary-text focus-visible:text-primary-text absolute right-full cursor-pointer pr-3 font-normal opacity-0 transition-opacity select-none group-hover:opacity-100 focus-visible:opacity-100'
+      // Sits in the margin left of the heading. Small screens have no margin to spare and no hover, so it's left out there.
+      className='text-muted-foreground hover:text-primary-text focus-visible:text-primary-text absolute right-full cursor-pointer pr-3 font-normal opacity-0 transition-opacity select-none group-hover:opacity-100 focus-visible:opacity-100 max-sm:hidden'
       title='Copy link to section'
       aria-label='Copy link to section'
     >

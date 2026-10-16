@@ -131,7 +131,8 @@ async function ProjectContent({
               </time>
             </div>
 
-            <div className='ml-auto flex flex-wrap items-center gap-2'>
+            {/* Own row, starting on the left, on small screens. Next to the date from sm up. */}
+            <div className='flex w-full flex-wrap items-center gap-2 sm:ml-auto sm:w-auto'>
               <ShareButton
                 path={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
                 label='Project'

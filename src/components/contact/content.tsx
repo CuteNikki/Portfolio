@@ -92,7 +92,7 @@ export function ContactContent() {
           <div
             data-reveal-item
             style={{ '--reveal-index': 0 } as React.CSSProperties}
-            className='flex flex-col gap-4 border-b p-6 sm:p-8 lg:border-r lg:border-b-0 lg:p-10'
+            className='flex flex-col gap-4 border-b p-4 sm:p-8 lg:border-r lg:border-b-0 lg:p-10'
           >
             <p className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-widest uppercase'>
               <MailIcon className='size-4' /> Contact
@@ -149,7 +149,7 @@ export function ContactContent() {
             <div
               data-reveal-item
               style={{ '--reveal-index': 2 } as React.CSSProperties}
-              className='p-6 sm:p-8 md:p-10'
+              className='p-4 sm:p-8 md:p-10'
             >
               {/* Honeypot: invisible to humans, bots fill it in */}
               <div
@@ -268,7 +268,7 @@ export function ContactContent() {
                 <div
                   data-reveal-item
                   style={{ '--reveal-index': 3 } as React.CSSProperties}
-                  className='flex flex-col items-center justify-between gap-4 sm:flex-row'
+                  className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'
                 >
                   <FieldDescription>
                     By submitting this form, you agree to the{' '}

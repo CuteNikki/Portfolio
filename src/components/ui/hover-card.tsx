@@ -22,6 +22,7 @@ function HoverCardContent({
   className,
   align = 'center',
   sideOffset = 4,
+  collisionPadding = 8,
   ...props
 }: React.ComponentProps<typeof HoverCardPrimitive.Content>) {
   return (
@@ -29,6 +30,8 @@ function HoverCardContent({
       <HoverCardPrimitive.Content
         data-slot='hover-card-content'
         align={align}
+        // Keeps a gap to the screen edge on narrow screens
+        collisionPadding={collisionPadding}
         sideOffset={sideOffset}
         className={cn(
           'bg-popover text-popover-foreground ring-foreground/10 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 z-50 w-64 origin-(--radix-hover-card-content-transform-origin) rounded-none p-2.5 text-xs/relaxed shadow-md ring-1 outline-hidden duration-100',

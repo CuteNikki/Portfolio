@@ -68,9 +68,9 @@ export function EditActionButtons({
   );
 
   return (
-    <div className='flex flex-col items-center gap-1 lg:flex-row-reverse lg:justify-between'>
+    <div className='flex flex-col items-start gap-1 lg:flex-row-reverse lg:items-center lg:justify-between'>
       {/* Other Action Buttons */}
-      <div className='flex flex-col-reverse items-center justify-end gap-1 sm:flex-row'>
+      <div className='flex flex-col-reverse items-start justify-end gap-1 sm:flex-row sm:items-center'>
         {/* Cancel Button */}
         <Button
           type='button'
