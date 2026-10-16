@@ -3,13 +3,18 @@ import Link from 'next/link';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+import { cn } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
 
 import { StoredImage } from '@/components/common/stored-image';
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
-import { StatTile, StorageTile } from '@/components/dashboard/shared/stat-tile';
+import {
+  StatTile,
+  StorageTile,
+  TILE_HEIGHT,
+} from '@/components/dashboard/shared/stat-tile';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export const { dashboardMedia: metadata } = SITE_METADATA;
@@ -79,7 +84,9 @@ export default async function MediaPage() {
 
       <dl className='grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3'>
         <div className='col-span-2 lg:col-span-1'>
-          <Suspense fallback={<Skeleton className='h-27 rounded-xl' />}>
+          <Suspense
+            fallback={<Skeleton className={cn('rounded-xl', TILE_HEIGHT)} />}
+          >
             <StorageTile />
           </Suspense>
         </div>
