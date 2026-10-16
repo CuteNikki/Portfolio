@@ -1,12 +1,15 @@
 'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
+import { after } from 'next/server';
 import { headers } from 'next/headers';
 
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
+import { readCover, removedImages } from '@/lib/form-images';
+import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
 import { hit, visitorHash } from '@/lib/rate-limit';
 import { resolveSlug } from '@/lib/slug';
@@ -50,6 +53,7 @@ export async function createPost(formData: FormData) {
       title,
       content,
       slug,
+      coverUrl: readCover(formData) ?? null,
       publishedAt: isPublished ? new Date() : null,
       // The picked authors, or else whoever creates it
       authors: {
@@ -87,6 +91,12 @@ export async function deletePost(formData: FormData) {
     where: { id: post.id },
   });
 
+  // Its cover goes too, once the response is sent
+  if (deletedPost.coverUrl) {
+    const { coverUrl } = deletedPost;
+    after(() => deleteImages([coverUrl]));
+  }
+
   revalidatePostPaths(deletedPost.id, deletedPost.slug);
 }
 
@@ -111,7 +121,7 @@ export async function updatePost(formData: FormData) {
 
   const currentPost = await prisma.post.findFirst({
     where: { id },
-    select: { publishedAt: true },
+    select: { publishedAt: true, coverUrl: true },
   });
 
   if (!currentPost) {
@@ -124,8 +134,9 @@ export async function updatePost(formData: FormData) {
     isPostSlugTaken(id),
   );
 
-  // A form without authors keeps the current ones
+  // A form without authors or a cover field keeps the current ones
   const authors = await readAuthors(formData);
+  const coverUrl = readCover(formData);
 
   await prisma.post.update({
     where: { id },
@@ -133,6 +144,7 @@ export async function updatePost(formData: FormData) {
       ...(authors && {
         authors: { deleteMany: {}, create: authorRows(authors) },
       }),
+      ...(coverUrl !== undefined && { coverUrl }),
       title,
       slug,
       content,
@@ -140,6 +152,12 @@ export async function updatePost(formData: FormData) {
       publishedAt: isPublished ? (currentPost.publishedAt ?? new Date()) : null,
     },
   });
+
+  // A replaced or removed cover goes once the response is sent
+  if (coverUrl !== undefined) {
+    const removed = removedImages([currentPost.coverUrl], [coverUrl]);
+    if (removed.length > 0) after(() => deleteImages(removed));
+  }
 
   revalidatePostPaths(id, slug);
 }

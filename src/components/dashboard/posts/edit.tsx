@@ -13,6 +13,7 @@ import {
   type AuthorOption,
   AuthorsField,
 } from '@/components/dashboard/shared/authors-field';
+import { CoverField } from '@/components/dashboard/shared/image-fields';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import {
   EditActionButtons,
@@ -107,6 +108,8 @@ export function EditPostForm({
       </div>
 
       <AuthorsField options={authorOptions} defaultValue={authorIds} />
+
+      <CoverField defaultValue={post.coverUrl} />
 
       {/* Markdown Editor */}
       <Tabs defaultValue='write' className='w-full'>

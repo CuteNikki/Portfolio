@@ -14,6 +14,11 @@ import {
   type AuthorOption,
   AuthorsField,
 } from '@/components/dashboard/shared/authors-field';
+import {
+  CoverField,
+  type GalleryImage,
+  GalleryField,
+} from '@/components/dashboard/shared/image-fields';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import {
   EditActionButtons,
@@ -26,10 +31,13 @@ import { Textarea } from '@/components/ui/textarea';
 
 export function EditProjectForm({
   project,
+  gallery,
   authorOptions,
   authorIds,
 }: {
   project: Project;
+  // The project's further pictures, in order
+  gallery: GalleryImage[];
   authorOptions: AuthorOption[];
   authorIds: string[];
 }) {
@@ -111,6 +119,10 @@ export function EditProjectForm({
       </div>
 
       <AuthorsField options={authorOptions} defaultValue={authorIds} />
+
+      <CoverField defaultValue={project.coverUrl} />
+
+      <GalleryField defaultValue={gallery} />
 
       {/* Description Editor & Preview */}
       <div className='flex flex-col gap-2'>

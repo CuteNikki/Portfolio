@@ -55,7 +55,10 @@ export default async function EditProjectPage({
       where: {
         OR: [{ id: projectId }, { slug: projectId }],
       },
-      include: { authors: { orderBy: { position: 'asc' } } },
+      include: {
+        authors: { orderBy: { position: 'asc' } },
+        images: { orderBy: { position: 'asc' } },
+      },
     })
     .then((project) => project)
     .catch(() => null);
@@ -78,6 +81,7 @@ export default async function EditProjectPage({
       <CardContent>
         <EditProjectForm
           project={project}
+          gallery={project.images.map(({ url, alt }) => ({ url, alt }))}
           authorOptions={await getAuthorOptions()}
           authorIds={project.authors.map(({ userId }) => userId)}
         />

@@ -1,11 +1,14 @@
 'use server';
 
 import { revalidatePath, updateTag } from 'next/cache';
+import { after } from 'next/server';
 
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
+import { readCover, readGallery, removedImages } from '@/lib/form-images';
+import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
 import { resolveSlug } from '@/lib/slug';
 
@@ -72,6 +75,8 @@ export async function createProject(formData: FormData) {
       technologies,
       tags,
       createdAt,
+      coverUrl: readCover(formData) ?? null,
+      images: { create: readGallery(formData) ?? [] },
       // The picked authors, or else whoever creates it
       authors: {
         create: authorRows((await readAuthors(formData)) ?? [session.user.id]),
@@ -104,7 +109,18 @@ export async function deleteProject(formData: FormData) {
 
   const deletedProject = await prisma.project.delete({
     where: { id: project.id },
+    include: { images: { select: { url: true } } },
   });
+
+  // Its pictures go too, once the response is sent
+  after(() =>
+    deleteImages(
+      [
+        deletedProject.coverUrl,
+        ...deletedProject.images.map(({ url }) => url),
+      ].filter((url): url is string => !!url),
+    ),
+  );
 
   revalidateProjectPaths(deletedProject.id, deletedProject.slug);
 }
@@ -142,7 +158,11 @@ export async function updateProject(formData: FormData) {
 
   const currentProject = await prisma.project.findFirst({
     where: { id },
-    select: { publishedAt: true },
+    select: {
+      publishedAt: true,
+      coverUrl: true,
+      images: { select: { url: true } },
+    },
   });
 
   if (!currentProject) {
@@ -155,8 +175,10 @@ export async function updateProject(formData: FormData) {
     isProjectSlugTaken(id),
   );
 
-  // A form without authors keeps the current ones
+  // A form without authors or pictures keeps the current ones
   const authors = await readAuthors(formData);
+  const coverUrl = readCover(formData);
+  const gallery = readGallery(formData);
 
   await prisma.project.update({
     where: { id },
@@ -164,6 +186,8 @@ export async function updateProject(formData: FormData) {
       ...(authors && {
         authors: { deleteMany: {}, create: authorRows(authors) },
       }),
+      ...(coverUrl !== undefined && { coverUrl }),
+      ...(gallery && { images: { deleteMany: {}, create: gallery } }),
       title,
       slug,
       description,
@@ -178,6 +202,20 @@ export async function updateProject(formData: FormData) {
         : null,
     },
   });
+
+  // Pictures that were replaced or removed go once the response is sent
+  const before = [
+    currentProject.coverUrl,
+    ...currentProject.images.map(({ url }) => url),
+  ];
+  const now = [
+    coverUrl === undefined ? currentProject.coverUrl : coverUrl,
+    ...(gallery
+      ? gallery.map(({ url }) => url)
+      : currentProject.images.map(({ url }) => url)),
+  ];
+  const removed = removedImages(before, now);
+  if (removed.length > 0) after(() => deleteImages(removed));
 
   revalidateProjectPaths(id, slug);
 }

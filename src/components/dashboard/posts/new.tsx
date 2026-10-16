@@ -12,6 +12,7 @@ import {
   type AuthorOption,
   AuthorsField,
 } from '@/components/dashboard/shared/authors-field';
+import { CoverField } from '@/components/dashboard/shared/image-fields';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
 import { Input } from '@/components/ui/input';
@@ -111,6 +112,8 @@ export function NewPostForm({
       </div>
 
       <AuthorsField options={authorOptions} defaultValue={authorIds} />
+
+      <CoverField defaultValue={null} />
 
       {/* The Editor */}
       <Tabs defaultValue='write' className='w-full'>
