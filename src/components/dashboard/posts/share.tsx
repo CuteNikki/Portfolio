@@ -9,14 +9,16 @@ import { Button } from '@/components/ui/button';
 export function ShareButton({
   path,
   label,
+  size = 'xs',
 }: {
   path: string;
   label: 'Post' | 'Project';
+  size?: 'xs' | 'default';
 }) {
   return (
     <Button
       variant='outline'
-      size='xs'
+      size={size}
       onClick={() =>
         navigator.clipboard
           .writeText(`${window.location.origin}${path}`)

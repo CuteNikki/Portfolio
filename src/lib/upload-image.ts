@@ -2,7 +2,12 @@
 
 import { requestImageUpload } from '@/actions/upload';
 
-import { IMAGE_SIZES, type ImageSize, type ImageType } from '@/lib/images';
+import {
+  IMAGE_SIZE_NAMES,
+  IMAGE_SIZES,
+  type ImageSize,
+  type ImageType,
+} from '@/lib/images';
 
 // Redraws a picture so its longest side is at most `size` pixels, as WebP, or JPEG where the browser can't write
 // WebP. EXIF rotation is applied, and an animated GIF keeps its first frame.
@@ -25,22 +30,24 @@ async function shrink(bitmap: ImageBitmap, size: number, type: ImageType) {
   return blob;
 }
 
-async function shrinkBoth(file: File) {
+async function shrinkAll(file: File) {
   const bitmap = await createImageBitmap(file, {
     imageOrientation: 'from-image',
   });
 
   try {
     let type: ImageType = 'image/webp';
-    let small = await shrink(bitmap, IMAGE_SIZES.small, type);
-    // Browsers without a WebP encoder quietly hand back PNG, so both copies are redone as JPEG
-    if (small.type !== type) {
+    let thumb = await shrink(bitmap, IMAGE_SIZES.thumb, type);
+    // Browsers without a WebP encoder quietly hand back PNG, so every copy is made as JPEG instead
+    if (thumb.type !== type) {
       type = 'image/jpeg';
-      small = await shrink(bitmap, IMAGE_SIZES.small, type);
+      thumb = await shrink(bitmap, IMAGE_SIZES.thumb, type);
     }
+    const small = await shrink(bitmap, IMAGE_SIZES.small, type);
     const large = await shrink(bitmap, IMAGE_SIZES.large, type);
 
-    return { type, small, large };
+    const copies: Record<ImageSize, Blob> = { thumb, small, large };
+    return { type, copies };
   } finally {
     bitmap.close();
   }
@@ -64,7 +71,7 @@ function put(url: string, blob: Blob, onProgress: (sent: number) => void) {
 }
 
 /**
- * Shrinks a picture into its two copies and uploads both straight to storage.
+ * Shrinks a picture into its copies and uploads them straight to storage.
  *
  * @param file - The picture the writer picked.
  * @param onProgress - Called with how much has been sent, from 0 to 1.
@@ -74,17 +81,16 @@ export async function uploadImage(
   file: File,
   onProgress: (progress: number) => void,
 ) {
-  const copies = await shrinkBoth(file);
-  const total = copies.small.size + copies.large.size;
+  const { type, copies } = await shrinkAll(file);
+  const sizes = Object.fromEntries(
+    IMAGE_SIZE_NAMES.map((size) => [size, copies[size].size]),
+  ) as Record<ImageSize, number>;
+  const total = IMAGE_SIZE_NAMES.reduce((sum, size) => sum + sizes[size], 0);
 
-  const { url, uploads } = await requestImageUpload(copies.type, {
-    small: copies.small.size,
-    large: copies.large.size,
-  });
+  const { url, uploads } = await requestImageUpload(type, sizes);
 
-  const order: ImageSize[] = ['small', 'large'];
   let done = 0;
-  for (const size of order) {
+  for (const size of IMAGE_SIZE_NAMES) {
     await put(uploads[size], copies[size], (sent) =>
       onProgress((done + sent) / total),
     );

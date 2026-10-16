@@ -2,7 +2,13 @@ import 'server-only';
 
 import { createHash, randomUUID } from 'node:crypto';
 
-import { IMAGE_TYPES, type ImageType, MAX_IMAGE_BYTES } from '@/lib/images';
+import {
+  IMAGE_SIZE_NAMES,
+  IMAGE_TYPES,
+  type ImageSize,
+  type ImageType,
+  MAX_IMAGE_BYTES,
+} from '@/lib/images';
 import {
   deleteObject,
   IMAGE_PUBLIC_URL,
@@ -23,24 +29,28 @@ function uploadFolder() {
 }
 
 /**
- * Two upload links for a new picture, one for its small and one for its large copy, and the address the picture
- * will have once both are sent.
+ * An upload link for each copy of a new picture, and the address the picture will have once they are sent.
  */
 export async function newUpload(
   type: ImageType,
-  sizes: { small: number; large: number },
+  bytes: Record<ImageSize, number>,
 ) {
   const extension = IMAGE_TYPES[type];
   const key = `${uploadFolder()}/${randomUUID()}`;
 
-  const [small, large] = await Promise.all([
-    signUpload(`${key}/small.${extension}`, type, sizes.small),
-    signUpload(`${key}/large.${extension}`, type, sizes.large),
-  ]);
+  const links = await Promise.all(
+    IMAGE_SIZE_NAMES.map(
+      async (size) =>
+        [
+          size,
+          await signUpload(`${key}/${size}.${extension}`, type, bytes[size]),
+        ] as const,
+    ),
+  );
 
   return {
     url: `${IMAGE_PUBLIC_URL}/${key}/large.${extension}`,
-    uploads: { small, large },
+    uploads: Object.fromEntries(links) as Record<ImageSize, string>,
   };
 }
 

@@ -356,7 +356,7 @@ function ProjectSwatch({
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={imageUrl(coverUrl, 'small')}
+        src={imageUrl(coverUrl, 'thumb')}
         alt=''
         loading='lazy'
         className='h-7.5 w-12 shrink-0 rounded-md object-cover'

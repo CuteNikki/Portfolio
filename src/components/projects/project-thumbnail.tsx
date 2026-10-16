@@ -1,7 +1,6 @@
-import Image from 'next/image';
-
-import { imageUrl } from '@/lib/images';
 import { cn, toneFor } from '@/lib/utils';
+
+import { StoredImage } from '@/components/common/stored-image';
 
 // A project's cover image, or until it has one, a small drawing of a browser window in the project's own colour. The
 // drawing (or image) rises a little while the surrounding card, which needs the `group` class, is hovered.
@@ -10,7 +9,6 @@ export function ProjectThumbnail({
   coverUrl,
   sizes,
   priority,
-  large,
   className,
 }: {
   title: string;
@@ -18,8 +16,6 @@ export function ProjectThumbnail({
   // Passed to the image so the browser picks a fitting width, e.g. "(min-width: 1024px) 66vw, 100vw"
   sizes: string;
   priority?: boolean;
-  // Wide cards use the large copy of the cover, the rest the small one
-  large?: boolean;
   className?: string;
 }) {
   const tone = toneFor(title);
@@ -33,8 +29,8 @@ export function ProjectThumbnail({
       style={{ '--tone': tone } as React.CSSProperties}
     >
       {coverUrl ? (
-        <Image
-          src={imageUrl(coverUrl, large ? 'large' : 'small')}
+        <StoredImage
+          url={coverUrl}
           alt=''
           fill
           sizes={sizes}

@@ -1,9 +1,8 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
-import { imageUrl } from '@/lib/images';
 import { cn, toneFor } from '@/lib/utils';
 
+import { StoredImage } from '@/components/common/stored-image';
 import { Badge } from '@/components/ui/badge';
 
 export interface PostRowData {
@@ -34,11 +33,11 @@ export function PostRow({ post }: { post: PostRowData }) {
         style={{ '--tone': toneFor(post.title) } as React.CSSProperties}
       >
         {post.coverUrl ? (
-          <Image
-            src={imageUrl(post.coverUrl, 'small')}
+          <StoredImage
+            url={post.coverUrl}
             alt=''
             fill
-            sizes='(min-width: 640px) 240px, 100vw'
+            sizes='(min-width: 640px) 240px, calc(100vw - 32px)'
             className='object-cover transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.04]'
           />
         ) : (

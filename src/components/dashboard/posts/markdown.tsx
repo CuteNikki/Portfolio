@@ -58,7 +58,7 @@ const CodeBlock = ({
     return (
       <code
         {...rest}
-        className='text-foreground bg-muted px-1.5 py-0.5 text-sm font-medium before:content-none after:content-none'
+        className='text-foreground bg-muted rounded-md px-1.5 py-0.5 text-sm font-medium before:content-none after:content-none'
       >
         {children}
       </code>
@@ -66,7 +66,7 @@ const CodeBlock = ({
   }
 
   return (
-    <div className='border-border overflow-hidden border shadow-sm'>
+    <div className='border-border overflow-hidden rounded-xl border shadow-sm'>
       {/* Header Bar */}
       <div className='border-border bg-muted text-muted-foreground flex items-center justify-between border-b px-4 py-2 text-xs font-semibold tracking-wider uppercase'>
         <span>{language}</span>

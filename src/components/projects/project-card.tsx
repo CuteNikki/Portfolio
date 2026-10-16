@@ -45,11 +45,10 @@ export function ProjectCard({
         title={project.title}
         coverUrl={project.coverUrl}
         priority={priority}
-        large={featured}
         sizes={
           featured
-            ? '(min-width: 1024px) 760px, 100vw'
-            : '(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw'
+            ? '(min-width: 1024px) 760px, calc(100vw - 32px)'
+            : '(min-width: 1024px) 380px, (min-width: 640px) calc(50vw - 32px), calc(100vw - 32px)'
         }
         className={featured ? 'h-50 lg:h-75' : 'h-50'}
       />

@@ -3,7 +3,12 @@
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
-import { IMAGE_TYPES, type ImageType } from '@/lib/images';
+import {
+  IMAGE_SIZE_NAMES,
+  IMAGE_TYPES,
+  type ImageSize,
+  type ImageType,
+} from '@/lib/images';
 import prisma from '@/lib/prisma';
 import {
   deleteImages,
@@ -24,26 +29,28 @@ async function requireWriterSession() {
 }
 
 /**
- * Upload links for one picture, for its small and large copy. The browser shrinks the picture first, then sends
- * both copies straight to storage.
+ * Upload links for one picture, one for each of its copies. The browser shrinks the picture first, then sends the
+ * copies straight to storage.
  */
 export async function requestImageUpload(
   type: string,
-  sizes: { small: number; large: number },
+  bytes: Record<ImageSize, number>,
 ) {
   await requireWriterSession();
 
   if (!(type in IMAGE_TYPES)) {
     throw new Error('Pictures must be WebP or JPEG.');
   }
-  if (!isValidUploadSize(sizes?.small) || !isValidUploadSize(sizes?.large)) {
+  if (!IMAGE_SIZE_NAMES.every((size) => isValidUploadSize(bytes?.[size]))) {
     throw new Error('That picture is too large, even after shrinking.');
   }
 
-  return newUpload(type as ImageType, {
-    small: sizes.small,
-    large: sizes.large,
-  });
+  // Only the expected sizes go on, whatever else the browser sent
+  const checked = Object.fromEntries(
+    IMAGE_SIZE_NAMES.map((size) => [size, bytes[size]]),
+  ) as Record<ImageSize, number>;
+
+  return newUpload(type as ImageType, checked);
 }
 
 /**

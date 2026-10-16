@@ -148,7 +148,7 @@ export function CoverField({ defaultValue }: { defaultValue: string | null }) {
             {/* The small copy is plenty for a preview */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={imageUrl(url, 'small')}
+              src={imageUrl(url, 'thumb')}
               alt=''
               className='size-full object-cover'
             />
@@ -252,7 +252,7 @@ export function GalleryField({
             <div className='bg-muted relative aspect-16/10 overflow-hidden rounded-lg'>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={imageUrl(image.url, 'small')}
+                src={imageUrl(image.url, 'thumb')}
                 alt=''
                 className='size-full object-cover'
               />
