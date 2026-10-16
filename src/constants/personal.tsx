@@ -449,3 +449,28 @@ export const PERSONAL_DETAILS = {
     } as const;
   },
 } as const;
+
+// The three short cards under the home page's introduction
+export const WHAT_I_DO = [
+  {
+    area: 'frontend',
+    title: 'Interfaces',
+    description:
+      'Fast, accessible interfaces that hold up on every screen size, built as components that are easy to change later.',
+    tools: ['TypeScript', 'React', 'Next.js', 'Tailwind CSS', 'shadcn/ui'],
+  },
+  {
+    area: 'backend',
+    title: 'APIs and data',
+    description:
+      'Servers, sign-in and data models that stay simple as the product grows, with Postgres underneath.',
+    tools: ['Node.js', 'Bun', 'NestJS', 'PostgreSQL', 'Redis', 'Prisma'],
+  },
+  {
+    area: 'delivery',
+    title: 'Design to deployment',
+    description:
+      'From the first Figma frame to a containerised app running on my own server.',
+    tools: ['Figma', 'Docker', 'Git', 'Linux VPS'],
+  },
+] as const;

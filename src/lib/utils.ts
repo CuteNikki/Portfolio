@@ -105,3 +105,34 @@ export function slugify(text: string, maxLength = 80): string {
 export function proxiedAvatarUrl(url: string): string {
   return url.replace(/^https:\/\/cdn\.discordapp\.com\//, '/discord-cdn/');
 }
+
+/**
+ * Formats a date the short way the cards show it, e.g. "16 Sep 2026".
+ *
+ * @param date - The date to format.
+ * @returns The formatted date, in UTC so the server and browser agree.
+ */
+export function formatShortDate(date: Date | string): string {
+  // Built from parts: British English writes "Sept", American English puts the month first
+  const parts = new Intl.DateTimeFormat('en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).formatToParts(new Date(date));
+  const part = (type: string) => parts.find((p) => p.type === type)?.value;
+
+  return `${part('day')} ${part('month')} ${part('year')}`;
+}
+
+/**
+ * Picks one of the five chart colours for a title, so every project keeps the same colour wherever it's shown.
+ *
+ * @param text - The text to pick a colour for, e.g. a project's title.
+ * @returns A CSS colour variable, e.g. "var(--chart-3)".
+ */
+export function toneFor(text: string): string {
+  let hash = 0;
+  for (const char of text) hash = (hash * 31 + char.charCodeAt(0)) | 0;
+  return `var(--chart-${(Math.abs(hash) % 5) + 1})`;
+}

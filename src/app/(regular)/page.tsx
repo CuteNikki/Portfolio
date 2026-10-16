@@ -1,16 +1,20 @@
 import { cacheLife } from 'next/cache';
 import Link from 'next/link';
 
-import { ArrowRightIcon } from 'lucide-react';
+import { ArrowRightIcon, BriefcaseIcon, GraduationCapIcon } from 'lucide-react';
 
+import { toPostRow, toProjectCard } from '@/lib/cards';
+import { getPublishedPosts, getPublishedProjects } from '@/lib/data';
 import { formatDate } from '@/lib/utils';
 
+import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
-import { PERSONAL_DETAILS } from '@/constants/personal';
+import { PERSONAL_DETAILS, WHAT_I_DO } from '@/constants/personal';
 
-import { ExperienceTabs } from '@/components/common/experience-tabs';
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { DiscordMenu } from '@/components/navigation/discord-menu';
+import { PostRow } from '@/components/posts/post-row';
+import { FeaturedProjects } from '@/components/projects/featured-projects';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -29,34 +33,46 @@ async function Age() {
   return PERSONAL_DETAILS.age;
 }
 
+const reveal = (index: number) =>
+  ({ '--reveal-index': index }) as React.CSSProperties;
+
 export default function Home() {
   return (
-    <div className='flex w-full flex-col gap-12'>
-      <section className='animate-rise-in flex flex-col gap-6'>
-        <p className='text-primary-text text-sm font-semibold tracking-widest uppercase'>
+    <div className='flex w-full flex-col gap-24 sm:gap-30'>
+      <section className='relative isolate flex flex-col gap-6'>
+        {/* Reaches out of the page's column to the window's edges, and up behind the navbar. `isolate` above keeps it in
+            front of the page background. */}
+        <div
+          aria-hidden
+          className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-160 w-screen -translate-x-1/2 sm:-top-24'
+        />
+        <p className='animate-hero-in text-primary-text pt-6 text-[13px] font-semibold tracking-[0.14em] uppercase sm:pt-10'>
           Portfolio / 2026
         </p>
-        <h1 className='max-w-5xl text-5xl font-bold tracking-tighter text-balance sm:text-7xl lg:text-8xl'>
-          Building useful things for the web.
+        <h1 className='animate-hero-in max-w-5xl text-[44px] leading-[1.04] font-bold tracking-[-0.06em] text-balance delay-1 sm:text-6xl lg:text-[76px]'>
+          Full-stack developer building fast, accessible web apps{' '}
+          <span className='text-primary-text'>from the ground up.</span>
         </h1>
-        <p className='text-muted-foreground max-w-xl text-lg leading-relaxed text-pretty'>
+        <p className='animate-hero-in text-body max-w-2xl text-base leading-[1.75] text-pretty delay-2'>
           I&apos;m {PERSONAL_DETAILS.firstName}, a <Age />
           -year-old {PERSONAL_DETAILS.title.toLowerCase()} based in{' '}
-          {PERSONAL_DETAILS.address.country}. {PERSONAL_DETAILS.description}
+          {PERSONAL_DETAILS.address.country}. I do full-stack development and
+          design, focusing on the intersection of code and user experience.
         </p>
-        <div className='flex flex-wrap items-center gap-3'>
-          <Button asChild variant='default' size='lg'>
-            <Link href='/projects'>
-              View selected work <ArrowRightIcon className='shrink-0' />
+        <div className='animate-hero-in flex flex-wrap items-center gap-3 pt-4 delay-3'>
+          <Button asChild size='lg'>
+            <Link href={LINKS.projects.url}>
+              View projects
+              <ArrowRightIcon className='group-hover/button:translate-x-0.75' />
             </Link>
           </Button>
           <Button asChild variant='outline' size='lg'>
-            <Link href='/contact'>Get in touch</Link>
+            <Link href={LINKS.contact.url}>Get in touch</Link>
           </Button>
         </div>
       </section>
 
-      <ScrollReveal className='scroll-reveal border-border grid gap-8 border-y py-8 lg:grid-cols-2 lg:gap-16'>
+      <ScrollReveal className='scroll-reveal border-border -mt-6 grid gap-8 border-y py-8 sm:-mt-12 lg:grid-cols-2 lg:gap-16'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 1 } as React.CSSProperties}
@@ -106,81 +122,115 @@ export default function Home() {
       </ScrollReveal>
 
       <ScrollReveal className='scroll-reveal'>
-        {/* The tabs say what's in them, but the career and school names below need a section heading above them */}
-        <h2 className='sr-only'>Experience</h2>
-        <ExperienceTabs
-          career={
-            <div
-              data-reveal-item
-              style={{ '--reveal-index': 3 } as React.CSSProperties}
-              className='flex flex-col gap-6'
+        <section aria-labelledby='what-i-do'>
+          <h2 id='what-i-do' className='sr-only'>
+            What I do
+          </h2>
+          <ul className='grid gap-4 md:grid-cols-3'>
+            {WHAT_I_DO.map(({ area, title, description, tools }, index) => (
+              <li
+                key={area}
+                data-reveal-item
+                style={reveal(index)}
+                className='group bg-card hover:border-line-strong flex flex-col gap-3 rounded-2xl border p-7 transition-[border-color,translate] duration-500 ease-(--ease-out-soft) hover:-translate-y-0.5'
+              >
+                <span className='text-muted-foreground group-hover:text-primary-text text-xs transition-colors duration-300'>
+                  {String(index + 1).padStart(2, '0')} / {area}
+                </span>
+                <h3 className='text-lg font-bold tracking-[-0.035em]'>
+                  {title}
+                </h3>
+                <p className='text-body text-sm leading-[1.7]'>{description}</p>
+                <p className='text-muted-foreground mt-auto border-t border-dashed pt-3.5 text-xs leading-[1.8]'>
+                  {tools.join(' · ')}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </ScrollReveal>
+
+      <ScrollReveal className='scroll-reveal'>
+        <section aria-labelledby='projects-heading'>
+          <SelectedProjects />
+          <div className='mt-6 flex justify-center'>
+            <Button asChild variant='outline'>
+              <Link href={LINKS.projects.url}>
+                All projects
+                <ArrowRightIcon className='group-hover/button:translate-x-0.75' />
+              </Link>
+            </Button>
+          </div>
+        </section>
+      </ScrollReveal>
+
+      <ScrollReveal className='scroll-reveal'>
+        <section aria-labelledby='posts-heading'>
+          <div className='mb-4 flex flex-wrap items-baseline justify-between gap-4'>
+            <h2
+              id='posts-heading'
+              className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
             >
-              {PERSONAL_DETAILS.career.map(
-                (
-                  { from, to, title, company, location, description, showDays },
-                  index,
-                ) => (
-                  <div
-                    key={`${title}-${company}`}
-                    data-reveal-item
-                    style={
-                      { '--reveal-index': index + 2 } as React.CSSProperties
-                    }
-                    className='grid gap-2 pb-6 sm:grid-cols-[1fr_auto]'
-                  >
-                    <div>
-                      <h3 className='text-xl font-semibold'>{company}</h3>
-                      <p className='text-muted-foreground text-sm'>
-                        {title} · {location}
-                      </p>
-                      <p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>
-                        {description}
-                      </p>
-                    </div>
-                    <time className='text-muted-foreground text-sm'>
-                      {formatDate(from, showDays)} —{' '}
-                      {typeof to === 'string' &&
-                      to.toLowerCase() === 'present' ? (
-                        <span>{formatDate(to)}</span>
-                      ) : (
-                        formatDate(to, showDays)
-                      )}
-                    </time>
-                  </div>
-                ),
+              Latest posts
+            </h2>
+            <Link
+              href={LINKS.posts.url}
+              className='nav-underline text-muted-foreground hover:text-foreground text-sm transition-colors'
+            >
+              all posts →
+            </Link>
+          </div>
+          <LatestPosts />
+        </section>
+      </ScrollReveal>
+
+      <ScrollReveal className='scroll-reveal'>
+        <section aria-labelledby='experience-heading'>
+          <h2
+            id='experience-heading'
+            className='mb-7 text-[32px] leading-tight font-bold tracking-[-0.05em]'
+          >
+            Experience
+          </h2>
+          <div className='grid items-start gap-4 lg:grid-cols-2'>
+            <ExperienceCard
+              title='Career'
+              icon={<BriefcaseIcon />}
+              index={0}
+              entries={PERSONAL_DETAILS.career.map(
+                ({
+                  from,
+                  to,
+                  title,
+                  company,
+                  location,
+                  description,
+                  showDays,
+                }) => ({
+                  name: company,
+                  role: `${title} · ${location}`,
+                  description,
+                  from: formatDate(from, showDays),
+                  to: typeof to === 'string' ? to : formatDate(to, showDays),
+                }),
               )}
-            </div>
-          }
-          education={
-            <div className='flex flex-col gap-6'>
-              {PERSONAL_DETAILS.education.map(
-                ({ from, to, title, school, location, description }, index) => (
-                  <div
-                    key={`${title}-${school}`}
-                    data-reveal-item
-                    style={
-                      { '--reveal-index': index + 2 } as React.CSSProperties
-                    }
-                    className='grid gap-2 pb-6 sm:grid-cols-[1fr_auto]'
-                  >
-                    <div>
-                      <h3 className='text-xl font-semibold'>{school}</h3>
-                      <p className='text-muted-foreground text-sm'>
-                        {title} · {location}
-                      </p>
-                      <p className='text-muted-foreground mt-3 max-w-xl text-sm leading-relaxed'>
-                        {description}
-                      </p>
-                    </div>
-                    <time className='text-muted-foreground text-sm'>
-                      {formatDate(from)} — {formatDate(to)}
-                    </time>
-                  </div>
-                ),
+            />
+            <ExperienceCard
+              title='Education'
+              icon={<GraduationCapIcon />}
+              index={1}
+              entries={PERSONAL_DETAILS.education.map(
+                ({ from, to, title, school, location, description }) => ({
+                  name: school,
+                  role: `${title} · ${location}`,
+                  description,
+                  from: formatDate(from),
+                  to: typeof to === 'string' ? to : formatDate(to),
+                }),
               )}
-            </div>
-          }
-        />
+            />
+          </div>
+        </section>
       </ScrollReveal>
 
       <ScrollReveal className='scroll-reveal'>
@@ -226,6 +276,151 @@ export default function Home() {
           </div>
         </section>
       </ScrollReveal>
+
+      <ScrollReveal className='scroll-reveal'>
+        <section
+          aria-labelledby='contact-heading'
+          className='bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-[20px] border p-8 sm:p-12 lg:flex-row lg:items-end lg:justify-between'
+        >
+          <div
+            aria-hidden
+            className='grid-backdrop absolute inset-0 -z-10 opacity-70'
+          />
+          <div className='max-w-xl'>
+            <h2
+              id='contact-heading'
+              className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
+            >
+              Have a project in mind?
+            </h2>
+            <p className='text-body mt-3 text-sm'>
+              Whether you have a question, want to collaborate or just want to
+              say hi, I&apos;d love to hear from you.
+            </p>
+          </div>
+          <div className='flex flex-wrap gap-2.5'>
+            <Button asChild size='lg'>
+              <Link href={LINKS.contact.url}>
+                Contact me
+                <ArrowRightIcon className='group-hover/button:translate-x-0.75' />
+              </Link>
+            </Button>
+            {PERSONAL_DETAILS.socials
+              .filter(
+                ({ platform }) =>
+                  platform === 'GitHub' || platform === 'LinkedIn',
+              )
+              .map(({ platform, url }) => (
+                <Button key={platform} asChild variant='outline' size='lg'>
+                  <a href={url} target='_blank' rel='noopener noreferrer'>
+                    {platform}
+                  </a>
+                </Button>
+              ))}
+          </div>
+        </section>
+      </ScrollReveal>
+    </div>
+  );
+}
+
+async function SelectedProjects() {
+  const projects = await getPublishedProjects();
+
+  const heading = (
+    <h2
+      id='projects-heading'
+      className='text-[32px] leading-tight font-bold tracking-[-0.05em]'
+    >
+      Selected projects
+    </h2>
+  );
+
+  if (projects.length === 0) {
+    return (
+      <>
+        {heading}
+        <p className='text-muted-foreground mt-4'>
+          No projects yet. Check back later!
+        </p>
+      </>
+    );
+  }
+
+  return (
+    <FeaturedProjects
+      projects={projects.map(toProjectCard)}
+      heading={heading}
+    />
+  );
+}
+
+async function LatestPosts() {
+  const posts = (await getPublishedPosts()).slice(0, 3);
+
+  if (posts.length === 0) {
+    return (
+      <p className='text-muted-foreground'>No posts yet. Check back later!</p>
+    );
+  }
+
+  return (
+    <div className='border-t'>
+      {posts.map((post) => (
+        <PostRow key={post.id} post={toPostRow(post)} />
+      ))}
+    </div>
+  );
+}
+
+function ExperienceCard({
+  title,
+  icon,
+  index,
+  entries,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  index: number;
+  entries: {
+    name: string;
+    role: string;
+    description: string;
+    from: string;
+    to: string;
+  }[];
+}) {
+  return (
+    <div
+      data-reveal-item
+      style={reveal(index)}
+      className='bg-card rounded-[18px] border p-2'
+    >
+      <h3 className='[&_svg]:text-primary-text flex items-center gap-2.5 px-4.5 pt-4 pb-3 text-[17px] font-bold tracking-[-0.03em] [&_svg]:size-4.5'>
+        {icon}
+        {title}
+      </h3>
+      <ul>
+        {entries.map(({ name, role, description, from, to }) => (
+          <li
+            key={`${name}-${role}`}
+            className='hover:bg-muted/60 flex flex-col gap-1 rounded-xl px-4.5 py-4 transition-colors'
+          >
+            <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
+              <span className='text-base font-bold tracking-[-0.02em]'>
+                {name}
+              </span>
+              <span className='text-muted-foreground text-xs'>
+                {from} — {to}
+              </span>
+            </div>
+            <span className='text-muted-foreground text-[13px]'>{role}</span>
+            <p className='text-body mt-1 text-[13px] leading-[1.65]'>
+              {description}
+            </p>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
