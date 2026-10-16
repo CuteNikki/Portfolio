@@ -34,7 +34,7 @@ export function ProjectCard({
     <Link
       href={project.href}
       className={cn(
-        'card-lift group bg-card flex flex-col overflow-hidden rounded-[18px] border',
+        'card-lift group bg-card flex flex-col overflow-hidden rounded-xl border',
         featured && 'lg:col-span-2',
       )}
     >

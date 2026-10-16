@@ -55,7 +55,7 @@ export function FeaturedProjects({
                   aria-pressed={on}
                   onClick={() => setTag(t)}
                   className={cn(
-                    'h-9 rounded-[10px] border px-3.5 text-[13px] transition-colors',
+                    'h-9 rounded-lg border px-3.5 text-[13px] transition-colors',
                     on
                       ? 'border-primary-text bg-primary-soft text-foreground'
                       : 'bg-card text-muted-foreground hover:border-line-strong hover:text-foreground',

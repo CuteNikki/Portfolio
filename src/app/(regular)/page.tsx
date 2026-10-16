@@ -72,7 +72,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollReveal className='scroll-reveal border-border -mt-6 grid gap-8 border-y py-8 sm:-mt-12 lg:grid-cols-2 lg:gap-16'>
+      <ScrollReveal className='scroll-reveal -mt-6 grid gap-8 py-2 sm:-mt-12 lg:grid-cols-2 lg:gap-16'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 1 } as React.CSSProperties}
@@ -132,7 +132,7 @@ export default function Home() {
                 key={area}
                 data-reveal-item
                 style={reveal(index)}
-                className='group bg-card hover:border-line-strong flex flex-col gap-3 rounded-2xl border p-7 transition-[border-color,translate] duration-500 ease-(--ease-out-soft) hover:-translate-y-0.5'
+                className='group bg-card hover:border-line-strong flex flex-col gap-3 rounded-xl border p-7 transition-[border-color,translate] duration-500 ease-(--ease-out-soft) hover:-translate-y-0.5'
               >
                 <span className='text-muted-foreground group-hover:text-primary-text text-xs transition-colors duration-300'>
                   {String(index + 1).padStart(2, '0')} / {area}
@@ -141,7 +141,7 @@ export default function Home() {
                   {title}
                 </h3>
                 <p className='text-body text-sm leading-[1.7]'>{description}</p>
-                <p className='text-muted-foreground mt-auto border-t border-dashed pt-3.5 text-xs leading-[1.8]'>
+                <p className='text-muted-foreground mt-auto pt-2 text-xs leading-[1.8]'>
                   {tools.join(' · ')}
                 </p>
               </li>
@@ -234,7 +234,7 @@ export default function Home() {
       </ScrollReveal>
 
       <ScrollReveal className='scroll-reveal'>
-        <section className='border-border flex flex-col gap-6 border-t pt-8'>
+        <section className='flex flex-col gap-6'>
           <div className='flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between'>
             <div>
               <p className='text-primary-text text-sm font-semibold tracking-widest uppercase'>
@@ -280,7 +280,7 @@ export default function Home() {
       <ScrollReveal className='scroll-reveal'>
         <section
           aria-labelledby='contact-heading'
-          className='bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-[20px] border p-8 sm:p-12 lg:flex-row lg:items-end lg:justify-between'
+          className='bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-xl border p-8 sm:p-12 lg:flex-row lg:items-end lg:justify-between'
         >
           <div
             aria-hidden
@@ -365,7 +365,7 @@ async function LatestPosts() {
   }
 
   return (
-    <div className='border-t'>
+    <div className='flex flex-col gap-2'>
       {posts.map((post) => (
         <PostRow key={post.id} post={toPostRow(post)} />
       ))}
@@ -394,7 +394,7 @@ function ExperienceCard({
     <div
       data-reveal-item
       style={reveal(index)}
-      className='bg-card rounded-[18px] border p-2'
+      className='bg-card rounded-xl border p-2'
     >
       <h3 className='[&_svg]:text-primary-text flex items-center gap-2.5 px-4.5 pt-4 pb-3 text-[17px] font-bold tracking-[-0.03em] [&_svg]:size-4.5'>
         {icon}
@@ -404,7 +404,7 @@ function ExperienceCard({
         {entries.map(({ name, role, description, from, to }) => (
           <li
             key={`${name}-${role}`}
-            className='hover:bg-muted/60 flex flex-col gap-1 rounded-xl px-4.5 py-4 transition-colors'
+            className='hover:bg-muted/60 flex flex-col gap-1 rounded-lg px-4.5 py-4 transition-colors'
           >
             <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
               <span className='text-base font-bold tracking-[-0.02em]'>

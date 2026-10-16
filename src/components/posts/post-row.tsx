@@ -19,7 +19,7 @@ export function PostRow({ post }: { post: PostRowData }) {
   return (
     <Link
       href={post.href}
-      className='group flex flex-col gap-5 border-b py-6 sm:flex-row sm:items-center sm:gap-8'
+      className='group hover:bg-muted/50 -mx-3 flex flex-col gap-5 rounded-xl p-3 transition-colors sm:flex-row sm:items-center sm:gap-8'
     >
       <div
         className={cn(
