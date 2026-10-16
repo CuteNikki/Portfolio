@@ -9,15 +9,19 @@ import {
 
 export function UserHover({
   user,
+  className,
   children,
 }: {
   user: PublicUser;
+  // For the trigger, e.g. to let a long name shrink
+  className?: string;
   children: React.ReactNode;
 }) {
   return (
     <HoverCard>
-      <HoverCardTrigger>{children}</HoverCardTrigger>
-      <HoverCardContent className='flex min-w-80 items-center justify-center gap-2 p-4'>
+      <HoverCardTrigger className={className}>{children}</HoverCardTrigger>
+      {/* Never wider than a small phone's screen */}
+      <HoverCardContent className='flex w-80 max-w-[calc(100vw-2rem)] items-center justify-center gap-2 p-4'>
         <Avatar>
           <AvatarImage src={user.avatarUrl} alt={user.username} />
           <AvatarFallback>

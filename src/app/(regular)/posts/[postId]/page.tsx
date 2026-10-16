@@ -236,7 +236,7 @@ async function PostContent({
       <ScrollReveal className='scroll-reveal mx-auto w-full max-w-3xl'>
         <section
           aria-labelledby='comments-heading'
-          className='bg-card mt-6 flex flex-col gap-6 rounded-xl border p-6 sm:p-8'
+          className='bg-card mt-6 flex flex-col gap-6 rounded-xl border p-5 sm:p-8'
         >
           <h2
             id='comments-heading'

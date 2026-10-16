@@ -67,15 +67,15 @@ export function Comment({
 
         <div className='flex w-full min-w-0 flex-col'>
           <div className='xs:gap-2 xs:flex-row xs:items-center flex flex-col justify-between'>
-            <UserHover user={comment.author}>
-              <span className='truncate text-sm font-bold'>
+            <UserHover user={comment.author} className='block min-w-0'>
+              <span className='block truncate text-sm font-bold'>
                 {comment.author.displayName || `@${comment.author.username}`}
               </span>
             </UserHover>
             <div className='flex items-center gap-2'>
               <time
                 dateTime={new Date(comment.createdAt).toISOString()}
-                className='text-muted-foreground text-xs'
+                className='text-muted-foreground text-xs whitespace-nowrap'
               >
                 {formatShortDate(comment.createdAt)}
               </time>
