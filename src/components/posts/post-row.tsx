@@ -13,6 +13,8 @@ export interface PostRowData {
   date: string;
   time: number;
   views: number;
+  // Reading time
+  minutes: number;
   coverUrl: string | null;
   // Unpublished posts only writers see
   isDraft: boolean;
@@ -63,9 +65,19 @@ export function PostRow({
         )}
       </div>
       <div className='flex min-w-0 flex-col gap-2'>
-        <span className='text-muted-foreground flex items-center gap-2 text-xs'>
+        <span className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs'>
           {post.isDraft && <Badge>Draft</Badge>}
           <time dateTime={new Date(post.time).toISOString()}>{post.date}</time>
+          <span aria-hidden>·</span>
+          <span>{post.minutes} min read</span>
+          {!post.isDraft && (
+            <>
+              <span aria-hidden>·</span>
+              <span>
+                {post.views} {post.views === 1 ? 'view' : 'views'}
+              </span>
+            </>
+          )}
         </span>
         <h3 className='text-xl leading-snug font-bold tracking-[-0.04em] text-balance'>
           <span className='title-sweep'>{post.title}</span>

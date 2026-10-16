@@ -1,4 +1,4 @@
-import { formatShortDate, toExcerpt } from '@/lib/utils';
+import { formatShortDate, readingMinutes, toExcerpt } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 
@@ -61,6 +61,7 @@ export function toPostRow(post: PostLike): PostRowData {
     date: formatShortDate(date),
     time: date.getTime(),
     views: post.views,
+    minutes: readingMinutes(post.content),
     coverUrl: post.coverUrl ?? null,
     isDraft: post.publishedAt === null,
   };
