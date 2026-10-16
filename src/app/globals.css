@@ -324,18 +324,6 @@
   .nav-underline[aria-current='page']::after {
     transform: scaleX(1);
   }
-  /* A title's underline sweeps in while its card or row is hovered */
-  .title-sweep {
-    background-image: linear-gradient(currentColor, currentColor);
-    background-size: 0 1px;
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    transition: background-size 500ms var(--ease-out-soft);
-  }
-  .group:hover .title-sweep,
-  .group:focus-visible .title-sweep {
-    background-size: 100% 1px;
-  }
   /* Project cards lift, and a short violet line lights up along their top edge */
   .card-lift {
     position: relative;

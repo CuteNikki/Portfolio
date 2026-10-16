@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+import { ArrowUpRightIcon } from 'lucide-react';
+
 import { cn, toneFor } from '@/lib/utils';
 
 import { StoredImage } from '@/components/common/stored-image';
@@ -20,8 +22,8 @@ export interface PostRowData {
   isDraft: boolean;
 }
 
-// A post in a list, in a card like the projects': its cover on the left, then the date, title and excerpt. The title's
-// underline sweeps in on hover.
+// A post in a list, in a card like the projects': its cover on the left, then the date, title and excerpt. An arrow
+// slides in at the top right on hover, as on the project cards.
 export function PostRow({
   post,
   revealIndex,
@@ -65,23 +67,31 @@ export function PostRow({
           </span>
         )}
       </div>
-      <div className='flex min-w-0 flex-col gap-2 px-2 pb-2 md:px-0 md:pr-4 md:pb-0'>
-        <span className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs'>
-          {post.isDraft && <Badge>Draft</Badge>}
-          <time dateTime={new Date(post.time).toISOString()}>{post.date}</time>
-          <span aria-hidden>·</span>
-          <span>{post.minutes} min read</span>
-          {!post.isDraft && (
-            <>
-              <span aria-hidden>·</span>
-              <span>
-                {post.views} {post.views === 1 ? 'view' : 'views'}
-              </span>
-            </>
-          )}
-        </span>
+      <div className='flex min-w-0 flex-1 flex-col gap-2 px-2 pb-2 md:px-0 md:pr-4 md:pb-0'>
+        <div className='flex items-start justify-between gap-4'>
+          <span className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs'>
+            {post.isDraft && <Badge>Draft</Badge>}
+            <time dateTime={new Date(post.time).toISOString()}>
+              {post.date}
+            </time>
+            <span aria-hidden>·</span>
+            <span>{post.minutes} min read</span>
+            {!post.isDraft && (
+              <>
+                <span aria-hidden>·</span>
+                <span>
+                  {post.views} {post.views === 1 ? 'view' : 'views'}
+                </span>
+              </>
+            )}
+          </span>
+          <ArrowUpRightIcon
+            aria-hidden
+            className='text-primary-text size-4 shrink-0 -translate-x-1 translate-y-1 opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-0 group-hover:opacity-100 group-focus-visible:translate-0 group-focus-visible:opacity-100'
+          />
+        </div>
         <h3 className='text-xl leading-snug font-bold tracking-[-0.04em] text-balance'>
-          <span className='title-sweep'>{post.title}</span>
+          {post.title}
         </h3>
         <p className='text-body max-w-2xl text-sm'>{post.excerpt}</p>
       </div>
