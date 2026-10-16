@@ -5,7 +5,6 @@ import { Role } from '@/generated/prisma/enums';
 import { getCurrentSession } from '@/lib/auth';
 
 import { AccountMenu } from '@/components/navigation/account-menu';
-import { MobileMenu } from '@/components/navigation/mobile-menu';
 
 // Reads the session, so it has to sit behind a Suspense boundary. Only the fields the menus show reach the browser:
 // the full user also holds the Discord access and refresh tokens.
@@ -25,7 +24,7 @@ export async function AccountButton() {
   return (
     <>
       <AccountMenu user={user} className='hidden sm:inline-flex' />
-      <MobileMenu user={user} className='sm:hidden' />
+      <AccountMenu user={user} withPages className='sm:hidden' />
     </>
   );
 }

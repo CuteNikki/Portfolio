@@ -7,7 +7,7 @@ import {
   AccountButton,
   AccountButtonPlaceholder,
 } from '@/components/navigation/account-button';
-import { MobileMenu } from '@/components/navigation/mobile-menu';
+import { AccountMenu } from '@/components/navigation/account-menu';
 import { NavLinks } from '@/components/navigation/nav-links';
 import { ThemeSwitcher } from '@/components/theme/switcher';
 
@@ -37,7 +37,12 @@ export function Navbar({ showAccount = true }: { showAccount?: boolean }) {
               <AccountButton />
             </Suspense>
           ) : (
-            <MobileMenu user={null} showAccount={false} className='sm:hidden' />
+            <AccountMenu
+              user={null}
+              withPages
+              showAccount={false}
+              className='sm:hidden'
+            />
           )}
         </div>
       </div>
