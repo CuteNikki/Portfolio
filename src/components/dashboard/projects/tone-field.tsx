@@ -1,8 +1,10 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
+
+import { Input } from '@/components/ui/input';
 
 // All five colours in one swatch, for Auto before there's a cover to match
 export const ALL_TONES =
@@ -45,8 +47,17 @@ export function ToneField({
   const [custom, setCustom] = useState(
     isCustom(defaultValue) ? defaultValue : '#a78bfa',
   );
+  // What's typed in the hex field, which may be half-finished; it only becomes the colour once it's a whole one
+  const [typed, setTyped] = useState(custom);
+  const picker = useRef<HTMLInputElement>(null);
   const labelId = useId();
   const group = `${labelId}-tone`;
+
+  const pickCustom = (colour: string) => {
+    setCustom(colour);
+    setTyped(colour);
+    setTone(colour);
+  };
 
   const options = [
     { value: null, name: 'Auto', colour: autoTone },
@@ -86,30 +97,54 @@ export function ToneField({
           </label>
         ))}
 
-        {/* Any colour: choosing it selects Custom, and the swatch opens the browser's colour picker */}
+        {/* Any colour: choosing it selects Custom and opens the browser's colour picker straight away */}
         <label className={choice(isCustom(tone))}>
           <input
             type='radio'
             name={group}
             checked={isCustom(tone)}
-            onChange={() => setTone(custom)}
+            onChange={() => {
+              setTone(custom);
+              // The picker below only exists once Custom is selected, so it opens on the next frame
+              requestAnimationFrame(() => picker.current?.showPicker?.());
+            }}
             className='sr-only'
           />
-          <span className='relative size-4 overflow-hidden rounded-full'>
-            <input
-              type='color'
-              aria-label='Custom colour'
-              value={custom}
-              onChange={(event) => {
-                setCustom(event.target.value);
-                setTone(event.target.value);
-              }}
-              className='absolute -inset-2 size-8 cursor-pointer border-0 p-0'
-            />
-          </span>
+          <span
+            aria-hidden
+            className='size-4 rounded-full'
+            style={{ background: custom }}
+          />
           Custom
         </label>
       </div>
+
+      {isCustom(tone) && (
+        <div className='flex items-center gap-2'>
+          <input
+            ref={picker}
+            type='color'
+            aria-label='Custom colour'
+            value={custom}
+            onChange={(event) => pickCustom(event.target.value)}
+            className='size-10 shrink-0 cursor-pointer rounded-lg border bg-transparent p-1'
+          />
+          <Input
+            aria-label='Custom colour as a hex code'
+            value={typed}
+            maxLength={7}
+            spellCheck={false}
+            onChange={(event) => {
+              const value = event.target.value.trim();
+              setTyped(value);
+              if (/^#[0-9a-f]{6}$/i.test(value))
+                pickCustom(value.toLowerCase());
+            }}
+            aria-invalid={!/^#[0-9a-f]{6}$/i.test(typed)}
+            className='w-32 font-mono'
+          />
+        </div>
+      )}
       <span className='text-muted-foreground text-xs'>
         Tints the project’s cards and thumbnails. Auto matches the cover’s main
         colour.
