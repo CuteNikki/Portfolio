@@ -21,14 +21,29 @@ export function RevealOnScroll() {
       { rootMargin: '0px 0px -8% 0px' },
     );
 
+    // React marks the elements it has taken over. Changing one before that would show as a hydration mismatch, which
+    // streamed parts of a page, such as a project's content, can still be at this point; those are tried again shortly.
+    const hydrated = (element: Element) =>
+      Object.keys(element).some((key) => key.startsWith('__reactFiber$'));
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    // Gives up after about five seconds; whatever is left keeps the animation it started with
+    let tries = 0;
+
     const hold = () => {
+      let pending = false;
       for (const element of document.querySelectorAll<HTMLElement>(
         '[data-reveal=""]',
       )) {
+        if (!hydrated(element)) {
+          pending = true;
+          continue;
+        }
         const below = element.getBoundingClientRect().top > innerHeight;
         element.dataset.reveal = below ? 'waiting' : 'seen';
         if (below) reveal.observe(element);
       }
+      clearTimeout(retry);
+      if (pending && tries++ < 50) retry = setTimeout(hold, 100);
     };
 
     hold();
@@ -36,6 +51,7 @@ export function RevealOnScroll() {
     added.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      clearTimeout(retry);
       added.disconnect();
       reveal.disconnect();
     };
