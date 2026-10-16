@@ -15,7 +15,12 @@ import { LINKS } from '@/constants/links';
 import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 import { getCurrentSession } from '@/lib/auth';
-import { getDraftPost, getPublishedPost, getPublishedPosts } from '@/lib/data';
+import {
+  getDraftPost,
+  getPublishedPost,
+  getPublishedPosts,
+  authorsOf,
+} from '@/lib/data';
 import { toExcerpt } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
@@ -129,14 +134,21 @@ async function PostContent({
           style={{ '--reveal-index': 1 } as React.CSSProperties}
           className='text-muted-foreground mb-10 flex flex-wrap items-center gap-4 border-b pb-8'
         >
-          <UserHover user={post.writer}>
-            <div className='flex items-center gap-2'>
+          {authorsOf(post).length > 0 && (
+            <div className='flex flex-wrap items-center gap-2'>
               <UserIcon className='size-4' />
-              <span className='text-foreground font-medium'>
-                {post.writer.displayName || `@${post.writer.username}`}
-              </span>
+              {authorsOf(post).map((author, index, all) => (
+                <span key={author.id} className='flex items-center'>
+                  <UserHover user={author}>
+                    <span className='text-foreground font-medium'>
+                      {author.displayName || `@${author.username}`}
+                    </span>
+                  </UserHover>
+                  {index < all.length - 1 && <span aria-hidden>,</span>}
+                </span>
+              ))}
             </div>
-          </UserHover>
+          )}
           <div className='flex items-center gap-2'>
             <CalendarIcon className='size-4' />
             <time dateTime={post.createdAt.toISOString()}>

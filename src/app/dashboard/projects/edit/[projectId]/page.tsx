@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { PencilLineIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
+import { getAuthorOptions } from '@/lib/authors';
 import prisma from '@/lib/prisma';
 
 import { EditProjectForm } from '@/components/dashboard/projects/edit';
@@ -54,6 +55,7 @@ export default async function EditProjectPage({
       where: {
         OR: [{ id: projectId }, { slug: projectId }],
       },
+      include: { authors: { orderBy: { position: 'asc' } } },
     })
     .then((project) => project)
     .catch(() => null);
@@ -74,7 +76,11 @@ export default async function EditProjectPage({
         />
       </CardHeader>
       <CardContent>
-        <EditProjectForm project={project} />
+        <EditProjectForm
+          project={project}
+          authorOptions={await getAuthorOptions()}
+          authorIds={project.authors.map(({ userId }) => userId)}
+        />
       </CardContent>
     </Card>
   );

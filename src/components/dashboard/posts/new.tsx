@@ -8,13 +8,24 @@ import { createPost } from '@/actions/post';
 
 import { LINKS } from '@/constants/links';
 
+import {
+  type AuthorOption,
+  AuthorsField,
+} from '@/components/dashboard/shared/authors-field';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
-export function NewPostForm() {
+export function NewPostForm({
+  authorOptions,
+  authorIds,
+}: {
+  authorOptions: AuthorOption[];
+  // Starts with whoever writes it
+  authorIds: string[];
+}) {
   const [content, setContent] = useState('');
   const [isPending, startTransition] = useTransition();
   // Stays set once saved: the transition ends before the edit page has loaded, and a second click would save a copy
@@ -98,6 +109,8 @@ export function NewPostForm() {
           />
         </div>
       </div>
+
+      <AuthorsField options={authorOptions} defaultValue={authorIds} />
 
       {/* The Editor */}
       <Tabs defaultValue='write' className='w-full'>

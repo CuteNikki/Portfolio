@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { PencilLineIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
+import { getAuthorOptions } from '@/lib/authors';
 import prisma from '@/lib/prisma';
 
 import { EditPostForm } from '@/components/dashboard/posts/edit';
@@ -54,6 +55,7 @@ export default async function EditPostPage({
       where: {
         OR: [{ id: postId }, { slug: postId }],
       },
+      include: { authors: { orderBy: { position: 'asc' } } },
     })
     .then((post) => post)
     .catch(() => null);
@@ -74,7 +76,11 @@ export default async function EditPostPage({
         />
       </CardHeader>
       <CardContent>
-        <EditPostForm post={post} />
+        <EditPostForm
+          post={post}
+          authorOptions={await getAuthorOptions()}
+          authorIds={post.authors.map(({ userId }) => userId)}
+        />
       </CardContent>
     </Card>
   );

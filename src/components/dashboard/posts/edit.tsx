@@ -9,6 +9,10 @@ import type { Post } from '@/generated/prisma/client';
 import { deletePost, updatePost } from '@/actions/post';
 import { LINKS } from '@/constants/links';
 
+import {
+  type AuthorOption,
+  AuthorsField,
+} from '@/components/dashboard/shared/authors-field';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import {
   EditActionButtons,
@@ -19,7 +23,15 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
-export function EditPostForm({ post }: { post: Post }) {
+export function EditPostForm({
+  post,
+  authorOptions,
+  authorIds,
+}: {
+  post: Post;
+  authorOptions: AuthorOption[];
+  authorIds: string[];
+}) {
   const [content, setContent] = useState(post.content);
   const [action, setAction] = useState<EditAction>('save');
   const [isPending, startTransition] = useTransition();
@@ -93,6 +105,8 @@ export function EditPostForm({ post }: { post: Post }) {
           />
         </div>
       </div>
+
+      <AuthorsField options={authorOptions} defaultValue={authorIds} />
 
       {/* Markdown Editor */}
       <Tabs defaultValue='write' className='w-full'>

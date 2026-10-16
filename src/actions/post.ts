@@ -6,6 +6,7 @@ import { headers } from 'next/headers';
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
+import { authorRows, readAuthors } from '@/lib/authors';
 import prisma from '@/lib/prisma';
 import { hit, visitorHash } from '@/lib/rate-limit';
 import { resolveSlug } from '@/lib/slug';
@@ -50,7 +51,10 @@ export async function createPost(formData: FormData) {
       content,
       slug,
       publishedAt: isPublished ? new Date() : null,
-      writerId: session.user.id,
+      // The picked authors, or else whoever creates it
+      authors: {
+        create: authorRows((await readAuthors(formData)) ?? [session.user.id]),
+      },
     },
   });
 
@@ -120,9 +124,15 @@ export async function updatePost(formData: FormData) {
     isPostSlugTaken(id),
   );
 
+  // A form without authors keeps the current ones
+  const authors = await readAuthors(formData);
+
   await prisma.post.update({
     where: { id },
     data: {
+      ...(authors && {
+        authors: { deleteMany: {}, create: authorRows(authors) },
+      }),
       title,
       slug,
       content,

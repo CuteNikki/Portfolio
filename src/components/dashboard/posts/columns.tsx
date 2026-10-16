@@ -45,7 +45,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-type PostWithWriter = Post & { writer: PublicUser };
+type PostWithWriter = Post & { authors: { user: PublicUser }[] };
 
 const PostActions = ({ post }: { post: PostWithWriter }) => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -92,17 +92,6 @@ const PostActions = ({ post }: { post: PostWithWriter }) => {
           >
             <ClipboardCopyIcon />
             Copy URL
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              navigator.clipboard
-                .writeText(post.writerId)
-                .then(() => toast.success('Writer ID copied to clipboard!'))
-                .catch(() => toast.error('Failed to copy Writer ID'));
-            }}
-          >
-            <ClipboardCopyIcon />
-            Copy Writer
           </DropdownMenuItem>
 
           <DropdownMenuItem asChild>
@@ -204,14 +193,15 @@ export const columns: DashboardColumnDef<PostWithWriter>[] = [
     },
   },
   {
-    accessorKey: 'writer.username',
-    id: 'writer',
+    id: 'authors',
+    // Sorts by the first author's name
+    accessorFn: (row) => row.authors[0]?.user.username ?? '',
     header: ({ column }) => (
       <Button
         variant='ghost'
         onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
       >
-        Writer
+        Authors
         {column.getIsSorted() === 'asc' ? (
           <ArrowUpIcon />
         ) : column.getIsSorted() === 'desc' ? (
@@ -221,18 +211,37 @@ export const columns: DashboardColumnDef<PostWithWriter>[] = [
         )}
       </Button>
     ),
-    cell: ({ row }) => (
-      <div className='flex flex-row items-center gap-2'>
-        <Image
-          src={proxiedAvatarUrl(row.original.writer.avatarUrl)}
-          alt='Avatar'
-          className='min-h-6 min-w-6 shrink-0 rounded-full'
-          width={24}
-          height={24}
-        />
-        <span>{row.original.writer.username}</span>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const authors = row.original.authors.map(({ user }) => user);
+      if (authors.length === 0)
+        return <span className='text-muted-foreground'>—</span>;
+
+      return (
+        <div className='flex flex-row items-center gap-2'>
+          <div className='flex -space-x-2'>
+            {authors.slice(0, 3).map((author) => (
+              <Image
+                key={author.id}
+                src={proxiedAvatarUrl(author.avatarUrl)}
+                alt=''
+                className='ring-card min-h-6 min-w-6 shrink-0 rounded-full ring-2'
+                width={24}
+                height={24}
+              />
+            ))}
+          </div>
+          <span>
+            {authors[0].username}
+            {authors.length > 1 && (
+              <span className='text-muted-foreground'>
+                {' '}
+                +{authors.length - 1}
+              </span>
+            )}
+          </span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'views',

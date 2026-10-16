@@ -10,6 +10,10 @@ import { deleteProject, updateProject } from '@/actions/project';
 
 import { LINKS } from '@/constants/links';
 
+import {
+  type AuthorOption,
+  AuthorsField,
+} from '@/components/dashboard/shared/authors-field';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import {
   EditActionButtons,
@@ -20,7 +24,15 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 
-export function EditProjectForm({ project }: { project: Project }) {
+export function EditProjectForm({
+  project,
+  authorOptions,
+  authorIds,
+}: {
+  project: Project;
+  authorOptions: AuthorOption[];
+  authorIds: string[];
+}) {
   const [description, setDescription] = useState(project.description);
   const [action, setAction] = useState<EditAction>('save');
   const [isPending, startTransition] = useTransition();
@@ -97,6 +109,8 @@ export function EditProjectForm({ project }: { project: Project }) {
           />
         </div>
       </div>
+
+      <AuthorsField options={authorOptions} defaultValue={authorIds} />
 
       {/* Description Editor & Preview */}
       <div className='flex flex-col gap-2'>

@@ -70,13 +70,11 @@ export async function deleteUser(formData: FormData) {
     throw new Error('Invalid user: user not found');
   }
 
-  // Comments, posts and projects block deleting their author, so they go first. Replies to the user's comments and
-  // comments on their posts go with them.
+  // Comments block deleting their author, so they go first, along with the replies to them. Posts and projects can
+  // have other authors, so they stay: deleting the user only takes them off the author lists.
   await prisma
     .$transaction([
       prisma.comment.deleteMany({ where: { authorId: targetUserId } }),
-      prisma.post.deleteMany({ where: { writerId: targetUserId } }),
-      prisma.project.deleteMany({ where: { writerId: targetUserId } }),
       prisma.user.delete({ where: { id: targetUserId } }),
     ])
     .catch((error) => {

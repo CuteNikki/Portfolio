@@ -2,6 +2,7 @@ import { NewspaperIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
 import { requireWriter } from '@/lib/auth';
+import { getAuthorOptions } from '@/lib/authors';
 
 import { NewPostForm } from '@/components/dashboard/posts/new';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
@@ -14,7 +15,8 @@ export const { dashboardNewPost: metadata } = SITE_METADATA;
 export const instant = false;
 
 export default async function NewPostPage() {
-  await requireWriter();
+  const session = await requireWriter();
+  const authorOptions = await getAuthorOptions();
 
   return (
     <Card className='w-full max-w-5xl'>
@@ -26,7 +28,10 @@ export default async function NewPostPage() {
         />
       </CardHeader>
       <CardContent>
-        <NewPostForm />
+        <NewPostForm
+          authorOptions={authorOptions}
+          authorIds={[session.user.id]}
+        />
       </CardContent>
     </Card>
   );

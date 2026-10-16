@@ -31,7 +31,12 @@ export default async function PostsPage() {
   const { posts, hasError } = await prisma.post
     .findMany({
       orderBy: { createdAt: 'desc' },
-      include: { writer: { select: PUBLIC_USER_SELECT } },
+      include: {
+        authors: {
+          orderBy: { position: 'asc' },
+          include: { user: { select: PUBLIC_USER_SELECT } },
+        },
+      },
     })
     .then((posts) => ({ posts, hasError: false }))
     .catch((error) => {

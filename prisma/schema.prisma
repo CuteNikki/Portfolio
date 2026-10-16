@@ -33,10 +33,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  sessions Session[]
-  comments Comment[]
-  posts    Post[]
-  projects Project[]
+  sessions       Session[]
+  comments       Comment[]
+  postAuthors    PostAuthor[]
+  projectAuthors ProjectAuthor[]
 }
 
 model Session {
@@ -50,18 +50,32 @@ model Session {
 
 model Post {
   id       String  @id @default(cuid())
-  writerId String
   title    String
   slug     String? @unique
   content  String  @db.Text
   views    Int     @default(0)
+  // The cover picture, stored on our own image server (see src/lib/images.ts)
+  coverUrl String?
 
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  writer   User      @relation(fields: [writerId], references: [id])
+  authors  PostAuthor[]
   comments Comment[]
+}
+
+// The people who wrote a post, in the order they're shown. Removing a user only removes them from the list.
+model PostAuthor {
+  postId   String
+  userId   String
+  position Int    @default(0)
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([postId, userId])
+  @@index([userId])
 }
 
 model Comment {
@@ -83,7 +97,6 @@ model Comment {
 
 model Project {
   id          String  @id @default(cuid())
-  writerId    String
   title       String
   slug        String? @unique
   description String  @db.Text
@@ -95,11 +108,42 @@ model Project {
   repository String?
   website    String?
 
+  // The cover picture and further pictures, stored on our own image server (see src/lib/images.ts)
+  coverUrl String?
+  images   ProjectImage[]
+
   publishedAt DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  writer User @relation(fields: [writerId], references: [id])
+  authors ProjectAuthor[]
+}
+
+// The people who made a project, in the order they're shown. Removing a user only removes them from the list.
+model ProjectAuthor {
+  projectId String
+  userId    String
+  position  Int    @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, userId])
+  @@index([userId])
+}
+
+// A project's pictures after the cover, in the order they're shown
+model ProjectImage {
+  id        String @id @default(cuid())
+  projectId String
+  url       String
+  // Describes the picture for screen readers
+  alt       String @default("")
+  position  Int    @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, position])
 }
 
 // Fixed-window counters for rate limits, e.g. contact form sends per visitor or one counted view per visitor and post.

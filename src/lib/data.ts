@@ -21,8 +21,14 @@ export type PublicUser = Prisma.UserGetPayload<{
   select: typeof PUBLIC_USER_SELECT;
 }>;
 
+// A post's or project's authors in the order they're shown, with only their public fields
+const AUTHORS = {
+  orderBy: { position: 'asc' },
+  include: { user: { select: PUBLIC_USER_SELECT } },
+} as const;
+
 const POST_INCLUDE = {
-  writer: { select: PUBLIC_USER_SELECT },
+  authors: AUTHORS,
   comments: {
     include: { author: { select: PUBLIC_USER_SELECT } },
     orderBy: { createdAt: 'desc' },
@@ -30,8 +36,16 @@ const POST_INCLUDE = {
 } satisfies Prisma.PostInclude;
 
 const PROJECT_INCLUDE = {
-  writer: { select: PUBLIC_USER_SELECT },
+  authors: AUTHORS,
+  images: { orderBy: { position: 'asc' } },
 } satisfies Prisma.ProjectInclude;
+
+/**
+ * The authors of a post or project as users, in the order they're shown.
+ */
+export function authorsOf(item: { authors: { user: PublicUser }[] }) {
+  return item.authors.map(({ user }) => user);
+}
 
 const bySlugOrId = (idOrSlug: string) => ({
   OR: [{ id: idOrSlug }, { slug: idOrSlug }],
@@ -49,7 +63,7 @@ export async function getPublishedPosts() {
   return prisma.post.findMany({
     where: { publishedAt: { not: null } },
     orderBy: { createdAt: 'desc' },
-    include: { writer: { select: PUBLIC_USER_SELECT } },
+    include: { authors: AUTHORS },
   });
 }
 
@@ -96,7 +110,7 @@ export async function getDraftPosts() {
   return prisma.post.findMany({
     where: { publishedAt: null },
     orderBy: { createdAt: 'desc' },
-    include: { writer: { select: PUBLIC_USER_SELECT } },
+    include: { authors: AUTHORS },
   });
 }
 

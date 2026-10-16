@@ -5,6 +5,7 @@ import { revalidatePath, updateTag } from 'next/cache';
 import { Role } from '@/generated/prisma/enums';
 
 import { getCurrentSession } from '@/lib/auth';
+import { authorRows, readAuthors } from '@/lib/authors';
 import prisma from '@/lib/prisma';
 import { resolveSlug } from '@/lib/slug';
 
@@ -71,7 +72,10 @@ export async function createProject(formData: FormData) {
       technologies,
       tags,
       createdAt,
-      writerId: session.user.id,
+      // The picked authors, or else whoever creates it
+      authors: {
+        create: authorRows((await readAuthors(formData)) ?? [session.user.id]),
+      },
       publishedAt: isPublished ? new Date() : null,
     },
   });
@@ -151,9 +155,15 @@ export async function updateProject(formData: FormData) {
     isProjectSlugTaken(id),
   );
 
+  // A form without authors keeps the current ones
+  const authors = await readAuthors(formData);
+
   await prisma.project.update({
     where: { id },
     data: {
+      ...(authors && {
+        authors: { deleteMany: {}, create: authorRows(authors) },
+      }),
       title,
       slug,
       description,

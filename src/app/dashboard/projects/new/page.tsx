@@ -2,6 +2,7 @@ import { PresentationIcon } from 'lucide-react';
 
 import { SITE_METADATA } from '@/constants/metadata';
 import { requireWriter } from '@/lib/auth';
+import { getAuthorOptions } from '@/lib/authors';
 
 import { NewProjectForm } from '@/components/dashboard/projects/new';
 import { DashboardHeader } from '@/components/dashboard/shared/header';
@@ -14,7 +15,8 @@ export const { dashboardNewProject: metadata } = SITE_METADATA;
 export const instant = false;
 
 export default async function NewProjectPage() {
-  await requireWriter();
+  const session = await requireWriter();
+  const authorOptions = await getAuthorOptions();
 
   return (
     <Card className='w-full max-w-5xl'>
@@ -26,7 +28,10 @@ export default async function NewProjectPage() {
         />
       </CardHeader>
       <CardContent>
-        <NewProjectForm />
+        <NewProjectForm
+          authorOptions={authorOptions}
+          authorIds={[session.user.id]}
+        />
       </CardContent>
     </Card>
   );
