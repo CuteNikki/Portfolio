@@ -66,7 +66,7 @@ export async function generateMetadata({
       type: 'article',
       title: post.title,
       url: path,
-      publishedTime: (post.publishedAt ?? post.createdAt).toISOString(),
+      publishedTime: post.createdAt.toISOString(),
       modifiedTime: post.updatedAt.toISOString(),
       authors: authorsOf(post).map(({ name }) => name),
     },
@@ -104,7 +104,8 @@ async function PostContent({
   }
 
   const authors = authorsOf(post);
-  const date = post.publishedAt ?? post.createdAt;
+  // The post's own date from its form, not when it went up on this site
+  const date = post.createdAt;
   const headings = headingsOf(post.content);
   const path = LINKS.postWithSlugOrId(post.slug ?? post.id).url;
 

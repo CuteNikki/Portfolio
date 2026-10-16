@@ -60,7 +60,8 @@ export function toProjectCard(project: ProjectLike): ProjectCardData {
 }
 
 export function toPostRow(post: PostLike): PostRowData {
-  const date = post.publishedAt ?? post.createdAt;
+  // The post's own date from its form, not when it went up on this site
+  const date = post.createdAt;
 
   return {
     id: post.id,

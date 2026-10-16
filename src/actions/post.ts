@@ -9,6 +9,7 @@ import { Role } from '@/generated/prisma/enums';
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
+import { readDate } from '@/lib/form-date';
 import { readCover, removedImages } from '@/lib/form-images';
 import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
@@ -45,6 +46,10 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
     return fail('Title and content are required.');
   }
 
+  // The post's own date, shown on the site; today when left empty
+  const createdAt = readDate(formData.get('date'));
+  if (createdAt === null) return fail('Please enter a valid date.');
+
   const slug = await resolveSlug(
     formData.get('slug'),
     title,
@@ -58,6 +63,7 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
       slug,
       coverUrl: readCover(formData) ?? null,
       thumbnailUrl: readCover(formData, 'thumbnailUrl') ?? null,
+      createdAt,
       publishedAt: isPublished ? new Date() : null,
       // The picked authors, or else whoever creates it
       authors: {
@@ -126,6 +132,10 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
     return fail('All fields are required.');
   }
 
+  // The post's own date; a form without a date field keeps the current one
+  const createdAt = readDate(formData.get('date'));
+  if (createdAt === null) return fail('Please enter a valid date.');
+
   const currentPost = await prisma.post.findFirst({
     where: { id },
     select: { publishedAt: true, coverUrl: true, thumbnailUrl: true },
@@ -157,6 +167,7 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
       title,
       slug,
       content,
+      createdAt,
       // Keep the original publish date when updating an already published post
       publishedAt: isPublished ? (currentPost.publishedAt ?? new Date()) : null,
     },

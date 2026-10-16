@@ -142,6 +142,13 @@ export function NewPostForm({
               description='Save a draft first or publish right away'
               className='order-last xl:order-first'
             >
+              <Field
+                label='Date'
+                htmlFor='date'
+                hint='Leave empty to use today’s date.'
+              >
+                <Input id='date' name='date' type='date' />
+              </Field>
               <NewActionButtons
                 isPending={isPending || isSaved}
                 isMissingRequiredFields={!content.trim()}

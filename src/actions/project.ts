@@ -8,6 +8,7 @@ import { Role } from '@/generated/prisma/enums';
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
+import { readDate } from '@/lib/form-date';
 import { readCover, readGallery, removedImages } from '@/lib/form-images';
 import { coverTone } from '@/lib/tone';
 import { deleteImages } from '@/lib/uploads';
@@ -59,7 +60,7 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
       .map((tech) => tech.trim())
       .filter((tech) => tech.length > 0) || [];
 
-  const createdAt = parseProjectDate(formData.get('date'));
+  const createdAt = readDate(formData.get('date'));
   if (createdAt === null) return fail('Please enter a valid project date.');
 
   const isPublished = formData.get('isPublished') === 'true';
@@ -168,7 +169,7 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
       .map((tech) => tech.trim())
       .filter((tech) => tech.length > 0) || [];
 
-  const createdAt = parseProjectDate(formData.get('date'));
+  const createdAt = readDate(formData.get('date'));
   if (createdAt === null) return fail('Please enter a valid project date.');
 
   const isPublished = formData.get('isPublished') === 'true';
@@ -280,12 +281,6 @@ function readLink(value: FormDataEntryValue | null): string | false {
 
 // Parses a "YYYY-MM-DD" date input. Stored at noon UTC so the displayed day
 // doesn't shift in other time zones. Undefined if no date was given, null if it isn't a date.
-function parseProjectDate(value: FormDataEntryValue | null) {
-  if (!value) return undefined;
-
-  const date = new Date(`${value}T12:00:00Z`);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
 
 /**
  * Publishes a project or takes it back to a draft without opening it, e.g. from a row's menu.

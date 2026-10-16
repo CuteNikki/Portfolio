@@ -150,6 +150,15 @@ export function EditPostForm({
               }
               className='order-last xl:order-first'
             >
+              <Field label='Date' htmlFor='date'>
+                <Input
+                  id='date'
+                  name='date'
+                  type='date'
+                  defaultValue={post.createdAt.toISOString().slice(0, 10)}
+                  required
+                />
+              </Field>
               <EditActionButtons
                 kind='post'
                 title={post.title}
