@@ -81,6 +81,31 @@ export function ownImageKey(url: unknown) {
     : null;
 }
 
+// The bucket's quota on the Garage server, shared with the plushies site's photos
+export const STORAGE_QUOTA_BYTES = 10 * 1024 ** 3;
+
+/**
+ * How much this site's pictures take up in storage, and how many there are. Null when storage isn't set up or can't
+ * be reached, e.g. locally without keys.
+ */
+export async function storageUsage() {
+  if (!process.env.STORAGE_ACCESS_KEY_ID) return null;
+
+  try {
+    const files = await listObjects(`${uploadFolder()}/`);
+    const pictures = new Set(
+      files.map(({ key }) => key.split('/').slice(0, 3).join('/')),
+    );
+    return {
+      bytes: files.reduce((sum, file) => sum + file.size, 0),
+      pictures: pictures.size,
+    };
+  } catch (error) {
+    console.error('Could not read storage usage:', error);
+    return null;
+  }
+}
+
 /**
  * Deletes pictures that are no longer used, both copies of each. Failures are logged rather than thrown: the
  * change that removed them has already been saved.

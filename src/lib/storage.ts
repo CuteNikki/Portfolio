@@ -61,7 +61,7 @@ export async function signUpload(
  * Every file whose key starts with `prefix`.
  */
 export async function listObjects(prefix: string) {
-  const keys: { key: string; lastModified: Date }[] = [];
+  const keys: { key: string; size: number; lastModified: Date }[] = [];
   let token: string | undefined;
 
   do {
@@ -82,7 +82,10 @@ export async function listObjects(prefix: string) {
       const modified = entry.match(
         /<LastModified>([^<]*)<\/LastModified>/,
       )?.[1];
-      if (key && modified) keys.push({ key, lastModified: new Date(modified) });
+      const size = Number(entry.match(/<Size>([^<]*)<\/Size>/)?.[1] ?? 0);
+      if (key && modified) {
+        keys.push({ key, size, lastModified: new Date(modified) });
+      }
     }
     token = xml.match(
       /<NextContinuationToken>([^<]*)<\/NextContinuationToken>/,

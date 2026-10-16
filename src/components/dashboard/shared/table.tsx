@@ -73,7 +73,7 @@ export function DataTable<TData extends RowData & { id: string }>({
         />
       </div>
 
-      <div className='w-full overflow-hidden border'>
+      <div className='bg-card w-full overflow-hidden rounded-xl border'>
         <Table className='lg:table-fixed'>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

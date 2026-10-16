@@ -135,7 +135,7 @@ export function NewPostForm({
         </TabsContent>
 
         <TabsContent value='preview'>
-          <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert min-h-100 w-full max-w-none border p-2 text-sm wrap-break-word'>
+          <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert min-h-100 w-full max-w-none rounded-lg border p-3 text-sm wrap-break-word'>
             {content ? (
               <MarkdownViewer content={content} />
             ) : (

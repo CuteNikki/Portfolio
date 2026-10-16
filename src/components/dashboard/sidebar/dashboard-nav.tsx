@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import {
-  HomeIcon,
   PanelLeftCloseIcon,
   PanelLeftOpenIcon,
   PlusIcon,
@@ -74,10 +73,6 @@ function sectionsFor(isAdmin: boolean) {
   return [
     { label: 'Content', links: DASHBOARD_LINKS },
     ...(isAdmin ? [{ label: 'Admin', links: DASHBOARD_ADMIN_LINKS }] : []),
-    {
-      label: 'Site',
-      links: [{ label: 'View site', url: LINKS.home.url, icon: HomeIcon }],
-    },
   ];
 }
 
@@ -229,14 +224,12 @@ export function DashboardTabs({
   isAdmin: boolean;
 }) {
   const pathname = usePathname();
-  const links = sectionsFor(isAdmin)
-    .flatMap(({ links }) => links)
-    .filter((link) => path(link.url) !== '/');
+  const links = sectionsFor(isAdmin).flatMap(({ links }) => links);
 
   return (
     <nav aria-label='Dashboard' className='flex items-center gap-2 lg:hidden'>
       <NewMenu compact />
-      <ul className='flex flex-1 gap-1 overflow-x-auto py-1'>
+      <ul className='flex min-w-0 flex-1 gap-1 overflow-x-auto py-1'>
         {links.map((link) => {
           const current = isCurrent(pathname, link.url);
           const Icon = link.icon;
