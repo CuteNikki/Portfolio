@@ -38,6 +38,7 @@ export default async function UsersPage() {
         hasError={hasError}
         defaultSorting={[{ id: 'role', desc: false }]}
         filterPlaceholder='Search users'
+        noun='user'
       />
     </div>
   );

@@ -55,6 +55,7 @@ export default async function ProjectsPage() {
         columns={columns}
         data={projects}
         filterPlaceholder='Search projects'
+        noun='project'
         hasError={hasError}
         defaultSorting={[{ id: 'updatedAt', desc: true }]}
       />

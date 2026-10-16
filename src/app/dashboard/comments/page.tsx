@@ -61,6 +61,7 @@ export default async function CommentsPage() {
         }))}
         hasError={hasError}
         filterPlaceholder='Search comments'
+        noun='comment'
         defaultSorting={[{ id: 'createdAt', desc: true }]}
       />
     </div>

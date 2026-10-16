@@ -55,6 +55,7 @@ export default async function PostsPage() {
         columns={columns}
         data={posts}
         filterPlaceholder='Search posts'
+        noun='post'
         hasError={hasError}
         defaultSorting={[{ id: 'updatedAt', desc: true }]}
       />

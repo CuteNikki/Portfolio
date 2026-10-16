@@ -1,10 +1,8 @@
 import Link from 'next/link';
-import type { ReactNode } from 'react';
 
 import { SiDiscord } from '@icons-pack/react-simple-icons';
 import {
   CheckIcon,
-  ChevronRightIcon,
   CircleQuestionMarkIcon,
   ClockIcon,
   CookieIcon,
@@ -15,7 +13,6 @@ import {
   HandIcon,
   InfoIcon,
   KeyRoundIcon,
-  LanguagesIcon,
   ListEndIcon,
   LockIcon,
   PenBoxIcon,
@@ -30,18 +27,17 @@ import {
 import { LINKS } from '@/constants/links';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 
+import { cn } from '@/lib/utils';
+
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
-import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { ScrollToTopButton } from '@/components/common/scroll-top-button';
-import { Button } from '@/components/ui/button';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+  LEGAL_BOX,
+  LegalHeader,
+  LegalNote,
+  LegalSection,
+} from '@/components/legal/legal-parts';
 
 const CONTENT = {
   en: {
@@ -51,7 +47,6 @@ const CONTENT = {
       lastUpdated: 'Last updated: March 2026',
     },
     languageToggle: 'Read in German',
-    languageToggleIcon: <LanguagesIcon className='shrink-0' />,
     notice: {
       icon: <ShieldIcon className='text-primary-text shrink-0' />,
       title: 'Your Privacy Matters',
@@ -292,7 +287,6 @@ const CONTENT = {
       lastUpdated: 'Zuletzt aktualisiert: März 2026',
     },
     languageToggle: 'Read in English',
-    languageToggleIcon: <LanguagesIcon className='shrink-0' />,
     notice: {
       icon: <ShieldIcon className='text-primary-text shrink-0' />,
       title: 'Ihre Privatsphäre ist uns wichtig',
@@ -534,40 +528,6 @@ const CONTENT = {
   },
 };
 
-function SectionCard({
-  id,
-  icon,
-  title,
-  description,
-  children,
-}: {
-  id?: string;
-  icon: ReactNode;
-  title: string;
-  description?: string;
-  children?: ReactNode;
-}) {
-  return (
-    <ScrollReveal className='w-full max-w-5xl'>
-      <Card
-        id={id}
-        className='w-full scroll-mt-20'
-        data-reveal-item
-        style={{ '--reveal-index': 0 } as React.CSSProperties}
-      >
-        <CardHeader>
-          <CardTitle className='text-primary-text flex items-center gap-2'>
-            {icon}
-            {title}
-          </CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
-        </CardHeader>
-        <CardContent className='flex flex-col gap-4'>{children}</CardContent>
-      </Card>
-    </ScrollReveal>
-  );
-}
-
 export function PrivacyContent({
   defaultLanguage,
 }: {
@@ -578,305 +538,288 @@ export function PrivacyContent({
 
   return (
     // The page itself is marked English, so screen readers need to know when this part is German
-    <div
-      lang={language}
-      className='flex w-full flex-col items-center gap-4 tracking-tight'
-    >
-      {/* Header */}
-      <ScrollReveal className='w-full max-w-5xl'>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='flex w-full flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'
-        >
-          <div className='flex flex-col gap-2 pb-4'>
-            <h1 className='text-4xl font-bold tracking-normal'>
-              {content.header.title}
-            </h1>
-            <p className='text-muted-foreground text-lg text-balance'>
-              {content.header.description}
-            </p>
-            <p className='text-muted-foreground text-sm'>
-              {content.header.lastUpdated}
-            </p>
-          </div>
-          <Button size='lg' asChild>
-            <Link
-              href={
-                language === 'en' ? LINKS.datenschutz.url : LINKS.privacy.url
-              }
-            >
-              {content.languageToggleIcon}
-              {content.languageToggle}
-            </Link>
-          </Button>
-        </div>
-      </ScrollReveal>
+    <div lang={language} className='flex w-full flex-col gap-10'>
+      <LegalHeader
+        eyebrow={language === 'en' ? 'Legal' : 'Rechtliches'}
+        title={content.header.title}
+        description={content.header.description}
+        meta={content.header.lastUpdated}
+        switchHref={
+          language === 'en' ? LINKS.datenschutz.url : LINKS.privacy.url
+        }
+        switchLabel={content.languageToggle}
+      />
 
-      {/* Notice */}
-      <ScrollReveal className='w-full max-w-5xl'>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='bg-primary/15 border-primary flex w-full flex-col gap-2 border p-4 sm:p-8'
-        >
-          <h2 className='flex items-center gap-2 text-xl font-semibold'>
-            {content.notice.icon}
-            {content.notice.title}
-          </h2>
-          <p>{content.notice.description}</p>
-        </div>
-      </ScrollReveal>
+      <div className='grid gap-10 lg:grid-cols-[minmax(0,48rem)_1fr] lg:gap-16'>
+        <div className='flex min-w-0 flex-col gap-4'>
+          <LegalNote icon={content.notice.icon} className='px-5 py-4'>
+            <p className='text-[15px] font-bold'>{content.notice.title}</p>
+            <p className='text-body mt-1'>{content.notice.description}</p>
+          </LegalNote>
 
-      {/* Sections (Each SectionCard already contains its own ScrollReveal) */}
-      <SectionCard
-        icon={content.quickNavigation.icon}
-        title={content.quickNavigation.title}
-      >
-        <ul className='text-muted-foreground *:hover:text-foreground grid list-inside grid-cols-1 gap-2 *:transition-all *:hover:translate-x-1 sm:grid-cols-2'>
-          {content.quickNavigation.links.map(({ href, label }) => (
-            <li key={href}>
-              <Link href={href} className='flex flex-row items-center gap-2'>
-                <ChevronRightIcon className='size-4 shrink-0' /> {label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </SectionCard>
-
-      <SectionCard
-        id='data-controller'
-        icon={content.dataController.icon}
-        title={content.dataController.title}
-        description={content.dataController.description}
-      >
-        <div className='border p-4 text-sm sm:text-base'>
-          <ul>
-            <li className='pb-2'>{content.dataController.name}</li>
-            <li className='text-muted-foreground'>
-              {content.dataController.addressLine1}
-            </li>
-            <li className='text-muted-foreground pb-2'>
-              {content.dataController.addressLine2}
-            </li>
-          </ul>
-          <EmailAndPhone language={language} />
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        id='discord-oauth-login'
-        icon={content.discordOAuthLogin.icon}
-        title={content.discordOAuthLogin.title}
-        description={content.discordOAuthLogin.description}
-      >
-        <ul className='flex flex-col gap-2 border p-4'>
-          {content.discordOAuthLogin.data.map(({ title, description }) => (
-            <li key={title} className='flex flex-row items-center gap-4'>
-              {content.discordOAuthLogin.dataIcon}
-              <p className='text-muted-foreground'>
-                <b className='text-foreground whitespace-nowrap'>{title}</b>
-                {' - '}
-                {description}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <p>
-          <b>{content.discordOAuthLogin.purpose.title} </b>
-          {content.discordOAuthLogin.purpose.description}
-        </p>
-        <p>
-          <b>{content.discordOAuthLogin.legalBasis.title} </b>
-          {content.discordOAuthLogin.legalBasis.description}
-        </p>
-        <p>
-          <b>{content.discordOAuthLogin.dataSharing.title} </b>
-          {content.discordOAuthLogin.dataSharing.description}
-          <Link
-            href={content.discordOAuthLogin.dataSharing.url}
-            target='_blank'
-            rel='noopener noreferrer'
-            className='hover:text-primary-text underline underline-offset-4 transition-colors'
+          <LegalSection
+            id='data-controller'
+            icon={content.dataController.icon}
+            title={content.dataController.title}
+            description={content.dataController.description}
           >
-            {content.discordOAuthLogin.dataSharing.privacyPolicy}
-          </Link>
-        </p>
-      </SectionCard>
+            <div className={LEGAL_BOX}>
+              <ul>
+                <li className='pb-2'>{content.dataController.name}</li>
+                <li className='text-muted-foreground'>
+                  {content.dataController.addressLine1}
+                </li>
+                <li className='text-muted-foreground pb-2'>
+                  {content.dataController.addressLine2}
+                </li>
+              </ul>
+              <EmailAndPhone language={language} />
+            </div>
+          </LegalSection>
 
-      <SectionCard
-        id='server-logs'
-        icon={content.serverLogs.icon}
-        title={content.serverLogs.title}
-        description={content.serverLogs.description}
-      >
-        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-2 border p-4 pl-8 marker:text-lg'>
-          {content.serverLogs.data.map((text) => (
-            <li key={text}>
-              <p className='text-muted-foreground'>{text}</p>
-            </li>
-          ))}
-        </ul>
-        <p>
-          <b>{content.serverLogs.purpose.title} </b>
-          {content.serverLogs.purpose.description}
-        </p>
-        <p>
-          <b>{content.serverLogs.legalBasis.title} </b>
-          {content.serverLogs.legalBasis.description}
-        </p>
-        <p>
-          <b>{content.serverLogs.retention.title} </b>
-          {content.serverLogs.retention.description}
-        </p>
-      </SectionCard>
-
-      <SectionCard
-        id='data-retention'
-        icon={content.dataRetention.icon}
-        title={content.dataRetention.title}
-        description={content.dataRetention.description}
-      >
-        <ul className='marker:text-primary-text flex list-outside list-disc flex-col gap-2 border p-4 pl-8 marker:text-lg'>
-          {content.dataRetention.data.map(({ title, description }) => (
-            <li key={title}>
-              <h3>{title}</h3>
-              <p className='text-muted-foreground'>{description}</p>
-            </li>
-          ))}
-        </ul>
-      </SectionCard>
-
-      <SectionCard
-        id='cookies-and-sessions'
-        icon={content.cookiesAndSessions.icon}
-        title={content.cookiesAndSessions.title}
-        description={content.cookiesAndSessions.description}
-      >
-        <ul className='flex flex-col gap-2'>
-          {content.cookiesAndSessions.cookies.map(
-            ({ description, title, essential, duration, icon: Icon }) => (
-              <li key={title} className='border p-4'>
-                <div className='flex flex-col gap-2'>
-                  <h3 className='flex gap-2'>
-                    <Icon className='text-primary-text shrink-0' />
-                    {title} {essential}
-                  </h3>
-                  <p className='text-muted-foreground'>{description}</p>
-                  <p className='text-muted-foreground text-sm'>{duration}</p>
-                </div>
-              </li>
-            ),
-          )}
-        </ul>
-        <div className='border-primary bg-primary/15 flex flex-row gap-2 border p-4'>
-          {content.cookiesAndSessions.noteIcon}
-          <p>{content.cookiesAndSessions.note}</p>
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        id='your-rights'
-        icon={content.yourRights.icon}
-        title={content.yourRights.title}
-        description={content.yourRights.description}
-      >
-        <ul className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
-          {content.yourRights.rights.map(
-            ({ icon: Icon, name, description }) => (
-              <li key={name} className='flex gap-4 border p-4'>
-                <Icon className='text-primary-text shrink-0' />
-                <div className='flex flex-col'>
-                  <h3>{name}</h3>
-                  <p className='text-muted-foreground'>{description}</p>
-                </div>
-              </li>
-            ),
-          )}
-        </ul>
-        <div className='border-primary bg-primary/15 flex flex-row gap-2 border p-4'>
-          {content.yourRights.noticeIcon}
-          <p>
-            {content.yourRights.notice.replace(
-              '{mail}',
-              PERSONAL_DETAILS.email,
-            )}
-          </p>
-        </div>
-      </SectionCard>
-
-      <SectionCard
-        id='third-party-services'
-        icon={content.thirdPartyServices.icon}
-        title={content.thirdPartyServices.title}
-      >
-        {content.thirdPartyServices.services.map((service) => (
-          <div key={service.name} className='flex flex-col gap-2 border p-4'>
-            <h3 className='flex items-center gap-2 text-lg font-semibold'>
-              {service.icon}
-              {service.name}
-            </h3>
-            <p className='text-muted-foreground'>{service.description}</p>
-            <p className='text-muted-foreground'>
-              <b className='text-foreground'>{service.sharedTitle} </b>
-              {service.sharedData}
+          <LegalSection
+            id='discord-oauth-login'
+            icon={content.discordOAuthLogin.icon}
+            title={content.discordOAuthLogin.title}
+            description={content.discordOAuthLogin.description}
+          >
+            <ul className={cn(LEGAL_BOX, 'flex flex-col gap-2')}>
+              {content.discordOAuthLogin.data.map(({ title, description }) => (
+                <li key={title} className='flex flex-row items-center gap-4'>
+                  {content.discordOAuthLogin.dataIcon}
+                  <p className='text-muted-foreground'>
+                    <b className='text-foreground whitespace-nowrap'>{title}</b>
+                    {' - '}
+                    {description}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <p>
+              <b>{content.discordOAuthLogin.purpose.title} </b>
+              {content.discordOAuthLogin.purpose.description}
             </p>
-            <Link
-              href={service.url}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='hover:text-primary-text flex items-center gap-2 text-sm underline underline-offset-4 transition-colors'
+            <p>
+              <b>{content.discordOAuthLogin.legalBasis.title} </b>
+              {content.discordOAuthLogin.legalBasis.description}
+            </p>
+            <p>
+              <b>{content.discordOAuthLogin.dataSharing.title} </b>
+              {content.discordOAuthLogin.dataSharing.description}
+              <Link
+                href={content.discordOAuthLogin.dataSharing.url}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='hover:text-primary-text underline underline-offset-4 transition-colors'
+              >
+                {content.discordOAuthLogin.dataSharing.privacyPolicy}
+              </Link>
+            </p>
+          </LegalSection>
+
+          <LegalSection
+            id='server-logs'
+            icon={content.serverLogs.icon}
+            title={content.serverLogs.title}
+            description={content.serverLogs.description}
+          >
+            <ul
+              className={cn(
+                LEGAL_BOX,
+                'marker:text-primary-text flex list-outside list-disc flex-col gap-2 pl-8',
+              )}
             >
-              {service.privacyPolicy}
-              <ExternalLinkIcon className='size-4 shrink-0' />
-            </Link>
+              {content.serverLogs.data.map((text) => (
+                <li key={text}>
+                  <p className='text-muted-foreground'>{text}</p>
+                </li>
+              ))}
+            </ul>
+            <p>
+              <b>{content.serverLogs.purpose.title} </b>
+              {content.serverLogs.purpose.description}
+            </p>
+            <p>
+              <b>{content.serverLogs.legalBasis.title} </b>
+              {content.serverLogs.legalBasis.description}
+            </p>
+            <p>
+              <b>{content.serverLogs.retention.title} </b>
+              {content.serverLogs.retention.description}
+            </p>
+          </LegalSection>
+
+          <LegalSection
+            id='data-retention'
+            icon={content.dataRetention.icon}
+            title={content.dataRetention.title}
+            description={content.dataRetention.description}
+          >
+            <ul
+              className={cn(
+                LEGAL_BOX,
+                'marker:text-primary-text flex list-outside list-disc flex-col gap-2 pl-8',
+              )}
+            >
+              {content.dataRetention.data.map(({ title, description }) => (
+                <li key={title}>
+                  <h3>{title}</h3>
+                  <p className='text-muted-foreground'>{description}</p>
+                </li>
+              ))}
+            </ul>
+          </LegalSection>
+
+          <LegalSection
+            id='cookies-and-sessions'
+            icon={content.cookiesAndSessions.icon}
+            title={content.cookiesAndSessions.title}
+            description={content.cookiesAndSessions.description}
+          >
+            <ul className='flex flex-col gap-2'>
+              {content.cookiesAndSessions.cookies.map(
+                ({ description, title, essential, duration, icon: Icon }) => (
+                  <li key={title} className={LEGAL_BOX}>
+                    <div className='flex flex-col gap-2'>
+                      <h3 className='flex gap-2'>
+                        <Icon className='text-primary-text shrink-0' />
+                        {title} {essential}
+                      </h3>
+                      <p className='text-muted-foreground'>{description}</p>
+                      <p className='text-muted-foreground text-sm'>
+                        {duration}
+                      </p>
+                    </div>
+                  </li>
+                ),
+              )}
+            </ul>
+            <LegalNote icon={content.cookiesAndSessions.noteIcon}>
+              {content.cookiesAndSessions.note}
+            </LegalNote>
+          </LegalSection>
+
+          <LegalSection
+            id='your-rights'
+            icon={content.yourRights.icon}
+            title={content.yourRights.title}
+            description={content.yourRights.description}
+          >
+            <ul className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
+              {content.yourRights.rights.map(
+                ({ icon: Icon, name, description }) => (
+                  <li key={name} className={cn(LEGAL_BOX, 'flex gap-4')}>
+                    <Icon className='text-primary-text shrink-0' />
+                    <div className='flex flex-col'>
+                      <h3>{name}</h3>
+                      <p className='text-muted-foreground'>{description}</p>
+                    </div>
+                  </li>
+                ),
+              )}
+            </ul>
+            <LegalNote icon={content.yourRights.noticeIcon}>
+              {content.yourRights.notice.replace(
+                '{mail}',
+                PERSONAL_DETAILS.email,
+              )}
+            </LegalNote>
+          </LegalSection>
+
+          <LegalSection
+            id='third-party-services'
+            icon={content.thirdPartyServices.icon}
+            title={content.thirdPartyServices.title}
+          >
+            {content.thirdPartyServices.services.map((service) => (
+              <div
+                key={service.name}
+                className={cn(LEGAL_BOX, 'flex flex-col gap-2')}
+              >
+                <h3 className='text-foreground flex items-center gap-2 text-[15px] font-semibold'>
+                  {service.icon}
+                  {service.name}
+                </h3>
+                <p className='text-muted-foreground'>{service.description}</p>
+                <p className='text-muted-foreground'>
+                  <b className='text-foreground'>{service.sharedTitle} </b>
+                  {service.sharedData}
+                </p>
+                <Link
+                  href={service.url}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='hover:text-primary-text flex items-center gap-2 text-sm underline underline-offset-4 transition-colors'
+                >
+                  {service.privacyPolicy}
+                  <ExternalLinkIcon className='size-4 shrink-0' />
+                </Link>
+              </div>
+            ))}
+            <p>{content.thirdPartyServices.notice}</p>
+          </LegalSection>
+
+          <LegalSection
+            id='data-security'
+            icon={content.dataSecurity.icon}
+            title={content.dataSecurity.title}
+            description={content.dataSecurity.description}
+          >
+            <ul className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
+              {content.dataSecurity.measures.map((text) => (
+                <li key={text} className='flex items-center gap-4'>
+                  {content.dataSecurity.measuresIcon}
+                  <p className='text-muted-foreground'>{text}</p>
+                </li>
+              ))}
+            </ul>
+            <p className='text-sm'>{content.dataSecurity.note}</p>
+          </LegalSection>
+
+          <LegalSection
+            id='questions'
+            icon={content.questions.icon}
+            title={content.questions.title}
+            description={content.questions.description}
+          >
+            <div className={LEGAL_BOX}>
+              <EmailAndPhone language={language} />
+            </div>
+            <p className='text-muted-foreground text-sm'>
+              {content.questions.note}
+            </p>
+          </LegalSection>
+
+          <div data-reveal='' className='flex flex-wrap gap-2 pt-2'>
+            <HomeButton quiet />
+            <ScrollToTopButton />
           </div>
-        ))}
-        <p>{content.thirdPartyServices.notice}</p>
-      </SectionCard>
-
-      <SectionCard
-        id='data-security'
-        icon={content.dataSecurity.icon}
-        title={content.dataSecurity.title}
-        description={content.dataSecurity.description}
-      >
-        <ul className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
-          {content.dataSecurity.measures.map((text) => (
-            <li key={text} className='flex items-center gap-4'>
-              {content.dataSecurity.measuresIcon}
-              <p className='text-muted-foreground'>{text}</p>
-            </li>
-          ))}
-        </ul>
-        <p className='text-sm'>{content.dataSecurity.note}</p>
-      </SectionCard>
-
-      <SectionCard
-        id='questions'
-        icon={content.questions.icon}
-        title={content.questions.title}
-        description={content.questions.description}
-      >
-        <div className='border p-4'>
-          <EmailAndPhone language={language} />
         </div>
-        <p className='text-muted-foreground text-sm'>
-          {content.questions.note}
-        </p>
-      </SectionCard>
 
-      {/* Footer Buttons */}
-      <ScrollReveal>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='flex flex-col items-center gap-2 sm:flex-row'
+        {/* Comes first on narrow screens, and stays in view beside the text on wide ones */}
+        <nav
+          aria-label={content.quickNavigation.title}
+          className='order-first lg:order-none'
         >
-          <HomeButton />
-          <ScrollToTopButton />
-        </div>
-      </ScrollReveal>
+          <div className='flex flex-col gap-2.5 text-[13px] lg:sticky lg:top-28'>
+            <span className='text-muted-foreground'>
+              {content.quickNavigation.title}
+            </span>
+            <ul className='grid grid-cols-2 gap-x-4 gap-y-2 lg:grid-cols-1'>
+              {content.quickNavigation.links.map(({ href, label }) => (
+                <li key={href}>
+                  <Link
+                    href={href}
+                    className='text-body hover:text-primary-text transition-colors'
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+      </div>
     </div>
   );
 }

@@ -8,7 +8,12 @@ import {
 } from '@tanstack/react-table';
 import { useState } from 'react';
 
-import { SearchIcon, XIcon } from 'lucide-react';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+  XIcon,
+} from 'lucide-react';
 
 import { ErrorToast } from '@/components/common/error-toast';
 import {
@@ -44,8 +49,11 @@ export function DataTable<TData extends RowData & { id: string }>({
   hasError = false,
   filterPlaceholder = 'Filter...',
   defaultSorting = [],
+  noun = 'row',
 }: DataTableProps<TData> & {
   filterPlaceholder?: string;
+  // What a row is, for the count under the table, e.g. "post" for "12 posts"
+  noun?: string;
   hasError?: boolean;
   // How the rows are sorted at first, shown on that column's header, e.g. [{ id: 'updatedAt', desc: true }]
   defaultSorting?: SortingState;
@@ -65,6 +73,9 @@ export function DataTable<TData extends RowData & { id: string }>({
       globalFilter,
     },
   });
+
+  const rowCount = table.getFilteredRowModel().rows.length;
+  const pageCount = table.getPageCount();
 
   return (
     <div className='flex flex-col gap-3'>
@@ -148,17 +159,14 @@ export function DataTable<TData extends RowData & { id: string }>({
         </Table>
       </div>
 
-      <div className='flex flex-col justify-between gap-4 xl:flex-row xl:items-center'>
-        {/* Left Side: Row Count / Selection Info */}
-        <div className='text-muted-foreground text-sm'>
-          {table.getFilteredRowModel().rows.length} total row(s) found.
-        </div>
+      <div className='text-muted-foreground flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-[13px]'>
+        <p role='status'>
+          {rowCount} {rowCount === 1 ? noun : `${noun}s`}
+        </p>
 
-        {/* Right Side: Pagination Controls */}
-        <div className='flex flex-col gap-2 space-x-6 lg:flex-row lg:items-center lg:space-x-8'>
-          {/* Items Per Page Selector */}
-          <div className='flex items-center gap-2'>
-            <p className='text-sm font-medium'>Rows per page</p>
+        <div className='flex flex-wrap items-center gap-x-5 gap-y-3'>
+          <label className='flex items-center gap-2'>
+            Rows
             <Select
               value={`${table.state.pagination.pageSize}`}
               onValueChange={(value) => {
@@ -173,40 +181,40 @@ export function DataTable<TData extends RowData & { id: string }>({
                 <SelectValue placeholder={table.state.pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side='top'>
-                {[5, 10, 15, 20, 25, 30, 40, 50].map((pageSize) => (
+                {[10, 20, 50, 100].map((pageSize) => (
                   <SelectItem key={pageSize} value={`${pageSize}`}>
                     {pageSize}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </label>
 
-          {/* Page Counter */}
-          <div className='flex items-center text-sm font-medium'>
-            Page {table.state.pagination.pageIndex + 1} of{' '}
-            {table.getPageCount() || 1}
-          </div>
-
-          {/* Previous/Next Buttons */}
-          <div className='flex items-center gap-2'>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-            >
-              Previous
-            </Button>
-            <Button
-              variant='outline'
-              size='sm'
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-            >
-              Next
-            </Button>
-          </div>
+          {pageCount > 1 && (
+            <div className='flex items-center gap-2'>
+              <span className='tabular-nums'>
+                Page {table.state.pagination.pageIndex + 1} of {pageCount}
+              </span>
+              <Button
+                variant='outline'
+                size='icon-sm'
+                aria-label='Previous page'
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                <ChevronLeftIcon />
+              </Button>
+              <Button
+                variant='outline'
+                size='icon-sm'
+                aria-label='Next page'
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                <ChevronRightIcon />
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,10 +1,6 @@
-import Link from 'next/link';
-import type { ReactNode } from 'react';
-
 import {
   CopyrightIcon,
   HouseIcon,
-  LanguagesIcon,
   LinkIcon,
   MailIcon,
   MapPinIcon,
@@ -16,10 +12,8 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
-import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { ScrollToTopButton } from '@/components/common/scroll-top-button';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { LegalHeader, LegalSection } from '@/components/legal/legal-parts';
 
 const CONTENT = {
   en: {
@@ -28,7 +22,6 @@ const CONTENT = {
       description: 'Legal information according to § 5 DDG',
     },
     languageToggle: 'Read in German',
-    languageToggleIcon: <LanguagesIcon className='shrink-0' />,
     provider: {
       icon: <HouseIcon className='shrink-0' />,
       title: 'Provider',
@@ -74,7 +67,6 @@ const CONTENT = {
       description: 'Rechtliche Angaben gemäß § 5 DDG',
     },
     languageToggle: 'Read in English',
-    languageToggleIcon: <LanguagesIcon className='shrink-0' />,
     provider: {
       icon: <HouseIcon className='shrink-0' />,
       title: 'Anbieter',
@@ -116,36 +108,6 @@ const CONTENT = {
   },
 };
 
-function SectionCard({
-  icon,
-  title,
-  children,
-}: {
-  icon: ReactNode;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <ScrollReveal className='w-full max-w-5xl'>
-      <Card
-        className='w-full'
-        data-reveal-item
-        style={{ '--reveal-index': 0 } as React.CSSProperties}
-      >
-        <CardHeader>
-          <CardTitle>
-            <h2 className='text-primary-text flex items-center gap-2'>
-              {icon}
-              {title}
-            </h2>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='flex flex-col gap-4'>{children}</CardContent>
-      </Card>
-    </ScrollReveal>
-  );
-}
-
 export function ImprintContent({
   defaultLanguage,
 }: {
@@ -156,91 +118,63 @@ export function ImprintContent({
 
   return (
     // The page itself is marked English, so screen readers need to know when this part is German
-    <div
-      lang={language}
-      className='flex flex-col items-center gap-4 tracking-tight'
-    >
-      {/* Header */}
-      <ScrollReveal className='w-full max-w-5xl'>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='flex w-full flex-col items-start justify-between gap-2 p-4 sm:flex-row sm:items-center'
-        >
-          <div className='flex flex-col gap-2 pb-4'>
-            <h1 className='text-4xl font-bold tracking-normal'>
-              {content.header.title}
-            </h1>
-            <p className='text-muted-foreground text-lg text-balance'>
-              {content.header.description}
-            </p>
-          </div>
-          <Button size='lg' asChild>
-            <Link
-              href={language === 'en' ? LINKS.impressum.url : LINKS.imprint.url}
-            >
-              {content.languageToggleIcon}
-              {content.languageToggle}
-            </Link>
-          </Button>
+    <div lang={language} className='flex w-full flex-col gap-10'>
+      <LegalHeader
+        eyebrow={language === 'en' ? 'Legal' : 'Rechtliches'}
+        title={content.header.title}
+        description={content.header.description}
+        switchHref={language === 'en' ? LINKS.impressum.url : LINKS.imprint.url}
+        switchLabel={content.languageToggle}
+      />
+
+      <div className='flex max-w-3xl flex-col gap-4'>
+        <div className='grid gap-4 sm:grid-cols-2'>
+          <LegalSection
+            icon={content.provider.icon}
+            title={content.provider.title}
+          >
+            <div>
+              <p className='text-foreground font-semibold'>
+                {content.provider.name}
+              </p>
+              <p className='mt-1 flex items-start gap-2'>
+                <MapPinIcon className='text-primary-text mt-0.5 size-4 shrink-0' />
+                <span>
+                  {content.provider.addressLineOne}
+                  <br />
+                  {content.provider.addressLineTwo}
+                  <br />
+                  {content.provider.country}
+                </span>
+              </p>
+            </div>
+          </LegalSection>
+
+          <LegalSection
+            icon={content.contact.icon}
+            title={content.contact.title}
+          >
+            <EmailAndPhone language={language} />
+          </LegalSection>
         </div>
-      </ScrollReveal>
 
-      {/* Sections */}
-      <SectionCard icon={content.provider.icon} title={content.provider.title}>
-        <h3>{content.provider.name}</h3>
-        <div className='flex items-start gap-2'>
-          <MapPinIcon className='text-primary-text size-4 shrink-0' />
-          <ul className='text-sm sm:text-base'>
-            <li>{content.provider.addressLineOne}</li>
-            <li>{content.provider.addressLineTwo}</li>
-            <li>{content.provider.country}</li>
-          </ul>
-        </div>
-      </SectionCard>
-
-      <SectionCard icon={content.contact.icon} title={content.contact.title}>
-        <EmailAndPhone language={language} />
-      </SectionCard>
-
-      <SectionCard
-        icon={content.liabilityContent.icon}
-        title={content.liabilityContent.title}
-      >
-        {content.liabilityContent.paragraphs.map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
+        {[
+          content.liabilityContent,
+          content.liabilityLinks,
+          content.copyright,
+        ].map(({ icon, title, paragraphs }) => (
+          <LegalSection key={title} icon={icon} title={title}>
+            {paragraphs.map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
+          </LegalSection>
         ))}
-      </SectionCard>
 
-      <SectionCard
-        icon={content.liabilityLinks.icon}
-        title={content.liabilityLinks.title}
-      >
-        {content.liabilityLinks.paragraphs.map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
-        ))}
-      </SectionCard>
-
-      <SectionCard
-        icon={content.copyright.icon}
-        title={content.copyright.title}
-      >
-        {content.copyright.paragraphs.map((paragraph, i) => (
-          <p key={i}>{paragraph}</p>
-        ))}
-      </SectionCard>
-
-      {/* Footer Nav */}
-      <ScrollReveal>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='flex flex-col items-center gap-2 sm:flex-row'
-        >
-          <HomeButton />
+        <div data-reveal='' className='flex flex-wrap gap-2 pt-2'>
+          <HomeButton quiet />
           <ScrollToTopButton />
         </div>
-      </ScrollReveal>
+      </div>
     </div>
   );
 }
