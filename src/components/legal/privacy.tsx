@@ -32,6 +32,7 @@ import { cn } from '@/lib/utils';
 import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
 import { ScrollToTopButton } from '@/components/common/scroll-top-button';
+import { TableOfContents } from '@/components/common/table-of-contents';
 import {
   LEGAL_BOX,
   LegalHeader,
@@ -796,29 +797,17 @@ export function PrivacyContent({
           </div>
         </div>
 
-        {/* Comes first on narrow screens, and stays in view beside the text on wide ones */}
-        <nav
-          aria-label={content.quickNavigation.title}
-          className='order-first lg:order-none'
-        >
-          <div className='flex flex-col gap-2.5 text-[13px] lg:sticky lg:top-28'>
-            <span className='text-muted-foreground'>
-              {content.quickNavigation.title}
-            </span>
-            <ul className='grid grid-cols-2 gap-x-4 gap-y-2 lg:grid-cols-1'>
-              {content.quickNavigation.links.map(({ href, label }) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className='text-body hover:text-primary-text transition-colors'
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </nav>
+        {/* Beside the text on wide screens only; narrower ones just read on */}
+        <div className='hidden lg:block'>
+          <TableOfContents
+            label={content.quickNavigation.title}
+            items={content.quickNavigation.links.map(({ href, label }) => ({
+              id: href.replace(/^#/, ''),
+              text: label,
+            }))}
+            className='sticky top-28'
+          />
+        </div>
       </div>
     </div>
   );

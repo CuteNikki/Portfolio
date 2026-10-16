@@ -18,6 +18,7 @@ import { headingsOf } from '@/lib/toc';
 import { formatShortDate, readingMinutes, toExcerpt } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
+import { TableOfContents } from '@/components/common/table-of-contents';
 import { StoredImage } from '@/components/common/stored-image';
 import { AuthorName } from '@/components/common/author-name';
 import { WriterOnly } from '@/components/common/writer-only';
@@ -204,26 +205,11 @@ async function PostContent({
           <MarkdownViewer content={post.content} />
         </div>
         {headings.length > 1 && (
-          <nav
-            aria-label='On this page'
-            className='order-first xl:order-none xl:col-start-3'
-          >
-            <div className='flex flex-col gap-2.5 text-[13px] xl:sticky xl:top-28 xl:pl-6'>
-              <span className='text-muted-foreground'>On this page</span>
-              <ul className='flex flex-col gap-2'>
-                {headings.map(({ id, text, level }) => (
-                  <li key={id} className={level === 3 ? 'pl-3' : undefined}>
-                    <a
-                      href={`#${id}`}
-                      className='text-body hover:text-primary-text transition-colors'
-                    >
-                      {text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
+          // Beside the text on wide screens only; narrower ones just read on. The column beside the centered text is
+          // narrow, so the list is a little wider than it and reaches into the page's margin.
+          <div className='hidden xl:col-start-3 xl:block'>
+            <TableOfContents items={headings} className='sticky top-28 w-52' />
+          </div>
         )}
       </div>
 

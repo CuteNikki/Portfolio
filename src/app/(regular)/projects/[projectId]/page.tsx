@@ -20,6 +20,7 @@ import { LINKS } from '@/constants/links';
 import { NO_INDEX } from '@/constants/metadata';
 
 import { AuthorName } from '@/components/common/author-name';
+import { TableOfContents } from '@/components/common/table-of-contents';
 import { WriterOnly } from '@/components/common/writer-only';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { ShareButton } from '@/components/dashboard/posts/share';
@@ -264,23 +265,10 @@ async function ProjectContent({
           <MarkdownViewer content={project.description} />
         </div>
         {headings.length > 1 && (
-          <nav aria-label='On this page' className='order-first lg:order-0'>
-            <div className='flex flex-col gap-2.5 text-[13px] lg:sticky lg:top-28'>
-              <span className='text-muted-foreground'>On this page</span>
-              <ul className='flex flex-col gap-2'>
-                {headings.map(({ id, text, level }) => (
-                  <li key={id} className={level === 3 ? 'pl-3' : undefined}>
-                    <a
-                      href={`#${id}`}
-                      className='text-body hover:text-primary-text transition-colors'
-                    >
-                      {text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </nav>
+          // Beside the text on wide screens only; narrower ones just read on
+          <div className='hidden lg:block'>
+            <TableOfContents items={headings} className='sticky top-28' />
+          </div>
         )}
       </div>
 
