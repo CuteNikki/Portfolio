@@ -11,7 +11,7 @@ import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
 
 import { StoredImage } from '@/components/common/stored-image';
-import { CleanUpButton } from '@/components/dashboard/media/clean-up';
+import { UnusedPictures as UnusedPictureList } from '@/components/dashboard/media/unused-pictures';
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
 import {
   StatTile,
@@ -175,44 +175,14 @@ export default async function MediaPage() {
   );
 }
 
-// Pictures in storage that no post or project uses, e.g. uploaded in a form that was never saved, with a button to
-// delete them. Shows nothing when there are none or storage isn't set up.
+// Pictures in storage that no post or project uses, e.g. uploaded in a form that was never saved, to delete all at
+// once or one by one. Shows nothing when there are none or storage isn't set up.
 async function UnusedPictures() {
   const unused = await findUnusedImages().catch((error) => {
     console.error('Could not look for unused pictures:', error);
     return null;
   });
-  if (!unused || unused.urls.length === 0) return null;
+  if (!unused || unused.items.length === 0) return null;
 
-  const count = unused.urls.length;
-  return (
-    <section className='bg-card flex flex-wrap items-center gap-4 rounded-xl border px-5 py-4'>
-      <ul className='flex -space-x-3' aria-hidden>
-        {unused.previews.slice(0, 4).map((url) => (
-          <li
-            key={url}
-            className='bg-muted ring-card relative h-7 w-14 overflow-hidden rounded-[4px] ring-2'
-          >
-            <StoredImage
-              url={url}
-              alt=''
-              fill
-              sizes='56px'
-              className='object-cover object-top'
-            />
-          </li>
-        ))}
-      </ul>
-      <div className='min-w-0 flex-1'>
-        <h2 className='text-[15px] font-bold'>
-          {count === 1 ? '1 unused picture' : `${count} unused pictures`}
-        </h2>
-        <p className='text-muted-foreground mt-0.5 text-xs'>
-          In storage but on no post or project, e.g. from a form that was left
-          without saving. They are cleared out after a day.
-        </p>
-      </div>
-      <CleanUpButton count={count} />
-    </section>
-  );
+  return <UnusedPictureList pictures={unused.items} />;
 }

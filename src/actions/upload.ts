@@ -15,6 +15,7 @@ import {
   discardUnusedImages,
   isValidUploadSize,
   newUpload,
+  ownImageKey,
   removeUnusedImages,
 } from '@/lib/uploads';
 
@@ -91,6 +92,36 @@ export async function cleanUpImages(): Promise<
     return { removed };
   } catch (error) {
     console.error('Could not clean up pictures:', error);
+    return { error: 'Storage couldn’t be reached. Please try again.' };
+  }
+}
+
+/**
+ * Deletes one picture nothing uses, from the Media page's list of unused pictures. If something has started using it
+ * in the meantime, it stays.
+ */
+export async function deleteUnusedImage(
+  url: string,
+): Promise<{ error: string } | { removed: true }> {
+  const session = await getCurrentSession();
+  if (
+    !session ||
+    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
+  ) {
+    return { error: 'Only writers can delete pictures.' };
+  }
+  if (typeof url !== 'string' || !ownImageKey(url)) {
+    return { error: 'That isn’t one of this site’s pictures.' };
+  }
+
+  try {
+    if ((await discardUnusedImages([url])) === 0) {
+      return { error: 'A post or project uses this picture now.' };
+    }
+    revalidatePath('/dashboard/media');
+    return { removed: true };
+  } catch (error) {
+    console.error('Could not delete an unused picture:', error);
     return { error: 'Storage couldn’t be reached. Please try again.' };
   }
 }

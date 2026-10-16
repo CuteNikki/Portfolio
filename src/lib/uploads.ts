@@ -180,16 +180,18 @@ async function usedImages(urls: string[]) {
 
 /**
  * Deletes the given pictures unless something still uses them, e.g. ones uploaded in a form that was then left
- * without saving. Addresses that aren't this site's uploads are ignored.
+ * without saving. Addresses that aren't this site's uploads are ignored. Returns how many were deleted.
  */
 export async function discardUnusedImages(urls: string[]) {
   const candidates = [...new Set(urls)].filter(
     (url) => ownImageKey(url) !== null,
   );
-  if (candidates.length === 0) return;
+  if (candidates.length === 0) return 0;
 
   const used = await usedImages(candidates);
-  await deleteImages(candidates.filter((url) => !used.has(url)));
+  const unused = candidates.filter((url) => !used.has(url));
+  await deleteImages(unused);
+  return unused.length;
 }
 
 // Uploads younger than this may belong to a form someone is still filling in
@@ -241,9 +243,22 @@ export async function findUnusedImages(minAgeMs = 0) {
   );
 
   const unused = urls.filter((url) => !used.has(url));
+  const uploadedAt = new Map<string, number>(
+    old.flatMap(([, { newest, large }]) =>
+      large ? [[`${IMAGE_PUBLIC_URL}/${large}`, newest]] : [],
+    ),
+  );
   return {
     urls: unused,
     previews: unused.filter((url) => complete.has(url)),
+    // Each unused picture with when it was uploaded, newest first, and whether it has every copy for a thumbnail
+    items: unused
+      .map((url) => ({
+        url,
+        uploadedAt: uploadedAt.get(url)!,
+        complete: complete.has(url),
+      }))
+      .sort((a, b) => b.uploadedAt - a.uploadedAt),
     unfinishedFiles: files
       .filter((file) =>
         unfinished.some((folder) => file.key.startsWith(`${folder}/`)),
