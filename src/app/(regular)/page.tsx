@@ -13,6 +13,7 @@ import { PERSONAL_DETAILS, WHAT_I_DO } from '@/constants/personal';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { DiscordMenu } from '@/components/navigation/discord-menu';
+import { ToolkitTooltips } from '@/components/common/toolkit-tooltips';
 import { PostRow } from '@/components/posts/post-row';
 import { FeaturedProjects } from '@/components/projects/featured-projects';
 import { Badge } from '@/components/ui/badge';
@@ -274,17 +275,20 @@ export default function Home() {
                       <span key={name} className='group/skill relative'>
                         <Badge
                           variant='outline'
-                          className='bg-background text-body group-hover/skill:border-line-strong group-hover/skill:text-foreground h-7 cursor-help gap-1.5 rounded-lg px-2.5 text-xs font-normal transition-colors'
+                          className='bg-background text-body group-hover/skill:border-line-strong group-hover/skill:text-foreground h-7 cursor-help gap-1.5 rounded-lg px-2.5 text-xs font-normal transition-colors [&>svg]:size-3.5'
                         >
                           {icon}
                           {name}
                         </Badge>
+                        {/* Centered over the badge; ToolkitTooltips moves it by --tip-shift where that would cross the
+                            window's edge, and the arrow back the same way so it still points at the badge */}
                         <span
                           aria-hidden
-                          className='bg-foreground text-background pointer-events-none absolute bottom-full left-1/2 z-20 mb-2.5 hidden w-max max-w-xs -translate-x-1/2 rounded-lg px-3 py-1.5 text-xs leading-snug [@media(hover:hover)]:group-hover/skill:block'
+                          data-tip
+                          className='bg-foreground text-background pointer-events-none absolute bottom-full left-1/2 z-20 mb-2.5 hidden w-max max-w-[min(20rem,calc(100vw-2rem))] translate-x-[calc(-50%+var(--tip-shift,0px))] rounded-lg px-3 py-1.5 text-xs leading-snug [@media(hover:hover)]:group-hover/skill:block'
                         >
                           {description}
-                          <span className='bg-foreground absolute top-full left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[2px]' />
+                          <span className='bg-foreground absolute top-full left-[calc(50%-var(--tip-shift,0px))] size-2.5 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-[2px]' />
                         </span>
                       </span>
                     ))}
@@ -293,6 +297,7 @@ export default function Home() {
               ),
             )}
           </div>
+          <ToolkitTooltips />
         </section>
       </ScrollReveal>
 
@@ -324,18 +329,6 @@ export default function Home() {
                 <ArrowRightIcon className='group-hover/button:translate-x-0.75' />
               </Link>
             </Button>
-            {PERSONAL_DETAILS.socials
-              .filter(
-                ({ platform }) =>
-                  platform === 'GitHub' || platform === 'LinkedIn',
-              )
-              .map(({ platform, url }) => (
-                <Button key={platform} asChild variant='outline' size='lg'>
-                  <a href={url} target='_blank' rel='noopener noreferrer'>
-                    {platform}
-                  </a>
-                </Button>
-              ))}
           </div>
         </section>
       </ScrollReveal>
