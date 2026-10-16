@@ -160,13 +160,13 @@ export function CoverField({
       />
       {url && progress === null ? (
         <figure aria-labelledby={labelId} className='flex flex-col gap-2'>
-          <div className='bg-muted relative aspect-video overflow-hidden rounded-xl border'>
+          <div className='bg-muted relative aspect-2/1 overflow-hidden rounded-xl border'>
             {/* The small copy is plenty for a preview */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imageUrl(url, 'thumb')}
               alt=''
-              className='size-full object-cover'
+              className='size-full object-cover object-top'
             />
           </div>
           <div className='grid grid-cols-2 gap-2'>
@@ -184,7 +184,7 @@ export function CoverField({
         <DropArea
           disabled={progress !== null}
           onFiles={upload}
-          className='bg-muted/30 aspect-video w-full gap-1.5 px-6 text-center'
+          className='bg-muted/30 aspect-2/1 w-full gap-1.5 px-6 text-center'
         >
           {progress !== null ? (
             <Progress value={progress} />

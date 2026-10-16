@@ -43,7 +43,7 @@ export function PostRow({
     >
       <div
         className={cn(
-          'relative aspect-16/10 w-full shrink-0 overflow-hidden rounded-lg sm:w-60',
+          'relative aspect-2/1 w-full shrink-0 overflow-hidden rounded-lg sm:w-64',
           'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]',
         )}
         style={{ '--tone': toneFor(post.title) } as React.CSSProperties}
@@ -53,8 +53,8 @@ export function PostRow({
             url={post.coverUrl}
             alt=''
             fill
-            sizes='(min-width: 640px) 240px, calc(100vw - 32px)'
-            className='object-cover transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.04]'
+            sizes='(min-width: 640px) 256px, calc(100vw - 32px)'
+            className='object-cover object-top transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.04]'
           />
         ) : (
           <span

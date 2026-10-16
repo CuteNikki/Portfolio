@@ -187,7 +187,7 @@ async function PostContent({
         <div
           data-reveal=''
           style={{ '--reveal-index': 3 } as React.CSSProperties}
-          className='bg-muted relative mx-auto aspect-video w-full max-w-4xl overflow-hidden rounded-xl border sm:aspect-2/1'
+          className='bg-muted relative mx-auto aspect-2/1 w-full max-w-4xl overflow-hidden rounded-xl border'
         >
           <StoredImage
             url={post.coverUrl}
@@ -195,7 +195,7 @@ async function PostContent({
             fill
             priority
             sizes='(min-width: 928px) 896px, calc(100vw - 32px)'
-            className='object-cover'
+            className='object-cover object-top'
           />
         </div>
       )}
