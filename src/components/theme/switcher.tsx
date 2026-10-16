@@ -3,42 +3,17 @@
 import { useSyncExternalStore } from 'react';
 import { useTheme } from 'next-themes';
 
-import {
-  CoffeeIcon,
-  type LucideIcon,
-  MonitorIcon,
-  MoonIcon,
-  MoonStarIcon,
-  SunIcon,
-  SunMoonIcon,
-} from 'lucide-react';
+import { SunMoonIcon } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
-
+import { LazyMenu } from '@/components/common/lazy-menu';
+import { themeById } from '@/components/theme/themes';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
-const THEMES: { id: string; label: string; icon: LucideIcon }[] = [
-  { id: 'light', label: 'Light', icon: SunIcon },
-  { id: 'dark', label: 'Dark', icon: MoonIcon },
-  { id: 'system', label: 'System', icon: MonitorIcon },
-  { id: 'catppuccin-latte', label: 'Catppuccin Latte', icon: CoffeeIcon },
-  {
-    id: 'catppuccin-macchiato',
-    label: 'Catppuccin Macchiato',
-    icon: MoonStarIcon,
-  },
-];
 
 const subscribeToNothing = () => () => {};
+const loadMenu = () =>
+  import('@/components/theme/switcher-menu').then((module) => module.default);
 
+// The theme button in the navbar. Its menu loads on first use (see LazyMenu).
 export function ThemeSwitcher({ className }: { className?: string }) {
   // False on the server and during hydration, true once the client has taken over
   const mounted = useSyncExternalStore(
@@ -46,7 +21,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
     () => true,
     () => false,
   );
-  const { theme, setTheme } = useTheme();
+  const { theme } = useTheme();
 
   // The server can't know the visitor's theme, so until the client takes over the button shows a neutral icon in
   // the same place and size, which keeps the layout from shifting
@@ -64,33 +39,22 @@ export function ThemeSwitcher({ className }: { className?: string }) {
     );
   }
 
-  const current = THEMES.find(({ id }) => id === theme) ?? THEMES[2];
+  const current = themeById(theme);
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <LazyMenu
+      load={loadMenu}
+      props={{ className }}
+      trigger={
         <Button
           variant='outline'
           size='icon'
-          className={cn(className)}
+          className={className}
           aria-label={`Theme: ${current.label}`}
         >
           <current.icon className='size-4.5' />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-64'>
-        <DropdownMenuLabel className='text-muted-foreground px-2.5 pt-1.5 pb-1 text-[11px] font-normal tracking-widest uppercase'>
-          Theme
-        </DropdownMenuLabel>
-        <DropdownMenuRadioGroup value={current.id} onValueChange={setTheme}>
-          {THEMES.map(({ id, label, icon: Icon }) => (
-            <DropdownMenuRadioItem key={id} value={id}>
-              <Icon className='text-muted-foreground' />
-              {label}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      }
+    />
   );
 }

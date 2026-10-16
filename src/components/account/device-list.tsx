@@ -3,7 +3,7 @@
 import { useTransition } from 'react';
 
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 import { signOutDevice, signOutOtherDevices } from '@/actions/account';
 

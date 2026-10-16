@@ -1,9 +1,22 @@
 'use client';
 
-import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
+import dynamic from 'next/dynamic';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+
+// The preview's Markdown renderer and syntax highlighter are most of the editor's code, so they load the first time
+// someone opens the Preview tab
+const MarkdownViewer = dynamic(
+  () =>
+    import('@/components/dashboard/posts/markdown').then(
+      (module) => module.MarkdownViewer,
+    ),
+  {
+    loading: () => <p className='text-muted-foreground'>Loading preview…</p>,
+  },
+);
 
 // The post and project forms: the writing on the left, publishing and the rest in a column on the right that stays
 // in view while scrolling. On narrower screens the column follows below.

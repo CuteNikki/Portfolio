@@ -5,7 +5,6 @@ import './globals.css';
 
 import { SITE_METADATA } from '@/constants/metadata';
 
-import { TooltipProvider } from '@/components/ui/tooltip';
 import { ThemeProvider } from '@/providers/theme';
 import { ToastProvider } from '@/providers/toast';
 
@@ -50,7 +49,7 @@ export default function RootLayout({
           ]}
         >
           <ToastProvider />
-          <TooltipProvider>{children}</TooltipProvider>
+          {children}
         </ThemeProvider>
         <div id='bottom' />
       </body>

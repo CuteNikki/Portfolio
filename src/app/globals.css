@@ -267,20 +267,19 @@
   .animate-hero-in {
     animation: hero-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .scroll-reveal {
-    opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .scroll-reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .scroll-reveal.is-visible [data-reveal-item] {
-    animation: rise-in 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: calc(var(--reveal-index, 0) * 150ms);
+  /* Sections rise in as they scroll into view, tied to the scroll position with CSS alone. Nothing waits for a script,
+     and browsers without scroll-driven animations, or with reduced motion, simply show everything. Items in a row
+     start a little after one another. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .scroll-reveal [data-reveal-item],
+      .scroll-reveal:not(:has([data-reveal-item])) {
+        animation: rise-in linear both;
+        animation-timeline: view();
+        animation-range: entry calc(var(--reveal-index, 0) * 6%) entry
+          calc(55% + var(--reveal-index, 0) * 6%);
+      }
+    }
   }
   .delay-1 {
     animation-delay: 100ms;
@@ -373,20 +372,7 @@
     transform: translateY(-4px) scale(0.97);
   }
 }
-/* Without JavaScript nothing reveals the content, so it stays visible */
-@media (scripting: none) {
-  .scroll-reveal {
-    opacity: 1;
-    transform: none;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .scroll-reveal,
-  .scroll-reveal.is-visible [data-reveal-item] {
-    opacity: 1;
-    transform: none;
-    animation: none !important;
-  }
   .card-lift:hover,
   .card-lift:focus-visible {
     transform: none;

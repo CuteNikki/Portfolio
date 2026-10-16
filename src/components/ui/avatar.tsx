@@ -1,22 +1,24 @@
 'use client';
 
-import { Avatar as AvatarPrimitive } from 'radix-ui';
+import { useEffect, useRef, useState } from 'react';
 
 import { cn, proxiedAvatarUrl } from '@/lib/utils';
+
+// A picture over initials, without a library: the initials show until the picture has loaded, and stay if it fails
 
 function Avatar({
   className,
   size = 'default',
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Root> & {
+}: React.ComponentProps<'span'> & {
   size?: 'default' | 'sm' | 'lg';
 }) {
   return (
-    <AvatarPrimitive.Root
+    <span
       data-slot='avatar'
       data-size={size}
       className={cn(
-        'group/avatar after:border-border relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
+        'group/avatar after:border-border relative flex size-8 shrink-0 overflow-hidden rounded-full select-none after:absolute after:inset-0 after:z-2 after:rounded-full after:border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten',
         className,
       )}
       {...props}
@@ -27,17 +29,37 @@ function Avatar({
 function AvatarImage({
   className,
   src,
+  alt = '',
   ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Image>) {
+}: React.ComponentProps<'img'>) {
+  const ref = useRef<HTMLImageElement>(null);
+  const [state, setState] = useState<'loading' | 'loaded' | 'failed'>(
+    'loading',
+  );
+
+  // The picture may have loaded or failed before React took over, when its own events had nobody listening
+  useEffect(() => {
+    const image = ref.current;
+    if (image?.complete) setState(image.naturalWidth > 0 ? 'loaded' : 'failed');
+  }, []);
+
+  if (!src || state === 'failed') return null;
+
   // Discord avatars load through this site, so visitors' browsers don't contact Discord's CDN
   const imageSrc = typeof src === 'string' ? proxiedAvatarUrl(src) : src;
 
   return (
-    <AvatarPrimitive.Image
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      ref={ref}
       data-slot='avatar-image'
+      data-state={state}
       src={imageSrc}
+      alt={alt}
+      onLoad={() => setState('loaded')}
+      onError={() => setState('failed')}
       className={cn(
-        'aspect-square size-full rounded-full object-cover',
+        'absolute inset-0 z-1 aspect-square size-full rounded-full object-cover',
         className,
       )}
       {...props}
@@ -45,15 +67,12 @@ function AvatarImage({
   );
 }
 
-function AvatarFallback({
-  className,
-  ...props
-}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
+function AvatarFallback({ className, ...props }: React.ComponentProps<'span'>) {
   return (
-    <AvatarPrimitive.Fallback
+    <span
       data-slot='avatar-fallback'
       className={cn(
-        'bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-sm group-data-[size=sm]/avatar:text-xs',
+        'bg-muted text-muted-foreground flex size-full items-center justify-center rounded-full text-sm group-has-[img[data-state=loaded]]/avatar:invisible group-data-[size=sm]/avatar:text-xs',
         className,
       )}
       {...props}

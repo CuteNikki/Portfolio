@@ -1,90 +1,16 @@
-'use client';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
-import { useEffect, useRef } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 
-import { MailIcon, SendHorizontalIcon } from 'lucide-react';
+import { MailIcon } from 'lucide-react';
 
-import { sendMail } from '@/actions/mail';
-
-import {
-  MailSubmitData,
-  mailSubmitSchema,
-  MAX_MESSAGE_LENGTH,
-} from '@/types/mail';
-
-import { LINKS } from '@/constants/links';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 
-import { cn } from '@/lib/utils';
-
 import { ScrollReveal } from '@/components/common/scroll-reveal';
+import { ContactForm } from '@/components/contact/contact-form';
 import { DiscordMenu } from '@/components/navigation/discord-menu';
-import { Button } from '@/components/ui/button';
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field';
-import { Input } from '@/components/ui/input';
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from '@/components/ui/input-group';
 
-function msSince(timestamp: number) {
-  return Date.now() - timestamp;
-}
-
+// The contact page: how to reach me, rendered on the server with the social links and their icons, and the form,
+// which is the only part that runs in the browser
 export function ContactContent() {
-  const honeypotRef = useRef<HTMLInputElement>(null);
-  const mountedAtRef = useRef(0);
-
-  useEffect(() => {
-    mountedAtRef.current = Date.now();
-  }, []);
-
-  const form = useForm<MailSubmitData>({
-    resolver: zodResolver(mailSubmitSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-    },
-  });
-
-  async function onSubmit(data: MailSubmitData) {
-    // A network error or a deploy that changed the action rejects instead of returning an error
-    const result = await sendMail(data, {
-      website: honeypotRef.current?.value ?? '',
-      elapsedMs: msSince(mountedAtRef.current),
-    }).catch(() => ({
-      error: 'Could not reach the server. Please try again.',
-    }));
-
-    if ('error' in result && result.error) {
-      toast.error('Something went wrong!', {
-        description: result.error,
-      });
-
-      return;
-    }
-
-    toast.success('Message sent!', {
-      description: 'Thanks for reaching out! I will get back to you soon.',
-    });
-
-    form.reset();
-  }
-
   return (
     <ScrollReveal className='scroll-reveal w-full max-w-6xl'>
       <section className='w-full'>
@@ -142,150 +68,7 @@ export function ContactContent() {
               </div>
             </div>
           </div>
-          <form
-            id='contact'
-            onSubmit={(event) => form.handleSubmit(onSubmit)(event)}
-          >
-            <div
-              data-reveal-item
-              style={{ '--reveal-index': 2 } as React.CSSProperties}
-              className='p-4 sm:p-8 md:p-10'
-            >
-              {/* Honeypot: invisible to humans, bots fill it in */}
-              <div
-                aria-hidden
-                className='absolute -left-[9999px] h-px w-px overflow-hidden'
-              >
-                <label htmlFor='contact-website'>Website</label>
-                <input
-                  ref={honeypotRef}
-                  id='contact-website'
-                  name='website'
-                  type='text'
-                  tabIndex={-1}
-                  autoComplete='off'
-                  defaultValue=''
-                />
-              </div>
-              <FieldGroup className='gap-4'>
-                <FieldGroup className='lg:flex-row'>
-                  <Controller
-                    name='name'
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor='contact-name'>
-                          Your Name
-                        </FieldLabel>
-                        <Input
-                          {...field}
-                          id='contact-name'
-                          aria-invalid={fieldState.invalid}
-                          placeholder='Nikki'
-                          autoComplete='off'
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                  <Controller
-                    name='email'
-                    control={form.control}
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={fieldState.invalid}>
-                        <FieldLabel htmlFor='contact-email'>
-                          Your Email
-                        </FieldLabel>
-                        <Input
-                          {...field}
-                          id='contact-email'
-                          aria-invalid={fieldState.invalid}
-                          placeholder='contact@niso.moe'
-                          type='email'
-                        />
-                        {fieldState.invalid && (
-                          <FieldError errors={[fieldState.error]} />
-                        )}
-                      </Field>
-                    )}
-                  />
-                </FieldGroup>
-
-                <Controller
-                  name='subject'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='contact-subject'>Subject</FieldLabel>
-                      <Input
-                        {...field}
-                        id='contact-subject'
-                        placeholder='*insert some subject here*'
-                        aria-invalid={fieldState.invalid}
-                      />
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <Controller
-                  name='message'
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor='contact-message'>Message</FieldLabel>
-                      <InputGroup>
-                        <InputGroupTextarea
-                          {...field}
-                          id='contact-message'
-                          placeholder='Drop a note with any feedback or just say hi! 👋'
-                          rows={6}
-                          className='min-h-24 resize-none'
-                          aria-invalid={fieldState.invalid}
-                        />
-                        <InputGroupAddon align='block-end'>
-                          <InputGroupText
-                            className={cn(
-                              'tabular-nums',
-                              (field.value?.length ?? 0) > MAX_MESSAGE_LENGTH &&
-                                'text-destructive',
-                            )}
-                          >
-                            {field.value?.length ?? 0}/{MAX_MESSAGE_LENGTH}{' '}
-                            characters
-                          </InputGroupText>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                />
-                <div
-                  data-reveal-item
-                  style={{ '--reveal-index': 3 } as React.CSSProperties}
-                  className='flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center'
-                >
-                  <FieldDescription>
-                    By submitting this form, you agree to the{' '}
-                    <Link href={LINKS.privacy.url}>{LINKS.privacy.label}</Link>.
-                  </FieldDescription>
-                  <Button
-                    type='submit'
-                    form='contact'
-                    disabled={form.formState.isSubmitting}
-                  >
-                    <SendHorizontalIcon />
-                    Submit
-                  </Button>
-                </div>
-              </FieldGroup>
-            </div>
-          </form>
+          <ContactForm />
         </div>
       </section>
     </ScrollReveal>

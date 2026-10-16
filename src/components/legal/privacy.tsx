@@ -1,7 +1,5 @@
-'use client';
-
 import Link from 'next/link';
-import { ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import { SiDiscord } from '@icons-pack/react-simple-icons';
 import {
@@ -575,7 +573,7 @@ export function PrivacyContent({
 }: {
   defaultLanguage: 'en' | 'de';
 }) {
-  const [language] = useState<'en' | 'de'>(defaultLanguage);
+  const language = defaultLanguage;
   const content = CONTENT[language];
 
   return (

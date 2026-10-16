@@ -1,7 +1,5 @@
-'use client';
-
 import Link from 'next/link';
-import { ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import {
   CopyrightIcon,
@@ -153,7 +151,7 @@ export function ImprintContent({
 }: {
   defaultLanguage: 'en' | 'de';
 }) {
-  const [language] = useState<'en' | 'de'>(defaultLanguage);
+  const language = defaultLanguage;
   const content = CONTENT[language];
 
   return (

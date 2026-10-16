@@ -1,47 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { MoreHorizontalIcon } from 'lucide-react';
 
-import {
-  ClipboardCopyIcon,
-  CornerDownRightIcon,
-  EditIcon,
-  MoreHorizontalIcon,
-  Trash2Icon,
-} from 'lucide-react';
-
-import { deleteComment } from '@/actions/post';
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { LazyMenu } from '@/components/common/lazy-menu';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
-export function CommentActions({
-  commentId,
-  commentAuthorId,
-  commentAuthorDiscordId,
-  postSlug,
-  userId,
-  isAdmin,
-  setEditingCommentIdAction,
-  setShowReplyFormAction,
-}: {
+export interface CommentActionsProps {
   commentId: string;
   commentAuthorId: string;
   commentAuthorDiscordId: string;
@@ -50,108 +14,30 @@ export function CommentActions({
   isAdmin: boolean;
   setEditingCommentIdAction: (commentId: string | null) => void;
   setShowReplyFormAction?: (show: boolean) => void;
-}) {
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+}
 
-  const handleDelete = () => {
-    const formData = new FormData();
-    formData.append('commentId', commentId);
-    formData.append('postSlug', postSlug);
-
-    deleteComment(formData)
-      .then(({ error }) => {
-        if (error)
-          toast.error('The comment wasn’t deleted', { description: error });
-        else toast.success('Comment deleted');
-        setShowDeleteDialog(false);
-      })
-      .catch((error) => {
-        console.error('Error deleting comment:', error);
-        toast.error('Failed to delete comment');
-        setShowDeleteDialog(false);
-      });
-  };
-
+// The menu's button, the same before and after the menu has loaded
+export function CommentActionsTrigger(props: React.ComponentProps<'button'>) {
   return (
-    <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant='ghost' size='icon-sm'>
-            <MoreHorizontalIcon />
-            <span className='sr-only'>Open comment actions menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end'>
-          {setShowReplyFormAction && (
-            <DropdownMenuItem onClick={() => setShowReplyFormAction(true)}>
-              <CornerDownRightIcon />
-              Reply
-            </DropdownMenuItem>
-          )}
+    <Button variant='ghost' size='icon-sm' {...props}>
+      <MoreHorizontalIcon />
+      <span className='sr-only'>Open comment actions menu</span>
+    </Button>
+  );
+}
 
-          <DropdownMenuItem
-            onClick={() =>
-              navigator.clipboard
-                .writeText(commentAuthorDiscordId)
-                .then(() => {
-                  toast.success('User ID copied to clipboard');
-                })
-                .catch((error) => {
-                  console.error('Error copying User ID:', error);
-                  toast.error('Failed to copy User ID');
-                })
-            }
-          >
-            <ClipboardCopyIcon />
-            Copy User ID
-          </DropdownMenuItem>
+const loadMenu = () =>
+  import('@/components/dashboard/posts/comment-actions-loaded').then(
+    (module) => module.default,
+  );
 
-          {userId === commentAuthorId && (
-            <DropdownMenuItem
-              onClick={() => {
-                setEditingCommentIdAction(commentId);
-              }}
-            >
-              <EditIcon />
-              Edit Comment
-            </DropdownMenuItem>
-          )}
-
-          {(userId === commentAuthorId || isAdmin) && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant='destructive'
-                onSelect={(e) => {
-                  e.preventDefault();
-                  setShowDeleteDialog(true);
-                }}
-              >
-                <Trash2Icon />
-                Delete
-              </DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
-
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this
-              comment.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction variant='destructive' onClick={handleDelete}>
-              Delete Comment
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
+// A comment's ⋯ menu: reply, copy the author's ID, edit or delete. Its menu loads on first use (see LazyMenu).
+export function CommentActions(props: CommentActionsProps) {
+  return (
+    <LazyMenu
+      load={loadMenu}
+      props={props}
+      trigger={<CommentActionsTrigger />}
+    />
   );
 }

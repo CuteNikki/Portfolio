@@ -13,7 +13,7 @@ import {
   SendHorizonalIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 import { deletePost, setPostPublished } from '@/actions/post';
 import { deleteProject, setProjectPublished } from '@/actions/project';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useId, useState } from 'react';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 import type { Comment as CommentType } from '@/generated/prisma/browser';
 

@@ -6,15 +6,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
+import { LazyMenu } from '@/components/common/lazy-menu';
 import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
 export interface SortOption<T extends string> {
   id: T;
@@ -24,47 +17,50 @@ export interface SortOption<T extends string> {
   icon: LucideIcon;
 }
 
-// The sort button next to a search field. On phones only its icon shows, so the field keeps most of the width.
-export function SortMenu<T extends string>({
-  options,
-  value,
-  onChange,
-}: {
+export interface SortMenuProps<T extends string> {
   options: SortOption<T>[];
   value: T;
   onChange: (value: T) => void;
-}) {
-  const current = options.find((option) => option.id === value) ?? options[0];
+}
+
+// The menu's button, the same before and after the menu has loaded. On phones only its icon shows, so the search
+// field keeps most of the width.
+export function SortTrigger({
+  current,
+  ...props
+}: {
+  current: { label: string; short: string };
+} & React.ComponentProps<'button'>) {
+  return (
+    <Button
+      variant='outline'
+      className='h-12 shrink-0 gap-2.5 px-3.5 font-normal'
+      aria-label={`Sort: ${current.label}`}
+      {...props}
+    >
+      <ArrowDownUpIcon className='text-muted-foreground' />
+      <span className='hidden sm:inline'>{current.short}</span>
+      <ChevronDownIcon className='text-muted-foreground size-3.5' />
+    </Button>
+  );
+}
+
+const loadMenu = () =>
+  import('@/components/search/sort-menu-loaded').then(
+    (module) => module.default,
+  );
+
+// The sort button next to a search field. Its menu loads on first use (see LazyMenu).
+export function SortMenu<T extends string>(props: SortMenuProps<T>) {
+  const current =
+    props.options.find((option) => option.id === props.value) ??
+    props.options[0];
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant='outline'
-          className='h-12 shrink-0 gap-2.5 px-3.5 font-normal'
-          aria-label={`Sort: ${current.label}`}
-        >
-          <ArrowDownUpIcon className='text-muted-foreground' />
-          <span className='hidden sm:inline'>{current.short}</span>
-          <ChevronDownIcon className='text-muted-foreground size-3.5' />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end' className='w-56'>
-        <DropdownMenuLabel className='text-muted-foreground px-2.5 pt-1.5 pb-1 text-[11px] font-normal tracking-widest uppercase'>
-          Sort by
-        </DropdownMenuLabel>
-        <DropdownMenuRadioGroup
-          value={current.id}
-          onValueChange={(id) => onChange(id as T)}
-        >
-          {options.map(({ id, label, icon: Icon }) => (
-            <DropdownMenuRadioItem key={id} value={id}>
-              <Icon className='text-muted-foreground' />
-              {label}
-            </DropdownMenuRadioItem>
-          ))}
-        </DropdownMenuRadioGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <LazyMenu
+      load={loadMenu as () => Promise<React.ComponentType<SortMenuProps<T>>>}
+      props={props}
+      trigger={<SortTrigger current={current} />}
+    />
   );
 }

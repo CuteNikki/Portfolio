@@ -1,52 +1,29 @@
 'use client';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import { motion, useReducedMotion } from 'framer-motion';
 import { Tabs as TabsPrimitive } from 'radix-ui';
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-// Shares the active value + a per-Tabs layout id so a single indicator can slide
-// between triggers. Variant travels separately from TabsList.
-type TabsContextValue = { value: string | undefined; indicatorId: string };
-const TabsContext = React.createContext<TabsContextValue | null>(null);
 const TabsVariantContext = React.createContext<'default' | 'line'>('default');
 
 function Tabs({
   className,
   orientation = 'horizontal',
-  value,
-  defaultValue,
-  onValueChange,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
-  const indicatorId = React.useId();
-  // Track the active tab (controlled or not) so the indicator knows where to sit.
-  const [uncontrolled, setUncontrolled] = React.useState<string | undefined>(
-    defaultValue,
-  );
-  const current = value ?? uncontrolled;
-
   return (
-    <TabsContext.Provider value={{ value: current, indicatorId }}>
-      <TabsPrimitive.Root
-        data-slot='tabs'
-        data-orientation={orientation}
-        orientation={orientation}
-        value={value}
-        defaultValue={defaultValue}
-        onValueChange={(next) => {
-          setUncontrolled(next);
-          onValueChange?.(next);
-        }}
-        className={cn(
-          'group/tabs flex gap-2 data-horizontal:flex-col',
-          className,
-        )}
-        {...props}
-      />
-    </TabsContext.Provider>
+    <TabsPrimitive.Root
+      data-slot='tabs'
+      data-orientation={orientation}
+      orientation={orientation}
+      className={cn(
+        'group/tabs flex gap-2 data-horizontal:flex-col',
+        className,
+      )}
+      {...props}
+    />
   );
 }
 
@@ -83,42 +60,25 @@ function TabsList({
   );
 }
 
+// The active tab gets the violet chip, or an underline in the line variant. Plain CSS: no animation library.
 function TabsTrigger({
   className,
-  value,
-  children,
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
-  const tabs = React.useContext(TabsContext);
   const variant = React.useContext(TabsVariantContext);
-  const reduce = useReducedMotion();
-  const active = tabs?.value !== undefined && tabs.value === value;
 
   return (
     <TabsPrimitive.Trigger
       data-slot='tabs-trigger'
-      value={value}
       className={cn(
-        "text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring data-active:text-foreground relative isolate inline-flex h-full flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2.5 py-0.5 text-[13px] font-medium whitespace-nowrap transition-all group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 data-active:font-semibold [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring data-active:text-foreground relative inline-flex h-full flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2.5 py-0.5 text-[13px] font-medium whitespace-nowrap transition-[color,background-color,border-color] group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 data-active:font-semibold [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        variant === 'line'
+          ? 'data-active:after:bg-foreground after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5'
+          : 'data-active:bg-primary-soft data-active:border-primary-text/40',
         className,
       )}
       {...props}
-    >
-      {active && tabs ? (
-        <motion.span
-          layoutId={reduce ? undefined : tabs.indicatorId}
-          aria-hidden
-          transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-          className={cn(
-            'pointer-events-none absolute -z-10',
-            variant === 'line'
-              ? 'bg-foreground inset-x-0 -bottom-1 h-0.5'
-              : 'bg-primary-soft border-primary-text/40 inset-0 rounded-md border',
-          )}
-        />
-      ) : null}
-      {children}
-    </TabsPrimitive.Trigger>
+    />
   );
 }
 

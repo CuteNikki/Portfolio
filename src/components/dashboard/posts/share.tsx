@@ -1,7 +1,7 @@
 'use client';
 
 import { SendIcon } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 import { Button } from '@/components/ui/button';
 

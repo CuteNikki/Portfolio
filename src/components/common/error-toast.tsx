@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 // Used to trigger an error toast from server components when data fetching fails. The toast will be displayed on the client side when the component is rendered.
 export function ErrorToast({

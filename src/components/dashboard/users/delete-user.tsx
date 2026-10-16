@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 import { deleteUser } from '@/actions/user';
 

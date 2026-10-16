@@ -1,6 +1,6 @@
 'use client';
 
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 // The "#" before a heading that copies a link to it. The rest of the markdown renders on the server, so this is the
 // only part that ships to the browser.
