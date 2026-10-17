@@ -78,7 +78,8 @@ const CodeBlock = ({ node }: ExtraProps) => {
           PreTag='div'
           language={language ?? 'text'}
           useInlineStyles={false}
-          customStyle={{ padding: '1rem' }}
+          // As wide as the longest line, so the padding stays after it when a long line scrolls sideways
+          className='w-max min-w-full p-4'
           codeTagProps={{
             style: { fontFamily: 'inherit' },
           }}
