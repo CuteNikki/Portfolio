@@ -69,7 +69,7 @@ function SectionHeader({
       <Link
         href={link.href}
         data-reveal=''
-        className='group nav-underline text-muted-foreground hover:text-foreground flex items-center gap-1.5 pb-1.5 text-sm transition-colors'
+        className='group nav-underline text-muted-foreground hover:text-foreground mb-1.5 flex items-center gap-1.5 text-sm transition-colors'
       >
         {link.label}
         <ArrowRightIcon className='size-3.5 transition-transform group-hover:translate-x-0.5' />
