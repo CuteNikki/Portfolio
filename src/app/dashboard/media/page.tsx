@@ -167,7 +167,7 @@ export default async function MediaPage() {
           No pictures yet. Add a cover to a post or project to see it here.
         </p>
       ) : (
-        <ul className='grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4'>
+        <ul className='grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4'>
           {pictures.map((picture) => (
             <li key={picture.url} className='group/picture relative'>
               <Link
@@ -179,7 +179,7 @@ export default async function MediaPage() {
                     url={picture.url}
                     alt={picture.alt}
                     fill
-                    sizes='(min-width: 1280px) 22vw, (min-width: 768px) 30vw, 46vw'
+                    sizes='(min-width: 1280px) 22vw, (min-width: 768px) 30vw, (min-width: 640px) 46vw, 100vw'
                     className='object-cover object-top'
                   />
                 </span>

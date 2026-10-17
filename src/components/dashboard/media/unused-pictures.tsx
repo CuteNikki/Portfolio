@@ -87,7 +87,7 @@ export function UnusedPictures({ pictures }: { pictures: UnusedPicture[] }) {
       {open && (
         <ul
           id='unused-pictures'
-          className='grid grid-cols-2 gap-3 border-t p-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+          className='grid gap-3 border-t p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
         >
           {pictures.map((picture) => (
             <UnusedPictureCard key={picture.url} picture={picture} />
@@ -170,7 +170,7 @@ function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
             url={picture.url}
             alt=''
             fill
-            sizes='(min-width: 1280px) 16vw, (min-width: 1024px) 20vw, (min-width: 640px) 28vw, 44vw'
+            sizes='(min-width: 1280px) 16vw, (min-width: 1024px) 20vw, (min-width: 768px) 28vw, (min-width: 640px) 44vw, 100vw'
             className='object-cover object-top'
           />
         ) : (
