@@ -22,21 +22,15 @@ export const instant = false;
 export default async function ProjectsPage() {
   await requireWriter();
 
-  const { projects, hasError } = await prisma.project
-    .findMany({
-      orderBy: { updatedAt: 'desc' },
-      include: {
-        authors: {
-          orderBy: { position: 'asc' },
-          include: { user: { select: PUBLIC_USER_SELECT } },
-        },
+  const projects = await prisma.project.findMany({
+    orderBy: { updatedAt: 'desc' },
+    include: {
+      authors: {
+        orderBy: { position: 'asc' },
+        include: { user: { select: PUBLIC_USER_SELECT } },
       },
-    })
-    .then((projects) => ({ projects, hasError: false }))
-    .catch((error) => {
-      console.error('Error fetching projects:', error);
-      return { projects: [], hasError: true };
-    });
+    },
+  });
 
   return (
     <div className='flex flex-col gap-6'>
@@ -56,7 +50,6 @@ export default async function ProjectsPage() {
         data={projects}
         filterPlaceholder='Search projects'
         noun='project'
-        hasError={hasError}
         defaultSorting={[{ id: 'updatedAt', desc: true }]}
       />
     </div>

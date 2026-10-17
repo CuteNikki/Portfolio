@@ -23,14 +23,10 @@ export async function generateMetadata({
 
   const { projectId } = await params;
 
-  const project = await prisma.project
-    .findFirst({
-      where: {
-        OR: [{ id: projectId }, { slug: projectId }],
-      },
-    })
-    .then((project) => project)
-    .catch(() => null);
+  const project = await prisma.project.findFirst({
+    where: { OR: [{ id: projectId }, { slug: projectId }] },
+    select: { title: true },
+  });
 
   if (!project) return { title: 'Project Not Found' };
 
@@ -53,18 +49,13 @@ export default async function EditProjectPage({
 
   const { projectId } = await params;
 
-  const project = await prisma.project
-    .findFirst({
-      where: {
-        OR: [{ id: projectId }, { slug: projectId }],
-      },
-      include: {
-        authors: { orderBy: { position: 'asc' } },
-        images: { orderBy: { position: 'asc' } },
-      },
-    })
-    .then((project) => project)
-    .catch(() => null);
+  const project = await prisma.project.findFirst({
+    where: { OR: [{ id: projectId }, { slug: projectId }] },
+    include: {
+      authors: { orderBy: { position: 'asc' } },
+      images: { orderBy: { position: 'asc' } },
+    },
+  });
 
   if (!project) {
     notFound();

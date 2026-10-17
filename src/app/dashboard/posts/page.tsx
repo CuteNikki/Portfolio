@@ -22,21 +22,15 @@ export const instant = false;
 export default async function PostsPage() {
   await requireWriter();
 
-  const { posts, hasError } = await prisma.post
-    .findMany({
-      orderBy: { updatedAt: 'desc' },
-      include: {
-        authors: {
-          orderBy: { position: 'asc' },
-          include: { user: { select: PUBLIC_USER_SELECT } },
-        },
+  const posts = await prisma.post.findMany({
+    orderBy: { updatedAt: 'desc' },
+    include: {
+      authors: {
+        orderBy: { position: 'asc' },
+        include: { user: { select: PUBLIC_USER_SELECT } },
       },
-    })
-    .then((posts) => ({ posts, hasError: false }))
-    .catch((error) => {
-      console.error('Error fetching posts:', error);
-      return { posts: [], hasError: true };
-    });
+    },
+  });
 
   return (
     <div className='flex flex-col gap-6'>
@@ -56,7 +50,6 @@ export default async function PostsPage() {
         data={posts}
         filterPlaceholder='Search posts'
         noun='post'
-        hasError={hasError}
         defaultSorting={[{ id: 'updatedAt', desc: true }]}
       />
     </div>

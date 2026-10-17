@@ -23,14 +23,10 @@ export async function generateMetadata({
 
   const { postId } = await params;
 
-  const post = await prisma.post
-    .findFirst({
-      where: {
-        OR: [{ id: postId }, { slug: postId }],
-      },
-    })
-    .then((post) => post)
-    .catch(() => null);
+  const post = await prisma.post.findFirst({
+    where: { OR: [{ id: postId }, { slug: postId }] },
+    select: { title: true },
+  });
 
   if (!post) return { title: 'Post Not Found' };
 
@@ -53,15 +49,10 @@ export default async function EditPostPage({
 
   const { postId } = await params;
 
-  const post = await prisma.post
-    .findFirst({
-      where: {
-        OR: [{ id: postId }, { slug: postId }],
-      },
-      include: { authors: { orderBy: { position: 'asc' } } },
-    })
-    .then((post) => post)
-    .catch(() => null);
+  const post = await prisma.post.findFirst({
+    where: { OR: [{ id: postId }, { slug: postId }] },
+    include: { authors: { orderBy: { position: 'asc' } } },
+  });
 
   if (!post) {
     notFound();

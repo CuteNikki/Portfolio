@@ -15,16 +15,10 @@ export const instant = false;
 export default async function UsersPage() {
   await requireAdmin();
 
-  const { users, hasError } = await prisma.user
-    .findMany({
-      omit: { accessToken: true, refreshToken: true, tokenExpiresAt: true },
-      orderBy: { createdAt: 'asc' },
-    })
-    .then((users) => ({ users, hasError: false }))
-    .catch((error) => {
-      console.error('Error fetching users:', error);
-      return { users: [], hasError: true };
-    });
+  const users = await prisma.user.findMany({
+    omit: { accessToken: true, refreshToken: true, tokenExpiresAt: true },
+    orderBy: { createdAt: 'asc' },
+  });
 
   return (
     <div className='flex flex-col gap-6'>
@@ -35,7 +29,6 @@ export default async function UsersPage() {
       <DataTable
         columns={columns}
         data={users}
-        hasError={hasError}
         defaultSorting={[{ id: 'role', desc: false }]}
         filterPlaceholder='Search users'
         noun='user'

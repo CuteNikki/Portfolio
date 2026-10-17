@@ -15,7 +15,6 @@ import {
   XIcon,
 } from 'lucide-react';
 
-import { ErrorToast } from '@/components/common/error-toast';
 import {
   dashboardTableFeatures,
   DashboardColumnDef,
@@ -46,7 +45,6 @@ interface DataTableProps<TData extends RowData & { id: string }> {
 export function DataTable<TData extends RowData & { id: string }>({
   columns,
   data,
-  hasError = false,
   filterPlaceholder = 'Filter...',
   defaultSorting = [],
   noun = 'row',
@@ -54,7 +52,6 @@ export function DataTable<TData extends RowData & { id: string }>({
   filterPlaceholder?: string;
   // What a row is, for the count under the table, e.g. "post" for "12 posts"
   noun?: string;
-  hasError?: boolean;
   // How the rows are sorted at first, shown on that column's header, e.g. [{ id: 'updatedAt', desc: true }]
   defaultSorting?: SortingState;
 }) {
@@ -145,12 +142,6 @@ export function DataTable<TData extends RowData & { id: string }>({
                   colSpan={columns.length}
                   className='h-12 text-center'
                 >
-                  {hasError && (
-                    <ErrorToast
-                      title='Failed to load data.'
-                      description='Please try again later.'
-                    />
-                  )}
                   No results.
                 </TableCell>
               </TableRow>

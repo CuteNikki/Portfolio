@@ -18,26 +18,20 @@ export const instant = false;
 export default async function CommentsPage() {
   await requireWriter();
 
-  const { comments, hasError } = await prisma.comment
-    .findMany({
-      orderBy: { createdAt: 'desc' },
-      include: {
-        author: {
-          select: {
-            id: true,
-            displayName: true,
-            username: true,
-            avatarUrl: true,
-          },
+  const comments = await prisma.comment.findMany({
+    orderBy: { createdAt: 'desc' },
+    include: {
+      author: {
+        select: {
+          id: true,
+          displayName: true,
+          username: true,
+          avatarUrl: true,
         },
-        post: { select: { id: true, title: true, slug: true } },
       },
-    })
-    .then((comments) => ({ comments, hasError: false }))
-    .catch((error) => {
-      console.error('Error fetching comments:', error);
-      return { comments: [], hasError: true };
-    });
+      post: { select: { id: true, title: true, slug: true } },
+    },
+  });
 
   return (
     <div className='flex flex-col gap-6'>
@@ -59,7 +53,6 @@ export default async function CommentsPage() {
           postHref: `${LINKS.postWithSlugOrId(comment.post.slug ?? comment.post.id).url}#comments`,
           createdAt: comment.createdAt,
         }))}
-        hasError={hasError}
         filterPlaceholder='Search comments'
         noun='comment'
         defaultSorting={[{ id: 'createdAt', desc: true }]}
