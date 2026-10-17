@@ -47,6 +47,8 @@ model Session {
   lastSeenAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model Post {
@@ -100,6 +102,10 @@ model Comment {
 
   parent  Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
   replies Comment[] @relation("CommentToComment")
+
+  @@index([postId])
+  @@index([authorId])
+  @@index([parentId])
 }
 
 model Project {
