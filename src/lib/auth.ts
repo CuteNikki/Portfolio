@@ -100,10 +100,19 @@ export async function getDisplaySession() {
   } catch (error) {
     // Next's own signals, such as the one that stops a prerender at the request, still go through
     unstable_rethrow(error);
+    // So does a request the browser closed before it finished, e.g. by moving on to another page. Next drops those
+    // without a word; logged here, each would look like a failed session lookup.
+    if (isAbortError(error)) throw error;
     console.error('Error fetching session:', error);
     return null;
   }
 }
+
+// The names Next itself gives a closed request's errors
+const isAbortError = (error: unknown) => {
+  const name = (error as { name?: unknown } | null)?.name;
+  return name === 'AbortError' || name === 'ResponseAborted';
+};
 
 // Next.js renders layouts and pages in parallel, so a check in the dashboard
 // layout alone doesn't stop a page from rendering its data. Call this at the
