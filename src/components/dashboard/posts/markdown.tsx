@@ -2,7 +2,7 @@
 // stay out of the browser. The dashboard editors import it from client components for their live preview.
 
 import { type ComponentPropsWithoutRef } from 'react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { nightOwl } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import rehypeExternalLinks from 'rehype-external-links';
@@ -40,43 +40,49 @@ const createHeading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   return Heading;
 };
 
-type CodeBlockProps = ComponentPropsWithoutRef<'code'> & {
-  inline?: boolean;
-  node?: unknown;
-};
-
-const CodeBlock = ({
+// Code within a line. Fenced code without a language looks just like it here, so blocks are drawn from their `pre`
+// instead (see CodeBlock) and never get this far.
+const InlineCode = ({
   children,
-  className,
   node, // eslint-disable-line @typescript-eslint/no-unused-vars -- react-markdown's syntax tree, not a DOM attribute
   ...rest
-}: CodeBlockProps) => {
-  const match = /language-(\w+)/.exec(className || '');
-  const language = match ? match[1] : '';
+}: ComponentPropsWithoutRef<'code'> & ExtraProps) => (
+  <code
+    {...rest}
+    className='text-foreground bg-muted rounded-md px-1.5 py-0.5 text-sm font-medium before:content-none after:content-none'
+  >
+    {children}
+  </code>
+);
 
-  if (!match) {
-    return (
-      <code
-        {...rest}
-        className='text-foreground bg-muted rounded-md px-1.5 py-0.5 text-sm font-medium before:content-none after:content-none'
-      >
-        {children}
-      </code>
-    );
-  }
+// A fenced code block, read from its `pre` element's syntax tree. A language shows in the bar above and colours the
+// code; without one, the code stays plain text with its lines and indents kept.
+const CodeBlock = ({ node }: ExtraProps) => {
+  const code = node?.children[0];
+  if (code?.type !== 'element') return null;
+
+  const classes = code.properties.className;
+  const language = /language-(\w+)/.exec(
+    Array.isArray(classes) ? classes.join(' ') : '',
+  )?.[1];
+  const text = code.children
+    .map((child) => ('value' in child ? child.value : ''))
+    .join('')
+    .replace(/\n$/, '');
 
   return (
-    <div className='border-border overflow-hidden rounded-xl border shadow-sm'>
+    <div className='not-prose border-border my-6 overflow-hidden rounded-xl border shadow-sm'>
       {/* Header Bar */}
-      <div className='border-border bg-muted text-muted-foreground flex items-center justify-between border-b px-4 py-2 text-xs font-semibold tracking-wider uppercase'>
-        <span>{language}</span>
-      </div>
+      {language && (
+        <div className='border-border bg-muted text-muted-foreground flex items-center justify-between border-b px-4 py-2 text-xs font-semibold tracking-wider uppercase'>
+          <span>{language}</span>
+        </div>
+      )}
 
       <div className='overflow-x-auto bg-(--code-background)'>
         <SyntaxHighlighter
-          {...rest}
           PreTag='div'
-          language={language}
+          language={language ?? 'text'}
           style={codeStyle}
           customStyle={{
             margin: 0,
@@ -87,7 +93,7 @@ const CodeBlock = ({
             style: { fontFamily: 'inherit' },
           }}
         >
-          {String(children).replace(/\n$/, '')}
+          {text}
         </SyntaxHighlighter>
       </div>
     </div>
@@ -114,11 +120,9 @@ export function MarkdownViewer({ content }: { content: string }) {
           h5: createHeading(5),
           h6: createHeading(6),
 
-          pre: ({ children }) => (
-            <div className='not-prose my-6'>{children}</div>
-          ),
+          pre: CodeBlock,
 
-          code: CodeBlock,
+          code: InlineCode,
         }}
       >
         {content}
