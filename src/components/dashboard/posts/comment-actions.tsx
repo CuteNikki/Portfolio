@@ -11,7 +11,8 @@ export interface CommentActionsProps {
   commentAuthorDiscordId: string;
   postSlug: string;
   userId: string;
-  isAdmin: boolean;
+  // Writers and admins can delete anyone's comment
+  canModerate: boolean;
   setEditingCommentIdAction: (commentId: string | null) => void;
   setShowReplyFormAction?: (show: boolean) => void;
 }

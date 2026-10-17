@@ -41,7 +41,7 @@ export default function CommentActionsLoaded({
   commentAuthorDiscordId,
   postSlug,
   userId,
-  isAdmin,
+  canModerate,
   setEditingCommentIdAction,
   setShowReplyFormAction,
   defaultOpen,
@@ -109,7 +109,7 @@ export default function CommentActionsLoaded({
             </DropdownMenuItem>
           )}
 
-          {(userId === commentAuthorId || isAdmin) && (
+          {(userId === commentAuthorId || canModerate) && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem

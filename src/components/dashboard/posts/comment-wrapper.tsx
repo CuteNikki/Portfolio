@@ -7,6 +7,8 @@ import type { Role } from '@/generated/prisma/enums';
 
 import type { PublicUser } from '@/lib/data';
 
+import { canWrite } from '@/constants/roles';
+
 import { Comment } from '@/components/dashboard/posts/comment';
 
 export function CommentWrapper({
@@ -39,7 +41,7 @@ export function CommentWrapper({
                   comment={comment}
                   postSlug={post.slug || ''}
                   userId={viewer?.id || ''}
-                  isAdmin={viewer?.role === 'ADMIN'}
+                  canModerate={canWrite(viewer?.role)}
                   editingCommentId={editingCommentId}
                   setEditingCommentIdAction={setEditingCommentId}
                   depth={0}

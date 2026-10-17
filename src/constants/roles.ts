@@ -7,3 +7,8 @@ export const ROLE_LABELS: Record<Role, string> = {
   WRITER: 'Writer',
   ADMIN: 'Admin',
 };
+
+// Writers and admins write and look after every post and project, and the comments on them
+export function canWrite(role: Role | null | undefined): boolean {
+  return role === 'ADMIN' || role === 'WRITER';
+}

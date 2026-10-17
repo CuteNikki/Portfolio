@@ -27,7 +27,7 @@ export function Comment({
   depth,
   allComments,
   comment,
-  isAdmin,
+  canModerate,
   userId,
   postSlug,
   editingCommentId,
@@ -36,7 +36,7 @@ export function Comment({
   depth: number;
   allComments: (CommentType & { author: PublicUser })[];
   comment: CommentType & { author: PublicUser };
-  isAdmin: boolean;
+  canModerate: boolean;
   userId: string;
   postSlug: string;
   editingCommentId: string | null;
@@ -87,7 +87,7 @@ export function Comment({
                 commentAuthorDiscordId={comment.author.discordId}
                 postSlug={postSlug}
                 userId={userId}
-                isAdmin={isAdmin}
+                canModerate={canModerate}
                 setEditingCommentIdAction={setEditingCommentIdAction}
                 // Replies stop nesting at MAX_DEPTH, so the deepest comments don't offer Reply
                 setShowReplyFormAction={
@@ -237,7 +237,7 @@ export function Comment({
                   allComments={allComments}
                   postSlug={postSlug}
                   userId={userId}
-                  isAdmin={isAdmin}
+                  canModerate={canModerate}
                   editingCommentId={editingCommentId}
                   setEditingCommentIdAction={setEditingCommentIdAction}
                 />
