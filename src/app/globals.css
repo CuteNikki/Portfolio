@@ -429,8 +429,9 @@
   .delay-3 {
     animation-delay: 300ms;
   }
-  /* The faded grid behind page headers; it fades out towards the bottom and the sides. Page headers start it 64px above their content (96px from sm), which sits 40px (64px) below the navbar. The offset
-     puts a line right under the navbar's bottom border, so the first line you see isn't a second border just below it. */
+  /* The faded grid behind page headers; it fades out towards the bottom and the sides. Page headers start it 64px above
+     their content (96px from sm), which sits 40px (64px) below the navbar. The offset puts a line right under the
+     navbar's bottom border, so the first line you see isn't a second border just below it. */
   .grid-backdrop {
     background-image:
       linear-gradient(var(--grid) 1px, transparent 1px),
