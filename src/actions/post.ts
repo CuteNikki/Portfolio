@@ -12,7 +12,7 @@ import {
 import { getCurrentSession, getWriterSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { commentsTag } from '@/lib/data';
-import { readDate } from '@/lib/form-date';
+import { readDate, readText } from '@/lib/form-fields';
 import { readCover, removedImages } from '@/lib/form-images';
 import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
@@ -33,12 +33,12 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
   const session = await getWriterSession();
   if (!session) return fail('Only writers and admins can do that.');
 
-  const title = formData.get('title') as string;
-  const content = formData.get('content') as string;
+  const title = readText(formData, 'title').trim();
+  const content = readText(formData, 'content');
 
   const isPublished = formData.get('isPublished') === 'true';
 
-  if (!title || !content) {
+  if (!title || !content.trim()) {
     return fail('Title and content are required.');
   }
 
@@ -81,7 +81,7 @@ export async function deletePost(formData: FormData): Promise<ActionResult> {
     return fail('Only writers and admins can do that.');
   }
 
-  const postId = formData.get('postId') as string;
+  const postId = readText(formData, 'postId');
 
   const post = await prisma.post.findFirst({
     where: { id: postId },
@@ -111,12 +111,12 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
     return fail('Only writers and admins can do that.');
   }
 
-  const id = formData.get('postId') as string;
-  const title = formData.get('title') as string;
-  const content = formData.get('content') as string;
+  const id = readText(formData, 'postId');
+  const title = readText(formData, 'title').trim();
+  const content = readText(formData, 'content');
   const isPublished = formData.get('isPublished') === 'true';
 
-  if (!id || !title || !content) {
+  if (!id || !title || !content.trim()) {
     return fail('All fields are required.');
   }
 
@@ -179,7 +179,7 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
 
 // A comment's text as it's kept: trimmed, with runs of blank lines shortened to one
 function readCommentContent(formData: FormData) {
-  return String(formData.get('content') ?? '')
+  return readText(formData, 'content')
     .trim()
     .replace(/(?:\r?\n){3,}/g, '\n\n');
 }
@@ -208,8 +208,8 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
     return fail('Sign in to comment.');
   }
 
-  const postId = String(formData.get('postId') ?? '');
-  const parentId = (formData.get('parentId') || null) as string | null;
+  const postId = readText(formData, 'postId');
+  const parentId = readText(formData, 'parentId') || null;
   const content = readCommentContent(formData);
 
   if (!postId || !content) {
@@ -269,7 +269,7 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
     return fail('Sign in to delete comments.');
   }
 
-  const commentId = String(formData.get('commentId') ?? '');
+  const commentId = readText(formData, 'commentId');
 
   if (!commentId) {
     return fail('Comment ID is required.');
@@ -304,7 +304,7 @@ export async function editComment(formData: FormData): Promise<ActionResult> {
     return fail('Sign in to edit comments.');
   }
 
-  const commentId = String(formData.get('commentId') ?? '');
+  const commentId = readText(formData, 'commentId');
   const content = readCommentContent(formData);
 
   if (!commentId || !content) {
@@ -341,9 +341,8 @@ export async function editComment(formData: FormData): Promise<ActionResult> {
 const NOT_A_READER = /bot|crawl|spider|slurp|preview|lighthouse|headless/i;
 
 export async function addView(formData: FormData): Promise<ActionResult> {
-  const postId = formData.get('postId');
-
-  if (typeof postId !== 'string' || !postId) return {};
+  const postId = readText(formData, 'postId');
+  if (!postId) return {};
 
   const [session, headerList] = await Promise.all([
     getCurrentSession(),

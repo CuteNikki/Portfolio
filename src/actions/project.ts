@@ -10,7 +10,7 @@ import {
 } from '@/lib/action-result';
 import { getWriterSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
-import { readDate } from '@/lib/form-date';
+import { readDate, readList, readText } from '@/lib/form-fields';
 import { readCover, readGallery, removedImages } from '@/lib/form-images';
 import { coverTone } from '@/lib/tone';
 import { deleteImages } from '@/lib/uploads';
@@ -28,29 +28,21 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
   const session = await getWriterSession();
   if (!session) return fail('Only writers and admins can do that.');
 
-  const title = formData.get('title') as string;
-  const description = formData.get('description') as string;
+  const title = readText(formData, 'title').trim();
+  const description = readText(formData, 'description');
   const repository = readLink(formData.get('repository'));
   const website = readLink(formData.get('website'));
   if (repository === false || website === false) {
     return fail('Links must be web addresses, like https://example.com.');
   }
-  const tags =
-    (formData.get('tags') as string)
-      ?.split(',')
-      .map((tag) => tag.trim())
-      .filter((tag) => tag.length > 0) || [];
-  const technologies =
-    (formData.get('technologies') as string)
-      ?.split(',')
-      .map((tech) => tech.trim())
-      .filter((tech) => tech.length > 0) || [];
+  const tags = readList(formData, 'tags');
+  const technologies = readList(formData, 'technologies');
 
   const createdAt = readDate(formData.get('date'));
   if (createdAt === null) return fail('Please enter a valid project date.');
 
   const isPublished = formData.get('isPublished') === 'true';
-  if (!title || !description) {
+  if (!title || !description.trim()) {
     return fail('Title and description are required.');
   }
 
@@ -98,7 +90,7 @@ export async function deleteProject(formData: FormData): Promise<ActionResult> {
     return fail('Only writers and admins can do that.');
   }
 
-  const projectId = formData.get('projectId') as string;
+  const projectId = readText(formData, 'projectId');
 
   const project = await prisma.project.findFirst({
     where: { id: projectId },
@@ -134,31 +126,23 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
     return fail('Only writers and admins can do that.');
   }
 
-  const id = formData.get('projectId') as string;
-  const title = formData.get('title') as string;
-  const description = formData.get('description') as string;
+  const id = readText(formData, 'projectId');
+  const title = readText(formData, 'title').trim();
+  const description = readText(formData, 'description');
   const repository = readLink(formData.get('repository'));
   const website = readLink(formData.get('website'));
   if (repository === false || website === false) {
     return fail('Links must be web addresses, like https://example.com.');
   }
-  const tags =
-    (formData.get('tags') as string)
-      ?.split(',')
-      .map((tag) => tag.trim())
-      .filter((tag) => tag.length > 0) || [];
-  const technologies =
-    (formData.get('technologies') as string)
-      ?.split(',')
-      .map((tech) => tech.trim())
-      .filter((tech) => tech.length > 0) || [];
+  const tags = readList(formData, 'tags');
+  const technologies = readList(formData, 'technologies');
 
   const createdAt = readDate(formData.get('date'));
   if (createdAt === null) return fail('Please enter a valid project date.');
 
   const isPublished = formData.get('isPublished') === 'true';
 
-  if (!id || !title || !description) {
+  if (!id || !title || !description.trim()) {
     return fail('Some required fields are missing.');
   }
 
@@ -244,7 +228,7 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
 // to the cover), or undefined if the form had no colour field (then the saved one stays)
 function readTone(formData: FormData): string | null | undefined {
   if (!formData.has('tone')) return undefined;
-  const tone = String(formData.get('tone')).trim().toLowerCase();
+  const tone = readText(formData, 'tone').trim().toLowerCase();
   return /^([1-5]|#[0-9a-f]{6})$/.test(tone) ? tone : null;
 }
 

@@ -7,6 +7,7 @@ import { Role } from '@/generated/prisma/enums';
 
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
+import { readText } from '@/lib/form-fields';
 import prisma from '@/lib/prisma';
 
 export async function updateUserRole(
@@ -18,7 +19,7 @@ export async function updateUserRole(
     return { error: 'Only admins can change roles.' };
   }
 
-  const targetUserId = formData.get('userId') as string;
+  const targetUserId = readText(formData, 'userId');
   const parsedRole = z.enum(Role).safeParse(formData.get('role'));
 
   if (!parsedRole.success) {
@@ -58,7 +59,7 @@ export async function deleteUser(formData: FormData): Promise<ActionResult> {
     return { error: 'Only admins can delete users.' };
   }
 
-  const targetUserId = formData.get('userId') as string;
+  const targetUserId = readText(formData, 'userId');
 
   if (session.user.id === targetUserId) {
     return { error: 'Delete your own account on the account page.' };
