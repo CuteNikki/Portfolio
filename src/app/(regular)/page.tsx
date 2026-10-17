@@ -310,7 +310,7 @@ export default function Home() {
         >
           <div
             aria-hidden
-            className='grid-backdrop absolute inset-0 -z-10 opacity-70'
+            className='grid-backdrop absolute inset-0 -z-10 mask-[radial-gradient(130%_140%_at_50%_0%,#000_35%,transparent_95%)] [--grid:color-mix(in_oklab,var(--border)_75%,transparent)]'
           />
           <div className='max-w-xl'>
             <h2
