@@ -23,11 +23,11 @@ export async function updateUserRole(
   const parsedRole = z.enum(Role).safeParse(formData.get('role'));
 
   if (!parsedRole.success) {
-    return { error: 'That isn’t a role.' };
+    return { error: "That isn't a role." };
   }
 
   if (session.user.id === targetUserId) {
-    return { error: 'You can’t change your own role.' };
+    return { error: "You can't change your own role." };
   }
 
   const targetUser = await prisma.user.findUnique({
@@ -35,7 +35,7 @@ export async function updateUserRole(
   });
 
   if (!targetUser) {
-    return { error: 'That user doesn’t exist any more.' };
+    return { error: "That user doesn't exist any more." };
   }
 
   try {
@@ -45,7 +45,7 @@ export async function updateUserRole(
     });
   } catch (error) {
     console.error('Error updating user role:', error);
-    return { error: 'The role couldn’t be saved. Please try again.' };
+    return { error: "The role couldn't be saved. Please try again." };
   }
 
   revalidateUserPaths();
@@ -70,7 +70,7 @@ export async function deleteUser(formData: FormData): Promise<ActionResult> {
   });
 
   if (!targetUser) {
-    return { error: 'That user doesn’t exist any more.' };
+    return { error: "That user doesn't exist any more." };
   }
 
   // Comments block deleting their author, so they go first, along with the replies to them. Posts and projects can
@@ -82,7 +82,7 @@ export async function deleteUser(formData: FormData): Promise<ActionResult> {
     ]);
   } catch (error) {
     console.error('Error deleting user:', error);
-    return { error: 'The user couldn’t be deleted. Please try again.' };
+    return { error: "The user couldn't be deleted. Please try again." };
   }
 
   revalidateUserPaths();

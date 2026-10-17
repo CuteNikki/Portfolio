@@ -129,11 +129,11 @@ export function EditActionButtons({
       <AlertDialog open={confirming} onOpenChange={setConfirming}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete “{title}”?</AlertDialogTitle>
+            <AlertDialogTitle>Delete "{title}"?</AlertDialogTitle>
             <AlertDialogDescription>
               {kind === 'post'
-                ? 'The post, its cover and its comments are deleted. This can’t be undone.'
-                : 'The project and its pictures are deleted. This can’t be undone.'}
+                ? "The post, its cover and its comments are deleted. This can't be undone."
+                : "The project and its pictures are deleted. This can't be undone."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

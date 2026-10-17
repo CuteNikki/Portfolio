@@ -41,17 +41,17 @@ export function RemovePictureButton({
       try {
         const result = await removePicture(url);
         if ('error' in result) {
-          toast.error('The picture wasn’t deleted', {
+          toast.error("The picture wasn't deleted", {
             description: result.error,
           });
           return;
         }
         toast.success('Picture deleted', {
-          description: `It’s no longer on “${usedBy}”.`,
+          description: `It's no longer on "${usedBy}".`,
         });
         router.refresh();
       } catch {
-        toast.error('The picture wasn’t deleted. Please try again.');
+        toast.error("The picture wasn't deleted. Please try again.");
       } finally {
         setConfirming(false);
       }
@@ -78,8 +78,8 @@ export function RemovePictureButton({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this picture?</AlertDialogTitle>
             <AlertDialogDescription>
-              It’s the {usage.toLowerCase()} of “{usedBy}”. It will be taken off
-              there and deleted from storage, and this can’t be undone.
+              It's the {usage.toLowerCase()} of "{usedBy}". It will be taken off
+              there and deleted from storage, and this can't be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

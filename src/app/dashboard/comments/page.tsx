@@ -37,7 +37,7 @@ export default async function CommentsPage() {
     <div className='flex flex-col gap-6'>
       <DashboardPageHeader
         title='Comments'
-        description='Every comment on every post. Delete the ones that don’t belong.'
+        description="Every comment on every post. Delete the ones that don't belong."
       />
       <DataTable
         columns={columns}

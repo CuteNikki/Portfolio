@@ -53,7 +53,7 @@ export function DeleteAccount({
       try {
         const { error } = await deleteAccount(typed);
         if (error) {
-          toast.error('Your account couldn’t be deleted', {
+          toast.error("Your account couldn't be deleted", {
             description: error,
           });
           return;
@@ -62,7 +62,7 @@ export function DeleteAccount({
         router.push('/');
         router.refresh();
       } catch (error) {
-        toast.error('Your account couldn’t be deleted', {
+        toast.error("Your account couldn't be deleted", {
           description: error instanceof Error ? error.message : 'Unknown error',
         });
       }
@@ -81,7 +81,7 @@ export function DeleteAccount({
           <AlertDialogTitle>Delete your account?</AlertDialogTitle>
           <AlertDialogDescription>
             {removed} are removed straight away. You can sign in with Discord
-            again later, but you’ll start fresh.
+            again later, but you'll start fresh.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <form

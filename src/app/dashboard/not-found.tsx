@@ -19,7 +19,7 @@ export default function DashboardNotFound() {
           Nothing here
         </h1>
         <p className='text-body mt-2 max-w-lg text-sm'>
-          This page doesn’t exist, or the post or project it showed was deleted.
+          This page doesn't exist, or the post or project it showed was deleted.
           The sidebar has everything else.
         </p>
       </div>

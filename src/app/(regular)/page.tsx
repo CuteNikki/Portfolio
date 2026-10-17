@@ -422,7 +422,7 @@ function ExperienceCard({
                 {name}
               </span>
               <span className='text-muted-foreground text-xs'>
-                {from} — {to}
+                {from} - {to}
               </span>
             </div>
             <span className='text-muted-foreground text-[13px]'>{role}</span>

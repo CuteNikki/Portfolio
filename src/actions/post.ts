@@ -228,7 +228,7 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
     },
     select: { id: true },
   });
-  if (!post) return fail('That post doesn’t exist any more.');
+  if (!post) return fail("That post doesn't exist any more.");
 
   // A reply answers a comment on the same post, and nests no deeper than the page shows
   if (parentId) {
@@ -237,16 +237,16 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
       select: { postId: true },
     });
     if (!parent || parent.postId !== post.id) {
-      return fail('The comment you replied to doesn’t exist any more.');
+      return fail("The comment you replied to doesn't exist any more.");
     }
     if ((await depthOf(parentId)) >= MAX_COMMENT_DEPTH) {
-      return fail('Replies can’t go any deeper here.');
+      return fail("Replies can't go any deeper here.");
     }
   }
 
   // Enough for a conversation, not for flooding a post
   if ((await hit(`comment:${session.user.id}`, 10 * 60)) > 10) {
-    return fail('That’s a lot of comments at once. Please wait a few minutes.');
+    return fail("That's a lot of comments at once. Please wait a few minutes.");
   }
 
   await prisma.comment.create({
@@ -394,7 +394,7 @@ export async function setPostPublished(
     where: { id: postId },
     select: { slug: true, publishedAt: true },
   });
-  if (!post) return fail('That post doesn’t exist any more.');
+  if (!post) return fail("That post doesn't exist any more.");
 
   // Already as asked, e.g. after a second click in another tab
   if (!!post.publishedAt === published) return {};

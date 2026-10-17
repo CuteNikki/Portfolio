@@ -56,7 +56,7 @@ export async function StorageTile() {
     return (
       <StatTile
         label='Image storage'
-        value='—'
+        value='-'
         note='No storage keys on this server'
       />
     );

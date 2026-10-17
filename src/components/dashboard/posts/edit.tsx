@@ -63,7 +63,7 @@ export function EditPostForm({
       try {
         const { error } = await updatePost(formData);
         if (error) {
-          toast.error('The post wasn’t saved', { description: error });
+          toast.error("The post wasn't saved", { description: error });
           return;
         }
         toast.success(intent === 'publish' ? 'Post published' : 'Draft saved');
@@ -85,7 +85,7 @@ export function EditPostForm({
         formData.set('postId', post.id);
         const { error } = await deletePost(formData);
         if (error) {
-          toast.error('The post wasn’t deleted', { description: error });
+          toast.error("The post wasn't deleted", { description: error });
           return;
         }
         toast.success('Post deleted');

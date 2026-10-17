@@ -37,13 +37,13 @@ export function DeleteUserDialog({
       try {
         const { error } = await deleteUser(formData);
         if (error) {
-          toast.error('The user wasn’t deleted', { description: error });
+          toast.error("The user wasn't deleted", { description: error });
           return;
         }
         toast.success(`${user.username} deleted`);
         onDeleted?.();
       } catch {
-        toast.error('The user wasn’t deleted. Please try again.');
+        toast.error("The user wasn't deleted. Please try again.");
       } finally {
         onOpenChange(false);
       }
@@ -55,8 +55,8 @@ export function DeleteUserDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete {user.username}?</AlertDialogTitle>
           <AlertDialogDescription>
-            Their comments and the replies to them are deleted, and they’re
-            taken off author lists. Posts and projects stay. This can’t be
+            Their comments and the replies to them are deleted, and they're
+            taken off author lists. Posts and projects stay. This can't be
             undone.
           </AlertDialogDescription>
         </AlertDialogHeader>

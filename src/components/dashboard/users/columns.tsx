@@ -93,7 +93,7 @@ export const RoleSelect = ({
       try {
         const { error } = await updateUserRole(formData);
         if (error) {
-          toast.error('The role wasn’t changed', { description: error });
+          toast.error("The role wasn't changed", { description: error });
           return;
         }
         toast.success('Role updated', {
@@ -154,7 +154,7 @@ const UserActions = ({ user }: { user: User }) => {
     navigator.clipboard
       .writeText(user.discordId)
       .then(() => toast.success('Discord ID copied'))
-      .catch(() => toast.error('The ID couldn’t be copied'));
+      .catch(() => toast.error("The ID couldn't be copied"));
 
   return (
     <div className='flex justify-end'>

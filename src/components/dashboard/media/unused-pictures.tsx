@@ -124,14 +124,14 @@ function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
       try {
         const result = await deleteUnusedImage(picture.url);
         if ('error' in result) {
-          toast.error('The picture wasn’t deleted', {
+          toast.error("The picture wasn't deleted", {
             description: result.error,
           });
           return;
         }
         router.refresh();
       } catch {
-        toast.error('The picture wasn’t deleted. Please try again.');
+        toast.error("The picture wasn't deleted. Please try again.");
       }
     });
 

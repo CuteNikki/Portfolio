@@ -18,7 +18,7 @@ export default function Error({ retry }: { retry: () => void }) {
           <PageHeader
             backdrop={false}
             eyebrow='Something went wrong'
-            title='This page didn’t load.'
+            title="This page didn't load."
             description='Something on the server failed for a moment. Trying again usually fixes it, and nothing you saved is lost.'
           />
           <div className='animate-hero-in flex flex-wrap items-center gap-3 delay-3'>

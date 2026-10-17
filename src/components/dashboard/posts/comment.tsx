@@ -217,7 +217,7 @@ function EditCommentForm({
         editComment(formData)
           .then(({ error }) => {
             if (error) {
-              toast.error('The comment wasn’t saved', { description: error });
+              toast.error("The comment wasn't saved", { description: error });
               return;
             }
             onClose();

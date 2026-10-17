@@ -75,7 +75,7 @@ export async function cleanUpImages(): Promise<
     return { removed };
   } catch (error) {
     console.error('Could not clean up pictures:', error);
-    return { error: 'Storage couldn’t be reached. Please try again.' };
+    return { error: "Storage couldn't be reached. Please try again." };
   }
 }
 
@@ -90,7 +90,7 @@ export async function deleteUnusedImage(
     return { error: 'Only writers can delete pictures.' };
   }
   if (typeof url !== 'string' || !ownImageKey(url)) {
-    return { error: 'That isn’t one of this site’s pictures.' };
+    return { error: "That isn't one of this site's pictures." };
   }
 
   try {
@@ -101,7 +101,7 @@ export async function deleteUnusedImage(
     return { removed: true };
   } catch (error) {
     console.error('Could not delete an unused picture:', error);
-    return { error: 'Storage couldn’t be reached. Please try again.' };
+    return { error: "Storage couldn't be reached. Please try again." };
   }
 }
 
@@ -118,10 +118,10 @@ export async function removePicture(
   }
 
   const uses = typeof url === 'string' ? await pictureUses(url) : null;
-  if (!uses) return { error: 'That isn’t one of this site’s pictures.' };
+  if (!uses) return { error: "That isn't one of this site's pictures." };
   if (uses.inText.length > 0) {
     return {
-      error: `It’s also in the text of ${uses.inText.map((title) => `“${title}”`).join(', ')}. Take it out there first.`,
+      error: `It's also in the text of ${uses.inText.map((title) => `"${title}"`).join(', ')}. Take it out there first.`,
     };
   }
 

@@ -57,7 +57,7 @@ export const columns: DashboardColumnDef<Row>[] = [
     cell: ({ row }) => (
       <span className='text-muted-foreground block max-w-48 truncate'>
         {[...row.original.tags, ...row.original.technologies].join(' · ') ||
-          '—'}
+          '-'}
       </span>
     ),
   },

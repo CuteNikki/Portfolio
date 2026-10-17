@@ -78,7 +78,7 @@ export function NewPostForm({
       try {
         const created = await createPost(formData);
         if (created.error || !created.id) {
-          toast.error('The post wasn’t saved', {
+          toast.error("The post wasn't saved", {
             description: created.error ?? 'Please try again.',
           });
           return;
@@ -140,7 +140,7 @@ export function NewPostForm({
               <Field
                 label='Date'
                 htmlFor='date'
-                hint='Leave empty to use today’s date.'
+                hint="Leave empty to use today's date."
               >
                 <Input id='date' name='date' type='date' />
               </Field>

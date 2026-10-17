@@ -146,7 +146,7 @@ export function ToneField({
         </div>
       )}
       <span className='text-muted-foreground text-xs'>
-        The panel behind the project’s cover. The five colours tint it softly; a
+        The panel behind the project's cover. The five colours tint it softly; a
         custom colour fills it as it is. Auto matches the cover.
       </span>
     </div>

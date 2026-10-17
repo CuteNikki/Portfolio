@@ -73,7 +73,7 @@ export function EditProjectForm({
       try {
         const { error } = await updateProject(formData);
         if (error) {
-          toast.error('The project wasn’t saved', { description: error });
+          toast.error("The project wasn't saved", { description: error });
           return;
         }
         toast.success(
@@ -97,7 +97,7 @@ export function EditProjectForm({
         formData.set('projectId', project.id);
         const { error } = await deleteProject(formData);
         if (error) {
-          toast.error('The project wasn’t deleted', { description: error });
+          toast.error("The project wasn't deleted", { description: error });
           return;
         }
         toast.success('Project deleted');

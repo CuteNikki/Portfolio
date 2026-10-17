@@ -17,7 +17,7 @@ export default function ProjectsPage() {
       <PageHeader
         eyebrow='Selected work'
         title='Projects.'
-        description='A collection of products, experiments, and systems I’ve helped bring to life.'
+        description="A collection of products, experiments, and systems I've helped bring to life."
       />
       {/* Drafts read the session, so they stream in after the prerendered list */}
       <Suspense fallback={null}>

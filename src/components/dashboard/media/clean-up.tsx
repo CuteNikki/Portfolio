@@ -31,7 +31,7 @@ export function CleanUpButton({ count }: { count: number }) {
       try {
         const result = await cleanUpImages();
         if ('error' in result) {
-          toast.error('The pictures weren’t deleted', {
+          toast.error("The pictures weren't deleted", {
             description: result.error,
           });
           return;
@@ -43,7 +43,7 @@ export function CleanUpButton({ count }: { count: number }) {
         );
         router.refresh();
       } catch {
-        toast.error('The pictures weren’t deleted. Please try again.');
+        toast.error("The pictures weren't deleted. Please try again.");
       } finally {
         setConfirming(false);
       }
@@ -72,7 +72,7 @@ export function CleanUpButton({ count }: { count: number }) {
             </AlertDialogTitle>
             <AlertDialogDescription>
               No post or project uses {count === 1 ? 'it' : 'them'}. A picture
-              someone is adding in a form they haven’t saved yet counts as
+              someone is adding in a form they haven't saved yet counts as
               unused too, so save open forms first.
             </AlertDialogDescription>
           </AlertDialogHeader>

@@ -56,7 +56,7 @@ export default function CommentActionsLoaded({
     deleteComment(formData)
       .then(({ error }) => {
         if (error)
-          toast.error('The comment wasn’t deleted', { description: error });
+          toast.error("The comment wasn't deleted", { description: error });
         else toast.success('Comment deleted');
         setShowDeleteDialog(false);
       })
@@ -132,7 +132,7 @@ export default function CommentActionsLoaded({
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this comment?</AlertDialogTitle>
             <AlertDialogDescription>
-              It’s removed together with any replies to it. This can’t be
+              It's removed together with any replies to it. This can't be
               undone.
             </AlertDialogDescription>
           </AlertDialogHeader>

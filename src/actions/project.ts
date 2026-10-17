@@ -267,7 +267,7 @@ export async function setProjectPublished(
     where: { id: projectId },
     select: { slug: true, publishedAt: true },
   });
-  if (!project) return fail('That project doesn’t exist any more.');
+  if (!project) return fail("That project doesn't exist any more.");
 
   // Already as asked, e.g. after a second click in another tab
   if (!!project.publishedAt === published) return {};

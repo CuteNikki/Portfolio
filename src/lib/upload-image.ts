@@ -19,14 +19,14 @@ async function shrink(bitmap: ImageBitmap, size: number, type: ImageType) {
 
   const context = canvas.getContext('2d');
   if (!context)
-    throw new Error('This browser can’t prepare pictures for upload.');
+    throw new Error("This browser can't prepare pictures for upload.");
   context.imageSmoothingQuality = 'high';
   context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
 
   const blob = await new Promise<Blob | null>((resolve) =>
     canvas.toBlob(resolve, type, 0.85),
   );
-  if (!blob) throw new Error('This picture couldn’t be prepared for upload.');
+  if (!blob) throw new Error("This picture couldn't be prepared for upload.");
   return blob;
 }
 

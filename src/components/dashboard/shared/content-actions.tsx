@@ -61,7 +61,7 @@ export function ContentActions({
     navigator.clipboard
       .writeText(`${window.location.origin}${publicHref}`)
       .then(() => toast.success('Link copied'))
-      .catch(() => toast.error('The link couldn’t be copied'));
+      .catch(() => toast.error("The link couldn't be copied"));
 
   // Publishes a draft or takes a published entry back to a draft
   const togglePublished = () =>
@@ -73,7 +73,7 @@ export function ContentActions({
           : setProjectPublished(id, publish));
         if (error) {
           toast.error(
-            `The ${kind} couldn’t be ${publish ? 'published' : 'unpublished'}`,
+            `The ${kind} couldn't be ${publish ? 'published' : 'unpublished'}`,
             { description: error },
           );
           return;
@@ -96,7 +96,7 @@ export function ContentActions({
           ? deletePost(formData)
           : deleteProject(formData));
         if (error) {
-          toast.error(`The ${kind} couldn’t be deleted`, {
+          toast.error(`The ${kind} couldn't be deleted`, {
             description: error,
           });
           return;
@@ -104,7 +104,7 @@ export function ContentActions({
         toast.success(kind === 'post' ? 'Post deleted' : 'Project deleted');
         router.refresh();
       } catch {
-        toast.error(`The ${kind} couldn’t be deleted. Please try again.`);
+        toast.error(`The ${kind} couldn't be deleted. Please try again.`);
       } finally {
         setConfirming(false);
       }
@@ -174,11 +174,11 @@ export function ContentActions({
       <AlertDialog open={confirming} onOpenChange={setConfirming}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete “{title}”?</AlertDialogTitle>
+            <AlertDialogTitle>Delete "{title}"?</AlertDialogTitle>
             <AlertDialogDescription>
               {kind === 'post'
-                ? 'The post, its cover and its comments are deleted. This can’t be undone.'
-                : 'The project and its pictures are deleted. This can’t be undone.'}
+                ? "The post, its cover and its comments are deleted. This can't be undone."
+                : "The project and its pictures are deleted. This can't be undone."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

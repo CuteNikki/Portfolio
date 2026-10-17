@@ -165,7 +165,7 @@ export function ContactForm() {
 
           <Field data-invalid={!!errors.subject}>
             <FieldLabel htmlFor='contact-subject'>Subject</FieldLabel>
-            <Input {...field('subject')} placeholder='What it’s about' />
+            <Input {...field('subject')} placeholder="What it's about" />
             {error('subject')}
           </Field>
           <Field data-invalid={!!errors.message}>

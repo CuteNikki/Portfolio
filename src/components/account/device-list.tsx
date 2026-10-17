@@ -40,10 +40,10 @@ export function DeviceList({ devices }: { devices: Device[] }) {
     startTransition(async () => {
       try {
         const { error } = await action();
-        if (error) toast.error('That didn’t work', { description: error });
+        if (error) toast.error("That didn't work", { description: error });
         else toast.success(done);
       } catch (error) {
-        toast.error('That didn’t work', { description: message(error) });
+        toast.error("That didn't work", { description: message(error) });
       }
     });
 

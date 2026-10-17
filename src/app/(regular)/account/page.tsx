@@ -28,7 +28,7 @@ export default function AccountPage() {
       <PageHeader
         eyebrow='Account'
         title='Your account.'
-        description='Your profile, your comments and the devices you’re signed in on, all in one place.'
+        description="Your profile, your comments and the devices you're signed in on, all in one place."
       />
       {/* Reads the session, so it streams in after the prerendered header */}
       <Suspense fallback={<AccountSkeleton />}>
@@ -168,7 +168,7 @@ async function AccountContent() {
           </h2>
           <p className='text-body mt-1 text-sm'>
             Removes your profile, your comments and every signed-in device.
-            Posts and projects you wrote stay. This can’t be undone.
+            Posts and projects you wrote stay. This can't be undone.
           </p>
         </div>
         <DeleteAccount

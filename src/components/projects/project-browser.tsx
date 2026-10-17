@@ -43,7 +43,7 @@ const SORTS: SortOption<Sort>[] = [
     icon: ClockArrowDownIcon,
   },
   { id: 'old', label: 'Oldest first', short: 'Oldest', icon: ClockArrowUpIcon },
-  { id: 'az', label: 'Name, A–Z', short: 'A–Z', icon: ArrowDownAZIcon },
+  { id: 'az', label: 'Name, A-Z', short: 'A-Z', icon: ArrowDownAZIcon },
 ];
 
 // How many times each value appears across the projects, most common first
@@ -231,7 +231,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
             placeholder='Name, stack or date'
             sections={sections}
             resultsLabel={plural(shown.length)}
-            emptyText={`No projects, technologies or dates match “${query.trim()}”.`}
+            emptyText={`No projects, technologies or dates match "${query.trim()}".`}
           />
         </div>
         <SortMenu options={SORTS} value={sort} onChange={setSort} />

@@ -127,7 +127,7 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
             placeholder='Title, text or date'
             sections={sections}
             resultsLabel={plural(shown.length)}
-            emptyText={`No posts or dates match “${query.trim()}”.`}
+            emptyText={`No posts or dates match "${query.trim()}".`}
           />
         </div>
         <SortMenu options={SORTS} value={sort} onChange={setSort} />

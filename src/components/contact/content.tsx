@@ -19,8 +19,8 @@ export function ContactContent() {
     <div className='flex w-full flex-col gap-10'>
       <PageHeader
         eyebrow='Contact'
-        title='Let’s talk.'
-        description='Have a question, an idea or a project in mind? Send a note and I’ll get back to you soon.'
+        title="Let's talk."
+        description="Have a question, an idea or a project in mind? Send a note and I'll get back to you soon."
       />
 
       <div className='grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start'>

@@ -38,7 +38,7 @@ export function CommentList({ comments }: { comments: OwnComment[] }) {
   if (comments.length === 0) {
     return (
       <p className='text-muted-foreground text-sm'>
-        You haven’t commented yet.
+        You haven't commented yet.
       </p>
     );
   }
@@ -53,14 +53,14 @@ export function CommentList({ comments }: { comments: OwnComment[] }) {
         formData.set('postSlug', comment.postSlug);
         const { error } = await deleteComment(formData);
         if (error) {
-          toast.error('The comment couldn’t be deleted', {
+          toast.error("The comment couldn't be deleted", {
             description: error,
           });
           return;
         }
         toast.success('Comment deleted');
       } catch (error) {
-        toast.error('The comment couldn’t be deleted', {
+        toast.error("The comment couldn't be deleted", {
           description: error instanceof Error ? error.message : 'Unknown error',
         });
       } finally {
@@ -110,7 +110,7 @@ export function CommentList({ comments }: { comments: OwnComment[] }) {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this comment?</AlertDialogTitle>
             <AlertDialogDescription>
-              It’s removed from “{deleting?.postTitle}”, together with any
+              It's removed from "{deleting?.postTitle}", together with any
               replies to it.
             </AlertDialogDescription>
           </AlertDialogHeader>

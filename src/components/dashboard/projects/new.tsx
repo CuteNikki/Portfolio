@@ -86,7 +86,7 @@ export function NewProjectForm({
       try {
         const created = await createProject(formData);
         if (created.error || !created.id) {
-          toast.error('The project wasn’t saved', {
+          toast.error("The project wasn't saved", {
             description: created.error ?? 'Please try again.',
           });
           return;
@@ -158,7 +158,7 @@ export function NewProjectForm({
               <Field
                 label='Date'
                 htmlFor='date'
-                hint='Leave empty to use today’s date.'
+                hint="Leave empty to use today's date."
               >
                 <Input id='date' name='date' type='date' />
               </Field>

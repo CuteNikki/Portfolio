@@ -105,7 +105,7 @@ export function StatusBadge({ published }: { published: boolean }) {
 
 export function AuthorsCell({ authors }: { authors: Author[] }) {
   if (authors.length === 0)
-    return <span className='text-muted-foreground'>—</span>;
+    return <span className='text-muted-foreground'>-</span>;
 
   // People who signed in open their dashboard page; others have none
   const hrefOf = (author: Author) =>

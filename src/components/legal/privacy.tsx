@@ -349,7 +349,7 @@ const CONTENT = {
       legalBasis: {
         title: 'Rechtsgrundlage:',
         description:
-          'Art. 6 Abs. 1 lit. a DSGVO (erforderlich zur Vertragserfüllung – Bereitstellung des von Ihnen angeforderten Dienstes).',
+          'Art. 6 Abs. 1 lit. a DSGVO (erforderlich zur Vertragserfüllung: Bereitstellung des von Ihnen angeforderten Dienstes).',
       },
       dataSharing: {
         title: 'Datenweitergabe:',

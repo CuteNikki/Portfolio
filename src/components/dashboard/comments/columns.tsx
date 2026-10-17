@@ -68,13 +68,13 @@ export function CommentActions({
       try {
         const { error } = await deleteComment(formData);
         if (error) {
-          toast.error('The comment wasn’t deleted', { description: error });
+          toast.error("The comment wasn't deleted", { description: error });
           return;
         }
         toast.success('Comment deleted');
         router.refresh();
       } catch {
-        toast.error('The comment wasn’t deleted. Please try again.');
+        toast.error("The comment wasn't deleted. Please try again.");
       } finally {
         setConfirming(false);
       }
@@ -114,10 +114,10 @@ export function CommentActions({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Delete {comment.author}’s comment?
+              Delete {comment.author}'s comment?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              It’s removed from “{comment.postTitle}”, together with any replies
+              It's removed from "{comment.postTitle}", together with any replies
               to it.
             </AlertDialogDescription>
           </AlertDialogHeader>

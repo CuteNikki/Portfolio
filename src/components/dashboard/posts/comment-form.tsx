@@ -41,7 +41,7 @@ export function CommentForm({
         createComment(formData)
           .then(({ error }) => {
             if (error) {
-              toast.error('The comment wasn’t posted', { description: error });
+              toast.error("The comment wasn't posted", { description: error });
               return;
             }
             setContent('');

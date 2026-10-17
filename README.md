@@ -6,14 +6,14 @@ A personal portfolio website built with **Next.js 16**, **React 19**, and **Type
 
 ## Features
 
-- **Portfolio & About** — Home page with career, education, skills, and social links
-- **Projects** — Showcase of projects with tags, technologies, and links
-- **Blog Posts** — Markdown-powered blog with syntax highlighting, GFM support, and nested comments
-- **Contact Form** — Email delivery via our own mail server (Stalwart at mail.niso.moe)
-- **Dashboard** — Protected area where writers and admins manage posts, projects, comments, and pictures, and admins manage users
-- **Authentication** — Discord OAuth2 login with session management
-- **Theming** — Light, dark, system, and Catppuccin themes
-- **Bilingual Legal Pages** — Imprint & privacy policy in English and German
+- **Portfolio & About**: Home page with career, education, skills, and social links
+- **Projects**: Showcase of projects with tags, technologies, and links
+- **Blog Posts**: Markdown-powered blog with syntax highlighting, GFM support, and nested comments
+- **Contact Form**: Email delivery via our own mail server (Stalwart at mail.niso.moe)
+- **Dashboard**: Protected area where writers and admins manage posts, projects, comments, and pictures, and admins manage users
+- **Authentication**: Discord OAuth2 login with session management
+- **Theming**: Light, dark, system, and Catppuccin themes
+- **Bilingual Legal Pages**: Imprint & privacy policy in English and German
 
 ## Tech Stack
 

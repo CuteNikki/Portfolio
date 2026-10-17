@@ -158,7 +158,7 @@ export function CoverField({
       if (url && url !== defaultValue) void discardImages([url]);
       setUrl(uploaded);
     } catch (error) {
-      toast.error('The picture couldn’t be uploaded', {
+      toast.error("The picture couldn't be uploaded", {
         description: message(error),
       });
     } finally {
@@ -251,7 +251,7 @@ export function GalleryField({
         );
         setImages((current) => [...current, { url, alt: '' }]);
       } catch (error) {
-        toast.error(`“${file.name}” couldn’t be uploaded`, {
+        toast.error(`"${file.name}" couldn't be uploaded`, {
           description: message(error),
         });
       }

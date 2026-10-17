@@ -211,7 +211,7 @@ export default async function UserPage({
         linkLabel='all comments'
       >
         {comments.length === 0 ? (
-          <PanelEmpty>{name} hasn’t commented yet.</PanelEmpty>
+          <PanelEmpty>{name} hasn't commented yet.</PanelEmpty>
         ) : (
           <ul className='divide-y'>
             {comments.map((comment) => {
