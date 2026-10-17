@@ -494,8 +494,16 @@
   .card-lift:focus-visible::before {
     opacity: 1;
   }
+  .animate-fade-in {
+    animation: fade-in 180ms ease-out;
+  }
   .animate-pop-in {
     animation: pop-in 180ms var(--ease-out-soft) both;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
 }
 @keyframes pop-in {
