@@ -76,6 +76,7 @@ export function CommentForm({
           <div className='ml-auto flex flex-wrap justify-end gap-2'>
             {(content.trim().length > 0 || setShowReplyFormAction) && (
               <Button
+                type='button'
                 variant='outline'
                 onClick={() => {
                   setContent('');

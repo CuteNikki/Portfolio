@@ -42,8 +42,6 @@ export function Comment({
   editingCommentId: string | null;
   setEditingCommentIdAction: (commentId: string | null) => void;
 }) {
-  const [content, setContent] = useState(comment.content);
-  const fieldId = useId();
   const [showReplyForm, setShowReplyForm] = useState(false);
 
   const replies = allComments.filter((c) => c.parentId === comment.id);
@@ -98,64 +96,10 @@ export function Comment({
           </div>
           {editingCommentId === comment.id ? (
             <div className='mt-2'>
-              <form
-                onSubmit={(event) => {
-                  event.preventDefault();
-
-                  const formData = new FormData(event.currentTarget);
-                  formData.append('commentId', comment.id);
-                  formData.append('postId', comment.postId);
-                  formData.append('postSlug', postSlug);
-
-                  editComment(formData)
-                    .then(({ error }) => {
-                      if (error) {
-                        toast.error('The comment wasn’t saved', {
-                          description: error,
-                        });
-                        return;
-                      }
-                      setEditingCommentIdAction(null);
-                      toast.success('Comment saved');
-                    })
-                    .catch((error) => {
-                      toast.error(`Failed to edit comment!`, {
-                        description: error.message,
-                      });
-                    });
-                }}
-                className='flex flex-col gap-2'
-              >
-                <Field>
-                  <FieldLabel htmlFor={fieldId} className='sr-only'>
-                    Your Comment
-                  </FieldLabel>
-                  <Textarea
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    id={fieldId}
-                    name='content'
-                  />
-                  <FieldDescription
-                    className={content.length >= 1000 ? 'text-destructive' : ''}
-                  >
-                    {content.trim().length}/1000
-                  </FieldDescription>
-                </Field>
-                <div className='flex flex-wrap justify-end gap-2'>
-                  {content.trim().length > 0 && (
-                    <Button
-                      variant='outline'
-                      onClick={() => setEditingCommentIdAction(null)}
-                    >
-                      Cancel
-                    </Button>
-                  )}
-                  <Button type='submit' disabled={content.trim().length === 0}>
-                    Save
-                  </Button>
-                </div>
-              </form>
+              <EditCommentForm
+                comment={comment}
+                onClose={() => setEditingCommentIdAction(null)}
+              />
             </div>
           ) : (
             <p className='text-body mt-1 text-sm wrap-break-word whitespace-pre-wrap'>
@@ -247,5 +191,69 @@ export function Comment({
         </div>
       )}
     </div>
+  );
+}
+
+// Editing your own comment. It opens with the saved text each time, so changes that were cancelled don't come back.
+function EditCommentForm({
+  comment,
+  onClose,
+}: {
+  comment: CommentType;
+  onClose: () => void;
+}) {
+  const [content, setContent] = useState(comment.content);
+  const fieldId = useId();
+
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.currentTarget);
+        formData.append('commentId', comment.id);
+
+        editComment(formData)
+          .then(({ error }) => {
+            if (error) {
+              toast.error('The comment wasn’t saved', { description: error });
+              return;
+            }
+            onClose();
+            toast.success('Comment saved');
+          })
+          .catch((error) => {
+            toast.error(`Failed to edit comment!`, {
+              description: error.message,
+            });
+          });
+      }}
+      className='flex flex-col gap-2'
+    >
+      <Field>
+        <FieldLabel htmlFor={fieldId} className='sr-only'>
+          Your Comment
+        </FieldLabel>
+        <Textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          id={fieldId}
+          name='content'
+        />
+        <FieldDescription
+          className={content.length >= 1000 ? 'text-destructive' : ''}
+        >
+          {content.trim().length}/1000
+        </FieldDescription>
+      </Field>
+      <div className='flex flex-wrap justify-end gap-2'>
+        <Button type='button' variant='outline' onClick={onClose}>
+          Cancel
+        </Button>
+        <Button type='submit' disabled={content.trim().length === 0}>
+          Save
+        </Button>
+      </div>
+    </form>
   );
 }
