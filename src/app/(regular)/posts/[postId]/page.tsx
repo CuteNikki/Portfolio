@@ -17,6 +17,7 @@ import {
 import { headingsOf, readingMinutes, toDescription } from '@/lib/markdown';
 import { formatShortDate } from '@/lib/utils';
 
+import { ReadingColumns } from '@/components/common/reading-columns';
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { TableOfContents } from '@/components/common/table-of-contents';
 import { StoredImage } from '@/components/common/stored-image';
@@ -201,22 +202,17 @@ async function PostContent({
         </div>
       )}
 
-      <div
+      <ReadingColumns
         data-reveal=''
         style={{ '--reveal-index': 4 } as React.CSSProperties}
-        className='mx-auto grid w-full max-w-3xl gap-10 xl:max-w-none xl:grid-cols-[1fr_minmax(0,48rem)_1fr]'
-      >
-        <div className='min-w-0 xl:col-start-2'>
-          <MarkdownViewer content={post.content} />
-        </div>
-        {headings.length > 1 && (
-          // Beside the text on wide screens only; narrower ones just read on. The column beside the centered text is
-          // narrow, so the list is a little wider than it and reaches into the page's margin.
-          <div className='hidden xl:col-start-3 xl:block'>
+        aside={
+          headings.length > 1 && (
             <TableOfContents items={headings} className='sticky top-28 w-52' />
-          </div>
-        )}
-      </div>
+          )
+        }
+      >
+        <MarkdownViewer content={post.content} />
+      </ReadingColumns>
 
       <ScrollReveal className='mx-auto w-full max-w-4xl'>
         <section

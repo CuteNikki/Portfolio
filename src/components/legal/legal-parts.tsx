@@ -27,7 +27,8 @@ export function LegalHeader({
   switchLabel: string;
 }) {
   return (
-    <header className='relative isolate flex flex-col gap-4 pt-6 pb-2 sm:pt-10'>
+    // In line with the text below it, which runs down the middle of the page (see ReadingColumns)
+    <header className='relative isolate mx-auto flex w-full max-w-3xl flex-col gap-4 pt-6 pb-2 sm:pt-10'>
       <div
         aria-hidden
         className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'

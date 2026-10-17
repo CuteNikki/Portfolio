@@ -29,9 +29,8 @@ import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { cn } from '@/lib/utils';
 
-import { HomeButton } from '@/components/common/home-button';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
-import { ScrollToTopButton } from '@/components/common/scroll-top-button';
+import { ReadingColumns } from '@/components/common/reading-columns';
 import { TableOfContents } from '@/components/common/table-of-contents';
 import {
   LEGAL_BOX,
@@ -551,8 +550,19 @@ export function PrivacyContent({
         switchLabel={content.languageToggle}
       />
 
-      <div className='grid gap-10 lg:grid-cols-[minmax(0,48rem)_1fr] lg:gap-16'>
-        <div className='flex min-w-0 flex-col gap-4'>
+      <ReadingColumns
+        aside={
+          <TableOfContents
+            label={content.quickNavigation.title}
+            items={content.quickNavigation.links.map(({ href, label }) => ({
+              id: href.replace(/^#/, ''),
+              text: label,
+            }))}
+            className='sticky top-28 w-52'
+          />
+        }
+      >
+        <div className='flex flex-col gap-4'>
           <LegalNote icon={content.notice.icon} className='px-5 py-4'>
             <p className='text-[15px] font-bold'>{content.notice.title}</p>
             <p className='text-body mt-1'>{content.notice.description}</p>
@@ -790,25 +800,8 @@ export function PrivacyContent({
               {content.questions.note}
             </p>
           </LegalSection>
-
-          <div data-reveal='' className='flex flex-wrap gap-2 pt-2'>
-            <HomeButton quiet />
-            <ScrollToTopButton />
-          </div>
         </div>
-
-        {/* Beside the text on wide screens only; narrower ones just read on */}
-        <div className='hidden lg:block'>
-          <TableOfContents
-            label={content.quickNavigation.title}
-            items={content.quickNavigation.links.map(({ href, label }) => ({
-              id: href.replace(/^#/, ''),
-              text: label,
-            }))}
-            className='sticky top-28'
-          />
-        </div>
-      </div>
+      </ReadingColumns>
     </div>
   );
 }

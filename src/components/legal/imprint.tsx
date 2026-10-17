@@ -10,9 +10,8 @@ import {
 import { LINKS } from '@/constants/links';
 import { PERSONAL_DETAILS } from '@/constants/personal';
 
-import { HomeButton } from '@/components/common/home-button';
+import { ReadingColumns } from '@/components/common/reading-columns';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
-import { ScrollToTopButton } from '@/components/common/scroll-top-button';
 import { LegalHeader, LegalSection } from '@/components/legal/legal-parts';
 
 const CONTENT = {
@@ -127,54 +126,51 @@ export function ImprintContent({
         switchLabel={content.languageToggle}
       />
 
-      <div className='flex max-w-3xl flex-col gap-4'>
-        <div className='grid gap-4 sm:grid-cols-2'>
-          <LegalSection
-            icon={content.provider.icon}
-            title={content.provider.title}
-          >
-            <div>
-              <p className='text-foreground font-semibold'>
-                {content.provider.name}
-              </p>
-              <p className='mt-1 flex items-start gap-2'>
-                <MapPinIcon className='text-primary-text mt-0.5 size-4 shrink-0' />
-                <span>
-                  {content.provider.addressLineOne}
-                  <br />
-                  {content.provider.addressLineTwo}
-                  <br />
-                  {content.provider.country}
-                </span>
-              </p>
-            </div>
-          </LegalSection>
+      <ReadingColumns>
+        <div className='flex flex-col gap-4'>
+          <div className='grid gap-4 sm:grid-cols-2'>
+            <LegalSection
+              icon={content.provider.icon}
+              title={content.provider.title}
+            >
+              <div>
+                <p className='text-foreground font-semibold'>
+                  {content.provider.name}
+                </p>
+                <p className='mt-1 flex items-start gap-2'>
+                  <MapPinIcon className='text-primary-text mt-0.5 size-4 shrink-0' />
+                  <span>
+                    {content.provider.addressLineOne}
+                    <br />
+                    {content.provider.addressLineTwo}
+                    <br />
+                    {content.provider.country}
+                  </span>
+                </p>
+              </div>
+            </LegalSection>
 
-          <LegalSection
-            icon={content.contact.icon}
-            title={content.contact.title}
-          >
-            <EmailAndPhone language={language} />
-          </LegalSection>
+            <LegalSection
+              icon={content.contact.icon}
+              title={content.contact.title}
+            >
+              <EmailAndPhone language={language} />
+            </LegalSection>
+          </div>
+
+          {[
+            content.liabilityContent,
+            content.liabilityLinks,
+            content.copyright,
+          ].map(({ icon, title, paragraphs }) => (
+            <LegalSection key={title} icon={icon} title={title}>
+              {paragraphs.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </LegalSection>
+          ))}
         </div>
-
-        {[
-          content.liabilityContent,
-          content.liabilityLinks,
-          content.copyright,
-        ].map(({ icon, title, paragraphs }) => (
-          <LegalSection key={title} icon={icon} title={title}>
-            {paragraphs.map((paragraph, i) => (
-              <p key={i}>{paragraph}</p>
-            ))}
-          </LegalSection>
-        ))}
-
-        <div data-reveal='' className='flex flex-wrap gap-2 pt-2'>
-          <HomeButton quiet />
-          <ScrollToTopButton />
-        </div>
-      </div>
+      </ReadingColumns>
     </div>
   );
 }
