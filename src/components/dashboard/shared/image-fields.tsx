@@ -203,7 +203,7 @@ export function CoverField({
         <DropArea
           disabled={progress !== null}
           onFiles={upload}
-          className='bg-muted/30 aspect-2/1 w-full gap-1.5 px-6 text-center'
+          className='bg-muted/30 aspect-2/1 w-full gap-1.5 px-6 py-5 text-center'
         >
           {progress !== null ? (
             <Progress value={progress} />
@@ -346,7 +346,7 @@ export function GalleryField({
               multiple
               disabled={progress !== null}
               onFiles={upload}
-              className='bg-muted/30 aspect-16/10 h-full min-h-40 w-full gap-1.5 px-6 text-center'
+              className='bg-muted/30 aspect-16/10 h-full min-h-40 w-full gap-1.5 px-6 py-5 text-center'
             >
               {progress !== null ? (
                 <Progress value={progress} />
