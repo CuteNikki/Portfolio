@@ -8,7 +8,7 @@ import { Role } from '@/generated/prisma/enums';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { formatShortDate, proxiedAvatarUrl, toExcerpt } from '@/lib/utils';
+import { formatShortDate, proxiedAvatarUrl, shorten } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { ROLE_LABELS } from '@/constants/roles';
@@ -233,7 +233,7 @@ export default async function UserPage({
                       </Link>
                     </p>
                     <p className='text-body mt-0.5 line-clamp-2 text-[13px]'>
-                      {toExcerpt(comment.content, 200)}
+                      {shorten(comment.content, 200)}
                     </p>
                   </div>
                   <CommentActions

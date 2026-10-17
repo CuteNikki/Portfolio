@@ -1,6 +1,6 @@
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { toExcerpt } from '@/lib/utils';
+import { shorten } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
@@ -49,7 +49,7 @@ export default async function CommentsPage() {
         columns={columns}
         data={comments.map((comment) => ({
           id: comment.id,
-          excerpt: toExcerpt(comment.content, 140),
+          excerpt: shorten(comment.content, 140),
           isReply: comment.parentId !== null,
           author: comment.author.displayName ?? comment.author.username,
           authorHref: LINKS.dashboardUserWithId(comment.author.id).url,

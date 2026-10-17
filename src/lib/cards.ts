@@ -1,9 +1,5 @@
-import {
-  formatShortDate,
-  projectTone,
-  readingMinutes,
-  toExcerpt,
-} from '@/lib/utils';
+import { readingMinutes, toExcerpt } from '@/lib/markdown';
+import { formatShortDate, projectTone } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 

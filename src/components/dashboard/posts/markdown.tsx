@@ -6,9 +6,8 @@ import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeSlug from 'rehype-slug';
-import remarkBreaks from 'remark-breaks';
-import remarkGemoji from 'remark-gemoji';
-import remarkGfm from 'remark-gfm';
+
+import { remarkPlugins } from '@/lib/markdown';
 
 import { HeadingLink } from '@/components/dashboard/posts/heading-link';
 
@@ -95,7 +94,7 @@ export function MarkdownViewer({ content }: { content: string }) {
   return (
     <div className='prose prose-zinc dark:prose-invert max-w-none'>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm, remarkBreaks, remarkGemoji]}
+        remarkPlugins={remarkPlugins}
         rehypePlugins={[
           rehypeSlug,
           [

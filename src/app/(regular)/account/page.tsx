@@ -13,7 +13,7 @@ import {
 import { getDisplaySession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { describeDevice } from '@/lib/user-agent';
-import { formatShortDate, toExcerpt } from '@/lib/utils';
+import { formatShortDate, shorten } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { ROLE_LABELS } from '@/constants/roles';
@@ -152,7 +152,7 @@ async function AccountContent() {
           <CommentList
             comments={comments.map((comment) => ({
               id: comment.id,
-              excerpt: toExcerpt(comment.content, 200),
+              excerpt: shorten(comment.content, 200),
               date: formatShortDate(comment.createdAt),
               postTitle: comment.post.title,
               postHref: `${LINKS.postWithSlugOrId(comment.post.slug ?? comment.post.id).url}#comments`,

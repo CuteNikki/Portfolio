@@ -50,47 +50,20 @@ export function getUserAvatarUrl(
 }
 
 /**
- * Turns markdown into a plain-text excerpt for meta descriptions, cut at a word boundary.
+ * Shortens text to fit a length, on one line and cut at a word boundary, e.g. a comment in a list. Markdown is
+ * shortened as it reads with toExcerpt in markdown.ts instead.
  *
- * @param markdown - The markdown source.
- * @param maxLength - The maximum length of the excerpt, including the ellipsis.
- * @returns The plain-text excerpt.
+ * @param text - The text to shorten.
+ * @param maxLength - The maximum length, including the ellipsis.
+ * @returns The text, shortened if it was longer.
  */
-export function toExcerpt(markdown: string, maxLength = 160): string {
-  const text = markdown
-    .replace(/```[\s\S]*?```/g, ' ') // code blocks
-    .replace(/<[^>]+>/g, ' ') // html tags
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ') // images
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1') // links
-    .replace(/^\s{0,3}#{1,6}\s.*$/gm, ' ') // headings, which aren't part of the summary
-    .replace(/^\s{0,3}(>|[-*+]|\d+\.)\s+/gm, '') // quotes, lists
-    .replace(/[*_~`|]/g, '') // emphasis, inline code, tables
-    .replace(/\s+/g, ' ')
-    .trim();
+export function shorten(text: string, maxLength: number): string {
+  const line = text.replace(/\s+/g, ' ').trim();
+  if (line.length <= maxLength) return line;
 
-  if (text.length <= maxLength) return text;
-
-  const cut = text.slice(0, maxLength - 1);
+  const cut = line.slice(0, maxLength - 1);
   const lastSpace = cut.lastIndexOf(' ');
   return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).replace(/[\s.,;:!?-]+$/, '')}…`;
-}
-
-/**
- * Turns markdown into a description for link previews and search results. It ends on the last whole sentence that
- * fits, and only cuts mid-sentence when that sentence would be too short to say much.
- *
- * @param markdown - The markdown source.
- * @param maxLength - The maximum length of the description.
- * @returns The plain-text description.
- */
-export function toDescription(markdown: string, maxLength = 160): string {
-  const text = toExcerpt(markdown, Infinity);
-  if (text.length <= maxLength) return text;
-
-  const sentences = text.slice(0, maxLength + 1).match(/^.*[.!?](?=\s)/);
-  if (sentences && sentences[0].length >= 60) return sentences[0];
-
-  return toExcerpt(markdown, maxLength);
 }
 
 /**
@@ -174,17 +147,4 @@ export function projectTone(project: {
   if (coverTone && coverTone >= 1 && coverTone <= 5)
     return `var(--chart-${coverTone})`;
   return toneFor(project.title);
-}
-
-/**
- * Roughly how long a text takes to read, at about 220 words a minute.
- *
- * @param markdown - The text, as markdown.
- * @returns The reading time in whole minutes, at least 1.
- */
-export function readingMinutes(markdown: string): number {
-  const words = toExcerpt(markdown, Number.MAX_SAFE_INTEGER)
-    .split(/\s+/)
-    .filter(Boolean).length;
-  return Math.max(1, Math.round(words / 220));
 }

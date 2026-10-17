@@ -14,8 +14,8 @@ import {
   getPublishedPosts,
   authorsOf,
 } from '@/lib/data';
-import { headingsOf } from '@/lib/toc';
-import { formatShortDate, readingMinutes, toDescription } from '@/lib/utils';
+import { headingsOf, readingMinutes, toDescription } from '@/lib/markdown';
+import { formatShortDate } from '@/lib/utils';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { TableOfContents } from '@/components/common/table-of-contents';

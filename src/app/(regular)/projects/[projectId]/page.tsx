@@ -13,8 +13,8 @@ import {
   getPublishedProject,
   getPublishedProjects,
 } from '@/lib/data';
-import { headingsOf } from '@/lib/toc';
-import { formatShortDate, projectTone, toDescription } from '@/lib/utils';
+import { headingsOf, toDescription } from '@/lib/markdown';
+import { formatShortDate, projectTone } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';

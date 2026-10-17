@@ -5,7 +5,7 @@ import { PlusIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { cn, toExcerpt } from '@/lib/utils';
+import { cn, shorten } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
@@ -282,7 +282,7 @@ export default async function DashboardPage() {
                         </Link>
                       </p>
                       <p className='text-body mt-0.5 line-clamp-2 text-[13px]'>
-                        {toExcerpt(comment.content, 140)}
+                        {shorten(comment.content, 140)}
                       </p>
                     </div>
                   </li>
