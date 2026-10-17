@@ -12,7 +12,6 @@ import {
 import { Footer } from '@/components/navigation/footer';
 import { Navbar } from '@/components/navigation/navbar';
 import { TooltipProvider } from '@/components/ui/tooltip';
-import { AuthProvider } from '@/providers/auth';
 
 export const { dashboard: metadata } = SITE_METADATA;
 
@@ -43,33 +42,19 @@ export default async function DashboardLayout({
   };
 
   return (
-    <AuthProvider
-      session={{
-        user: {
-          id: user.id,
-          discordId: user.discordId,
-          displayName: user.displayName,
-          username: user.username,
-          avatarUrl: user.avatarUrl,
-          role: user.role,
-          createdAt: user.createdAt,
-        },
-      }}
-    >
-      {/* The sidebar's tooltips; the rest of the site has none */}
-      <TooltipProvider>
-        <div className='flex min-h-svh flex-col'>
-          <Navbar wide />
-          <div className='flex flex-1'>
-            <DashboardSidebar counts={counts} isAdmin={isAdmin} />
-            <main className='flex min-w-0 flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10 lg:py-8'>
-              <DashboardMobileNav counts={counts} isAdmin={isAdmin} />
-              {children}
-            </main>
-          </div>
-          <Footer wide />
+    // The sidebar's tooltips; the rest of the site has none
+    <TooltipProvider>
+      <div className='flex min-h-svh flex-col'>
+        <Navbar wide />
+        <div className='flex flex-1'>
+          <DashboardSidebar counts={counts} isAdmin={isAdmin} />
+          <main className='flex min-w-0 flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10 lg:py-8'>
+            <DashboardMobileNav counts={counts} isAdmin={isAdmin} />
+            {children}
+          </main>
         </div>
-      </TooltipProvider>
-    </AuthProvider>
+        <Footer wide />
+      </div>
+    </TooltipProvider>
   );
 }
