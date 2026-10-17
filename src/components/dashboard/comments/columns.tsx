@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { ExternalLinkIcon, Trash2Icon } from 'lucide-react';
+import { GlobeIcon, Trash2Icon } from 'lucide-react';
 import { fadeOutRow } from '@/lib/row-motion';
 import { toast } from '@/lib/toast';
 
@@ -26,6 +26,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
+import { NewTabItem } from '@/components/common/menu-at-point';
 import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import {
   DropdownMenuItem,
@@ -83,16 +84,14 @@ export function CommentActions({
 
   return (
     <div ref={actions} className='flex justify-end'>
-      <RowMenu
-        label={`More actions for ${comment.author}'s comment`}
-        newTabHref={comment.postHref}
-      >
+      <RowMenu label={`More actions for ${comment.author}'s comment`}>
         <DropdownMenuItem asChild>
           <Link href={comment.postHref}>
-            <ExternalLinkIcon />
+            <GlobeIcon />
             View on the post
           </Link>
         </DropdownMenuItem>
+        <NewTabItem href={comment.postHref} />
         <DropdownMenuSeparator />
         <DropdownMenuItem
           variant='destructive'

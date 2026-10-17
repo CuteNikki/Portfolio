@@ -26,6 +26,7 @@ import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 
 import { AuthorName } from '@/components/common/author-name';
 import { TableOfContents } from '@/components/common/table-of-contents';
+import { WriterMenu } from '@/components/common/writer-menu';
 import { WriterOnly } from '@/components/common/writer-only';
 import { MarkdownViewer } from '@/components/dashboard/posts/markdown';
 import { ShareButton } from '@/components/dashboard/posts/share';
@@ -113,174 +114,186 @@ async function ProjectContent({
 
   return (
     <article className='flex w-full flex-col gap-10'>
-      <header className='relative isolate flex flex-col gap-6 pt-2 sm:pt-6'>
-        <div
-          aria-hidden
-          className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'
-        />
-        <nav
-          aria-label='Breadcrumb'
-          className='animate-hero-in text-muted-foreground text-[13px]'
-        >
-          <ol className='flex flex-wrap items-center gap-2'>
-            <li>
-              <Link
-                href={LINKS.projects.url}
-                className='nav-underline hover:text-foreground lowercase transition-colors'
-              >
-                projects
-              </Link>
-            </li>
-            <li aria-hidden>/</li>
-            <li aria-current='page' className='text-foreground lowercase'>
-              {project.slug ?? project.title}
-            </li>
-          </ol>
-        </nav>
-
-        <div className='flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between'>
-          <h1 className='animate-hero-in flex flex-wrap items-center gap-4 text-[44px] leading-[1.04] font-bold tracking-[-0.06em] text-balance delay-1 sm:text-[56px]'>
-            {project.title}
-            {!project.publishedAt && (
-              <Badge variant='destructive' size='lg'>
-                Unpublished
-              </Badge>
-            )}
-          </h1>
-
-          <div className='animate-hero-in flex flex-wrap items-center gap-2.5 delay-2'>
-            {project.website && (
-              <Button asChild>
-                <a
-                  href={project.website}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  Visit site
-                  <ArrowUpRightIcon className='group-hover/button:translate-x-0.5 group-hover/button:-translate-y-0.5' />
-                </a>
-              </Button>
-            )}
-            {project.repository && (
-              <Button asChild variant='outline'>
-                <a
-                  href={project.repository}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  <SiGithub title='' aria-hidden />
-                  Source
-                </a>
-              </Button>
-            )}
-            <ShareButton
-              path={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
-              label='Project'
-              size='default'
-            />
-            <WriterOnly>
-              <Button asChild variant='outline'>
-                <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
-                  <PencilLineIcon />
-                  Edit
-                </Link>
-              </Button>
-            </WriterOnly>
-          </div>
-        </div>
-
-        <dl className='animate-hero-in bg-card grid gap-x-8 gap-y-5 rounded-xl border p-6 text-[13px] delay-3 sm:grid-cols-2 lg:grid-cols-4'>
-          <div className='flex flex-col gap-1.5'>
-            <dt className='text-muted-foreground'>Date</dt>
-            <dd>
-              <time dateTime={date.toISOString()}>{formatShortDate(date)}</time>
-            </dd>
-          </div>
-          {authors.length > 0 && (
-            <div className='flex flex-col gap-1.5'>
-              <dt className='text-muted-foreground'>
-                {authors.length === 1 ? 'Author' : 'Authors'}
-              </dt>
-              <dd className='flex flex-wrap gap-x-3 gap-y-1.5'>
-                {authors.map((author) => (
-                  <AuthorName key={author.key} author={author} size='sm' />
-                ))}
-              </dd>
-            </div>
-          )}
-          {project.technologies.length > 0 && (
-            <div className='flex flex-col gap-1.5'>
-              <dt className='text-muted-foreground'>Stack</dt>
-              <dd>{project.technologies.join(', ')}</dd>
-            </div>
-          )}
-          {project.tags.length > 0 && (
-            <div className='flex flex-col gap-1.5'>
-              <dt className='text-muted-foreground'>
-                {project.tags.length === 1 ? 'Tag' : 'Tags'}
-              </dt>
-              <dd className='flex flex-wrap gap-1.5'>
-                {project.tags.map((tag) => (
-                  <Badge key={tag} variant='outline' className='rounded-md'>
-                    {tag}
-                  </Badge>
-                ))}
-              </dd>
-            </div>
-          )}
-        </dl>
-      </header>
-
-      {project.coverUrl && (
-        <div
-          data-reveal=''
-          style={{ '--reveal-index': 3 } as React.CSSProperties}
-        >
-          {/* The same window on a tinted panel as on the cards, so screenshots sit alike in every theme */}
-          <ProjectThumbnail
-            title={project.title}
-            coverUrl={project.coverUrl}
-            coverDarkUrl={project.coverDarkUrl}
-            tone={projectTone(project)}
-            priority
-            sizes='(min-width: 1200px) 990px, calc(86vw - 28px)'
-            className='aspect-2/1 rounded-xl border'
-          />
-        </div>
-      )}
-
-      {project.images.length > 0 && (
-        <section
-          aria-labelledby='pictures-heading'
-          data-reveal=''
-          style={{ '--reveal-index': 4 } as React.CSSProperties}
-        >
-          <h2 id='pictures-heading' className='sr-only'>
-            Pictures
-          </h2>
-          <ProjectGallery
-            title={project.title}
-            pictures={project.images.map(({ url, alt }) => ({ url, alt }))}
-          />
-        </section>
-      )}
-
-      <div
-        data-reveal=''
-        style={{ '--reveal-index': 5 } as React.CSSProperties}
-        className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-16'
+      {/* For writers and admins, right-clicking the page gives a menu to edit or unpublish it; links, pictures and
+          code keep the browser's menu */}
+      <WriterMenu
+        kind='project'
+        id={project.id}
+        title={project.title}
+        href={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
+        isDraft={!project.publishedAt}
+        passThrough='a[href], img, video, pre, .code-block'
       >
-        <div className='max-w-3xl min-w-0'>
-          <MarkdownViewer content={project.description} />
-        </div>
-        {headings.length > 1 && (
-          // Beside the text on wide screens only; narrower ones just read on
-          <div className='hidden lg:block'>
-            <TableOfContents items={headings} className='sticky top-28' />
+        <header className='relative isolate flex flex-col gap-6 pt-2 sm:pt-6'>
+          <div
+            aria-hidden
+            className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'
+          />
+          <nav
+            aria-label='Breadcrumb'
+            className='animate-hero-in text-muted-foreground text-[13px]'
+          >
+            <ol className='flex flex-wrap items-center gap-2'>
+              <li>
+                <Link
+                  href={LINKS.projects.url}
+                  className='nav-underline hover:text-foreground lowercase transition-colors'
+                >
+                  projects
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li aria-current='page' className='text-foreground lowercase'>
+                {project.slug ?? project.title}
+              </li>
+            </ol>
+          </nav>
+
+          <div className='flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between'>
+            <h1 className='animate-hero-in flex flex-wrap items-center gap-4 text-[44px] leading-[1.04] font-bold tracking-[-0.06em] text-balance delay-1 sm:text-[56px]'>
+              {project.title}
+              {!project.publishedAt && (
+                <Badge variant='destructive' size='lg'>
+                  Unpublished
+                </Badge>
+              )}
+            </h1>
+
+            <div className='animate-hero-in flex flex-wrap items-center gap-2.5 delay-2'>
+              {project.website && (
+                <Button asChild>
+                  <a
+                    href={project.website}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Visit site
+                    <ArrowUpRightIcon className='group-hover/button:translate-x-0.5 group-hover/button:-translate-y-0.5' />
+                  </a>
+                </Button>
+              )}
+              {project.repository && (
+                <Button asChild variant='outline'>
+                  <a
+                    href={project.repository}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <SiGithub title='' aria-hidden />
+                    Source
+                  </a>
+                </Button>
+              )}
+              <ShareButton
+                path={LINKS.projectWithSlugOrId(project.slug ?? project.id).url}
+                label='Project'
+                size='default'
+              />
+              <WriterOnly>
+                <Button asChild variant='outline'>
+                  <Link href={LINKS.dashboardProjectEditWithId(project.id).url}>
+                    <PencilLineIcon />
+                    Edit
+                  </Link>
+                </Button>
+              </WriterOnly>
+            </div>
+          </div>
+
+          <dl className='animate-hero-in bg-card grid gap-x-8 gap-y-5 rounded-xl border p-6 text-[13px] delay-3 sm:grid-cols-2 lg:grid-cols-4'>
+            <div className='flex flex-col gap-1.5'>
+              <dt className='text-muted-foreground'>Date</dt>
+              <dd>
+                <time dateTime={date.toISOString()}>
+                  {formatShortDate(date)}
+                </time>
+              </dd>
+            </div>
+            {authors.length > 0 && (
+              <div className='flex flex-col gap-1.5'>
+                <dt className='text-muted-foreground'>
+                  {authors.length === 1 ? 'Author' : 'Authors'}
+                </dt>
+                <dd className='flex flex-wrap gap-x-3 gap-y-1.5'>
+                  {authors.map((author) => (
+                    <AuthorName key={author.key} author={author} size='sm' />
+                  ))}
+                </dd>
+              </div>
+            )}
+            {project.technologies.length > 0 && (
+              <div className='flex flex-col gap-1.5'>
+                <dt className='text-muted-foreground'>Stack</dt>
+                <dd>{project.technologies.join(', ')}</dd>
+              </div>
+            )}
+            {project.tags.length > 0 && (
+              <div className='flex flex-col gap-1.5'>
+                <dt className='text-muted-foreground'>
+                  {project.tags.length === 1 ? 'Tag' : 'Tags'}
+                </dt>
+                <dd className='flex flex-wrap gap-1.5'>
+                  {project.tags.map((tag) => (
+                    <Badge key={tag} variant='outline' className='rounded-md'>
+                      {tag}
+                    </Badge>
+                  ))}
+                </dd>
+              </div>
+            )}
+          </dl>
+        </header>
+
+        {project.coverUrl && (
+          <div
+            data-reveal=''
+            style={{ '--reveal-index': 3 } as React.CSSProperties}
+          >
+            {/* The same window on a tinted panel as on the cards, so screenshots sit alike in every theme */}
+            <ProjectThumbnail
+              title={project.title}
+              coverUrl={project.coverUrl}
+              coverDarkUrl={project.coverDarkUrl}
+              tone={projectTone(project)}
+              priority
+              sizes='(min-width: 1200px) 990px, calc(86vw - 28px)'
+              className='aspect-2/1 rounded-xl border'
+            />
           </div>
         )}
-      </div>
 
+        {project.images.length > 0 && (
+          <section
+            aria-labelledby='pictures-heading'
+            data-reveal=''
+            style={{ '--reveal-index': 4 } as React.CSSProperties}
+          >
+            <h2 id='pictures-heading' className='sr-only'>
+              Pictures
+            </h2>
+            <ProjectGallery
+              title={project.title}
+              pictures={project.images.map(({ url, alt }) => ({ url, alt }))}
+            />
+          </section>
+        )}
+
+        <div
+          data-reveal=''
+          style={{ '--reveal-index': 5 } as React.CSSProperties}
+          className='grid gap-10 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-16'
+        >
+          <div className='max-w-3xl min-w-0'>
+            <MarkdownViewer content={project.description} />
+          </div>
+          {headings.length > 1 && (
+            // Beside the text on wide screens only; narrower ones just read on
+            <div className='hidden lg:block'>
+              <TableOfContents items={headings} className='sticky top-28' />
+            </div>
+          )}
+        </div>
+      </WriterMenu>
       {project.publishedAt && <Neighbours projectId={project.id} />}
     </article>
   );

@@ -24,6 +24,7 @@ import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { TableOfContents } from '@/components/common/table-of-contents';
 import { StoredImage } from '@/components/common/stored-image';
 import { AuthorName } from '@/components/common/author-name';
+import { WriterMenu } from '@/components/common/writer-menu';
 import { WriterOnly } from '@/components/common/writer-only';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
 import { CommentWrapper } from '@/components/dashboard/posts/comment-wrapper';
@@ -117,104 +118,118 @@ async function PostContent({
       {/* Drafts aren't read by anyone but their writers, so they don't count views */}
       {post.publishedAt && <ViewTracker postId={post.id} />}
 
-      <header className='relative isolate mx-auto flex w-full max-w-3xl flex-col gap-6 pt-2 sm:pt-6'>
-        <div
-          aria-hidden
-          className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'
-        />
-        <nav
-          aria-label='Breadcrumb'
-          className='animate-hero-in text-muted-foreground text-[13px]'
-        >
-          <ol className='flex flex-wrap items-center gap-2'>
-            <li>
-              <Link
-                href={LINKS.posts.url}
-                className='nav-underline hover:text-foreground lowercase transition-colors'
-              >
-                posts
-              </Link>
-            </li>
-            <li aria-hidden>/</li>
-            <li
-              aria-current='page'
-              className='text-foreground truncate lowercase'
-            >
-              {post.slug ?? post.title}
-            </li>
-          </ol>
-        </nav>
-
-        <h1 className='animate-hero-in text-[36px] leading-[1.1] font-bold tracking-tighter text-balance delay-1 sm:text-5xl'>
-          {post.title}
-        </h1>
-
-        <div className='animate-hero-in flex flex-col gap-5 delay-2 sm:flex-row sm:items-center sm:justify-between'>
-          <div className='text-muted-foreground flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px]'>
-            {authors.length > 0 && (
-              <span className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
-                {authors.map((author) => (
-                  <span key={author.key} className='text-foreground'>
-                    <AuthorName author={author} />
-                  </span>
-                ))}
-              </span>
-            )}
-            <time dateTime={date.toISOString()}>{formatShortDate(date)}</time>
-            <span>{readingMinutes(post.content)} min read</span>
-            {post.publishedAt && (
-              <span>
-                {post.views} {post.views === 1 ? 'view' : 'views'}
-              </span>
-            )}
-            {!post.publishedAt && (
-              <Badge variant='destructive' size='lg'>
-                Unpublished
-              </Badge>
-            )}
-          </div>
-          <div className='flex flex-wrap items-center gap-2.5'>
-            <ShareButton path={path} label='Post' size='default' />
-            <WriterOnly>
-              <Button asChild variant='outline'>
-                <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
-                  <PencilLineIcon />
-                  Edit
-                </Link>
-              </Button>
-            </WriterOnly>
-          </div>
-        </div>
-      </header>
-
-      {post.coverUrl && (
-        <div
-          data-reveal=''
-          style={{ '--reveal-index': 3 } as React.CSSProperties}
-          className='bg-muted relative mx-auto aspect-2/1 w-full max-w-4xl overflow-hidden rounded-xl border'
-        >
-          <StoredImage
-            url={post.coverUrl}
-            alt={`${post.title}'s cover picture`}
-            fill
-            priority
-            sizes='(min-width: 928px) 896px, calc(100vw - 32px)'
-            className='object-cover object-top'
-          />
-        </div>
-      )}
-
-      <ReadingColumns
-        data-reveal=''
-        style={{ '--reveal-index': 4 } as React.CSSProperties}
-        aside={
-          headings.length > 1 && (
-            <TableOfContents items={headings} className='sticky top-28 w-52' />
-          )
-        }
+      {/* For writers and admins, right-clicking the page gives a menu to edit or unpublish it; links, pictures and
+          code keep the browser's menu */}
+      <WriterMenu
+        kind='post'
+        id={post.id}
+        title={post.title}
+        href={path}
+        isDraft={!post.publishedAt}
+        passThrough='a[href], img, video, pre, .code-block'
       >
-        <MarkdownViewer content={post.content} />
-      </ReadingColumns>
+        <header className='relative isolate mx-auto flex w-full max-w-3xl flex-col gap-6 pt-2 sm:pt-6'>
+          <div
+            aria-hidden
+            className='grid-backdrop pointer-events-none absolute -top-16 left-1/2 -z-10 h-120 w-screen -translate-x-1/2 sm:-top-24'
+          />
+          <nav
+            aria-label='Breadcrumb'
+            className='animate-hero-in text-muted-foreground text-[13px]'
+          >
+            <ol className='flex flex-wrap items-center gap-2'>
+              <li>
+                <Link
+                  href={LINKS.posts.url}
+                  className='nav-underline hover:text-foreground lowercase transition-colors'
+                >
+                  posts
+                </Link>
+              </li>
+              <li aria-hidden>/</li>
+              <li
+                aria-current='page'
+                className='text-foreground truncate lowercase'
+              >
+                {post.slug ?? post.title}
+              </li>
+            </ol>
+          </nav>
+
+          <h1 className='animate-hero-in text-[36px] leading-[1.1] font-bold tracking-tighter text-balance delay-1 sm:text-5xl'>
+            {post.title}
+          </h1>
+
+          <div className='animate-hero-in flex flex-col gap-5 delay-2 sm:flex-row sm:items-center sm:justify-between'>
+            <div className='text-muted-foreground flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px]'>
+              {authors.length > 0 && (
+                <span className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
+                  {authors.map((author) => (
+                    <span key={author.key} className='text-foreground'>
+                      <AuthorName author={author} />
+                    </span>
+                  ))}
+                </span>
+              )}
+              <time dateTime={date.toISOString()}>{formatShortDate(date)}</time>
+              <span>{readingMinutes(post.content)} min read</span>
+              {post.publishedAt && (
+                <span>
+                  {post.views} {post.views === 1 ? 'view' : 'views'}
+                </span>
+              )}
+              {!post.publishedAt && (
+                <Badge variant='destructive' size='lg'>
+                  Unpublished
+                </Badge>
+              )}
+            </div>
+            <div className='flex flex-wrap items-center gap-2.5'>
+              <ShareButton path={path} label='Post' size='default' />
+              <WriterOnly>
+                <Button asChild variant='outline'>
+                  <Link href={LINKS.dashboardPostEditWithId(post.id).url}>
+                    <PencilLineIcon />
+                    Edit
+                  </Link>
+                </Button>
+              </WriterOnly>
+            </div>
+          </div>
+        </header>
+
+        {post.coverUrl && (
+          <div
+            data-reveal=''
+            style={{ '--reveal-index': 3 } as React.CSSProperties}
+            className='bg-muted relative mx-auto aspect-2/1 w-full max-w-4xl overflow-hidden rounded-xl border'
+          >
+            <StoredImage
+              url={post.coverUrl}
+              alt={`${post.title}'s cover picture`}
+              fill
+              priority
+              sizes='(min-width: 928px) 896px, calc(100vw - 32px)'
+              className='object-cover object-top'
+            />
+          </div>
+        )}
+
+        <ReadingColumns
+          data-reveal=''
+          style={{ '--reveal-index': 4 } as React.CSSProperties}
+          aside={
+            headings.length > 1 && (
+              <TableOfContents
+                items={headings}
+                className='sticky top-28 w-52'
+              />
+            )
+          }
+        >
+          <MarkdownViewer content={post.content} />
+        </ReadingColumns>
+      </WriterMenu>
 
       <ScrollReveal className='mx-auto w-full max-w-4xl'>
         <section

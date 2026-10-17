@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import {
-  ExternalLinkIcon,
+  GlobeIcon,
   EyeOffIcon,
   LinkIcon,
   PencilLineIcon,
@@ -28,6 +28,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { NewTabItem } from '@/components/common/menu-at-point';
 import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import { Button } from '@/components/ui/button';
 import {
@@ -126,28 +127,30 @@ export function ContentActions({
           <PencilLineIcon />
         </Link>
       </Button>
-      <RowMenu label={`More actions for ${title}`} newTabHref={editHref}>
+      {/* Its page on the site (drafts have none yet), then changing it, with deleting it last */}
+      <RowMenu label={`More actions for ${title}`}>
+        {isPublished && (
+          <>
+            <DropdownMenuItem asChild>
+              <Link href={publicHref}>
+                <GlobeIcon />
+                View on site
+              </Link>
+            </DropdownMenuItem>
+            <NewTabItem href={publicHref} />
+            <DropdownMenuItem onSelect={copyLink}>
+              <LinkIcon />
+              Copy link
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem asChild>
           <Link href={editHref}>
             <PencilLineIcon />
             Edit
           </Link>
         </DropdownMenuItem>
-        {isPublished && (
-          <>
-            <DropdownMenuItem asChild>
-              <Link href={publicHref}>
-                <ExternalLinkIcon />
-                View on site
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={copyLink}>
-              <LinkIcon />
-              Copy link
-            </DropdownMenuItem>
-          </>
-        )}
-        <DropdownMenuSeparator />
         <DropdownMenuItem disabled={pending} onSelect={togglePublished}>
           {isPublished ? <EyeOffIcon /> : <SendHorizonalIcon />}
           {isPublished ? 'Unpublish' : 'Publish'}

@@ -2,6 +2,8 @@ import Link from 'next/link';
 
 import { ArrowUpRightIcon } from 'lucide-react';
 
+import { WriterMenu } from '@/components/common/writer-menu';
+
 import { cn } from '@/lib/utils';
 
 import { ProjectThumbnail } from '@/components/projects/project-thumbnail';
@@ -41,54 +43,64 @@ export function ProjectCard({
   revealIndex?: number;
 }) {
   return (
-    <Link
+    <WriterMenu
+      kind='project'
+      id={project.id}
+      title={project.title}
       href={project.href}
-      data-reveal={revealIndex === undefined ? undefined : ''}
-      style={
-        revealIndex === undefined
-          ? undefined
-          : ({ '--reveal-index': revealIndex } as React.CSSProperties)
-      }
-      className={cn(
-        'card-lift group bg-card flex flex-col overflow-hidden rounded-xl border',
-        featured && 'lg:col-span-2',
-      )}
+      isDraft={project.isDraft}
     >
-      <ProjectThumbnail
-        title={project.title}
-        coverUrl={project.coverUrl}
-        coverDarkUrl={project.coverDarkUrl}
-        tone={project.tone}
-        priority={priority}
-        // The window inside is about 86% of the card's width
-        sizes={
-          featured
-            ? '(min-width: 1024px) 660px, calc(86vw - 28px)'
-            : '(min-width: 1024px) 330px, (min-width: 640px) calc(43vw - 28px), calc(86vw - 28px)'
+      <Link
+        href={project.href}
+        data-reveal={revealIndex === undefined ? undefined : ''}
+        style={
+          revealIndex === undefined
+            ? undefined
+            : ({ '--reveal-index': revealIndex } as React.CSSProperties)
         }
-        className='aspect-2/1'
-      />
-      <div className='flex flex-1 flex-col gap-1.5 border-t px-5 pt-4.5 pb-5'>
-        <div className='flex items-center justify-between gap-3'>
-          <h3 className='flex min-w-0 items-center gap-2 text-[17px] font-bold tracking-[-0.04em]'>
-            <span className='truncate'>{project.title}</span>
-            {project.isDraft && <Badge>Draft</Badge>}
-          </h3>
-          <ArrowUpRightIcon
-            aria-hidden
-            className='text-primary-text size-4 shrink-0 -translate-x-1 translate-y-1 opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-0 group-hover:opacity-100 group-focus-visible:translate-0 group-focus-visible:opacity-100'
-          />
+        className={cn(
+          'card-lift group bg-card flex flex-col overflow-hidden rounded-xl border',
+          featured && 'lg:col-span-2',
+        )}
+      >
+        <ProjectThumbnail
+          title={project.title}
+          coverUrl={project.coverUrl}
+          coverDarkUrl={project.coverDarkUrl}
+          tone={project.tone}
+          priority={priority}
+          // The window inside is about 86% of the card's width
+          sizes={
+            featured
+              ? '(min-width: 1024px) 660px, calc(86vw - 28px)'
+              : '(min-width: 1024px) 330px, (min-width: 640px) calc(43vw - 28px), calc(86vw - 28px)'
+          }
+          className='aspect-2/1'
+        />
+        <div className='flex flex-1 flex-col gap-1.5 border-t px-5 pt-4.5 pb-5'>
+          <div className='flex items-center justify-between gap-3'>
+            <h3 className='flex min-w-0 items-center gap-2 text-[17px] font-bold tracking-[-0.04em]'>
+              <span className='truncate'>{project.title}</span>
+              {project.isDraft && <Badge>Draft</Badge>}
+            </h3>
+            <ArrowUpRightIcon
+              aria-hidden
+              className='text-primary-text size-4 shrink-0 -translate-x-1 translate-y-1 opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-0 group-hover:opacity-100 group-focus-visible:translate-0 group-focus-visible:opacity-100'
+            />
+          </div>
+          <p className='text-body line-clamp-3 text-[13px]'>
+            {project.excerpt}
+          </p>
+          <div className='text-muted-foreground mt-auto flex flex-col gap-1 pt-2 text-xs'>
+            <time dateTime={new Date(project.time).toISOString()}>
+              {project.date}
+            </time>
+            {project.technologies.length > 0 && (
+              <span>{project.technologies.slice(0, 3).join(' · ')}</span>
+            )}
+          </div>
         </div>
-        <p className='text-body line-clamp-3 text-[13px]'>{project.excerpt}</p>
-        <div className='text-muted-foreground mt-auto flex flex-col gap-1 pt-2 text-xs'>
-          <time dateTime={new Date(project.time).toISOString()}>
-            {project.date}
-          </time>
-          {project.technologies.length > 0 && (
-            <span>{project.technologies.slice(0, 3).join(' · ')}</span>
-          )}
-        </div>
-      </div>
-    </Link>
+      </Link>
+    </WriterMenu>
   );
 }

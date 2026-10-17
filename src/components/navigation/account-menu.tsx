@@ -1,9 +1,12 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
 
 import type { Role } from '@/generated/prisma/enums';
 
+import { setCanWrite } from '@/lib/can-write';
 import { cn } from '@/lib/utils';
 
 import { LazyMenu } from '@/components/common/lazy-menu';
@@ -87,6 +90,10 @@ const loadMenu = () =>
 // The account dropdown. On phones (`withPages`) the same menu also holds the page links, in their own group under the
 // account's name. Its menu loads on first use (see LazyMenu).
 export function AccountMenu(props: AccountMenuProps) {
+  // The writer menus on cards and pages (see WriterMenu) only appear for writers and admins
+  const canWrite = !!props.user?.canWrite;
+  useEffect(() => setCanWrite(canWrite), [canWrite]);
+
   return (
     <LazyMenu
       load={loadMenu}

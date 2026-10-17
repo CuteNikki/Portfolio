@@ -25,6 +25,7 @@ import { updateUserRole } from '@/actions/user';
 import { sortableHeader } from '@/components/dashboard/shared/column-parts';
 import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
 import { DeleteUserDialog } from '@/components/dashboard/users/delete-user';
+import { NewTabItem } from '@/components/common/menu-at-point';
 import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import {
   DropdownMenuItem,
@@ -162,16 +163,14 @@ const UserActions = ({ user }: { user: User }) => {
 
   return (
     <div ref={actions} className='flex justify-end'>
-      <RowMenu
-        label={`More actions for ${user.username}`}
-        newTabHref={LINKS.dashboardUserWithId(user.id).url}
-      >
+      <RowMenu label={`More actions for ${user.username}`}>
         <DropdownMenuItem asChild>
           <Link href={LINKS.dashboardUserWithId(user.id).url}>
             <UserRoundIcon />
             Open
           </Link>
         </DropdownMenuItem>
+        <NewTabItem href={LINKS.dashboardUserWithId(user.id).url} />
         <DropdownMenuItem onSelect={copyId}>
           <ClipboardCopyIcon />
           Copy Discord ID
