@@ -81,7 +81,21 @@
   --ring: #a78bfa;
   --grid: rgb(23 22 26 / 6%);
   --radius: 0.75rem;
-  --code-background: #1b1a1f;
+  --code-background: var(--muted);
+  /* The colours of code in posts and projects (see .code-block). Dark themes use Night Owl's; these are deeper shades of
+     the same hues, which read on a light background. */
+  --code-text: var(--foreground);
+  --code-comment: var(--muted-foreground);
+  --code-punctuation: var(--primary-text);
+  --code-keyword: #0d7368;
+  --code-property: #155e75;
+  --code-function: #1d4ed8;
+  --code-string: #3f6212;
+  --code-class: #92400e;
+  --code-number: #b4320a;
+  --code-boolean: #be123c;
+  --code-variable: #475569;
+  --code-deleted: #b91c1c;
   --chart-1: oklch(0.56 0.25 302);
   --chart-2: oklch(0.6 0.17 250);
   --chart-3: oklch(0.65 0.14 175);
@@ -123,7 +137,6 @@
   --input: rgb(255 255 255 / 12%);
   --ring: #a78bfa;
   --grid: rgb(255 255 255 / 5%);
-  --code-background: var(--muted);
   --chart-1: oklch(0.68 0.21 303);
   --chart-2: oklch(0.7 0.14 250);
   --chart-3: oklch(0.75 0.13 175);
@@ -154,6 +167,7 @@
   --input: hsl(228 12% 71%);
   --ring: hsl(266 44% 49%);
   --destructive: hsl(347 85% 36%);
+  --code-background: var(--card);
   --chart-1: hsl(266 85% 58%);
   --chart-2: hsl(220 91% 54%);
   --chart-3: hsl(183 74% 35%);
@@ -193,6 +207,22 @@
   --chart-5: hsl(351 74% 73%);
   color-scheme: dark;
 }
+/* Night Owl's code colours, in both dark themes. Its own comment grey is too faint to read on their backgrounds. */
+.dark,
+.catppuccin-macchiato {
+  --code-text: #ffffff;
+  --code-comment: #8a9b9b;
+  --code-punctuation: #c792ea;
+  --code-keyword: #7fdbca;
+  --code-property: #80cbc4;
+  --code-function: #82aaff;
+  --code-string: #addb67;
+  --code-class: #ffcb8b;
+  --code-number: #f78c6c;
+  --code-boolean: #ff5874;
+  --code-variable: #d6deeb;
+  --code-deleted: rgb(239 83 80 / 56%);
+}
 
 /* Post and project text follows the theme's colours rather than Tailwind's zinc greys, in every theme */
 .prose {
@@ -224,6 +254,73 @@
   --tw-prose-invert-code: var(--foreground);
   --tw-prose-invert-th-borders: var(--line-strong);
   --tw-prose-invert-td-borders: var(--border);
+}
+
+/* Code blocks in posts and projects (see CodeBlock in markdown.tsx). The highlighter marks each token with classes, and
+   these colour them with the theme's --code-* colours. A token inside another, like the "<" of a tag, carries both
+   tokens' classes and should show as the inner one, so tokens that hold others come first and later rules win. */
+.code-block {
+  color: var(--code-text);
+  line-height: 1.5;
+  tab-size: 4;
+  /* Code shows exactly as typed: JetBrains Mono would otherwise draw >= as ≥ */
+  font-variant-ligatures: none;
+}
+.code-block .token.tag {
+  color: var(--code-keyword);
+}
+.code-block .token.attr-name {
+  color: var(--code-string);
+  font-style: italic;
+}
+.code-block .token:is(.attr-value, .atrule, .class-name) {
+  color: var(--code-class);
+}
+.code-block .token:is(.selector, .doctype) {
+  color: var(--code-punctuation);
+  font-style: italic;
+}
+.code-block .token:is(.string, .url, .entity) {
+  color: var(--code-string);
+}
+.code-block .token.inserted {
+  color: var(--code-string);
+  font-style: italic;
+}
+.code-block .token.deleted {
+  color: var(--code-deleted);
+  font-style: italic;
+}
+.code-block .token:is(.regex, .variable, .important) {
+  color: var(--code-variable);
+}
+.code-block .token:is(.comment, .prolog, .cdata) {
+  color: var(--code-comment);
+  font-style: italic;
+}
+.code-block .token:is(.keyword, .operator) {
+  color: var(--code-keyword);
+}
+.code-block .token:is(.property, .symbol) {
+  color: var(--code-property);
+}
+.code-block .token:is(.function, .builtin, .constant, .char) {
+  color: var(--code-function);
+}
+.code-block .token.number {
+  color: var(--code-number);
+}
+.code-block .token.boolean {
+  color: var(--code-boolean);
+}
+.code-block .token.punctuation {
+  color: var(--code-punctuation);
+}
+.code-block .token:is(.important, .bold) {
+  font-weight: bold;
+}
+.code-block .token.italic {
+  font-style: italic;
 }
 
 @layer base {

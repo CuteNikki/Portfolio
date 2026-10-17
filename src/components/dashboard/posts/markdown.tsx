@@ -4,7 +4,6 @@
 import { type ComponentPropsWithoutRef } from 'react';
 import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { nightOwl } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeSlug from 'rehype-slug';
 import remarkBreaks from 'remark-breaks';
@@ -12,12 +11,6 @@ import remarkGemoji from 'remark-gemoji';
 import remarkGfm from 'remark-gfm';
 
 import { HeadingLink } from '@/components/dashboard/posts/heading-link';
-
-// Night Owl's comment grey is too faint to read on any of the code backgrounds
-const codeStyle = {
-  ...nightOwl,
-  comment: { ...nightOwl.comment, color: '#8a9b9b' },
-};
 
 const createHeading = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
   const Heading = ({
@@ -79,16 +72,13 @@ const CodeBlock = ({ node }: ExtraProps) => {
         </div>
       )}
 
-      <div className='overflow-x-auto bg-(--code-background)'>
+      {/* The highlighter only marks the tokens; .code-block in globals.css colours them for the theme */}
+      <div className='code-block overflow-x-auto bg-(--code-background)'>
         <SyntaxHighlighter
           PreTag='div'
           language={language ?? 'text'}
-          style={codeStyle}
-          customStyle={{
-            margin: 0,
-            padding: '1rem',
-            background: 'transparent',
-          }}
+          useInlineStyles={false}
+          customStyle={{ padding: '1rem' }}
           codeTagProps={{
             style: { fontFamily: 'inherit' },
           }}
