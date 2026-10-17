@@ -5,5 +5,9 @@ export default function DashboardTemplate({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className='animate-fade-in min-w-0'>{children}</div>;
+  return (
+    <div className='animate-fade-in flex min-w-0 flex-col gap-6'>
+      {children}
+    </div>
+  );
 }
