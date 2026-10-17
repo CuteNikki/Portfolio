@@ -58,7 +58,7 @@
 
 :root {
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --background: #fbfaf8;
+  --background: #fafafb;
   --foreground: #17161a;
   --body: #4a4752;
   --card: #ffffff;
@@ -70,16 +70,16 @@
   --primary-text: #6d28d9;
   --primary-foreground: #17161a;
   --primary-soft: #eee8f7;
-  --secondary: #f3f1ec;
+  --secondary: #f2f2f5;
   --secondary-foreground: #17161a;
-  --muted: #f3f1ec;
+  --muted: #f2f2f5;
   --muted-foreground: #5e5b66;
-  --accent: #f3f1ec;
+  --accent: #f2f2f5;
   --accent-foreground: #17161a;
   --destructive: oklch(0.51 0.21 27);
-  --border: #e6e3de;
-  --line-strong: #d3cec6;
-  --input: #e6e3de;
+  --border: #e4e4e9;
+  --line-strong: #d0d0d8;
+  --input: #e4e4e9;
   --ring: #a78bfa;
   --grid: rgb(23 22 26 / 6%);
   --radius: 0.75rem;
