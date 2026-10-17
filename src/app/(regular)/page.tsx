@@ -45,7 +45,7 @@ function SectionHeading({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn('flex flex-col gap-2', className)}>
+    <div data-reveal='' className={cn('flex flex-col gap-2', className)}>
       <p className={EYEBROW}>{eyebrow}</p>
       <h2
         id={id}
@@ -97,11 +97,7 @@ export default function Home() {
       </section>
 
       <ScrollReveal className='bg-card grid gap-8 rounded-xl border p-7 sm:p-8 lg:grid-cols-2 lg:gap-0'>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 1 } as React.CSSProperties}
-          className='flex flex-col gap-3 lg:pr-8'
-        >
+        <div className='flex flex-col gap-3 lg:pr-8'>
           <span className={EYEBROW}>Availability</span>
           <p className='text-body max-w-md text-sm leading-relaxed'>
             Currently open to thoughtful collaborations, product work, and
@@ -128,11 +124,7 @@ export default function Home() {
             </li>
           </ul>
         </div>
-        <div
-          data-reveal-item
-          style={{ '--reveal-index': 2 } as React.CSSProperties}
-          className='lg:border-border flex flex-col gap-3 lg:border-l lg:pl-8'
-        >
+        <div className='lg:border-border flex flex-col gap-3 lg:border-l lg:pl-8'>
           <span className={EYEBROW}>Experience</span>
           <p className='text-body max-w-md text-sm leading-relaxed text-pretty'>
             Nearly a decade of experience building on the web, shaped by the
@@ -150,7 +142,7 @@ export default function Home() {
             {WHAT_I_DO.map(({ area, title, description, tools }, index) => (
               <li
                 key={area}
-                data-reveal-item
+                data-reveal=''
                 style={reveal(index)}
                 className='group bg-card hover:border-line-strong flex flex-col gap-3 rounded-xl border p-7 transition-[border-color,translate] duration-500 ease-(--ease-out-soft) hover:-translate-y-0.5'
               >
@@ -173,7 +165,7 @@ export default function Home() {
       <ScrollReveal>
         <section aria-labelledby='projects-heading'>
           <SelectedProjects />
-          <div className='mt-6 flex justify-center'>
+          <div data-reveal='' className='mt-6 flex justify-center'>
             <Button asChild variant='outline'>
               <Link href={LINKS.projects.url}>
                 All projects
@@ -192,6 +184,7 @@ export default function Home() {
             </SectionHeading>
             <Link
               href={LINKS.posts.url}
+              data-reveal=''
               className='nav-underline text-muted-foreground hover:text-foreground text-sm transition-colors'
             >
               all posts →
@@ -259,16 +252,16 @@ export default function Home() {
           <SectionHeading id='toolkit-heading' eyebrow='Toolkit'>
             Things I work with.
           </SectionHeading>
-          <div className='bg-card grid gap-x-6 gap-y-8 rounded-xl border p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4'>
+          <div
+            data-reveal=''
+            className='bg-card grid gap-x-6 gap-y-8 rounded-xl border p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4'
+          >
             {Object.entries(PERSONAL_DETAILS.skillsTechnologies).map(
-              ([category, skills], index) => (
+              ([category, skills]) => (
                 <div
                   key={category}
-                  data-reveal-item
-                  style={{ '--reveal-index': index } as React.CSSProperties}
-                  // Each column's rise-in animation makes it a layer of its own, so the hovered one comes to the front,
-                  // or the columns after it would cover its tooltips
-                  className='flex flex-col gap-2 hover:z-10'
+                  // The hovered column comes to the front, so the columns after it don't cover its tooltips
+                  className='relative flex flex-col gap-2 hover:z-10'
                 >
                   <h3 className='text-sm font-bold capitalize'>{category}</h3>
                   <div className='flex flex-wrap gap-1.5'>
@@ -377,8 +370,8 @@ async function LatestPosts() {
 
   return (
     <div className='flex flex-col gap-4'>
-      {posts.map((post) => (
-        <PostRow key={post.id} post={toPostRow(post)} />
+      {posts.map((post, index) => (
+        <PostRow key={post.id} post={toPostRow(post)} revealIndex={index} />
       ))}
     </div>
   );
@@ -402,19 +395,21 @@ function ExperienceCard({
   }[];
 }) {
   return (
-    <div
-      data-reveal-item
-      style={reveal(index)}
-      className='bg-card rounded-xl border p-2'
-    >
-      <h3 className='[&_svg]:text-primary-text flex items-center gap-2.5 px-4.5 pt-4 pb-3 text-[17px] font-bold tracking-[-0.03em] [&_svg]:size-4.5'>
+    <div className='bg-card rounded-xl border p-2'>
+      <h3
+        data-reveal=''
+        style={reveal(index)}
+        className='[&_svg]:text-primary-text flex items-center gap-2.5 px-4.5 pt-4 pb-3 text-[17px] font-bold tracking-[-0.03em] [&_svg]:size-4.5'
+      >
         {icon}
         {title}
       </h3>
       <ul>
-        {entries.map(({ name, role, description, from, to }) => (
+        {entries.map(({ name, role, description, from, to }, entry) => (
           <li
             key={`${name}-${role}`}
+            data-reveal=''
+            style={reveal(index + entry + 1)}
             className='hover:bg-muted/60 flex flex-col gap-1 rounded-lg px-4.5 py-4 transition-colors'
           >
             <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>

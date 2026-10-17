@@ -383,11 +383,7 @@
 @keyframes rise-in {
   from {
     opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateY(18px);
   }
 }
 /* The page's opening text. It starts at 1% opacity rather than 0: browsers skip invisible text when timing the
@@ -395,11 +391,7 @@
 @keyframes hero-in {
   from {
     opacity: 0.01;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: translateY(18px);
   }
 }
 @layer utilities {
@@ -409,24 +401,23 @@
   .animate-hero-in {
     animation: hero-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  /* Sections, cards and rows marked with data-reveal rise in as the page loads, a little after one another (each
-     item's --reveal-index). Further down the page, RevealOnScroll holds them back until they scroll into view, then
-     they rise in there. Nothing on screen waits for a script, and with reduced motion nothing moves. */
+  /* Headings, cards and rows marked data-reveal each rise in on their own: as the page loads, a little after one another
+     (each one's --reveal-index), and further down the page once enough of them scrolls into view (see RevealOnScroll),
+     one after another in the order they appear (--reveal-order). Something marked data-reveal that holds others only
+     groups them and doesn't move itself. Only the start is set, so once in place nothing holds their transform, like a
+     card's lift on hover. Nothing on screen waits for a script, and with reduced motion nothing moves. */
   @media (prefers-reduced-motion: no-preference) {
-    [data-reveal]:not(:has([data-reveal-item])),
-    [data-reveal] [data-reveal-item] {
-      animation: hero-in 700ms var(--ease-out-soft) both;
-      animation-delay: calc(120ms + var(--reveal-index, 0) * 90ms);
+    [data-reveal]:not(:has([data-reveal])) {
+      animation: hero-in 750ms var(--ease-out-soft) backwards;
+      animation-delay: calc(120ms + var(--reveal-index, 0) * 80ms);
     }
-    [data-reveal='waiting']:not(:has([data-reveal-item])),
-    [data-reveal='waiting'] [data-reveal-item] {
+    [data-reveal='waiting'] {
       opacity: 0;
       animation: none;
     }
-    [data-reveal='shown']:not(:has([data-reveal-item])),
-    [data-reveal='shown'] [data-reveal-item] {
-      animation: rise-in 800ms var(--ease-out-soft) both;
-      animation-delay: calc(var(--reveal-index, 0) * 90ms);
+    [data-reveal='shown']:not(:has([data-reveal])) {
+      animation-name: rise-in;
+      animation-delay: calc(var(--reveal-order, 0) * 80ms);
     }
   }
   .delay-1 {

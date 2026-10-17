@@ -44,6 +44,7 @@ export function FeaturedProjects({
           <div
             role='group'
             aria-label='Filter projects'
+            data-reveal=''
             className='flex flex-wrap gap-1.5'
           >
             {[null, ...tags].map((t) => {
@@ -75,6 +76,7 @@ export function FeaturedProjects({
             project={project}
             featured={index === 0 && shown.length > 2}
             priority={index === 0}
+            revealIndex={index}
           />
         ))}
       </div>
