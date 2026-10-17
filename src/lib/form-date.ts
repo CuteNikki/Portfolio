@@ -4,7 +4,13 @@
  */
 export function readDate(value: FormDataEntryValue | null) {
   if (!value) return undefined;
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return null;
+  }
 
   const date = new Date(`${value}T12:00:00Z`);
-  return Number.isNaN(date.getTime()) ? null : date;
+  // A day that doesn't exist, like 31 February, would otherwise roll over into the next month
+  return !Number.isNaN(date.getTime()) && date.toISOString().startsWith(value)
+    ? date
+    : null;
 }
