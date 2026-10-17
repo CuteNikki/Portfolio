@@ -15,7 +15,7 @@ import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { DiscordMenu } from '@/components/navigation/discord-menu';
 import { ToolkitTooltips } from '@/components/common/toolkit-tooltips';
 import { PostRow } from '@/components/posts/post-row';
-import { FeaturedProjects } from '@/components/projects/featured-projects';
+import { ProjectCard } from '@/components/projects/project-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -53,6 +53,27 @@ function SectionHeading({
       >
         {children}
       </h2>
+    </div>
+  );
+}
+
+function SectionHeader({
+  link,
+  ...heading
+}: React.ComponentProps<typeof SectionHeading> & {
+  link: { href: string; label: string };
+}) {
+  return (
+    <div className='mb-6 flex flex-wrap items-end justify-between gap-4'>
+      <SectionHeading {...heading} />
+      <Link
+        href={link.href}
+        data-reveal=''
+        className='group nav-underline text-muted-foreground hover:text-foreground flex items-center gap-1.5 pb-1.5 text-sm transition-colors'
+      >
+        {link.label}
+        <ArrowRightIcon className='size-3.5 transition-transform group-hover:translate-x-0.5' />
+      </Link>
     </div>
   );
 }
@@ -164,32 +185,26 @@ export default function Home() {
 
       <ScrollReveal>
         <section aria-labelledby='projects-heading'>
+          <SectionHeader
+            id='projects-heading'
+            eyebrow='Work'
+            link={{ href: LINKS.projects.url, label: 'all projects' }}
+          >
+            Selected projects
+          </SectionHeader>
           <SelectedProjects />
-          <div data-reveal='' className='mt-6 flex justify-center'>
-            <Button asChild variant='outline'>
-              <Link href={LINKS.projects.url}>
-                All projects
-                <ArrowRightIcon className='group-hover/button:translate-x-0.75' />
-              </Link>
-            </Button>
-          </div>
         </section>
       </ScrollReveal>
 
       <ScrollReveal>
         <section aria-labelledby='posts-heading'>
-          <div className='mb-6 flex flex-wrap items-end justify-between gap-4'>
-            <SectionHeading id='posts-heading' eyebrow='Writing'>
-              Latest posts
-            </SectionHeading>
-            <Link
-              href={LINKS.posts.url}
-              data-reveal=''
-              className='nav-underline text-muted-foreground hover:text-foreground text-sm transition-colors'
-            >
-              all posts →
-            </Link>
-          </div>
+          <SectionHeader
+            id='posts-heading'
+            eyebrow='Writing'
+            link={{ href: LINKS.posts.url, label: 'all posts' }}
+          >
+            Latest posts
+          </SectionHeader>
           <LatestPosts />
         </section>
       </ScrollReveal>
@@ -331,31 +346,30 @@ export default function Home() {
   );
 }
 
+// The five newest projects; the first spans two columns when there are enough cards to fill the rows around it
 async function SelectedProjects() {
-  const projects = await getPublishedProjects();
-
-  const heading = (
-    <SectionHeading id='projects-heading' eyebrow='Work'>
-      Selected projects
-    </SectionHeading>
-  );
+  const projects = (await getPublishedProjects()).slice(0, 5);
 
   if (projects.length === 0) {
     return (
-      <>
-        {heading}
-        <p className='text-muted-foreground mt-4'>
-          No projects yet. Check back later!
-        </p>
-      </>
+      <p className='text-muted-foreground'>
+        No projects yet. Check back later!
+      </p>
     );
   }
 
   return (
-    <FeaturedProjects
-      projects={projects.map(toProjectCard)}
-      heading={heading}
-    />
+    <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+      {projects.map((project, index) => (
+        <ProjectCard
+          key={project.id}
+          project={toProjectCard(project)}
+          featured={index === 0 && projects.length > 2}
+          priority={index === 0}
+          revealIndex={index}
+        />
+      ))}
+    </div>
   );
 }
 
