@@ -10,7 +10,7 @@ A personal portfolio website built with **Next.js 16**, **React 19**, and **Type
 - **Projects** — Showcase of projects with tags, technologies, and links
 - **Blog Posts** — Markdown-powered blog with syntax highlighting, GFM support, and nested comments
 - **Contact Form** — Email delivery via our own mail server (Stalwart at mail.niso.moe)
-- **Admin Dashboard** — Protected area for managing posts, projects, and users (admin-only)
+- **Dashboard** — Protected area where writers and admins manage posts, projects, comments, and pictures, and admins manage users
 - **Authentication** — Discord OAuth2 login with session management
 - **Theming** — Light, dark, system, and Catppuccin themes
 - **Bilingual Legal Pages** — Imprint & privacy policy in English and German
@@ -29,7 +29,7 @@ A personal portfolio website built with **Next.js 16**, **React 19**, and **Type
 | Animations | Framer Motion                                               |
 | Markdown   | react-markdown, remark-gfm, rehype-slug, syntax-highlighter |
 | Tables     | TanStack Table                                              |
-| Forms      | React Hook Form + Zod validation                            |
+| Forms      | Server Actions, Zod validation                              |
 
 ## Getting Started
 
@@ -54,6 +54,10 @@ NEXT_PUBLIC_DISCORD_REDIRECT_URI=
 SMTP_URL=
 EMAIL_FROM=
 EMAIL_TO=
+
+# Pictures: the site's own key on the image server (see Pictures below)
+STORAGE_ACCESS_KEY_ID=
+STORAGE_SECRET_ACCESS_KEY=
 ```
 
 ### Installation
@@ -73,6 +77,8 @@ bun run dev
 ```
 
 The app will be available at `http://localhost:3000`.
+
+The build doesn't touch the database. Apply new migrations to the live database with `bunx prisma migrate deploy`, and when a migration removes something, deploy the code that stops using it first.
 
 ### Available Scripts
 
@@ -111,16 +117,16 @@ For local testing against another S3-compatible server, set `STORAGE_API_URL` (w
 
 ```
 src/
-├── actions/        # Server actions (mail, posts, projects, users)
+├── actions/        # Server actions (account, mail, posts and comments, projects, uploads, users)
 ├── app/
-│   ├── (regular)/  # Public pages (home, posts, projects, contact, legal)
-│   ├── api/auth/   # Discord OAuth2 routes
-│   └── dashboard/  # Admin dashboard (posts, projects, users)
+│   ├── (regular)/  # Public pages (home, posts, projects, contact, account, legal)
+│   ├── api/        # Discord OAuth2 routes, account data export, upload cleanup
+│   └── dashboard/  # Dashboard for writers and admins (posts, projects, comments, media, users)
+├── assets/         # Fonts for the link preview images
 ├── components/     # UI components (shadcn/ui, dashboard, navigation)
 ├── constants/      # Site metadata, links, personal details
-├── hooks/          # Custom React hooks
-├── lib/            # Auth, Prisma client, utilities
-├── providers/      # Context providers (auth, theme, toast)
+├── lib/            # Auth, Prisma client, data loading, Markdown, uploads, utilities
+├── providers/      # Context providers (theme, toast)
 └── types/          # TypeScript type definitions
 prisma/
 ├── schema.prisma   # Database schema
