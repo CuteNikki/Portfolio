@@ -314,7 +314,7 @@ export default function Home() {
       <ScrollReveal>
         <section
           aria-labelledby='contact-heading'
-          className='bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-xl border p-8 sm:p-12 lg:flex-row lg:items-end lg:justify-between'
+          className='bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-xl border p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between'
         >
           <div
             aria-hidden
