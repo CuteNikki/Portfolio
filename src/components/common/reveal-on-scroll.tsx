@@ -18,16 +18,9 @@ function isEnough(shown: number, height: number, visibleHeight: number) {
   );
 }
 
-function inView(element: Element) {
-  const { top, bottom, height } = element.getBoundingClientRect();
-  const visibleBottom = innerHeight * (1 - BOTTOM_MARGIN);
-  const shown = Math.min(bottom, visibleBottom) - Math.max(top, 0);
-  return isEnough(shown, height, visibleBottom);
-}
-
-// Holds back the page's data-reveal headings, cards and rows that aren't in view as the page loads, and lets each rise
-// in once it scrolls into view (see [data-reveal] in globals.css). Ones in view keep the animation they start with as
-// the page loads, so nothing visible ever waits for this script. Ones that come into view together rise in one after
+// Holds back the page's data-reveal headings, cards and rows that are out of the window as the page loads, and lets each
+// rise in once it scrolls into view (see [data-reveal] in globals.css). Ones that show at all keep the animation they
+// start with as the page loads, so nothing visible ever waits for this script or disappears again. Ones that come into view together rise in one after
 // another, top to bottom and left to right. Rendered once in the layout; it also picks up elements that appear later,
 // such as cards after a search or a page Next shows without reloading.
 export function RevealOnScroll() {
@@ -106,7 +99,9 @@ export function RevealOnScroll() {
           pending = true;
           continue;
         }
-        const waiting = !inView(element);
+        // Its rise-in has already started, so one that shows at all keeps it rather than vanishing until it's scrolled to
+        const { top, bottom } = element.getBoundingClientRect();
+        const waiting = top >= innerHeight || bottom <= 0;
         element.dataset.reveal = waiting ? 'waiting' : 'seen';
         if (waiting) reveal.observe(element);
       }
