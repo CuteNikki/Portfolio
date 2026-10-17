@@ -5,8 +5,7 @@ import type { Prisma } from '@/generated/prisma/client';
 import { isWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
-// The user fields that are safe to show publicly. Never send a full user to
-// the page: it includes the user's Discord access and refresh tokens.
+// The user fields that are safe to show publicly
 export const PUBLIC_USER_SELECT = {
   id: true,
   discordId: true,

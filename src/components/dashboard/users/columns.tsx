@@ -13,8 +13,9 @@ import {
   UserRoundIcon,
 } from 'lucide-react';
 
-import type { Role, User as UserModel } from '@/generated/prisma/client';
+import type { Role } from '@/generated/prisma/client';
 
+import type { PublicUser as User } from '@/lib/data';
 import { proxiedAvatarUrl } from '@/lib/utils';
 
 import { LINKS } from '@/constants/links';
@@ -40,9 +41,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-// The users page leaves out the Discord tokens
-type User = Omit<UserModel, 'accessToken' | 'refreshToken' | 'tokenExpiresAt'>;
 
 const userColumn: DashboardColumnDef<User> = {
   accessorKey: 'username',

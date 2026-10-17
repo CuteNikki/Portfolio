@@ -1,5 +1,6 @@
 import { SITE_METADATA } from '@/constants/metadata';
 import { requireAdmin } from '@/lib/auth';
+import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
 
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';
@@ -16,7 +17,7 @@ export default async function UsersPage() {
   await requireAdmin();
 
   const users = await prisma.user.findMany({
-    omit: { accessToken: true, refreshToken: true, tokenExpiresAt: true },
+    select: PUBLIC_USER_SELECT,
     orderBy: { createdAt: 'asc' },
   });
 

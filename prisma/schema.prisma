@@ -26,10 +26,6 @@ model User {
   avatarUrl   String
   role        Role    @default(USER)
 
-  accessToken    String? @db.Text
-  refreshToken   String? @db.Text
-  tokenExpiresAt Int?
-
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

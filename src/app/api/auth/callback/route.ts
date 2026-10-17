@@ -137,17 +137,13 @@ export async function GET(req: NextRequest) {
     );
 
     // 3. Upsert the user in your database (Update if exists, Create if new). The Discord tokens aren't kept: the profile
-    // is all we need, and only at login. Clearing them also removes ones stored before.
+    // is all we need, and only at login.
     const user = await prisma.user.upsert({
       where: { discordId: userData.id },
       update: {
         displayName: userData.global_name,
         username: userData.username,
         avatarUrl,
-
-        accessToken: null,
-        refreshToken: null,
-        tokenExpiresAt: null,
       },
       create: {
         discordId: userData.id,
