@@ -9,6 +9,7 @@ import { Role } from '@/generated/prisma/enums';
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
+import { commentsTag } from '@/lib/data';
 import { readDate } from '@/lib/form-date';
 import { readCover, removedImages } from '@/lib/form-images';
 import { deleteImages } from '@/lib/uploads';
@@ -246,7 +247,7 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
       id: postId,
       ...(isStaff ? {} : { publishedAt: { not: null } }),
     },
-    select: { id: true, slug: true },
+    select: { id: true },
   });
   if (!post) return fail('That post doesn’t exist any more.');
 
@@ -278,7 +279,7 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
     },
   });
 
-  revalidatePostPaths(post.id, post.slug);
+  updateTag(commentsTag(post.id));
   return {};
 }
 
@@ -297,7 +298,7 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
 
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },
-    include: { post: { select: { slug: true } } },
+    select: { authorId: true, postId: true },
   });
 
   if (!comment) {
@@ -317,7 +318,7 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
     where: { id: commentId },
   });
 
-  revalidatePostPaths(comment.postId, comment.post.slug);
+  updateTag(commentsTag(comment.postId));
   return {};
 }
 
@@ -341,7 +342,7 @@ export async function editComment(formData: FormData): Promise<ActionResult> {
 
   const comment = await prisma.comment.findUnique({
     where: { id: commentId },
-    include: { post: { select: { slug: true } } },
+    select: { authorId: true, postId: true },
   });
 
   if (!comment) {
@@ -357,7 +358,7 @@ export async function editComment(formData: FormData): Promise<ActionResult> {
     data: { content },
   });
 
-  revalidatePostPaths(comment.postId, comment.post.slug);
+  updateTag(commentsTag(comment.postId));
   return {};
 }
 

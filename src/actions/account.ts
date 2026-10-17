@@ -79,8 +79,9 @@ export async function deleteAccount(
 
   (await cookies()).delete(SESSION_COOKIE);
 
-  // Author lists and comments show on cached posts and projects
+  // Author lists show on cached posts and projects, and comments are cached for each post
   updateTag('posts');
   updateTag('projects');
+  updateTag('comments');
   return {};
 }

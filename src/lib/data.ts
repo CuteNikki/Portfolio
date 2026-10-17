@@ -27,13 +27,7 @@ const AUTHORS = {
   include: { user: { select: PUBLIC_USER_SELECT } },
 } as const;
 
-const POST_INCLUDE = {
-  authors: AUTHORS,
-  comments: {
-    include: { author: { select: PUBLIC_USER_SELECT } },
-    orderBy: { createdAt: 'desc' },
-  },
-} satisfies Prisma.PostInclude;
+const POST_INCLUDE = { authors: AUTHORS } satisfies Prisma.PostInclude;
 
 const PROJECT_INCLUDE = {
   authors: AUTHORS,
@@ -71,6 +65,22 @@ export async function getPublishedPost(idOrSlug: string) {
   return prisma.post.findFirst({
     where: { ...bySlugOrId(idOrSlug), publishedAt: { not: null } },
     include: POST_INCLUDE,
+  });
+}
+
+export const commentsTag = (postId: string) => `comments:${postId}`;
+
+// A post's comments, newest first. They're cached apart from the post, so a new comment only refreshes these (through
+// the post's comments tag), not every page that shows the post. Deleting a user refreshes them all (`comments`).
+export async function getComments(postId: string) {
+  'use cache';
+  cacheTag('comments', commentsTag(postId));
+  cacheLife('hours');
+
+  return prisma.comment.findMany({
+    where: { postId },
+    include: { author: { select: PUBLIC_USER_SELECT } },
+    orderBy: { createdAt: 'desc' },
   });
 }
 

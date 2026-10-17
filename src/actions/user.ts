@@ -92,5 +92,6 @@ export async function deleteUser(formData: FormData): Promise<ActionResult> {
 function revalidateUserPaths() {
   updateTag('posts');
   updateTag('projects');
+  updateTag('comments');
   revalidatePath('/dashboard/users');
 }

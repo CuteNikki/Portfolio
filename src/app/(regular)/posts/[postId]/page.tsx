@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { connection } from 'next/server';
 import { Suspense } from 'react';
 
 import { LogInIcon, PencilLineIcon } from 'lucide-react';
@@ -9,6 +10,7 @@ import { LINKS } from '@/constants/links';
 import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 import { getDisplaySession } from '@/lib/auth';
 import {
+  getComments,
   getDraftPost,
   getPublishedPost,
   getPublishedPosts,
@@ -224,9 +226,9 @@ async function PostContent({
             className='text-2xl font-bold tracking-[-0.04em]'
           >
             Comments{' '}
-            <span className='text-muted-foreground font-normal'>
-              {post.comments.length}
-            </span>
+            <Suspense fallback={null}>
+              <CommentCount postId={post.id} />
+            </Suspense>
           </h2>
           <Suspense fallback={<CommentsSkeleton />}>
             <Comments post={post} path={path} />
@@ -237,9 +239,21 @@ async function PostContent({
   );
 }
 
-// Depends on who is signed in, so it streams in after the prerendered post
+// Comments are read at request time only, after something that depends on the request. Read while the page is
+// prerendered, they would be kept with it, and the first visitor after a new comment would still get the old ones.
+async function CommentCount({ postId }: { postId: string }) {
+  await connection();
+  const comments = await getComments(postId);
+  return (
+    <span className='text-muted-foreground font-normal'>{comments.length}</span>
+  );
+}
+
+// Depends on who is signed in, so it streams in after the prerendered post. The session comes first, for the reason
+// above.
 async function Comments({ post, path }: { post: Post; path: string }) {
   const session = await getDisplaySession();
+  const comments = await getComments(post.id);
   const viewer = session
     ? { id: session.user.id, role: session.user.role }
     : null;
@@ -281,10 +295,7 @@ async function Comments({ post, path }: { post: Post; path: string }) {
         </div>
       )}
 
-      <CommentWrapper
-        post={{ slug: post.slug, comments: post.comments }}
-        viewer={viewer}
-      />
+      <CommentWrapper post={{ slug: post.slug, comments }} viewer={viewer} />
     </>
   );
 }
