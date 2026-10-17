@@ -408,17 +408,20 @@ function ExperienceCard({
     to: string;
   }[];
 }) {
-  // Every entry's name and dates take as much room as the card's longest, so the dates of all of them move under the
-  // names at the same width rather than one by one. The font is monospaced, so characters give their widths.
-  const widths = {
-    '--name-chars': Math.max(...entries.map(({ name }) => name.length)),
-    '--date-chars': Math.max(
-      ...entries.map(({ from, to }) => `${from} - ${to}`.length),
-    ),
-  } as React.CSSProperties;
+  // The dates of all entries move under the names together, once the card is too narrow for its longest name and its
+  // longest dates side by side. The font is monospaced, its characters 0.6em wide: names are 16px with letters 0.02em
+  // closer, dates 12px. The list's width also takes in the entries' padding and the gap between name and dates.
+  const nameChars = Math.max(...entries.map(({ name }) => name.length));
+  const dateChars = Math.max(
+    ...entries.map(({ from, to }) => `${from} - ${to}`.length),
+  );
+  const fits =
+    Math.ceil(nameChars * 16 * 0.58 + 16 + dateChars * 12 * 0.6) + 36;
+  const container = `experience-${title.toLowerCase()}`;
 
   return (
-    <div className='bg-card rounded-xl border p-2' style={widths}>
+    <div className='bg-card rounded-xl border p-2'>
+      <style>{`@container ${container} (width < ${fits}px) { [data-dates='${container}'] { flex-direction: column; align-items: flex-start; } }`}</style>
       <h3
         data-reveal=''
         style={reveal(index)}
@@ -427,7 +430,7 @@ function ExperienceCard({
         {icon}
         {title}
       </h3>
-      <ul>
+      <ul style={{ containerType: 'inline-size', containerName: container }}>
         {entries.map(({ name, role, description, from, to }, entry) => (
           <li
             key={`${name}-${role}`}
@@ -435,11 +438,14 @@ function ExperienceCard({
             style={reveal(index + entry + 1)}
             className='hover:bg-muted/60 flex flex-col gap-1 rounded-lg px-4.5 py-4 transition-colors'
           >
-            <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
-              <span className='max-w-full basis-[calc(var(--name-chars)*(1ch-0.02em))] text-base font-bold tracking-[-0.02em]'>
+            <div
+              data-dates={container}
+              className='flex items-baseline justify-between gap-x-4 gap-y-1'
+            >
+              <span className='min-w-0 text-base font-bold tracking-[-0.02em]'>
                 {name}
               </span>
-              <span className='text-muted-foreground min-w-[calc(var(--date-chars)*1ch)] text-xs'>
+              <span className='text-muted-foreground shrink-0 text-xs'>
                 {from} - {to}
               </span>
             </div>
