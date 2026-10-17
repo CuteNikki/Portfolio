@@ -96,7 +96,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollReveal className='bg-card -mt-6 grid gap-8 rounded-xl border p-7 sm:-mt-8 sm:p-8 lg:-mt-12 lg:grid-cols-2 lg:gap-0'>
+      <ScrollReveal className='bg-card grid gap-8 rounded-xl border p-7 sm:p-8 lg:grid-cols-2 lg:gap-0'>
         <div
           data-reveal-item
           style={{ '--reveal-index': 1 } as React.CSSProperties}
