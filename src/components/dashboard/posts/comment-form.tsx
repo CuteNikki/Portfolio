@@ -5,6 +5,8 @@ import { toast } from '@/lib/toast';
 
 import { createComment } from '@/actions/post';
 
+import { MAX_COMMENT_LENGTH } from '@/constants/comments';
+
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
@@ -69,9 +71,11 @@ export function CommentForm({
         {/* Wraps in a narrow reply column, keeping the buttons on the right */}
         <div className='flex flex-wrap items-center justify-between gap-2'>
           <FieldDescription
-            className={content.length >= 1000 ? 'text-destructive' : ''}
+            className={
+              content.length >= MAX_COMMENT_LENGTH ? 'text-destructive' : ''
+            }
           >
-            {content.trim().length}/1000
+            {content.trim().length}/{MAX_COMMENT_LENGTH}
           </FieldDescription>
           <div className='ml-auto flex flex-wrap justify-end gap-2'>
             {(content.trim().length > 0 || setShowReplyFormAction) && (

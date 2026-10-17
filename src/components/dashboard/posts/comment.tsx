@@ -9,6 +9,8 @@ import type { PublicUser } from '@/lib/data';
 
 import { editComment } from '@/actions/post';
 
+import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
+
 import { UserHover } from '@/components/common/user-hover';
 import { CommentActions } from '@/components/dashboard/posts/comment-actions';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
@@ -19,7 +21,6 @@ import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
 import { Textarea } from '@/components/ui/textarea';
 
-const MAX_DEPTH = 3;
 // How many levels replies indent on phones; deeper ones stay in line
 const MAX_PHONE_INDENT = 2;
 
@@ -87,9 +88,9 @@ export function Comment({
                 userId={userId}
                 canModerate={canModerate}
                 setEditingCommentIdAction={setEditingCommentIdAction}
-                // Replies stop nesting at MAX_DEPTH, so the deepest comments don't offer Reply
+                // Replies stop nesting at MAX_COMMENT_DEPTH, so the deepest comments don't offer Reply
                 setShowReplyFormAction={
-                  depth < MAX_DEPTH ? setShowReplyForm : undefined
+                  depth < MAX_COMMENT_DEPTH ? setShowReplyForm : undefined
                 }
               />
             </div>
@@ -106,7 +107,7 @@ export function Comment({
               {comment.content}
             </p>
           )}
-          {showReplyForm && depth < MAX_DEPTH && (
+          {showReplyForm && depth < MAX_COMMENT_DEPTH && (
             <div className='pt-2'>
               <CommentForm
                 postId={comment.postId}
@@ -241,9 +242,11 @@ function EditCommentForm({
           name='content'
         />
         <FieldDescription
-          className={content.length >= 1000 ? 'text-destructive' : ''}
+          className={
+            content.length >= MAX_COMMENT_LENGTH ? 'text-destructive' : ''
+          }
         >
-          {content.trim().length}/1000
+          {content.trim().length}/{MAX_COMMENT_LENGTH}
         </FieldDescription>
       </Field>
       <div className='flex flex-wrap justify-end gap-2'>

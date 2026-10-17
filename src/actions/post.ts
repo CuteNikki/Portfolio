@@ -19,6 +19,7 @@ import prisma from '@/lib/prisma';
 import { hit, visitorHash } from '@/lib/rate-limit';
 import { resolveSlug } from '@/lib/slug';
 
+import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
 import { canWrite } from '@/constants/roles';
 
 function isPostSlugTaken(exceptId?: string) {
@@ -175,10 +176,6 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
   revalidatePostPaths(id, slug);
   return {};
 }
-
-// Replies nest at most this deep (the post page stops offering Reply there), so threads stay readable
-const MAX_COMMENT_DEPTH = 3;
-const MAX_COMMENT_LENGTH = 1000;
 
 // A comment's text as it's kept: trimmed, with runs of blank lines shortened to one
 function readCommentContent(formData: FormData) {

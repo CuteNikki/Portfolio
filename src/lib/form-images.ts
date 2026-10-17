@@ -1,8 +1,8 @@
 import 'server-only';
 
+import { MAX_GALLERY_PICTURES } from '@/lib/images';
 import { ownImageKey } from '@/lib/uploads';
 
-const MAX_GALLERY = 12;
 const MAX_ALT_LENGTH = 300;
 
 /**
@@ -40,7 +40,7 @@ export function readGallery(formData: FormData) {
         ownImageKey(image?.url) !== null,
     )
     .filter(({ url }) => !seen.has(url) && !!seen.add(url))
-    .slice(0, MAX_GALLERY)
+    .slice(0, MAX_GALLERY_PICTURES)
     .map(({ url, alt }, position) => ({
       url,
       alt: typeof alt === 'string' ? alt.trim().slice(0, MAX_ALT_LENGTH) : '',

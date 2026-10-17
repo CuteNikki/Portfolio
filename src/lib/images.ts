@@ -20,6 +20,9 @@ export const IMAGE_SIZE_NAMES = Object.keys(IMAGE_SIZES) as ImageSize[];
 // The most a single copy may weigh after shrinking
 export const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
 
+// How many pictures a project can have after its cover
+export const MAX_GALLERY_PICTURES = 12;
+
 /**
  * The address of one copy of a stored picture. The database keeps the large copy's address.
  *

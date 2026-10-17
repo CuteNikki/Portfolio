@@ -14,7 +14,7 @@ import { toast } from '@/lib/toast';
 
 import { discardImages } from '@/actions/upload';
 
-import { imageUrl } from '@/lib/images';
+import { imageUrl, MAX_GALLERY_PICTURES } from '@/lib/images';
 import { uploadImage } from '@/lib/upload-image';
 import { cn } from '@/lib/utils';
 
@@ -25,8 +25,6 @@ export interface GalleryImage {
   url: string;
   alt: string;
 }
-
-const MAX_GALLERY = 12;
 
 // Picks picture files with a button, or by dropping them onto the area. `children` is what the area shows. As a
 // `button`, it looks like the outline buttons next to it but still takes a dropped picture.
@@ -238,10 +236,10 @@ export function GalleryField({
   const saved = new Set(defaultValue.map(({ url }) => url));
 
   const upload = async (files: File[]) => {
-    const room = MAX_GALLERY - images.length;
+    const room = MAX_GALLERY_PICTURES - images.length;
     if (files.length > room) {
       toast.warning(
-        `A project can have ${MAX_GALLERY} pictures; the first ${room} are added.`,
+        `A project can have ${MAX_GALLERY_PICTURES} pictures; the first ${room} are added.`,
       );
     }
     const batch = files.slice(0, room);
@@ -342,7 +340,7 @@ export function GalleryField({
             </div>
           </li>
         ))}
-        {images.length < MAX_GALLERY && (
+        {images.length < MAX_GALLERY_PICTURES && (
           <li>
             <DropArea
               multiple
