@@ -45,6 +45,8 @@ import {
 
 const userColumn: DashboardColumnDef<User> = {
   accessorKey: 'username',
+  // Takes the room the other columns leave
+  enableHiding: false,
   header: sortableHeader('User'),
   cell: ({ row }) => (
     <Link
@@ -67,6 +69,8 @@ const userColumn: DashboardColumnDef<User> = {
 
 const nameColumn: DashboardColumnDef<User> = {
   accessorKey: 'displayName',
+  size: 220,
+  meta: { label: 'Name' },
   header: sortableHeader('Name'),
 };
 
@@ -143,6 +147,8 @@ const ROLE_RANK: Record<Role, number> = { ADMIN: 0, WRITER: 1, USER: 2 };
 
 const roleColumn: DashboardColumnDef<User> = {
   accessorKey: 'role',
+  size: 140,
+  meta: { label: 'Role' },
   sortFn: (a, b) => ROLE_RANK[a.original.role] - ROLE_RANK[b.original.role],
   header: sortableHeader('Role'),
   cell: ({ row }) => <RoleSelect user={row.original} />,
@@ -204,12 +210,17 @@ const UserActions = ({ user }: { user: User }) => {
 
 const actionsColumn: DashboardColumnDef<User> = {
   id: 'actions',
+  size: 64,
+  enableResizing: false,
+  enableHiding: false,
   header: () => <span className='sr-only'>Actions</span>,
   cell: ({ row }) => <UserActions user={row.original} />,
 };
 
 const idColumn: DashboardColumnDef<User> = {
   accessorKey: 'discordId',
+  size: 220,
+  meta: { label: 'Discord ID' },
   header: sortableHeader('ID'),
 };
 

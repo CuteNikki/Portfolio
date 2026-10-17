@@ -28,6 +28,7 @@ export default async function UsersPage() {
         description='Everyone who has signed in. Admins can change roles here.'
       />
       <DataTable
+        storageKey='users'
         columns={columns}
         data={users}
         defaultSorting={[{ id: 'role', desc: false }]}

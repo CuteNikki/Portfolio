@@ -1,5 +1,8 @@
 import {
   columnFilteringFeature,
+  columnResizingFeature,
+  columnSizingFeature,
+  columnVisibilityFeature,
   createFilteredRowModel,
   createPaginatedRowModel,
   createSortedRowModel,
@@ -14,10 +17,20 @@ import {
   type RowData,
 } from '@tanstack/react-table';
 
-// What the dashboard tables can do: sort by a column, search all columns, and page through rows. The sort functions
-// are the ones a column picks on its own for text, text with numbers, and dates.
+// What a column says about itself beyond what the table needs: its name in the Columns menu, for columns that can be
+// hidden there
+interface DashboardColumnMeta {
+  label?: string;
+}
+
+// What the dashboard tables can do: sort by a column, search all columns, page through rows, and show, hide and resize
+// columns. The sort functions are the ones a column picks on its own for text, text with numbers, and dates.
 export const dashboardTableFeatures = tableFeatures({
+  columnMeta: {} as DashboardColumnMeta,
   columnFilteringFeature,
+  columnResizingFeature,
+  columnSizingFeature,
+  columnVisibilityFeature,
   globalFilteringFeature,
   rowSortingFeature,
   rowPaginationFeature,

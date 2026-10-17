@@ -46,6 +46,7 @@ export default async function PostsPage() {
         </Button>
       </DashboardPageHeader>
       <DataTable
+        storageKey='posts'
         columns={columns}
         data={posts}
         filterPlaceholder='Search posts'

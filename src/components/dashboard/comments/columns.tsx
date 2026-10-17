@@ -144,11 +144,13 @@ export function CommentActions({
 export const columns: DashboardColumnDef<CommentRow>[] = [
   {
     accessorKey: 'author',
+    size: 200,
+    meta: { label: 'Author' },
     header: sortableHeader('Author'),
     cell: ({ row }) => (
       <Link
         href={row.original.authorHref}
-        className='group flex items-center gap-2.5'
+        className='group flex min-w-0 items-center gap-2.5'
       >
         <Image
           src={proxiedAvatarUrl(row.original.avatarUrl)}
@@ -157,7 +159,7 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
           height={24}
           className='size-6 shrink-0 rounded-md'
         />
-        <span className='group-hover:text-primary-text font-semibold transition-colors'>
+        <span className='group-hover:text-primary-text truncate font-semibold transition-colors'>
           {row.original.author}
         </span>
       </Link>
@@ -165,9 +167,11 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
   },
   {
     accessorKey: 'excerpt',
+    // Takes the room the other columns leave
+    enableHiding: false,
     header: () => 'Comment',
     cell: ({ row }) => (
-      <span className='flex max-w-md items-center gap-2'>
+      <span className='flex min-w-0 items-center gap-2'>
         {row.original.isReply && <Badge variant='outline'>Reply</Badge>}
         <span className='text-body truncate'>{row.original.excerpt}</span>
       </span>
@@ -175,11 +179,13 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
   },
   {
     accessorKey: 'postTitle',
+    size: 240,
+    meta: { label: 'Post' },
     header: sortableHeader('Post'),
     cell: ({ row }) => (
       <Link
         href={row.original.postHref}
-        className='hover:text-primary-text block max-w-56 truncate transition-colors'
+        className='hover:text-primary-text block truncate transition-colors'
       >
         {row.original.postTitle}
       </Link>
@@ -187,6 +193,8 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
   },
   {
     accessorKey: 'createdAt',
+    size: 120,
+    meta: { label: 'Date' },
     header: sortableHeader('Date'),
     cell: ({ row }) => (
       <span className='text-muted-foreground whitespace-nowrap'>
@@ -196,6 +204,9 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
   },
   {
     id: 'actions',
+    size: 64,
+    enableResizing: false,
+    enableHiding: false,
     header: () => <span className='sr-only'>Actions</span>,
     cell: ({ row }) => <CommentActions comment={row.original} />,
   },

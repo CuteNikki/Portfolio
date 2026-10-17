@@ -29,6 +29,8 @@ type Row = Project & {
 export const columns: DashboardColumnDef<Row>[] = [
   {
     accessorKey: 'title',
+    // Takes the room the other columns leave
+    enableHiding: false,
     header: sortableHeader('Title'),
     cell: ({ row }) => (
       <TitleCell
@@ -40,6 +42,8 @@ export const columns: DashboardColumnDef<Row>[] = [
   },
   {
     accessorKey: 'publishedAt',
+    size: 120,
+    meta: { label: 'Status' },
     header: sortableHeader('Status'),
     cell: ({ row }) => <StatusBadge published={!!row.original.publishedAt} />,
   },
@@ -47,15 +51,19 @@ export const columns: DashboardColumnDef<Row>[] = [
     id: 'authors',
     // Sorts and searches by the first author's name
     accessorFn: (row) => authorsOf(row)[0]?.name ?? '',
+    size: 200,
+    meta: { label: 'Authors' },
     header: sortableHeader('Authors'),
     cell: ({ row }) => <AuthorsCell authors={authorsOf(row.original)} />,
   },
   {
     id: 'tags',
     accessorFn: (row) => [...row.tags, ...row.technologies].join(' '),
+    size: 220,
+    meta: { label: 'Tags' },
     header: () => 'Tags',
     cell: ({ row }) => (
-      <span className='text-muted-foreground block max-w-48 truncate'>
+      <span className='text-muted-foreground block truncate'>
         {[...row.original.tags, ...row.original.technologies].join(' · ') ||
           '-'}
       </span>
@@ -63,6 +71,8 @@ export const columns: DashboardColumnDef<Row>[] = [
   },
   {
     accessorKey: 'updatedAt',
+    size: 120,
+    meta: { label: 'Updated' },
     header: sortableHeader('Updated'),
     cell: ({ row }) => (
       <span className='text-muted-foreground whitespace-nowrap'>
@@ -72,6 +82,9 @@ export const columns: DashboardColumnDef<Row>[] = [
   },
   {
     id: 'actions',
+    size: 96,
+    enableResizing: false,
+    enableHiding: false,
     header: () => <span className='sr-only'>Actions</span>,
     cell: ({ row }) => (
       <ContentActions

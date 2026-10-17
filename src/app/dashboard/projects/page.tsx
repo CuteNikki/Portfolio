@@ -46,6 +46,7 @@ export default async function ProjectsPage() {
         </Button>
       </DashboardPageHeader>
       <DataTable
+        storageKey='projects'
         columns={columns}
         data={projects}
         filterPlaceholder='Search projects'

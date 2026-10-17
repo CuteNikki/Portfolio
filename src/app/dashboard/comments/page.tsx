@@ -40,6 +40,7 @@ export default async function CommentsPage() {
         description="Every comment on every post. Delete the ones that don't belong."
       />
       <DataTable
+        storageKey='comments'
         columns={columns}
         data={comments.map((comment) => ({
           id: comment.id,
