@@ -46,8 +46,9 @@ export function ContentRow({ item }: { item: ContentRowItem }) {
         >
           {item.title}
         </Link>
-        <span className='text-muted-foreground text-xs'>
-          {isPost ? 'Post' : 'Project'} · updated{' '}
+        <span className='text-muted-foreground block truncate text-xs'>
+          {isPost ? 'Post' : 'Project'} ·{' '}
+          <span className='hidden sm:inline'>updated </span>
           {formatShortDate(item.updatedAt)}
         </span>
       </span>

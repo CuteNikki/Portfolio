@@ -112,11 +112,13 @@ export function ContentActions({
 
   return (
     <div className='flex justify-end gap-1'>
+      {/* On phones the ⋯ menu's Edit does this, which leaves the title more room */}
       <Button
         asChild
         variant='ghost'
         size='icon-sm'
         aria-label={`Edit ${title}`}
+        className='hidden sm:inline-flex'
       >
         <Link href={editHref}>
           <PencilLineIcon />

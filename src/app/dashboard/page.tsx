@@ -187,11 +187,8 @@ export default async function DashboardPage() {
       </dl>
 
       <div className='grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]'>
-        <Panel
-          title='Recently updated'
-          href={LINKS.dashboardPosts.url}
-          linkLabel='all posts'
-        >
+        {/* Posts and projects together, so no "all" link: the sidebar leads to each list */}
+        <Panel title='Recently updated'>
           {recent.length === 0 ? (
             <PanelEmpty>
               Nothing yet. Start with a post or a project.
