@@ -83,9 +83,36 @@ export function MenuAtPoint({
   onRightClickOutside: () => void;
   children: React.ReactNode;
 }) {
+  // Closes once the page scrolls, as the browser's own menu does, rather than staying put while what it was opened on
+  // moves away. Scrolling inside the menu itself, or the submenu, doesn't count.
+  const close = useRef(onClose);
+  useEffect(() => {
+    close.current = onClose;
+  });
+  const open = point !== null;
+  useEffect(() => {
+    if (!open) return;
+    const scrolled = (event: Event) => {
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target.closest('[data-slot^="dropdown-menu"]')
+      ) {
+        return;
+      }
+      close.current();
+    };
+    addEventListener('scroll', scrolled, { capture: true, passive: true });
+    addEventListener('resize', scrolled);
+    return () => {
+      removeEventListener('scroll', scrolled, { capture: true });
+      removeEventListener('resize', scrolled);
+    };
+  }, [open]);
+
   return (
     <DropdownMenu
-      open={point !== null}
+      open={open}
       onOpenChange={(open) => !open && onClose()}
       modal={false}
     >
