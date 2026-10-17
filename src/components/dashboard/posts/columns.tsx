@@ -59,6 +59,7 @@ export const columns: DashboardColumnDef<Row>[] = [
   {
     accessorKey: 'views',
     size: 96,
+    minSize: 80,
     meta: { label: 'Views' },
     header: sortableHeader('Views'),
     cell: ({ row }) => (
@@ -79,6 +80,7 @@ export const columns: DashboardColumnDef<Row>[] = [
   {
     id: 'actions',
     size: 96,
+    minSize: 96,
     enableResizing: false,
     enableHiding: false,
     header: () => <span className='sr-only'>Actions</span>,

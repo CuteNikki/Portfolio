@@ -8,7 +8,6 @@ import { toast } from '@/lib/toast';
 
 import {
   ClipboardCopyIcon,
-  EllipsisIcon,
   LoaderCircleIcon,
   Trash2Icon,
   UserRoundIcon,
@@ -26,13 +25,10 @@ import { updateUserRole } from '@/actions/user';
 import { sortableHeader } from '@/components/dashboard/shared/column-parts';
 import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
 import { DeleteUserDialog } from '@/components/dashboard/users/delete-user';
-import { Button } from '@/components/ui/button';
+import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
   Select,
@@ -166,37 +162,29 @@ const UserActions = ({ user }: { user: User }) => {
 
   return (
     <div ref={actions} className='flex justify-end'>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant='ghost'
-            size='icon-sm'
-            aria-label={`More actions for ${user.username}`}
-          >
-            <EllipsisIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='w-52'>
-          <DropdownMenuItem asChild>
-            <Link href={LINKS.dashboardUserWithId(user.id).url}>
-              <UserRoundIcon />
-              Open
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={copyId}>
-            <ClipboardCopyIcon />
-            Copy Discord ID
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant='destructive'
-            onSelect={() => setConfirming(true)}
-          >
-            <Trash2Icon />
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowMenu
+        label={`More actions for ${user.username}`}
+        newTabHref={LINKS.dashboardUserWithId(user.id).url}
+      >
+        <DropdownMenuItem asChild>
+          <Link href={LINKS.dashboardUserWithId(user.id).url}>
+            <UserRoundIcon />
+            Open
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={copyId}>
+          <ClipboardCopyIcon />
+          Copy Discord ID
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          variant='destructive'
+          onSelect={() => setConfirming(true)}
+        >
+          <Trash2Icon />
+          Delete
+        </DropdownMenuItem>
+      </RowMenu>
 
       <DeleteUserDialog
         user={user}
@@ -211,6 +199,7 @@ const UserActions = ({ user }: { user: User }) => {
 const actionsColumn: DashboardColumnDef<User> = {
   id: 'actions',
   size: 64,
+  minSize: 64,
   enableResizing: false,
   enableHiding: false,
   header: () => <span className='sr-only'>Actions</span>,

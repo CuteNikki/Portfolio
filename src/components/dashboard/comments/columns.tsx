@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { EllipsisIcon, ExternalLinkIcon, Trash2Icon } from 'lucide-react';
+import { ExternalLinkIcon, Trash2Icon } from 'lucide-react';
 import { fadeOutRow } from '@/lib/row-motion';
 import { toast } from '@/lib/toast';
 
@@ -26,13 +26,10 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
 export interface CommentRow {
@@ -86,33 +83,25 @@ export function CommentActions({
 
   return (
     <div ref={actions} className='flex justify-end'>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant='ghost'
-            size='icon-sm'
-            aria-label={`More actions for ${comment.author}'s comment`}
-          >
-            <EllipsisIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='w-52'>
-          <DropdownMenuItem asChild>
-            <Link href={comment.postHref}>
-              <ExternalLinkIcon />
-              View on the post
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant='destructive'
-            onSelect={() => setConfirming(true)}
-          >
-            <Trash2Icon />
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowMenu
+        label={`More actions for ${comment.author}'s comment`}
+        newTabHref={comment.postHref}
+      >
+        <DropdownMenuItem asChild>
+          <Link href={comment.postHref}>
+            <ExternalLinkIcon />
+            View on the post
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          variant='destructive'
+          onSelect={() => setConfirming(true)}
+        >
+          <Trash2Icon />
+          Delete
+        </DropdownMenuItem>
+      </RowMenu>
 
       <AlertDialog open={confirming} onOpenChange={setConfirming}>
         <AlertDialogContent>
@@ -205,6 +194,7 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
   {
     id: 'actions',
     size: 64,
+    minSize: 64,
     enableResizing: false,
     enableHiding: false,
     header: () => <span className='sr-only'>Actions</span>,

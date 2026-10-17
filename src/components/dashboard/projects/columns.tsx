@@ -83,6 +83,7 @@ export const columns: DashboardColumnDef<Row>[] = [
   {
     id: 'actions',
     size: 96,
+    minSize: 96,
     enableResizing: false,
     enableHiding: false,
     header: () => <span className='sr-only'>Actions</span>,

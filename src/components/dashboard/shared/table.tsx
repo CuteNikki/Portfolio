@@ -8,7 +8,7 @@ import {
   SortingState,
   useTable,
 } from '@tanstack/react-table';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
   ChevronLeftIcon,
@@ -113,6 +113,37 @@ export function DataTable<TData extends RowData & { id: string }>({
   const [layoutLoaded, setLayoutLoaded] = useState(false);
   const layoutKey = `dashboard-table:${storageKey}`;
 
+  // Whether part of the table is scrolled out of view under the pinned actions column, which then gets a background and
+  // a shadow so the rows' ⋯ stay reachable and readable
+  const frame = useRef<HTMLDivElement>(null);
+  const [scrolledUnder, setScrolledUnder] = useState(false);
+  useEffect(() => {
+    const scroller = frame.current?.querySelector<HTMLElement>(
+      '[data-slot="table-container"]',
+    );
+    if (!scroller) return;
+    const update = () =>
+      setScrolledUnder(
+        scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft > 1,
+      );
+    update();
+    const resized = new ResizeObserver(update);
+    resized.observe(scroller);
+    if (scroller.firstElementChild) resized.observe(scroller.firstElementChild);
+    scroller.addEventListener('scroll', update, { passive: true });
+    return () => {
+      resized.disconnect();
+      scroller.removeEventListener('scroll', update);
+    };
+  }, []);
+  const pinned = (columnId: string) =>
+    columnId === 'actions' &&
+    cn(
+      'sticky right-0 z-10',
+      scrolledUnder &&
+        'bg-card shadow-[-10px_0_12px_-10px_rgb(0_0_0/0.4)] group-hover/row:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))]',
+    );
+
   // Read after the first render, which matches the server's, so the page doesn't change under React as it takes over
   useEffect(() => {
     const saved = readLayout(layoutKey);
@@ -137,6 +168,8 @@ export function DataTable<TData extends RowData & { id: string }>({
     columns,
     getRowId: (row) => row.id,
     columnResizeMode: 'onChange',
+    // Dragged narrower, a column stops where its header and a badge or date still fit; a column can ask for less
+    defaultColumn: { minSize: 120 },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     onColumnSizingChange: setColumnSizing,
@@ -248,7 +281,10 @@ export function DataTable<TData extends RowData & { id: string }>({
         )}
       </div>
 
-      <div className='bg-card w-full overflow-hidden rounded-xl border'>
+      <div
+        ref={frame}
+        className='bg-card w-full overflow-hidden rounded-xl border'
+      >
         <Table
           className='lg:min-w-(--table-min) lg:table-fixed'
           style={{ '--table-min': `${minTableWidth}px` } as React.CSSProperties}
@@ -265,6 +301,7 @@ export function DataTable<TData extends RowData & { id: string }>({
                       className={cn(
                         'relative',
                         sized && 'lg:w-(--column-width)',
+                        pinned(header.column.id),
                       )}
                       style={
                         sized
@@ -308,13 +345,14 @@ export function DataTable<TData extends RowData & { id: string }>({
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} className='group/row'>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}
                       // What doesn't fit a narrowed column is cut off at its edge rather than running into the next
                       className={cn(
                         cell.column.getCanResize() && 'lg:overflow-hidden',
+                        pinned(cell.column.id),
                       )}
                     >
                       {flexRender(

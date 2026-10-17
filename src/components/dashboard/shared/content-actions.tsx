@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import {
-  EllipsisIcon,
   ExternalLinkIcon,
   EyeOffIcon,
   LinkIcon,
@@ -29,13 +28,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import { Button } from '@/components/ui/button';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
 // The edit button and ⋯ menu at the end of a post's or project's row in the dashboard
@@ -129,52 +126,41 @@ export function ContentActions({
           <PencilLineIcon />
         </Link>
       </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant='ghost'
-            size='icon-sm'
-            aria-label={`More actions for ${title}`}
-          >
-            <EllipsisIcon />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align='end' className='w-52'>
-          <DropdownMenuItem asChild>
-            <Link href={editHref}>
-              <PencilLineIcon />
-              Edit
-            </Link>
-          </DropdownMenuItem>
-          {isPublished && (
-            <>
-              <DropdownMenuItem asChild>
-                <Link href={publicHref}>
-                  <ExternalLinkIcon />
-                  View on site
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onSelect={copyLink}>
-                <LinkIcon />
-                Copy link
-              </DropdownMenuItem>
-            </>
-          )}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem disabled={pending} onSelect={togglePublished}>
-            {isPublished ? <EyeOffIcon /> : <SendHorizonalIcon />}
-            {isPublished ? 'Unpublish' : 'Publish'}
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            variant='destructive'
-            onSelect={() => setConfirming(true)}
-          >
-            <Trash2Icon />
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <RowMenu label={`More actions for ${title}`} newTabHref={editHref}>
+        <DropdownMenuItem asChild>
+          <Link href={editHref}>
+            <PencilLineIcon />
+            Edit
+          </Link>
+        </DropdownMenuItem>
+        {isPublished && (
+          <>
+            <DropdownMenuItem asChild>
+              <Link href={publicHref}>
+                <ExternalLinkIcon />
+                View on site
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem onSelect={copyLink}>
+              <LinkIcon />
+              Copy link
+            </DropdownMenuItem>
+          </>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem disabled={pending} onSelect={togglePublished}>
+          {isPublished ? <EyeOffIcon /> : <SendHorizonalIcon />}
+          {isPublished ? 'Unpublish' : 'Publish'}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          variant='destructive'
+          onSelect={() => setConfirming(true)}
+        >
+          <Trash2Icon />
+          Delete
+        </DropdownMenuItem>
+      </RowMenu>
 
       <AlertDialog open={confirming} onOpenChange={setConfirming}>
         <AlertDialogContent>
