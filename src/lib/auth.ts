@@ -15,18 +15,21 @@ export const RETURN_TO_COOKIE = 'auth_return_to';
 const LAST_SEEN_INTERVAL_MS = 15 * 60 * 1000;
 
 // Where to send someone after signing in. Only paths on this site count, so a crafted link can't use the login to
-// send people elsewhere ("//evil.example" and "/\\evil.example" are other hosts to a browser).
+// send people elsewhere. The path is resolved the way the redirect resolves it, because URL parsing skips tabs and
+// line breaks and reads "\" as "/": "/\t/evil.example" and "/\evil.example" both lead to another host.
 export function safeReturnPath(value: string | null | undefined) {
-  if (
-    !value ||
-    !value.startsWith('/') ||
-    value.startsWith('//') ||
-    value.startsWith('/\\')
-  ) {
+  if (!value?.startsWith('/')) return null;
+
+  const base = 'https://placeholder.invalid';
+  let url: URL;
+  try {
+    url = new URL(value, base);
+  } catch {
     return null;
   }
-  if (value.startsWith('/api/')) return null;
-  return value;
+  if (url.origin !== base || url.pathname.startsWith('/api/')) return null;
+
+  return url.pathname + url.search + url.hash;
 }
 
 // The database keeps only a hash of each session token, so a leaked copy of it can't be used to sign in
