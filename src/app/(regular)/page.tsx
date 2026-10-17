@@ -408,8 +408,17 @@ function ExperienceCard({
     to: string;
   }[];
 }) {
+  // Every entry's name and dates take as much room as the card's longest, so the dates of all of them move under the
+  // names at the same width rather than one by one. The font is monospaced, so characters give their widths.
+  const widths = {
+    '--name-chars': Math.max(...entries.map(({ name }) => name.length)),
+    '--date-chars': Math.max(
+      ...entries.map(({ from, to }) => `${from} - ${to}`.length),
+    ),
+  } as React.CSSProperties;
+
   return (
-    <div className='bg-card rounded-xl border p-2'>
+    <div className='bg-card rounded-xl border p-2' style={widths}>
       <h3
         data-reveal=''
         style={reveal(index)}
@@ -427,10 +436,10 @@ function ExperienceCard({
             className='hover:bg-muted/60 flex flex-col gap-1 rounded-lg px-4.5 py-4 transition-colors'
           >
             <div className='flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1'>
-              <span className='text-base font-bold tracking-[-0.02em]'>
+              <span className='max-w-full basis-[calc(var(--name-chars)*(1ch-0.02em))] text-base font-bold tracking-[-0.02em]'>
                 {name}
               </span>
-              <span className='text-muted-foreground text-xs'>
+              <span className='text-muted-foreground min-w-[calc(var(--date-chars)*1ch)] text-xs'>
                 {from} - {to}
               </span>
             </div>
