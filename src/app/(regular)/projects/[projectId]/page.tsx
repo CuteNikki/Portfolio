@@ -4,7 +4,12 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { SiGithub } from '@icons-pack/react-simple-icons';
-import { ArrowUpRightIcon, PencilLineIcon } from 'lucide-react';
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  PencilLineIcon,
+} from 'lucide-react';
 
 import { toProjectCard } from '@/lib/cards';
 import {
@@ -326,8 +331,18 @@ function NeighbourCard({
         className='aspect-16/10 shrink-0 rounded-lg sm:w-50'
       />
       <span className='flex min-w-0 flex-col gap-1 py-1 pr-2'>
-        <span className='text-muted-foreground text-xs'>
-          {direction === 'newer' ? '← Newer project' : 'Older project →'}
+        <span className='text-muted-foreground flex items-center gap-1 text-xs [&_svg]:size-3.5'>
+          {direction === 'newer' ? (
+            <>
+              <ArrowLeftIcon />
+              Newer project
+            </>
+          ) : (
+            <>
+              Older project
+              <ArrowRightIcon />
+            </>
+          )}
         </span>
         <span className='text-[17px] font-bold tracking-[-0.04em]'>
           {project.title}
