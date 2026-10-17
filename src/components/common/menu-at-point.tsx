@@ -1,5 +1,5 @@
-'use client';
-
+// Not a client boundary of its own: only client components use these, and MenuAtPoint takes functions, which a server
+// component couldn't pass
 import { useEffect, useRef, useState } from 'react';
 
 import { ExternalLinkIcon } from 'lucide-react';
