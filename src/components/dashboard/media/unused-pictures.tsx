@@ -35,8 +35,9 @@ export function UnusedPictures({ pictures }: { pictures: UnusedPicture[] }) {
 
   return (
     <section className='bg-card flex flex-col rounded-xl border'>
-      <div className='flex flex-wrap items-center gap-4 px-5 py-4'>
-        <ul className='flex -space-x-3' aria-hidden>
+      <div className='flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center'>
+        {/* A glimpse of them beside the text; on phones the text needs the room, and View all shows them */}
+        <ul className='hidden -space-x-3 sm:flex' aria-hidden>
           {previews.map(({ url }) => (
             <li
               key={url}
@@ -61,7 +62,7 @@ export function UnusedPictures({ pictures }: { pictures: UnusedPicture[] }) {
             without saving. They are cleared out after a day.
           </p>
         </div>
-        <div className='flex flex-wrap gap-2'>
+        <div className='grid grid-cols-2 gap-2 sm:flex'>
           <Button
             variant='outline'
             aria-expanded={open}
