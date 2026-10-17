@@ -266,11 +266,6 @@
   /* Code shows exactly as typed: JetBrains Mono would otherwise draw >= as ≥ */
   font-variant-ligatures: none;
 }
-/* The scrollbar runs along the block's rounded bottom edge, so it starts and ends in line with the code, clear of the
-   corners that would cut its ends off */
-.code-block::-webkit-scrollbar-track {
-  margin-inline: 1rem;
-}
 .code-block .token.tag {
   color: var(--code-keyword);
 }
@@ -374,6 +369,13 @@
         )
         transparent;
     }
+  }
+}
+/* For an area that scrolls sideways along the bottom of a rounded box, like a code block or a table: its scrollbar
+   starts and ends in line with the content, clear of the corners that would cut its ends off */
+@utility scrollbar-inset-x {
+  &::-webkit-scrollbar-track {
+    margin-inline: 1rem;
   }
 }
 @keyframes rise-in {

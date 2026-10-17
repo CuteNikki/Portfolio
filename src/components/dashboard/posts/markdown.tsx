@@ -72,7 +72,7 @@ const CodeBlock = ({ node }: ExtraProps) => {
       )}
 
       {/* The highlighter only marks the tokens; .code-block in globals.css colours them for the theme */}
-      <div className='code-block overflow-x-auto bg-(--code-background)'>
+      <div className='code-block scrollbar-inset-x overflow-x-auto bg-(--code-background)'>
         <SyntaxHighlighter
           PreTag='div'
           language={language ?? 'text'}
