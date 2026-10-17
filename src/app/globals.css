@@ -52,6 +52,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  /* Small pictures in lists, like a cover's thumbnail (rounded-thumb). The sizes above follow --radius and are too
+     round for them. */
+  --radius-thumb: 4px;
 }
 
 :root {

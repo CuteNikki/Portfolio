@@ -28,7 +28,7 @@ export function ContentRow({ item }: { item: ContentRowItem }) {
 
   return (
     <li className='flex items-center gap-4 px-5 py-3'>
-      <span className='bg-muted relative h-7 w-14 shrink-0 overflow-hidden rounded-[4px]'>
+      <span className='bg-muted rounded-thumb relative h-7 w-14 shrink-0 overflow-hidden'>
         {item.coverUrl && (
           <StoredImage
             url={item.coverUrl}
