@@ -6,7 +6,7 @@ import { createElement } from 'react';
 
 import { hit, hitsSoFar, visitorHash } from '@/lib/rate-limit';
 
-import { ContactTemplate } from '@/components/resend/contact-template';
+import { ContactTemplate } from '@/components/contact/contact-template';
 
 import {
   AntiSpamData,
