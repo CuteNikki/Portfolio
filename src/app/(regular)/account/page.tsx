@@ -1,14 +1,6 @@
 import { Suspense } from 'react';
 
-import {
-  DownloadIcon,
-  LogInIcon,
-  MessageSquareIcon,
-  MonitorSmartphoneIcon,
-  RefreshCwIcon,
-  Trash2Icon,
-  UserIcon,
-} from 'lucide-react';
+import { DownloadIcon, LogInIcon, RefreshCwIcon } from 'lucide-react';
 
 import { getDisplaySession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
@@ -29,17 +21,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export const { account: metadata } = SITE_METADATA;
 
-const SECTIONS = [
-  { id: 'profile', label: 'Profile', icon: UserIcon },
-  { id: 'comments', label: 'Comments', icon: MessageSquareIcon },
-  { id: 'devices', label: 'Devices', icon: MonitorSmartphoneIcon },
-  { id: 'data', label: 'Your data', icon: DownloadIcon },
-  { id: 'delete', label: 'Delete account', icon: Trash2Icon },
-];
-
 export default function AccountPage() {
   return (
-    <div className='flex w-full flex-col gap-10'>
+    // A column down the middle of the page, like posts and the legal pages
+    <div className='mx-auto flex w-full max-w-3xl flex-col gap-10'>
       <PageHeader
         eyebrow='Account'
         title='Your account.'
@@ -94,124 +79,103 @@ async function AccountContent() {
   const name = user.displayName ?? user.username;
 
   return (
-    <div className='flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12'>
-      <nav
-        aria-label='Account sections'
-        className='lg:sticky lg:top-28 lg:w-56 lg:shrink-0'
-      >
-        <ul className='flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0'>
-          {SECTIONS.map(({ id, label, icon: Icon }) => (
-            <li key={id} className='shrink-0'>
-              <a
-                href={`#${id}`}
-                className='text-body hover:bg-muted hover:text-foreground flex h-10 items-center gap-3 rounded-lg px-3 text-sm transition-colors [&_svg]:size-4'
-              >
-                <Icon aria-hidden className='text-muted-foreground' />
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div className='flex min-w-0 flex-1 flex-col gap-5'>
-        <Section id='profile' title='Profile'>
-          <div className='flex flex-wrap items-center gap-5'>
-            <Avatar className='size-16 rounded-xl after:rounded-xl'>
-              <AvatarImage src={user.avatarUrl} alt='' className='rounded-xl' />
-              <AvatarFallback className='rounded-xl text-lg'>
-                {name.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className='min-w-0'>
-              <p className='text-lg font-bold tracking-[-0.03em]'>{name}</p>
-              <p className='text-muted-foreground text-[13px]'>
-                @{user.username} · {ROLE_LABELS[user.role]} · member since{' '}
-                {formatShortDate(user.createdAt)}
-              </p>
-            </div>
-          </div>
-          <div className='mt-5 flex flex-wrap items-center justify-between gap-4'>
-            <p className='text-muted-foreground max-w-md text-[13px] leading-relaxed'>
-              Your name and picture come from Discord. Changed them there?
-              Refresh to bring them over.
+    <div className='flex flex-col gap-5'>
+      <Section id='profile' title='Profile'>
+        <div className='flex flex-wrap items-center gap-5'>
+          <Avatar className='size-16 rounded-xl after:rounded-xl'>
+            <AvatarImage src={user.avatarUrl} alt='' className='rounded-xl' />
+            <AvatarFallback className='rounded-xl text-lg'>
+              {name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className='min-w-0'>
+            <p className='text-lg font-bold tracking-[-0.03em]'>{name}</p>
+            <p className='text-muted-foreground text-[13px]'>
+              @{user.username} · {ROLE_LABELS[user.role]} · member since{' '}
+              {formatShortDate(user.createdAt)}
             </p>
-            <Button asChild variant='outline'>
-              {/* Signs in with Discord again and comes back here. A plain link: a prefetch would start a login. */}
-              <a
-                href={`/api/auth/login?refresh=1&next=${encodeURIComponent('/account')}`}
-              >
-                <RefreshCwIcon />
-                Refresh
-              </a>
-            </Button>
           </div>
-        </Section>
-
-        <Section id='comments' title='Your comments' count={comments.length}>
-          <CommentList
-            comments={comments.map((comment) => ({
-              id: comment.id,
-              excerpt: shorten(comment.content, 200),
-              date: formatShortDate(comment.createdAt),
-              postTitle: comment.post.title,
-              postHref: `${LINKS.postWithSlugOrId(comment.post.slug ?? comment.post.id).url}#comments`,
-              postSlug: comment.post.slug ?? '',
-              isReply: comment.parentId !== null,
-            }))}
-          />
-        </Section>
-
-        <Section id='devices' title='Signed-in devices' count={sessions.length}>
-          <DeviceList
-            devices={sessions.map((s) => ({
-              id: s.id,
-              ...describeDevice(s.userAgent),
-              lastUsed: formatShortDate(s.lastSeenAt),
-              signedIn: formatShortDate(s.createdAt),
-              current: s.id === session.id,
-            }))}
-          />
-        </Section>
-
-        <Section id='data' title='Your data'>
-          <div className='flex flex-wrap items-center justify-between gap-4'>
-            <p className='text-body max-w-md text-sm'>
-              Download your profile, comments and devices as a JSON file.
-            </p>
-            <Button asChild variant='outline'>
-              {/* A plain link, so the browser downloads the file instead of the app navigating to it */}
-              <a href='/api/account/export' download>
-                <DownloadIcon />
-                Download
-              </a>
-            </Button>
-          </div>
-        </Section>
-
-        <section
-          id='delete'
-          aria-labelledby='delete-heading'
-          className='bg-card border-destructive/30 flex scroll-mt-28 flex-wrap items-center justify-between gap-4 rounded-xl border p-6'
-        >
-          <div className='max-w-md'>
-            <h2
-              id='delete-heading'
-              className='text-destructive text-base font-bold'
+        </div>
+        <div className='mt-5 flex flex-wrap items-center justify-between gap-4'>
+          <p className='text-muted-foreground max-w-md text-[13px] leading-relaxed'>
+            Your name and picture come from Discord. Changed them there? Refresh
+            to bring them over.
+          </p>
+          <Button asChild variant='outline'>
+            {/* Signs in with Discord again and comes back here. A plain link: a prefetch would start a login. */}
+            <a
+              href={`/api/auth/login?refresh=1&next=${encodeURIComponent('/account')}`}
             >
-              Delete account
-            </h2>
-            <p className='text-body mt-1 text-sm'>
-              Removes your profile, your comments and every signed-in device.
-              Posts and projects you wrote stay. This can’t be undone.
-            </p>
-          </div>
-          <DeleteAccount
-            username={user.username}
-            commentCount={comments.length}
-          />
-        </section>
-      </div>
+              <RefreshCwIcon />
+              Refresh
+            </a>
+          </Button>
+        </div>
+      </Section>
+
+      <Section id='comments' title='Your comments' count={comments.length}>
+        <CommentList
+          comments={comments.map((comment) => ({
+            id: comment.id,
+            excerpt: shorten(comment.content, 200),
+            date: formatShortDate(comment.createdAt),
+            postTitle: comment.post.title,
+            postHref: `${LINKS.postWithSlugOrId(comment.post.slug ?? comment.post.id).url}#comments`,
+            postSlug: comment.post.slug ?? '',
+            isReply: comment.parentId !== null,
+          }))}
+        />
+      </Section>
+
+      <Section id='devices' title='Signed-in devices' count={sessions.length}>
+        <DeviceList
+          devices={sessions.map((s) => ({
+            id: s.id,
+            ...describeDevice(s.userAgent),
+            lastUsed: formatShortDate(s.lastSeenAt),
+            signedIn: formatShortDate(s.createdAt),
+            current: s.id === session.id,
+          }))}
+        />
+      </Section>
+
+      <Section id='data' title='Your data'>
+        <div className='flex flex-wrap items-center justify-between gap-4'>
+          <p className='text-body max-w-md text-sm'>
+            Download your profile, comments and devices as a JSON file.
+          </p>
+          <Button asChild variant='outline'>
+            {/* A plain link, so the browser downloads the file instead of the app navigating to it */}
+            <a href='/api/account/export' download>
+              <DownloadIcon />
+              Download
+            </a>
+          </Button>
+        </div>
+      </Section>
+
+      <section
+        id='delete'
+        aria-labelledby='delete-heading'
+        className='bg-card border-destructive/30 flex scroll-mt-28 flex-wrap items-center justify-between gap-4 rounded-xl border p-6'
+      >
+        <div className='max-w-md'>
+          <h2
+            id='delete-heading'
+            className='text-destructive text-base font-bold'
+          >
+            Delete account
+          </h2>
+          <p className='text-body mt-1 text-sm'>
+            Removes your profile, your comments and every signed-in device.
+            Posts and projects you wrote stay. This can’t be undone.
+          </p>
+        </div>
+        <DeleteAccount
+          username={user.username}
+          commentCount={comments.length}
+        />
+      </section>
     </div>
   );
 }
@@ -248,12 +212,9 @@ function Section({
 
 function AccountSkeleton() {
   return (
-    <div className='flex flex-col gap-5 lg:flex-row lg:gap-12'>
-      <Skeleton className='h-48 w-full rounded-xl lg:w-56' />
-      <div className='flex flex-1 flex-col gap-5'>
-        <Skeleton className='h-36 w-full rounded-xl' />
-        <Skeleton className='h-56 w-full rounded-xl' />
-      </div>
+    <div className='flex flex-col gap-5'>
+      <Skeleton className='h-36 w-full rounded-xl' />
+      <Skeleton className='h-56 w-full rounded-xl' />
     </div>
   );
 }
