@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { ExternalLinkIcon } from 'lucide-react';
 
@@ -125,5 +125,48 @@ export function NewTabItem({ href }: { href: string }) {
       <ExternalLinkIcon />
       Open in new tab
     </DropdownMenuItem>
+  );
+}
+
+/**
+ * A right-click menu for the element this sits in, the closest match of `within` (a table row or list item unless
+ * told otherwise), for parts of a page rendered elsewhere: a row's ⋯ menu, say, or a picture's card. Its children are
+ * the menu's DropdownMenuItems.
+ */
+export function ContextMenuFor({
+  within = 'tr, li',
+  children,
+}: {
+  within?: string;
+  children: React.ReactNode;
+}) {
+  const marker = useRef<HTMLSpanElement>(null);
+  const { onContextMenu, onPointerDown, menuProps } = useMenuAtPoint();
+
+  // The handlers change with the menu's state, so the listeners go through a ref to the latest ones
+  const handlers = useRef({ onContextMenu, onPointerDown });
+  useEffect(() => {
+    handlers.current = { onContextMenu, onPointerDown };
+  });
+  useEffect(() => {
+    const element = marker.current?.closest(within);
+    if (!element) return;
+    const contextMenu = (event: Event) =>
+      handlers.current.onContextMenu(event as MouseEvent);
+    const pointerDown = (event: Event) =>
+      handlers.current.onPointerDown(event as PointerEvent);
+    element.addEventListener('contextmenu', contextMenu);
+    element.addEventListener('pointerdown', pointerDown);
+    return () => {
+      element.removeEventListener('contextmenu', contextMenu);
+      element.removeEventListener('pointerdown', pointerDown);
+    };
+  }, [within]);
+
+  return (
+    <>
+      <span ref={marker} hidden />
+      <MenuAtPoint {...menuProps}>{children}</MenuAtPoint>
+    </>
   );
 }

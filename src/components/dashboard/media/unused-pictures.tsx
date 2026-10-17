@@ -14,9 +14,15 @@ import { cn } from '@/lib/utils';
 
 import { deleteUnusedImage } from '@/actions/upload';
 
+import { ContextMenuFor } from '@/components/common/menu-at-point';
 import { StoredImage } from '@/components/common/stored-image';
 import { CleanUpButton } from '@/components/dashboard/media/clean-up';
+import { PictureMenuItems } from '@/components/dashboard/media/picture-menu-items';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 
 export interface UnusedPicture {
   url: string;
@@ -114,7 +120,7 @@ function uploadedAgo(time: number) {
 }
 
 // One unused picture, with when it was uploaded and a button that deletes it right away. Nothing uses it, so nothing
-// changes on the site.
+// changes on the site. Right-clicking it can also open or copy the picture.
 function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -142,6 +148,22 @@ function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
         pending && 'opacity-50',
       )}
     >
+      <ContextMenuFor>
+        {picture.complete && (
+          <>
+            <PictureMenuItems url={picture.url} />
+            <DropdownMenuSeparator />
+          </>
+        )}
+        <DropdownMenuItem
+          variant='destructive'
+          disabled={pending}
+          onSelect={remove}
+        >
+          <Trash2Icon />
+          Delete
+        </DropdownMenuItem>
+      </ContextMenuFor>
       <span className='bg-muted relative aspect-2/1'>
         {picture.complete ? (
           <StoredImage

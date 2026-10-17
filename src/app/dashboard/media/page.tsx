@@ -195,6 +195,7 @@ export default async function MediaPage() {
               <RemovePictureButton
                 url={picture.url}
                 usedBy={picture.usedBy}
+                editHref={picture.editHref}
                 usage={picture.usage}
               />
             </li>

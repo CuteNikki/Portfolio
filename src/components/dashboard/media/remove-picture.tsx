@@ -1,13 +1,16 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { LoaderCircleIcon, Trash2Icon } from 'lucide-react';
+import { LoaderCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
 import { toast } from '@/lib/toast';
 
 import { removePicture } from '@/actions/upload';
 
+import { ContextMenuFor } from '@/components/common/menu-at-point';
+import { PictureMenuItems } from '@/components/dashboard/media/picture-menu-items';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,16 +22,23 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 
 // Takes a picture off the post or project that uses it and deletes it from storage, after asking. Sits in the corner
-// of the picture's card on the Media page, and shows while the card is hovered or the button has focus.
+// of the picture's card on the Media page, and shows while the card is hovered or the button has focus. Right-clicking
+// the card gives the same, besides opening or copying the picture and editing what uses it.
 export function RemovePictureButton({
   url,
   usedBy,
+  editHref,
   usage,
 }: {
   url: string;
   usedBy: string;
+  editHref: string;
   // What the picture is, e.g. "Post cover"
   usage: string;
 }) {
@@ -59,6 +69,26 @@ export function RemovePictureButton({
 
   return (
     <>
+      {/* The picture, then what uses it, then deleting it, as in the dashboard's other menus */}
+      <ContextMenuFor>
+        <PictureMenuItems url={url} />
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href={editHref}>
+            <PencilLineIcon />
+            {editHref.includes('/posts/') ? 'Edit post' : 'Edit project'}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          variant='destructive'
+          disabled={pending}
+          onSelect={() => setConfirming(true)}
+        >
+          <Trash2Icon />
+          Delete
+        </DropdownMenuItem>
+      </ContextMenuFor>
       <Button
         variant='outline'
         size='icon-sm'
