@@ -8,6 +8,8 @@ import { Role } from '@/generated/prisma/enums';
 
 import prisma from '@/lib/prisma';
 
+import { canWrite } from '@/constants/roles';
+
 export const SESSION_COOKIE = 'auth_session';
 export const OAUTH_STATE_COOKIE = 'oauth_state';
 export const RETURN_TO_COOKIE = 'auth_return_to';
@@ -127,24 +129,21 @@ export async function requireAdmin() {
   return session;
 }
 
+// The session of a writer or admin, or null for anyone else. For actions and routes, which answer with an error
+// instead of redirecting.
+export async function getWriterSession() {
+  const session = await getCurrentSession();
+  return session && canWrite(session.user.role) ? session : null;
+}
+
 // The dashboard is for writers and admins, who both manage every post and project there. Only admins see the users
 // page. Like requireAdmin, call it at the top of every dashboard page.
 export async function requireWriter() {
-  const session = await getCurrentSession();
-
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
-    redirect('/');
-  }
-
+  const session = await getWriterSession();
+  if (!session) redirect('/');
   return session;
 }
 
 export async function isWriter() {
-  const session = await getCurrentSession();
-  return (
-    session?.user.role === Role.ADMIN || session?.user.role === Role.WRITER
-  );
+  return canWrite((await getCurrentSession())?.user.role);
 }

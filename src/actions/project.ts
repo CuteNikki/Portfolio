@@ -3,10 +3,12 @@
 import { revalidatePath, updateTag } from 'next/cache';
 import { after } from 'next/server';
 
-import { Role } from '@/generated/prisma/enums';
-
-import type { ActionResult } from '@/lib/action-result';
-import { getCurrentSession } from '@/lib/auth';
+import {
+  type ActionResult,
+  type CreateResult,
+  fail,
+} from '@/lib/action-result';
+import { getWriterSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { readDate } from '@/lib/form-date';
 import { readCover, readGallery, removedImages } from '@/lib/form-images';
@@ -14,19 +16,6 @@ import { coverTone } from '@/lib/tone';
 import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
 import { resolveSlug } from '@/lib/slug';
-
-// Messages go back as values, since a production build hides a thrown error's message (see action-result.ts)
-const fail = (error: string) => ({ error });
-type CreateResult = ActionResult & { id?: string; slug?: string | null };
-
-function canWrite(
-  session: Awaited<ReturnType<typeof getCurrentSession>>,
-): session is NonNullable<typeof session> {
-  return (
-    !!session &&
-    (session.user.role === Role.ADMIN || session.user.role === Role.WRITER)
-  );
-}
 
 function isProjectSlugTaken(exceptId?: string) {
   return async (slug: string) =>
@@ -36,11 +25,8 @@ function isProjectSlugTaken(exceptId?: string) {
 }
 
 export async function createProject(formData: FormData): Promise<CreateResult> {
-  const session = await getCurrentSession();
-
-  if (!canWrite(session)) {
-    return fail('Only writers and admins can do that.');
-  }
+  const session = await getWriterSession();
+  if (!session) return fail('Only writers and admins can do that.');
 
   const title = formData.get('title') as string;
   const description = formData.get('description') as string;
@@ -108,9 +94,7 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
 }
 
 export async function deleteProject(formData: FormData): Promise<ActionResult> {
-  const session = await getCurrentSession();
-
-  if (!canWrite(session)) {
+  if (!(await getWriterSession())) {
     return fail('Only writers and admins can do that.');
   }
 
@@ -146,9 +130,7 @@ export async function deleteProject(formData: FormData): Promise<ActionResult> {
 }
 
 export async function updateProject(formData: FormData): Promise<ActionResult> {
-  const session = await getCurrentSession();
-
-  if (!canWrite(session)) {
+  if (!(await getWriterSession())) {
     return fail('Only writers and admins can do that.');
   }
 
@@ -293,8 +275,9 @@ export async function setProjectPublished(
   projectId: string,
   published: boolean,
 ): Promise<ActionResult> {
-  const session = await getCurrentSession();
-  if (!canWrite(session)) return fail('Only writers and admins can do that.');
+  if (!(await getWriterSession())) {
+    return fail('Only writers and admins can do that.');
+  }
 
   const project = await prisma.project.findUnique({
     where: { id: projectId },

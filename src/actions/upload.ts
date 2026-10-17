@@ -2,9 +2,7 @@
 
 import { revalidatePath, updateTag } from 'next/cache';
 
-import { Role } from '@/generated/prisma/enums';
-
-import { getCurrentSession } from '@/lib/auth';
+import { getWriterSession } from '@/lib/auth';
 import {
   IMAGE_SIZE_NAMES,
   IMAGE_TYPES,
@@ -22,17 +20,6 @@ import {
   removeUnusedImages,
 } from '@/lib/uploads';
 
-async function requireWriterSession() {
-  const session = await getCurrentSession();
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
-    throw new Error('Unauthorized: only writers can upload pictures.');
-  }
-  return session;
-}
-
 /**
  * Upload links for one picture, one for each of its copies. The browser shrinks the picture first, then sends the
  * copies straight to storage.
@@ -42,11 +29,7 @@ export async function requestImageUpload(
   bytes: Record<ImageSize, number>,
 ) {
   // Reasons go back as values: a production build hides a thrown error's message
-  const session = await getCurrentSession();
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
+  if (!(await getWriterSession())) {
     return { error: 'Only writers can upload pictures.' } as const;
   }
   if (!(type in IMAGE_TYPES)) {
@@ -70,7 +53,8 @@ export async function requestImageUpload(
  * Deletes pictures uploaded in a form that was then left without saving. Pictures a post or project uses stay.
  */
 export async function discardImages(urls: string[]) {
-  await requireWriterSession();
+  // Only a clean-up, which forms don't wait for, so anyone else just gets nothing done
+  if (!(await getWriterSession())) return;
   await discardUnusedImages(urls);
 }
 
@@ -81,11 +65,7 @@ export async function discardImages(urls: string[]) {
 export async function cleanUpImages(): Promise<
   { error: string } | { removed: number }
 > {
-  const session = await getCurrentSession();
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
+  if (!(await getWriterSession())) {
     return { error: 'Only writers can clean up pictures.' };
   }
 
@@ -106,11 +86,7 @@ export async function cleanUpImages(): Promise<
 export async function deleteUnusedImage(
   url: string,
 ): Promise<{ error: string } | { removed: true }> {
-  const session = await getCurrentSession();
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
+  if (!(await getWriterSession())) {
     return { error: 'Only writers can delete pictures.' };
   }
   if (typeof url !== 'string' || !ownImageKey(url)) {
@@ -137,11 +113,7 @@ export async function deleteUnusedImage(
 export async function removePicture(
   url: string,
 ): Promise<{ error: string } | { removed: true }> {
-  const session = await getCurrentSession();
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
+  if (!(await getWriterSession())) {
     return { error: 'Only writers can delete pictures.' };
   }
 

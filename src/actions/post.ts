@@ -4,10 +4,12 @@ import { revalidatePath, updateTag } from 'next/cache';
 import { after } from 'next/server';
 import { headers } from 'next/headers';
 
-import { Role } from '@/generated/prisma/enums';
-
-import type { ActionResult } from '@/lib/action-result';
-import { getCurrentSession } from '@/lib/auth';
+import {
+  type ActionResult,
+  type CreateResult,
+  fail,
+} from '@/lib/action-result';
+import { getCurrentSession, getWriterSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { commentsTag } from '@/lib/data';
 import { readDate } from '@/lib/form-date';
@@ -17,9 +19,7 @@ import prisma from '@/lib/prisma';
 import { hit, visitorHash } from '@/lib/rate-limit';
 import { resolveSlug } from '@/lib/slug';
 
-// Messages go back as values, since a production build hides a thrown error's message (see action-result.ts)
-const fail = (error: string) => ({ error });
-type CreateResult = ActionResult & { id?: string; slug?: string | null };
+import { canWrite } from '@/constants/roles';
 
 function isPostSlugTaken(exceptId?: string) {
   return async (slug: string) =>
@@ -29,14 +29,8 @@ function isPostSlugTaken(exceptId?: string) {
 }
 
 export async function createPost(formData: FormData): Promise<CreateResult> {
-  const session = await getCurrentSession();
-
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
-    return fail('Only writers and admins can do that.');
-  }
+  const session = await getWriterSession();
+  if (!session) return fail('Only writers and admins can do that.');
 
   const title = formData.get('title') as string;
   const content = formData.get('content') as string;
@@ -82,12 +76,7 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
 }
 
 export async function deletePost(formData: FormData): Promise<ActionResult> {
-  const session = await getCurrentSession();
-
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
+  if (!(await getWriterSession())) {
     return fail('Only writers and admins can do that.');
   }
 
@@ -117,12 +106,7 @@ export async function deletePost(formData: FormData): Promise<ActionResult> {
 }
 
 export async function updatePost(formData: FormData): Promise<ActionResult> {
-  const session = await getCurrentSession();
-
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
+  if (!(await getWriterSession())) {
     return fail('Only writers and admins can do that.');
   }
 
@@ -240,12 +224,10 @@ export async function createComment(formData: FormData): Promise<ActionResult> {
   }
 
   // Only published posts take comments, from anyone, and drafts from the people who write them
-  const isStaff =
-    session.user.role === Role.ADMIN || session.user.role === Role.WRITER;
   const post = await prisma.post.findFirst({
     where: {
       id: postId,
-      ...(isStaff ? {} : { publishedAt: { not: null } }),
+      ...(canWrite(session.user.role) ? {} : { publishedAt: { not: null } }),
     },
     select: { id: true },
   });
@@ -306,11 +288,7 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
   }
 
   // A comment's author can delete it, and so can writers and admins, who look after the posts
-  if (
-    comment.authorId !== session.user.id &&
-    session.user.role !== Role.ADMIN &&
-    session.user.role !== Role.WRITER
-  ) {
+  if (comment.authorId !== session.user.id && !canWrite(session.user.role)) {
     return fail('You can only delete your own comments.');
   }
 
@@ -377,11 +355,7 @@ export async function addView(formData: FormData): Promise<ActionResult> {
   const userAgent = headerList.get('user-agent') ?? '';
 
   // Writers and admins checking their own blog aren't readers
-  if (
-    session?.user.role === Role.ADMIN ||
-    session?.user.role === Role.WRITER ||
-    NOT_A_READER.test(userAgent)
-  ) {
+  if (canWrite(session?.user.role) || NOT_A_READER.test(userAgent)) {
     return {};
   }
 
@@ -410,19 +384,13 @@ export async function addView(formData: FormData): Promise<ActionResult> {
 }
 
 /**
- * Publishes a post or takes it back to a draft without opening it, e.g. from a row's menu. Like the form, a post
- * published again gets today's date.
+ * Publishes a post or takes it back to a draft without opening it, e.g. from a row's menu. The post keeps its own date.
  */
 export async function setPostPublished(
   postId: string,
   published: boolean,
 ): Promise<ActionResult> {
-  const session = await getCurrentSession();
-
-  if (
-    !session ||
-    (session.user.role !== Role.ADMIN && session.user.role !== Role.WRITER)
-  ) {
+  if (!(await getWriterSession())) {
     return fail('Only writers and admins can do that.');
   }
 

@@ -1,13 +1,12 @@
 import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
 
-import { Role } from '@/generated/prisma/enums';
-
 import { getDisplaySession } from '@/lib/auth';
+
+import { canWrite } from '@/constants/roles';
 
 import { AccountMenu } from '@/components/navigation/account-menu';
 
-// Reads the session, so it has to sit behind a Suspense boundary. Only the fields the menus show reach the browser:
-// the full user also holds the Discord access and refresh tokens.
+// Reads the session, so it has to sit behind a Suspense boundary. Only the fields the menus show reach the browser.
 export async function AccountButton() {
   const session = await getDisplaySession();
   const user = session
@@ -16,8 +15,7 @@ export async function AccountButton() {
         username: session.user.username,
         avatarUrl: session.user.avatarUrl,
         role: session.user.role,
-        canWrite:
-          session.user.role === Role.ADMIN || session.user.role === Role.WRITER,
+        canWrite: canWrite(session.user.role),
       }
     : null;
 

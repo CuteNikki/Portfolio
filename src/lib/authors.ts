@@ -1,7 +1,7 @@
-import { Role } from '@/generated/prisma/enums';
-
 import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
+
+import { canWrite } from '@/constants/roles';
 
 import type { AuthorOption } from '@/components/dashboard/shared/authors-field';
 
@@ -28,7 +28,7 @@ export async function getAuthorOptions(): Promise<AuthorOption[]> {
       name: user.displayName ?? user.username,
       username: user.username,
       avatarUrl: user.avatarUrl,
-      isWriter: user.role === Role.WRITER || user.role === Role.ADMIN,
+      isWriter: canWrite(user.role),
     }))
     .sort((a, b) => Number(b.isWriter) - Number(a.isWriter));
 }
