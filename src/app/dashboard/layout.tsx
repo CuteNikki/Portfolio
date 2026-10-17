@@ -6,8 +6,8 @@ import prisma from '@/lib/prisma';
 import { SITE_METADATA } from '@/constants/metadata';
 
 import {
+  DashboardMobileNav,
   DashboardSidebar,
-  DashboardTabs,
 } from '@/components/dashboard/sidebar/dashboard-nav';
 import { Footer } from '@/components/navigation/footer';
 import { Navbar } from '@/components/navigation/navbar';
@@ -63,7 +63,7 @@ export default async function DashboardLayout({
           <div className='flex flex-1'>
             <DashboardSidebar counts={counts} isAdmin={isAdmin} />
             <main className='flex min-w-0 flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:px-10 lg:py-8'>
-              <DashboardTabs counts={counts} isAdmin={isAdmin} />
+              <DashboardMobileNav counts={counts} isAdmin={isAdmin} />
               {children}
             </main>
           </div>

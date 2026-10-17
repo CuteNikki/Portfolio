@@ -1,6 +1,6 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -28,6 +28,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import {
   Tooltip,
   TooltipContent,
@@ -112,16 +118,19 @@ function SidebarLink({
   count,
   current,
   collapsed,
+  onNavigate,
 }: {
   link: NavLink;
   count?: number;
   current: boolean;
   collapsed: boolean;
+  onNavigate?: () => void;
 }) {
   const Icon = link.icon;
   const item = (
     <Link
       href={link.url}
+      onClick={onNavigate}
       aria-current={current ? 'page' : undefined}
       aria-label={collapsed ? link.label : undefined}
       className={cn(
@@ -215,8 +224,8 @@ export function DashboardSidebar({
   );
 }
 
-// The same sections on phones and tablets, as a row of tabs that scrolls sideways above the page
-export function DashboardTabs({
+// The same sidebar on phones and tablets, opening from the left: a button shows the section you're in, next to New
+export function DashboardMobileNav({
   counts,
   isAdmin,
 }: {
@@ -224,38 +233,60 @@ export function DashboardTabs({
   isAdmin: boolean;
 }) {
   const pathname = usePathname();
-  const links = sectionsFor(isAdmin).flatMap(({ links }) => links);
+  const [open, setOpen] = useState(false);
+  const sections = sectionsFor(isAdmin);
+  const current = sections
+    .flatMap(({ links }) => links)
+    .find((link) => isCurrent(pathname, link.url));
+  const currentCount = current && counts[path(current.url)];
 
   return (
-    <nav aria-label='Dashboard' className='flex items-center gap-2 lg:hidden'>
+    <div className='flex items-center gap-2 lg:hidden'>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant='outline' className='min-w-0 flex-1 justify-start'>
+            <PanelLeftOpenIcon />
+            <span className='sr-only'>Dashboard:</span>
+            <span className='truncate'>{current?.label ?? 'Dashboard'}</span>
+            {currentCount !== undefined && (
+              <span className='text-muted-foreground ml-auto text-xs font-normal tabular-nums'>
+                {currentCount}
+              </span>
+            )}
+          </Button>
+        </SheetTrigger>
+        <SheetContent
+          side='left'
+          aria-describedby={undefined}
+          className='w-72 gap-6 overflow-y-auto px-3 py-4'
+        >
+          <SheetTitle className='px-3 pt-1.5 text-sm font-bold'>
+            Dashboard
+          </SheetTitle>
+          {sections.map(({ label, links }) => (
+            <nav
+              key={label}
+              aria-label={label}
+              className='flex flex-col gap-0.5'
+            >
+              <span className='text-muted-foreground px-3 pb-1.5 text-[11px] tracking-widest uppercase'>
+                {label}
+              </span>
+              {links.map((link) => (
+                <SidebarLink
+                  key={link.url}
+                  link={link}
+                  count={counts[path(link.url)]}
+                  current={isCurrent(pathname, link.url)}
+                  collapsed={false}
+                  onNavigate={() => setOpen(false)}
+                />
+              ))}
+            </nav>
+          ))}
+        </SheetContent>
+      </Sheet>
       <NewMenu compact />
-      <ul className='flex min-w-0 flex-1 gap-1 overflow-x-auto py-1'>
-        {links.map((link) => {
-          const current = isCurrent(pathname, link.url);
-          const Icon = link.icon;
-          const count = counts[path(link.url)];
-          return (
-            <li key={link.url} className='shrink-0'>
-              <Link
-                href={link.url}
-                aria-current={current ? 'page' : undefined}
-                className={cn(
-                  'flex h-10 items-center gap-2 rounded-lg border px-3 text-sm whitespace-nowrap transition-colors [&_svg]:size-4',
-                  current
-                    ? 'border-primary-text/40 bg-primary-soft text-foreground'
-                    : 'bg-card text-body hover:text-foreground',
-                )}
-              >
-                {Icon && <Icon aria-hidden className='text-muted-foreground' />}
-                {link.label}
-                {count !== undefined && (
-                  <span className='text-muted-foreground text-xs'>{count}</span>
-                )}
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+    </div>
   );
 }
