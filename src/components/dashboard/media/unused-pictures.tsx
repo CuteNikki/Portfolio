@@ -87,7 +87,7 @@ export function UnusedPictures({ pictures }: { pictures: UnusedPicture[] }) {
       {open && (
         <ul
           id='unused-pictures'
-          className='grid gap-3 border-t p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+          className='grid grid-cols-1 gap-3 border-t p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
         >
           {pictures.map((picture) => (
             <UnusedPictureCard key={picture.url} picture={picture} />
