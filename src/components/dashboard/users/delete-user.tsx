@@ -26,7 +26,8 @@ export function DeleteUserDialog({
   user: { id: string; username: string };
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onDeleted?: () => void;
+  // Waited for, so the users table can fade the row out before the refreshed list leaves it out
+  onDeleted?: () => void | Promise<void>;
 }) {
   const [pending, startTransition] = useTransition();
 
@@ -40,8 +41,9 @@ export function DeleteUserDialog({
           toast.error("The user wasn't deleted", { description: error });
           return;
         }
+        onOpenChange(false);
         toast.success(`${user.username} deleted`);
-        onDeleted?.();
+        await onDeleted?.();
       } catch {
         toast.error("The user wasn't deleted. Please try again.");
       } finally {

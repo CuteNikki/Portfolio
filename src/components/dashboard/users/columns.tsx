@@ -2,7 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useOptimistic, useState, useTransition } from 'react';
+import { useOptimistic, useRef, useState, useTransition } from 'react';
+import { fadeOutRow } from '@/lib/row-motion';
 import { toast } from '@/lib/toast';
 
 import {
@@ -149,6 +150,7 @@ const roleColumn: DashboardColumnDef<User> = {
 
 const UserActions = ({ user }: { user: User }) => {
   const [confirming, setConfirming] = useState(false);
+  const actions = useRef<HTMLDivElement>(null);
 
   const copyId = () =>
     navigator.clipboard
@@ -157,7 +159,7 @@ const UserActions = ({ user }: { user: User }) => {
       .catch(() => toast.error("The ID couldn't be copied"));
 
   return (
-    <div className='flex justify-end'>
+    <div ref={actions} className='flex justify-end'>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -194,6 +196,7 @@ const UserActions = ({ user }: { user: User }) => {
         user={user}
         open={confirming}
         onOpenChange={setConfirming}
+        onDeleted={() => fadeOutRow(actions.current)}
       />
     </div>
   );

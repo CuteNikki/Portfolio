@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { EllipsisIcon, ExternalLinkIcon, Trash2Icon } from 'lucide-react';
+import { fadeOutRow } from '@/lib/row-motion';
 import { toast } from '@/lib/toast';
 
 import { deleteComment } from '@/actions/post';
@@ -59,6 +60,7 @@ export function CommentActions({
   const router = useRouter();
   const [confirming, setConfirming] = useState(false);
   const [pending, startTransition] = useTransition();
+  const actions = useRef<HTMLDivElement>(null);
 
   const remove = () =>
     startTransition(async () => {
@@ -71,7 +73,9 @@ export function CommentActions({
           toast.error("The comment wasn't deleted", { description: error });
           return;
         }
+        setConfirming(false);
         toast.success('Comment deleted');
+        await fadeOutRow(actions.current);
         router.refresh();
       } catch {
         toast.error("The comment wasn't deleted. Please try again.");
@@ -81,7 +85,7 @@ export function CommentActions({
     });
 
   return (
-    <div className='flex justify-end'>
+    <div ref={actions} className='flex justify-end'>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

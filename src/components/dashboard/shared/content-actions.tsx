@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -13,6 +13,7 @@ import {
   SendHorizonalIcon,
   Trash2Icon,
 } from 'lucide-react';
+import { fadeOutRow, flashRow } from '@/lib/row-motion';
 import { toast } from '@/lib/toast';
 
 import { deletePost, setPostPublished } from '@/actions/post';
@@ -54,6 +55,7 @@ export function ContentActions({
   isPublished: boolean;
 }) {
   const router = useRouter();
+  const actions = useRef<HTMLDivElement>(null);
   const [confirming, setConfirming] = useState(false);
   const [pending, startTransition] = useTransition();
 
@@ -81,6 +83,7 @@ export function ContentActions({
         toast.success(
           `${kind === 'post' ? 'Post' : 'Project'} ${publish ? 'published' : 'back to a draft'}`,
         );
+        flashRow(actions.current);
         router.refresh();
       } catch {
         toast.error('Something went wrong. Please try again.');
@@ -101,7 +104,9 @@ export function ContentActions({
           });
           return;
         }
+        setConfirming(false);
         toast.success(kind === 'post' ? 'Post deleted' : 'Project deleted');
+        await fadeOutRow(actions.current);
         router.refresh();
       } catch {
         toast.error(`The ${kind} couldn't be deleted. Please try again.`);
@@ -111,7 +116,7 @@ export function ContentActions({
     });
 
   return (
-    <div className='flex justify-end gap-1'>
+    <div ref={actions} className='flex justify-end gap-1'>
       {/* On phones the ⋯ menu's Edit does this, which leaves the title more room */}
       <Button
         asChild
