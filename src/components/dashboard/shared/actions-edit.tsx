@@ -21,14 +21,16 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 
-export type EditAction = 'save' | 'publish' | 'delete';
+// What submitting a post or project form does: save it (as a draft, or unpublished) or publish it
+export type SubmitIntent = 'save' | 'publish';
+export type EditAction = SubmitIntent | 'delete';
 
-// Reads which button submitted the form. Pressing Enter in a field submits with the first submit button in the form:
-// Update for a published entry, so it stays live, and Save draft for a draft. Delete isn't a submit button, so Enter
-// never deletes.
+// Reads which button submitted the form, new or edit. Pressing Enter in a field submits with the first submit button in
+// the form: Update for a published entry, so it stays live, and Save draft otherwise. Delete isn't a submit button, so
+// Enter never deletes.
 export function getEditAction(
   event: React.SubmitEvent<HTMLFormElement>,
-): Exclude<EditAction, 'delete'> {
+): SubmitIntent {
   const value = (event.submitter as HTMLButtonElement | null)?.value;
   return value === 'publish' ? 'publish' : 'save';
 }

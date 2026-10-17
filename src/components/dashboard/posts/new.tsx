@@ -14,6 +14,10 @@ import {
   AuthorsField,
 } from '@/components/dashboard/shared/authors-field';
 import { CoverField } from '@/components/dashboard/shared/image-fields';
+import {
+  getEditAction,
+  type SubmitIntent,
+} from '@/components/dashboard/shared/actions-edit';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
 import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
 import {
@@ -61,21 +65,14 @@ export function NewPostForm({
 
   const router = useRouter();
 
-  const [submitAction, setSubmitAction] = useState<'draft' | 'publish'>(
-    'draft',
-  );
+  const [action, setAction] = useState<SubmitIntent>('save');
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const intent = getEditAction(event);
+    setAction(intent);
     const formData = new FormData(event.currentTarget);
-
-    // The textarea is unmounted while the Preview tab is open, so take the value from state
-    formData.set('content', content);
-
-    formData.append(
-      'isPublished',
-      submitAction === 'publish' ? 'true' : 'false',
-    );
+    formData.append('isPublished', intent === 'publish' ? 'true' : 'false');
 
     startTransition(async () => {
       try {
@@ -87,9 +84,7 @@ export function NewPostForm({
           return;
         }
 
-        toast.success(
-          submitAction === 'publish' ? 'Post published' : 'Draft saved',
-        );
+        toast.success(intent === 'publish' ? 'Post published' : 'Draft saved');
         setIsSaved(true);
         router.push(LINKS.dashboardPostEditWithId(created.id).url);
       } catch (error) {
@@ -152,8 +147,7 @@ export function NewPostForm({
               <NewActionButtons
                 isPending={isPending || isSaved}
                 isMissingRequiredFields={!content.trim()}
-                action={submitAction}
-                setAction={setSubmitAction}
+                action={action}
                 onBack={confirmLeave}
               />
             </FormCard>

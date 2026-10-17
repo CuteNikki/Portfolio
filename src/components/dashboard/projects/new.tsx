@@ -22,6 +22,10 @@ import {
   ALL_TONES,
   ToneField,
 } from '@/components/dashboard/projects/tone-field';
+import {
+  getEditAction,
+  type SubmitIntent,
+} from '@/components/dashboard/shared/actions-edit';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
 import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
 import {
@@ -69,21 +73,14 @@ export function NewProjectForm({
 
   const router = useRouter();
 
-  const [submitAction, setSubmitAction] = useState<'draft' | 'publish'>(
-    'draft',
-  );
+  const [action, setAction] = useState<SubmitIntent>('save');
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const intent = getEditAction(event);
+    setAction(intent);
     const formData = new FormData(event.currentTarget);
-
-    // The textarea is unmounted while the Preview tab is open, so take the value from state
-    formData.set('description', description);
-
-    formData.append(
-      'isPublished',
-      submitAction === 'publish' ? 'true' : 'false',
-    );
+    formData.append('isPublished', intent === 'publish' ? 'true' : 'false');
 
     startTransition(async () => {
       try {
@@ -96,7 +93,7 @@ export function NewProjectForm({
         }
 
         toast.success(
-          submitAction === 'publish' ? 'Project published' : 'Draft saved',
+          intent === 'publish' ? 'Project published' : 'Draft saved',
         );
         setIsSaved(true);
         router.push(LINKS.dashboardProjectEditWithId(created.id).url);
@@ -168,8 +165,7 @@ export function NewProjectForm({
               <NewActionButtons
                 isPending={isPending || isSaved}
                 isMissingRequiredFields={!description.trim()}
-                action={submitAction}
-                setAction={setSubmitAction}
+                action={action}
                 onBack={confirmLeave}
               />
             </FormCard>

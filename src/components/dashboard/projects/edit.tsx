@@ -66,10 +66,6 @@ export function EditProjectForm({
     const intent = getEditAction(event);
     setAction(intent);
     const formData = new FormData(event.currentTarget);
-
-    // The textarea is unmounted while the Preview tab is open, so take the value from state
-    formData.set('description', description);
-
     formData.append('projectId', project.id);
     formData.append('isPublished', intent === 'publish' ? 'true' : 'false');
 

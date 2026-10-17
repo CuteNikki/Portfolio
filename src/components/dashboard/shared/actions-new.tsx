@@ -5,21 +5,21 @@ import {
   SendHorizonalIcon,
 } from 'lucide-react';
 
+import type { SubmitIntent } from '@/components/dashboard/shared/actions-edit';
 import { Button } from '@/components/ui/button';
 
 // The buttons of the Publish card on a new post or project, stacked with the main one on top. Save draft comes first
-// in the markup, so pressing Enter in a field saves a draft rather than publishing.
+// in the markup, so pressing Enter in a field saves a draft rather than publishing (see getEditAction).
 export function NewActionButtons({
   isPending,
   isMissingRequiredFields,
   action,
-  setAction,
   onBack,
 }: {
   isPending: boolean;
   isMissingRequiredFields: boolean;
-  action: 'draft' | 'publish';
-  setAction: React.Dispatch<React.SetStateAction<'draft' | 'publish'>>;
+  // The button that was pressed, which shows a spinner while it saves
+  action: SubmitIntent;
   // Asks first when there are unsaved changes
   onBack: (back: () => void) => void;
 }) {
@@ -27,11 +27,11 @@ export function NewActionButtons({
     <div className='flex flex-col gap-2'>
       <Button
         type='submit'
+        value='save'
         variant='outline'
-        onClick={() => setAction('draft')}
         disabled={isPending || isMissingRequiredFields}
       >
-        {isPending && action === 'draft' ? (
+        {isPending && action === 'save' ? (
           <LoaderCircleIcon className='animate-spin' />
         ) : (
           <SaveIcon />
@@ -41,7 +41,7 @@ export function NewActionButtons({
 
       <Button
         type='submit'
-        onClick={() => setAction('publish')}
+        value='publish'
         disabled={isPending || isMissingRequiredFields}
         className='order-first'
       >
