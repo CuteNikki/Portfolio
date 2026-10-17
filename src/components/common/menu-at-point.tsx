@@ -90,6 +90,9 @@ export function MenuAtPoint({
     close.current = onClose;
   });
   const open = point !== null;
+  // Where the menu hangs from, kept after it closes so it fades out where it was rather than in the window's corner
+  const [anchor, setAnchor] = useState<Point>(point ?? { x: 0, y: 0 });
+  if (point && point !== anchor) setAnchor(point);
   useEffect(() => {
     if (!open) return;
     const scrolled = (event: Event) => {
@@ -121,7 +124,7 @@ export function MenuAtPoint({
           aria-hidden
           tabIndex={-1}
           className='pointer-events-none fixed size-0'
-          style={{ left: point?.x ?? 0, top: point?.y ?? 0 }}
+          style={{ left: anchor.x, top: anchor.y }}
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent
