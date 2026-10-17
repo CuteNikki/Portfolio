@@ -68,11 +68,13 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
     return fail('Title and description are required.');
   }
 
-  const slug = await resolveSlug(
+  const resolved = await resolveSlug(
     formData.get('slug'),
     title,
     isProjectSlugTaken(),
   );
+  if ('error' in resolved) return fail(resolved.error);
+  const { slug } = resolved;
 
   const coverUrl = readCover(formData) ?? null;
 
@@ -192,11 +194,13 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
     return fail('Project not found.');
   }
 
-  const slug = await resolveSlug(
+  const resolved = await resolveSlug(
     formData.get('slug'),
     title,
     isProjectSlugTaken(id),
   );
+  if ('error' in resolved) return fail(resolved.error);
+  const { slug } = resolved;
 
   // A form without authors or pictures keeps the current ones
   const authors = await readAuthors(formData);

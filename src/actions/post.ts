@@ -50,11 +50,13 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
   const createdAt = readDate(formData.get('date'));
   if (createdAt === null) return fail('Please enter a valid date.');
 
-  const slug = await resolveSlug(
+  const resolved = await resolveSlug(
     formData.get('slug'),
     title,
     isPostSlugTaken(),
   );
+  if ('error' in resolved) return fail(resolved.error);
+  const { slug } = resolved;
 
   const createdPost = await prisma.post.create({
     data: {
@@ -145,11 +147,13 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
     return fail('Post not found.');
   }
 
-  const slug = await resolveSlug(
+  const resolved = await resolveSlug(
     formData.get('slug'),
     title,
     isPostSlugTaken(id),
   );
+  if ('error' in resolved) return fail(resolved.error);
+  const { slug } = resolved;
 
   // A form without authors or a cover field keeps the current ones
   const authors = await readAuthors(formData);
