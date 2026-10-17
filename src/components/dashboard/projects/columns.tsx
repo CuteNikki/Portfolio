@@ -41,6 +41,19 @@ export const columns: DashboardColumnDef<Row>[] = [
     ),
   },
   {
+    id: 'tags',
+    accessorFn: (row) => [...row.tags, ...row.technologies].join(' '),
+    size: 320,
+    meta: { label: 'Tags' },
+    header: () => 'Tags',
+    cell: ({ row }) => (
+      <span className='text-muted-foreground block truncate'>
+        {[...row.original.tags, ...row.original.technologies].join(' · ') ||
+          '-'}
+      </span>
+    ),
+  },
+  {
     accessorKey: 'publishedAt',
     size: 120,
     meta: { label: 'Status' },
@@ -55,19 +68,6 @@ export const columns: DashboardColumnDef<Row>[] = [
     meta: { label: 'Authors' },
     header: sortableHeader('Authors'),
     cell: ({ row }) => <AuthorsCell authors={authorsOf(row.original)} />,
-  },
-  {
-    id: 'tags',
-    accessorFn: (row) => [...row.tags, ...row.technologies].join(' '),
-    size: 220,
-    meta: { label: 'Tags' },
-    header: () => 'Tags',
-    cell: ({ row }) => (
-      <span className='text-muted-foreground block truncate'>
-        {[...row.original.tags, ...row.original.technologies].join(' · ') ||
-          '-'}
-      </span>
-    ),
   },
   {
     accessorKey: 'updatedAt',
