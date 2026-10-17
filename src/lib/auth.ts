@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { redirect, unstable_rethrow } from 'next/navigation';
 import { after, connection } from 'next/server';
 import { cache } from 'react';
 
@@ -45,38 +45,62 @@ export const getCurrentSession = cache(async () => {
   // check shouldn't be cached anyway, so it waits for the request.
   await connection();
 
-  try {
-    const session = await prisma.session.findUnique({
-      where: { sessionToken: hashSessionToken(sessionToken) },
+  const session = await findSession(hashSessionToken(sessionToken));
+
+  if (!session) return null;
+
+  if (session.expiresAt < new Date()) {
+    // Signed out either way; a session left behind is only cleaned up later
+    await prisma.session.delete({ where: { id: session.id } }).catch(() => {});
+    return null;
+  }
+
+  // The account page shows when each device was last used. A few minutes off is fine, so it's written at most every
+  // quarter of an hour, and only after the response is sent.
+  if (Date.now() - session.lastSeenAt.getTime() > LAST_SEEN_INTERVAL_MS) {
+    after(() =>
+      prisma.session
+        .update({
+          where: { id: session.id },
+          data: { lastSeenAt: new Date() },
+        })
+        .catch(() => {}),
+    );
+  }
+
+  return session;
+});
+
+// A failed lookup must not pass for "signed out": the dashboard would then send a writer home mid-save, and the rest
+// of that render (cache() keeps the result per request) would show them signed out. A connection the database closed
+// while it sat in the pool fails the first query on it, so the lookup is tried once more before the error is thrown.
+async function findSession(hashedToken: string) {
+  const lookup = () =>
+    prisma.session.findUnique({
+      where: { sessionToken: hashedToken },
       include: { user: true },
     });
 
-    if (!session) return null;
-
-    if (session.expiresAt < new Date()) {
-      await prisma.session.delete({ where: { id: session.id } });
-      return null;
-    }
-
-    // The account page shows when each device was last used. A few minutes off is fine, so it's written at most every
-    // quarter of an hour, and only after the response is sent.
-    if (Date.now() - session.lastSeenAt.getTime() > LAST_SEEN_INTERVAL_MS) {
-      after(() =>
-        prisma.session
-          .update({
-            where: { id: session.id },
-            data: { lastSeenAt: new Date() },
-          })
-          .catch(() => {}),
-      );
-    }
-
-    return session;
+  try {
+    return await lookup();
   } catch (error) {
+    console.warn('Session lookup failed, trying again:', error);
+    return await lookup();
+  }
+}
+
+// For UI that only shows who is signed in, such as the navbar. If the session can't be read, it shows signed out
+// rather than breaking the page. Checks that let someone in or keep them out use getCurrentSession, which throws then.
+export async function getDisplaySession() {
+  try {
+    return await getCurrentSession();
+  } catch (error) {
+    // Next's own signals, such as the one that stops a prerender at the request, still go through
+    unstable_rethrow(error);
     console.error('Error fetching session:', error);
     return null;
   }
-});
+}
 
 // Next.js renders layouts and pages in parallel, so a check in the dashboard
 // layout alone doesn't stop a page from rendering its data. Call this at the

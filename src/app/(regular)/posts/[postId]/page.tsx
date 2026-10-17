@@ -7,7 +7,7 @@ import { LogInIcon, PencilLineIcon } from 'lucide-react';
 
 import { LINKS } from '@/constants/links';
 import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
-import { getCurrentSession } from '@/lib/auth';
+import { getDisplaySession } from '@/lib/auth';
 import {
   getDraftPost,
   getPublishedPost,
@@ -243,7 +243,7 @@ async function PostContent({
 
 // Depends on who is signed in, so it streams in after the prerendered post
 async function Comments({ post, path }: { post: Post; path: string }) {
-  const session = await getCurrentSession();
+  const session = await getDisplaySession();
   const viewer = session
     ? { id: session.user.id, role: session.user.role }
     : null;

@@ -2,14 +2,14 @@ import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
 
 import { Role } from '@/generated/prisma/enums';
 
-import { getCurrentSession } from '@/lib/auth';
+import { getDisplaySession } from '@/lib/auth';
 
 import { AccountMenu } from '@/components/navigation/account-menu';
 
 // Reads the session, so it has to sit behind a Suspense boundary. Only the fields the menus show reach the browser:
 // the full user also holds the Discord access and refresh tokens.
 export async function AccountButton() {
-  const session = await getCurrentSession();
+  const session = await getDisplaySession();
   const user = session
     ? {
         name: session.user.displayName ?? session.user.username,

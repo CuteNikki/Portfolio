@@ -10,7 +10,7 @@ import {
   UserIcon,
 } from 'lucide-react';
 
-import { getCurrentSession } from '@/lib/auth';
+import { getDisplaySession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { describeDevice } from '@/lib/user-agent';
 import { formatShortDate, toExcerpt } from '@/lib/utils';
@@ -54,7 +54,7 @@ export default function AccountPage() {
 }
 
 async function AccountContent() {
-  const session = await getCurrentSession();
+  const session = await getDisplaySession();
 
   if (!session) {
     return (
