@@ -45,7 +45,7 @@ export function ProjectThumbnail({
     >
       <div
         aria-hidden
-        className='border-border bg-card absolute inset-x-[7%] top-[11%] -bottom-[12%] flex flex-col overflow-hidden rounded-lg border shadow-[0_16px_40px_rgb(0_0_0/0.14)] transition-transform duration-700 ease-(--ease-out-soft) group-hover:-translate-y-1.5'
+        className='border-border bg-card absolute inset-x-[7%] top-[11%] bottom-[-12%] flex flex-col overflow-hidden rounded-lg border shadow-[0_16px_40px_rgb(0_0_0/0.14)] transition-transform duration-700 ease-(--ease-out-soft) group-hover:-translate-y-1.5'
       >
         <div className='border-border flex h-6 shrink-0 items-center gap-1.25 border-b px-3'>
           <span className='bg-line-strong size-1.75 rounded-full' />

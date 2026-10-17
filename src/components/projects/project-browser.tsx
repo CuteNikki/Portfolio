@@ -381,7 +381,7 @@ function ProjectSwatch({
         } as React.CSSProperties
       }
     >
-      <span className='bg-card absolute inset-x-[14%] top-[22%] -bottom-[10%] rounded-[3px]' />
+      <span className='bg-card absolute inset-x-[14%] top-[22%] bottom-[-10%] rounded-[3px]' />
     </span>
   );
 }

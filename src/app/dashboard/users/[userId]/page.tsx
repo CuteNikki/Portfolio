@@ -119,7 +119,7 @@ export default async function UserPage({
             </AvatarFallback>
           </Avatar>
           <div className='min-w-0'>
-            <h1 className='truncate text-[28px] leading-tight font-bold tracking-[-0.05em]'>
+            <h1 className='truncate text-[28px] leading-tight font-bold tracking-tighter'>
               {name}
             </h1>
             <p className='text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]'>

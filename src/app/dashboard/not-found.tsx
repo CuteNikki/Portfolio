@@ -15,7 +15,7 @@ export default function DashboardNotFound() {
         <SearchXIcon aria-hidden className='size-6' />
       </span>
       <div>
-        <h1 className='text-[28px] leading-tight font-bold tracking-[-0.05em]'>
+        <h1 className='text-[28px] leading-tight font-bold tracking-tighter'>
           Nothing here
         </h1>
         <p className='text-body mt-2 max-w-lg text-sm'>

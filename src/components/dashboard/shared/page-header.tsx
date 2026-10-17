@@ -12,7 +12,7 @@ export function DashboardPageHeader({
   return (
     <header className='flex flex-wrap items-end justify-between gap-4'>
       <div>
-        <h1 className='text-[28px] leading-tight font-bold tracking-[-0.05em]'>
+        <h1 className='text-[28px] leading-tight font-bold tracking-tighter'>
           {title}
         </h1>
         <p className='text-muted-foreground mt-1 text-[13px]'>{description}</p>

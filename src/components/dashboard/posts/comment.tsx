@@ -53,7 +53,7 @@ export function Comment({
       <div className='relative flex items-start gap-3'>
         {(replies?.length ?? 0) > 0 && (
           // The thread line runs down from the middle of the 36px avatar
-          <div className='border-border absolute top-9 bottom-0 left-[17px] border-l-2' />
+          <div className='border-border absolute top-9 bottom-0 left-4.25 border-l-2' />
         )}
 
         <Avatar className='z-10 size-9 rounded-lg after:rounded-lg'>
@@ -178,7 +178,7 @@ export function Comment({
       {(replies?.length ?? 0) > 0 && (
         <div
           className={cn(
-            'ml-[17px] flex flex-col',
+            'ml-4.25 flex flex-col',
             // Phones run out of room after two levels: the deepest replies line up with the comment they answer
             depth >= MAX_PHONE_INDENT && 'max-sm:ml-0',
           )}
@@ -204,7 +204,7 @@ export function Comment({
                     />
                     <div
                       className={cn(
-                        'border-border absolute top-0 left-0 h-[34px] w-5 border-b-2',
+                        'border-border absolute top-0 left-0 h-8.5 w-5 border-b-2',
                         flatOnPhones && 'max-sm:hidden',
                       )}
                     />
@@ -214,7 +214,7 @@ export function Comment({
                 {isLast && (
                   <div
                     className={cn(
-                      'border-border absolute top-0 left-0 h-[34px] w-5 rounded-bl-xl border-b-2 border-l-2',
+                      'border-border absolute top-0 left-0 h-8.5 w-5 rounded-bl-xl border-b-2 border-l-2',
                       flatOnPhones && 'max-sm:hidden',
                     )}
                   />
@@ -225,7 +225,7 @@ export function Comment({
                 {flatOnPhones && (
                   <div
                     className={cn(
-                      'border-border absolute top-0 left-[17px] border-l-2 sm:hidden',
+                      'border-border absolute top-0 left-4.25 border-l-2 sm:hidden',
                       isLast ? 'h-4' : 'bottom-0',
                     )}
                   />

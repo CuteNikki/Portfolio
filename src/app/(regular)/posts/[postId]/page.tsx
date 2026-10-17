@@ -142,7 +142,7 @@ async function PostContent({
           </ol>
         </nav>
 
-        <h1 className='animate-hero-in text-[36px] leading-[1.1] font-bold tracking-[-0.05em] text-balance delay-1 sm:text-5xl'>
+        <h1 className='animate-hero-in text-[36px] leading-[1.1] font-bold tracking-tighter text-balance delay-1 sm:text-5xl'>
           {post.title}
         </h1>
 
