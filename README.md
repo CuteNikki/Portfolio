@@ -99,7 +99,7 @@ Covers for posts and projects, and the further pictures of a project, are kept o
 
 Each picture is a folder `portfolio/<database>/<id>/` with `small.webp` and `large.webp` (`.jpg` from a browser that can't write WebP). `<database>` is named after the database (`uploadFolder` in `src/lib/uploads.ts`), so a local copy of the site never touches the live site's pictures. Garage can't limit a key to part of a bucket, so the site's own checks (`ownImageKey`) are what keep it inside its folder and away from the plushies photos.
 
-To set it up on the server, with `garage` standing for `docker exec tinderhaj-storage /garage`:
+To set it up on the server, with `garage` standing for `docker exec image-storage /garage`:
 
 1. Give the site a key of its own and let it use the bucket:
    ```sh
