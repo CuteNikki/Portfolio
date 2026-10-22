@@ -95,23 +95,21 @@ The build doesn't touch the database. Apply new migrations to the live database 
 
 ## Pictures
 
-Covers for posts and projects, and the further pictures of a project, are kept on our own [Garage](https://garagehq.deuxfleurs.fr) server and load from `https://images.niso.moe`, in the same bucket as the [plushies site](https://plushies.niso.moe)'s photos. The browser shrinks each picture into a small and a large WebP before it goes (`IMAGE_SIZES` in `src/lib/images.ts`), asks the site for links to upload them to (`requestImageUpload` in `src/actions/upload.ts`) and sends them there itself. The links last 5 minutes, are signed for that file's type and size, and are only handed to writers and admins. The site saves the large copy's address; cards and lists show the small one. Pictures that are replaced, removed or left in an unsaved form are deleted again once the change is saved.
+Covers for posts and projects, and the further pictures of a project, are kept on our own [Garage](https://garagehq.deuxfleurs.fr) server, in a bucket of the site's own, `portfolio`, and load from `https://images.niso.moe/portfolio/`. The browser shrinks each picture into a small and a large WebP before it goes (`IMAGE_SIZES` in `src/lib/images.ts`), asks the site for links to upload them to (`requestImageUpload` in `src/actions/upload.ts`) and sends them there itself, through Garage's S3 API at `https://s3.niso.moe`. The links last 5 minutes, are signed for that file's type and size, and are only handed to writers and admins. The site saves the large copy's address; cards and lists show the small one. Pictures that are replaced, removed or left in an unsaved form are deleted again once the change is saved.
 
-Each picture is a folder `portfolio/<database>/<id>/` with `small.webp` and `large.webp` (`.jpg` from a browser that can't write WebP). `<database>` is named after the database (`uploadFolder` in `src/lib/uploads.ts`), so a local copy of the site never touches the live site's pictures. Garage can't limit a key to part of a bucket, so the site's own checks (`ownImageKey`) are what keep it inside its folder and away from the plushies photos.
+Each picture is a folder `portfolio/<database>/<id>/` with `small.webp` and `large.webp` (`.jpg` from a browser that can't write WebP). `<database>` is named after the database (`uploadFolder` in `src/lib/uploads.ts`), so a local copy of the site never touches the live site's pictures. The `portfolio/` part is from when every site shared one bucket: addresses still start with it, and `src/lib/storage.ts` leaves it off inside the bucket, which Caddy serves at `images.niso.moe/portfolio/`.
 
-To set it up on the server, with `garage` standing for `docker exec image-storage /garage`:
+To set it up on the server, with `garage` standing for `docker exec garage /garage`:
 
-1. Give the site a key of its own and let it use the bucket:
+1. Give the site a key of its own and let it use its bucket, and only that:
    ```sh
    garage key create portfolio-site      # its Key ID and Secret key are STORAGE_ACCESS_KEY_ID and STORAGE_SECRET_ACCESS_KEY
-   garage bucket allow --read --write images.niso.moe --key portfolio-site
+   garage bucket allow --read --write portfolio --key portfolio-site
    ```
-2. Let the site's pages upload: the bucket's CORS rule has to allow `PUT` with a `content-type` header from `https://niso.moe` as well. Setting CORS replaces the whole rule, so keep the plushies origins in it: `https://plushies.niso.moe`, `https://niso.moe` and `http://localhost:3000`.
-3. Set `STORAGE_ACCESS_KEY_ID` and `STORAGE_SECRET_ACCESS_KEY` on the host. The Caddy setup that serves `images.niso.moe` is already in place for the plushies site.
+2. Let the site's pages upload: the bucket's CORS rule allows `PUT` with a `content-type` header from `https://niso.moe` and `http://localhost:3000`.
+3. Set `STORAGE_ACCESS_KEY_ID` and `STORAGE_SECRET_ACCESS_KEY` on the host. Caddy serves `images.niso.moe/portfolio/` and `s3.niso.moe` already.
 
-The plushies dashboard's storage meter counts the whole bucket, so the portfolio's pictures count towards it too.
-
-For local testing against another S3-compatible server, set `STORAGE_API_URL` (where uploads go, bucket included) and `IMAGE_PUBLIC_URL` (where pictures are read from).
+For local testing against another S3-compatible server, set `STORAGE_ENDPOINT` (its S3 API), `STORAGE_BUCKET` and `IMAGE_PUBLIC_URL` (where pictures are read from).
 
 ## Project Structure
 

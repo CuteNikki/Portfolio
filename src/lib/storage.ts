@@ -2,15 +2,22 @@ import 'server-only';
 
 import { AwsClient } from 'aws4fetch';
 
-// Where pictures go and where they're read from. In production both are on images.niso.moe: uploads go through
-// Garage's S3 API, which takes the bucket in the path, and reads go to the bucket's website, which doesn't. Locally
-// they can point at any S3-compatible test server instead.
-export const STORAGE_API_URL = (
-  process.env.STORAGE_API_URL ?? 'https://images.niso.moe/images.niso.moe'
+// Where pictures go and where they're read from. Uploads go through Garage's S3 API at s3.niso.moe, which takes the
+// bucket in the path, into this site's own bucket; reads go to images.niso.moe/portfolio/, which Caddy serves from
+// that bucket. Locally they can point at any S3-compatible test server instead.
+const STORAGE_ENDPOINT = (
+  process.env.STORAGE_ENDPOINT ?? 'https://s3.niso.moe'
 ).replace(/\/$/, '');
+const STORAGE_BUCKET = process.env.STORAGE_BUCKET ?? 'portfolio';
 export const IMAGE_PUBLIC_URL = (
   process.env.IMAGE_PUBLIC_URL ?? 'https://images.niso.moe'
 ).replace(/\/$/, '');
+
+// Keys keep the folder they had when every site shared one bucket, as addresses still start with it; the bucket, being
+// this site's alone, holds them without it
+const FOLDER = 'portfolio/';
+const inBucket = (key: string) =>
+  key.startsWith(FOLDER) ? key.slice(FOLDER.length) : key;
 
 // How long a link to upload to lasts: plenty to send one picture, too short to keep
 const UPLOAD_LINK_SECONDS = 300;
@@ -34,7 +41,8 @@ function storage() {
   });
 }
 
-const apiUrl = (objectKey = '') => new URL(`${STORAGE_API_URL}/${objectKey}`);
+const apiUrl = (objectKey = '') =>
+  new URL(`${STORAGE_ENDPOINT}/${STORAGE_BUCKET}/${inBucket(objectKey)}`);
 
 /**
  * A link for the browser to upload one file to, straight to storage rather than through the site. It is signed for
@@ -67,7 +75,7 @@ export async function listObjects(prefix: string) {
   do {
     const url = apiUrl();
     url.searchParams.set('list-type', '2');
-    url.searchParams.set('prefix', prefix);
+    url.searchParams.set('prefix', inBucket(prefix));
     if (token) url.searchParams.set('continuation-token', token);
 
     const response = await storage().fetch(url.href, {
@@ -84,7 +92,11 @@ export async function listObjects(prefix: string) {
       )?.[1];
       const size = Number(entry.match(/<Size>([^<]*)<\/Size>/)?.[1] ?? 0);
       if (key && modified) {
-        keys.push({ key, size, lastModified: new Date(modified) });
+        keys.push({
+          key: FOLDER + key,
+          size,
+          lastModified: new Date(modified),
+        });
       }
     }
     token = xml.match(

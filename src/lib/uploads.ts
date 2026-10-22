@@ -17,8 +17,7 @@ import {
   signUpload,
 } from '@/lib/storage';
 
-// Each database keeps its pictures in its own folder, so a local test database can never touch the live site's,
-// and the plushies site's pictures in the same bucket are out of reach entirely.
+// Each database keeps its pictures in its own folder, so a local test database can never touch the live site's.
 function uploadFolder() {
   const database = new URL(process.env.DATABASE_URL ?? 'postgresql://unknown');
   const owner = createHash('sha256')
@@ -82,7 +81,7 @@ export function ownImageKey(url: unknown) {
     : null;
 }
 
-// The bucket's quota on the Garage server, shared with the plushies site's photos
+// The site's bucket's quota on the Garage server
 export const STORAGE_QUOTA_BYTES = 10 * 1024 ** 3;
 
 /**
