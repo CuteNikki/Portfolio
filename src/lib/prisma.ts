@@ -11,7 +11,7 @@ const globalForPrisma = global as unknown as {
 // one worker per CPU, each with its own pool, so there each gets even fewer.
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  max: process.env.NEXT_PHASE === 'phase-production-build' ? 2 : 5,
+  max: process.env.NEXT_PHASE === 'phase-production-build' ? 2 : 3,
   // Hands idle connections back quickly. The server also closes any left idle for two minutes (idle_session_timeout on
   // the portfolio role), which catches those of instances that were suspended before they could.
   idleTimeoutMillis: 5000,
