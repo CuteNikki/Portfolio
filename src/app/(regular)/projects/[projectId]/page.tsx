@@ -153,7 +153,12 @@ async function ProjectContent({
             <h1 className='animate-hero-in flex flex-wrap items-center gap-4 text-[44px] leading-[1.04] font-bold tracking-[-0.06em] text-balance delay-1 sm:text-[56px]'>
               {project.title}
               {!project.publishedAt && (
-                <Badge variant='destructive' size='lg'>
+                <Badge
+                  variant='destructive'
+                  size='lg'
+                  // The heading's tight tracking is for its large title, not the badge
+                  className='tracking-normal'
+                >
                   Unpublished
                 </Badge>
               )}
