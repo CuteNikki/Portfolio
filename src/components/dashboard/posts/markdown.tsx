@@ -116,7 +116,7 @@ const Picture = ({
       loading='lazy'
       decoding='async'
       className={cn(
-        'bg-card m-0 w-full rounded-xl border',
+        'bg-card m-0 block w-full rounded-xl border',
         theme === 'light' && 'dark:hidden',
         theme === 'dark' && 'hidden dark:block',
       )}
@@ -149,8 +149,11 @@ const Paragraph = ({
 
   return (
     <figure className='not-prose my-8'>
-      {/* Only the pictures; the line breaks between them would add space under the frame */}
-      {Children.toArray(children).filter(isValidElement)}
+      {/* Only the pictures. A line break between them would start an empty line above the second whenever the first
+          is hidden, pushing a dark picture lower than its light one. */}
+      {Children.toArray(children).filter(
+        (child) => isValidElement(child) && child.type !== 'br',
+      )}
       {caption && (
         <figcaption className='text-muted-foreground mt-3 text-center text-xs'>
           {caption}
