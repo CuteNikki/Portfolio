@@ -338,7 +338,8 @@ function NeighbourCard({
   return (
     <Link
       href={project.href}
-      className='group bg-card hover:border-line-strong flex flex-col gap-4 rounded-xl border p-3 transition-colors sm:flex-row'
+      data-reveal=''
+      className='group edge-glow bg-card flex flex-col gap-4 rounded-xl border p-3 sm:flex-row'
     >
       <ProjectThumbnail
         title={project.title}

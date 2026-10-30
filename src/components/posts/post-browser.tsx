@@ -118,7 +118,11 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
     <div className='flex flex-col gap-4'>
       {/* The posts' titles are third-level headings, so the list needs one at the second level */}
       <h2 className='sr-only'>All posts</h2>
-      <div className='flex items-center gap-2.5'>
+      <div
+        data-reveal=''
+        style={{ '--reveal-index': 1 } as React.CSSProperties}
+        className='flex items-center gap-2.5'
+      >
         <div className='min-w-0 flex-1'>
           <SearchBox
             value={query}
@@ -133,7 +137,11 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
         <SortMenu options={SORTS} value={sort} onChange={setSort} />
       </div>
 
-      <div className='flex min-h-9 flex-wrap items-center justify-between gap-3'>
+      <div
+        data-reveal=''
+        style={{ '--reveal-index': 2 } as React.CSSProperties}
+        className='flex min-h-9 flex-wrap items-center justify-between gap-3'
+      >
         <div className='flex gap-1.5'>
           {date && (
             <button

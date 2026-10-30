@@ -558,15 +558,17 @@ export function PrivacyContent({
               id: href.replace(/^#/, ''),
               text: label,
             }))}
-            className='sticky top-28 w-52'
+            className='animate-hero-in sticky top-28 w-52 delay-2'
           />
         }
       >
         <div className='flex flex-col gap-4'>
-          <LegalNote icon={content.notice.icon} className='px-5 py-4'>
-            <p className='text-[15px] font-bold'>{content.notice.title}</p>
-            <p className='text-body mt-1'>{content.notice.description}</p>
-          </LegalNote>
+          <div data-reveal=''>
+            <LegalNote icon={content.notice.icon} className='px-5 py-4'>
+              <p className='text-[15px] font-bold'>{content.notice.title}</p>
+              <p className='text-body mt-1'>{content.notice.description}</p>
+            </LegalNote>
+          </div>
 
           <LegalSection
             id='data-controller'

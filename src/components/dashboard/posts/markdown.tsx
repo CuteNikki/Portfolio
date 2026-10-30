@@ -1,13 +1,15 @@
 // No 'use client': on post and project pages this renders on the server, so the syntax highlighter and its languages
 // stay out of the browser. The dashboard editors import it from client components for their live preview.
 
-import { type ComponentPropsWithoutRef } from 'react';
+import type { ElementContent } from 'hast';
+import { Children, type ComponentPropsWithoutRef, isValidElement } from 'react';
 import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeSlug from 'rehype-slug';
 
 import { remarkPlugins } from '@/lib/markdown';
+import { cn } from '@/lib/utils';
 
 import { HeadingLink } from '@/components/dashboard/posts/heading-link';
 
@@ -90,6 +92,74 @@ const CodeBlock = ({ node }: ExtraProps) => {
   );
 };
 
+// A picture in the text. One whose address ends in #light shows only in light themes and one ending in #dark only in
+// dark ones, so a diagram can come in both, written one under the other:
+//   ![A diagram](https://…/light.webp#light)
+//   ![A diagram](https://…/dark.webp#dark)
+// Hidden ones load lazily, so the browser only fetches the one it shows.
+const Picture = ({
+  src,
+  alt,
+  title, // eslint-disable-line @typescript-eslint/no-unused-vars -- shown as the caption under the picture instead
+  node, // eslint-disable-line @typescript-eslint/no-unused-vars -- react-markdown's syntax tree, not a DOM attribute
+  ...rest
+}: ComponentPropsWithoutRef<'img'> & ExtraProps) => {
+  const theme =
+    typeof src === 'string' ? /#(light|dark)$/.exec(src)?.[1] : undefined;
+
+  return (
+    // eslint-disable-next-line @next/next/no-img-element -- pictures in a post can come from anywhere
+    <img
+      {...rest}
+      src={src}
+      alt={alt}
+      loading='lazy'
+      decoding='async'
+      className={cn(
+        'bg-card m-0 w-full rounded-xl border',
+        theme === 'light' && 'dark:hidden',
+        theme === 'dark' && 'hidden dark:block',
+      )}
+    />
+  );
+};
+
+const isPicture = (child: ElementContent) =>
+  (child.type === 'element' && ['img', 'br'].includes(child.tagName)) ||
+  (child.type === 'text' && !child.value.trim());
+
+// A paragraph of nothing but pictures, such as one in both themes, is set apart as a figure with the same rounded frame
+// as the code blocks. A picture's title, as in ![…](… "A caption"), shows under it.
+const Paragraph = ({
+  children,
+  node,
+  ...rest
+}: ComponentPropsWithoutRef<'p'> & ExtraProps) => {
+  if (!node?.children.length || !node.children.every(isPicture)) {
+    return <p {...rest}>{children}</p>;
+  }
+
+  const caption = node.children
+    .map((child) =>
+      child.type === 'element' && typeof child.properties.title === 'string'
+        ? child.properties.title
+        : '',
+    )
+    .find(Boolean);
+
+  return (
+    <figure className='not-prose my-8'>
+      {/* Only the pictures; the line breaks between them would add space under the frame */}
+      {Children.toArray(children).filter(isValidElement)}
+      {caption && (
+        <figcaption className='text-muted-foreground mt-3 text-center text-xs'>
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+};
+
 export function MarkdownViewer({ content }: { content: string }) {
   return (
     <div className='prose prose-zinc dark:prose-invert max-w-none'>
@@ -111,6 +181,8 @@ export function MarkdownViewer({ content }: { content: string }) {
           h6: createHeading(6),
 
           pre: CodeBlock,
+          p: Paragraph,
+          img: Picture,
 
           code: InlineCode,
         }}

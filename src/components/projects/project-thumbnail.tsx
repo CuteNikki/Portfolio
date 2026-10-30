@@ -5,7 +5,8 @@ import { StoredImage } from '@/components/common/stored-image';
 // A project's cover in a little browser window on a panel tinted in the project's own colour, or until it has a cover,
 // a drawing of one. Screenshots come in all sorts of light and dark, and the window and panel make them sit the same
 // way in every theme. The picture always shows its full width, cut off at the bottom, so no text at its sides is lost.
-// The window rises a little while the surrounding card, which needs the `group` class, is hovered.
+// The window rises a little while the surrounding card, which needs the `group` class, is hovered, and slides up as
+// the card comes in (see .card-lift in globals.css).
 export function ProjectThumbnail({
   title,
   coverUrl,
@@ -45,7 +46,7 @@ export function ProjectThumbnail({
     >
       <div
         aria-hidden
-        className='border-border bg-card absolute inset-x-[7%] top-[11%] bottom-[-12%] flex flex-col overflow-hidden rounded-lg border shadow-[0_16px_40px_rgb(0_0_0/0.14)] transition-transform duration-700 ease-(--ease-out-soft) group-hover:-translate-y-1.5'
+        className='reveal-window border-border bg-card absolute inset-x-[7%] top-[11%] bottom-[-12%] flex flex-col overflow-hidden rounded-lg border shadow-[0_16px_40px_rgb(0_0_0/0.14)] transition-transform duration-700 ease-(--ease-out-soft) group-hover:-translate-y-1.5'
       >
         <div className='border-border flex h-6 shrink-0 items-center gap-1.25 border-b px-3'>
           <span className='bg-line-strong size-1.75 rounded-full' />

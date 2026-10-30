@@ -65,12 +65,12 @@ export function PostRow({
               alt=''
               fill
               sizes='(min-width: 768px) 256px, calc(100vw - 32px)'
-              className='object-cover object-top transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.04]'
+              className='reveal-picture object-cover object-top transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.04]'
             />
           ) : (
             <span
               aria-hidden
-              className='absolute inset-0 grid place-items-center text-4xl font-bold tracking-[-0.06em] text-(--tone) opacity-60 transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.06]'
+              className='reveal-picture absolute inset-0 grid place-items-center text-4xl font-bold tracking-[-0.06em] text-(--tone) opacity-60 transition-transform duration-700 ease-(--ease-out-soft) group-hover:scale-[1.06]'
             >
               {post.title.slice(0, 1)}
             </span>

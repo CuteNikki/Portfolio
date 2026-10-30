@@ -380,6 +380,17 @@
     margin-inline: 1rem;
   }
 }
+/* Registered so a card's border colour and glow fade in and out (see .edge-glow) */
+@property --edge {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+@property --edge-glow {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 0%;
+}
 @keyframes rise-in {
   from {
     opacity: 0;
@@ -388,6 +399,22 @@
 }
 /* The page's opening text. It starts at 1% opacity rather than 0: browsers skip invisible text when timing the
    largest paint, which would hold that measurement back until the animation ends. */
+@keyframes card-in {
+  from {
+    opacity: 0.01;
+    transform: translateY(22px) scale(0.97);
+  }
+}
+@keyframes picture-in {
+  from {
+    scale: 1.08;
+  }
+}
+@keyframes window-in {
+  from {
+    transform: translateY(26px);
+  }
+}
 @keyframes hero-in {
   from {
     opacity: 0.01;
@@ -418,6 +445,28 @@
     [data-reveal='shown']:not(:has([data-reveal])) {
       animation-name: rise-in;
       animation-delay: calc(var(--reveal-order, 0) * 80ms);
+    }
+    /* Project and post cards land rather than only rise: they grow a little as they come in. The picture in a post's
+       card settles from a small zoom with it, and the window in a project's thumbnail slides up a moment after its
+       card, each starting when its card does. */
+    .card-lift[data-reveal]:not([data-reveal='waiting']) {
+      animation-name: card-in;
+    }
+    .card-lift[data-reveal]:not([data-reveal='waiting']) .reveal-picture {
+      animation: picture-in 1100ms var(--ease-out-soft) backwards;
+    }
+    .card-lift[data-reveal]:not([data-reveal='waiting']) .reveal-window {
+      --after: 140ms;
+      animation: window-in 900ms var(--ease-out-soft) backwards;
+    }
+    .card-lift:is([data-reveal=''], [data-reveal='seen'])
+      :is(.reveal-picture, .reveal-window) {
+      animation-delay: calc(
+        120ms + var(--reveal-index, 0) * 80ms + var(--after, 0ms)
+      );
+    }
+    .card-lift[data-reveal='shown'] :is(.reveal-picture, .reveal-window) {
+      animation-delay: calc(var(--reveal-order, 0) * 80ms + var(--after, 0ms));
     }
   }
   .delay-1 {
@@ -462,37 +511,91 @@
   .nav-underline[aria-current='page']::after {
     transform: scaleX(1);
   }
-  /* Project cards lift, and a short violet line lights up along their top edge */
+  /* Cards whose border lights up violet on hover around the mouse (--mx and --my, set by PointerGlow), brightest
+     where it is and fading out along the edge. Without a mouse, as on a keyboard's focus, the light sits at the top
+     centre. The border is drawn as a background behind a transparent one, so cards that clip their content (a
+     picture's corners) don't clip the light too. --edge is the border's own colour. */
+  .edge-glow,
   .card-lift {
     position: relative;
+    --edge: var(--border);
+    border-color: transparent;
+    background:
+      linear-gradient(var(--card), var(--card)) padding-box,
+      radial-gradient(
+          320px circle at var(--mx, 50%) var(--my, 0%),
+          color-mix(
+            in oklab,
+            var(--primary-text) var(--edge-glow),
+            transparent
+          ),
+          transparent 70%
+        )
+        border-box,
+      linear-gradient(var(--edge), var(--edge)) border-box;
     transition:
-      border-color 350ms,
+      --edge 350ms,
+      --edge-glow 400ms,
+      translate 500ms var(--ease-out-soft),
       transform 500ms var(--ease-out-soft);
   }
-  .card-lift::before {
+  .edge-glow:hover,
+  .edge-glow:focus-visible,
+  .card-lift:hover,
+  .card-lift:focus-visible {
+    --edge: var(--line-strong);
+    --edge-glow: 100%;
+  }
+  /* A second, narrower ring just inside the border, lit only close to the mouse, so the edge grows to twice its width
+     there. Drawn over the card's content, such as a project's picture, and inside the padding box, so a card that
+     clips its content still shows it. */
+  .edge-glow::after,
+  .card-lift::after {
     content: '';
     position: absolute;
     z-index: 2;
-    inset-inline: 20%;
-    top: -1px;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: radial-gradient(
+      120px circle at calc(var(--mx, 50%) - 1px) calc(var(--my, 0%) - 1px),
       var(--primary-text),
-      transparent
+      transparent 70%
+    );
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 400ms;
+  }
+  .edge-glow:hover::after,
+  .edge-glow:focus-visible::after,
+  .card-lift:hover::after,
+  .card-lift:focus-visible::after {
+    opacity: 1;
+  }
+  /* Project and post cards also lift, with a violet tint on the whole border */
+  .card-lift:hover,
+  .card-lift:focus-visible {
+    --edge: color-mix(in oklab, var(--primary-text) 38%, transparent);
+    transform: translateY(-3px);
+  }
+  /* A brighter copy of the grid backdrop, shown only around the mouse while it is over the card holding it. Touch
+     screens keep the plain grid. */
+  .grid-spotlight {
+    mask-image: radial-gradient(
+      200px circle at var(--mx, 50%) var(--my, 0%),
+      #000,
+      transparent 75%
     );
     opacity: 0;
     transition: opacity 400ms;
   }
-  .card-lift:hover,
-  .card-lift:focus-visible {
-    border-color: color-mix(in oklab, var(--primary-text) 38%, transparent);
-    transform: translateY(-3px);
-  }
-  .card-lift:hover::before,
-  .card-lift:focus-visible::before {
-    opacity: 1;
+  @media (hover: hover) and (pointer: fine) {
+    .edge-glow:hover .grid-spotlight {
+      opacity: 1;
+    }
   }
   .animate-fade-in {
     animation: fade-in 180ms ease-out;

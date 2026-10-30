@@ -43,7 +43,10 @@ async function AccountContent() {
 
   if (!session) {
     return (
-      <section className='bg-card flex flex-col items-start gap-4 rounded-xl border p-8 sm:flex-row sm:items-center sm:justify-between'>
+      <section
+        data-reveal=''
+        className='bg-card flex flex-col items-start gap-4 rounded-xl border p-8 sm:flex-row sm:items-center sm:justify-between'
+      >
         <div>
           <h2 className='text-lg font-bold tracking-[-0.03em]'>
             Not signed in

@@ -117,7 +117,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollReveal className='bg-card grid gap-8 rounded-xl border p-7 sm:p-8 lg:grid-cols-2 lg:gap-0'>
+      <ScrollReveal className='edge-glow bg-card grid gap-8 rounded-xl border p-7 sm:p-8 lg:grid-cols-2 lg:gap-0'>
         <div className='flex flex-col gap-3 lg:pr-8'>
           <span className={EYEBROW}>Availability</span>
           <p className='text-body max-w-md text-sm leading-relaxed'>
@@ -165,7 +165,7 @@ export default function Home() {
                 key={area}
                 data-reveal=''
                 style={reveal(index)}
-                className='group bg-card hover:border-line-strong flex flex-col gap-3 rounded-xl border p-7 transition-[border-color,translate] duration-500 ease-(--ease-out-soft) hover:-translate-y-0.5'
+                className='group edge-glow bg-card flex flex-col gap-3 rounded-xl border p-7 hover:-translate-y-0.5'
               >
                 <span className='text-muted-foreground group-hover:text-primary-text text-xs transition-colors duration-300'>
                   {String(index + 1).padStart(2, '0')} / {area}
@@ -269,7 +269,7 @@ export default function Home() {
           </SectionHeading>
           <div
             data-reveal=''
-            className='bg-card grid gap-x-6 gap-y-8 rounded-xl border p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4'
+            className='edge-glow bg-card grid gap-x-6 gap-y-8 rounded-xl border p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4'
           >
             {Object.entries(PERSONAL_DETAILS.skillsTechnologies).map(
               ([category, skills]) => (
@@ -314,11 +314,15 @@ export default function Home() {
       <ScrollReveal>
         <section
           aria-labelledby='contact-heading'
-          className='bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-xl border p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between'
+          className='edge-glow bg-card relative isolate flex flex-col gap-8 overflow-hidden rounded-xl border p-8 sm:p-12 lg:flex-row lg:items-center lg:justify-between'
         >
           <div
             aria-hidden
             className='grid-backdrop absolute inset-0 -z-10 mask-[radial-gradient(130%_140%_at_50%_0%,#000_35%,transparent_95%)] [--grid:color-mix(in_oklab,var(--border)_75%,transparent)]'
+          />
+          <div
+            aria-hidden
+            className='grid-backdrop grid-spotlight absolute inset-0 -z-10 [--grid:var(--line-strong)]'
           />
           <div className='max-w-xl'>
             <h2

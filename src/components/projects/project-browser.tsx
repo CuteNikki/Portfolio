@@ -222,7 +222,11 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
     <div className='flex flex-col gap-4'>
       {/* The cards' titles are third-level headings, so the list needs one at the second level */}
       <h2 className='sr-only'>All projects</h2>
-      <div className='flex items-center gap-2.5'>
+      <div
+        data-reveal=''
+        style={{ '--reveal-index': 1 } as React.CSSProperties}
+        className='flex items-center gap-2.5'
+      >
         <div className='min-w-0 flex-1'>
           <SearchBox
             value={query}
@@ -237,7 +241,11 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
         <SortMenu options={SORTS} value={sort} onChange={setSort} />
       </div>
 
-      <div className='flex flex-wrap items-center justify-between gap-3'>
+      <div
+        data-reveal=''
+        style={{ '--reveal-index': 2 } as React.CSSProperties}
+        className='flex flex-wrap items-center justify-between gap-3'
+      >
         <div
           role='group'
           aria-label='Filter by tag'
