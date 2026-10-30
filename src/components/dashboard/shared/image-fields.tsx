@@ -123,7 +123,7 @@ const COVER_KINDS = {
     upload: 'Upload a cover',
     hint: 'Drop a picture or click. Shown on cards and in link previews.',
   },
-  // A project's cover for dark themes
+  // A cover for dark themes
   dark: {
     field: 'coverDarkUrl',
     label: 'Cover for dark themes',
@@ -136,6 +136,13 @@ const COVER_KINDS = {
     label: 'Thumbnail',
     upload: 'Upload a thumbnail',
     hint: 'Optional. Shown instead of the cover in post lists and link previews, where pictures are small.',
+  },
+  // A post's thumbnail for dark themes
+  darkThumbnail: {
+    field: 'thumbnailDarkUrl',
+    label: 'Thumbnail for dark themes',
+    upload: 'Upload a dark thumbnail',
+    hint: 'Optional. Shown instead of the thumbnail in dark themes.',
   },
 } as const;
 

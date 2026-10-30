@@ -11,8 +11,13 @@ const MAX_ALT_LENGTH = 300;
  */
 export function readCover(
   formData: FormData,
-  // `coverDarkUrl` for a project's cover for dark themes, `thumbnailUrl` for a post's thumbnail
-  field: 'coverUrl' | 'coverDarkUrl' | 'thumbnailUrl' = 'coverUrl',
+  // `coverDarkUrl` for a cover for dark themes, `thumbnailUrl` for a post's thumbnail and `thumbnailDarkUrl` for its
+  // dark one
+  field:
+    | 'coverUrl'
+    | 'coverDarkUrl'
+    | 'thumbnailUrl'
+    | 'thumbnailDarkUrl' = 'coverUrl',
 ): string | null | undefined {
   if (!formData.has(field)) return undefined;
   const url = formData.get(field);

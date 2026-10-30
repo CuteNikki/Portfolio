@@ -61,6 +61,9 @@ model Post {
   coverUrl     String?
   // A simpler picture for small places, the post's card in lists and its link preview; the cover when empty
   thumbnailUrl String?
+  // The cover and the thumbnail for dark themes, if the post has them; the ones above are used everywhere else
+  coverDarkUrl     String?
+  thumbnailDarkUrl String?
 
   publishedAt DateTime?
   createdAt   DateTime  @default(now())

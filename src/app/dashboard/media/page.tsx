@@ -44,9 +44,21 @@ export default async function MediaPage() {
   const [posts, projects, images] = await Promise.all([
     prisma.post.findMany({
       where: {
-        OR: [{ coverUrl: { not: null } }, { thumbnailUrl: { not: null } }],
+        OR: [
+          { coverUrl: { not: null } },
+          { thumbnailUrl: { not: null } },
+          { coverDarkUrl: { not: null } },
+          { thumbnailDarkUrl: { not: null } },
+        ],
       },
-      select: { id: true, title: true, coverUrl: true, thumbnailUrl: true },
+      select: {
+        id: true,
+        title: true,
+        coverUrl: true,
+        thumbnailUrl: true,
+        coverDarkUrl: true,
+        thumbnailDarkUrl: true,
+      },
     }),
     prisma.project.findMany({
       where: {
@@ -63,8 +75,14 @@ export default async function MediaPage() {
   const projectCount = new Set(images.map(({ projectId }) => projectId)).size;
   // Thumbnails and dark theme covers count as covers too
   const postCovers = posts.reduce(
-    (sum, { coverUrl, thumbnailUrl }) =>
-      sum + (coverUrl ? 1 : 0) + (thumbnailUrl ? 1 : 0),
+    (sum, post) =>
+      sum +
+      [
+        post.coverUrl,
+        post.thumbnailUrl,
+        post.coverDarkUrl,
+        post.thumbnailDarkUrl,
+      ].filter(Boolean).length,
     0,
   );
   const projectCovers = projects.reduce(
@@ -97,6 +115,28 @@ export default async function MediaPage() {
             },
           ]
         : []),
+      ...(post.coverDarkUrl
+        ? [
+            {
+              url: post.coverDarkUrl,
+              alt: `Dark theme cover of ${post.title}`,
+              usedBy: post.title,
+              usage: 'Post cover, dark themes',
+              editHref: LINKS.dashboardPostEditWithId(post.id).url,
+            },
+          ]
+        : []),
+      ...(post.thumbnailDarkUrl
+        ? [
+            {
+              url: post.thumbnailDarkUrl,
+              alt: `Dark theme thumbnail of ${post.title}`,
+              usedBy: post.title,
+              usage: 'Post thumbnail, dark themes',
+              editHref: LINKS.dashboardPostEditWithId(post.id).url,
+            },
+          ]
+        : []),
     ]),
     ...projects.flatMap((project) => [
       ...(project.coverUrl
@@ -122,13 +162,26 @@ export default async function MediaPage() {
           ]
         : []),
     ]),
-    ...images.map((image) => ({
-      url: image.url,
-      alt: image.alt || `Picture from ${image.project.title}`,
-      usedBy: image.project.title,
-      usage: 'Project picture',
-      editHref: LINKS.dashboardProjectEditWithId(image.project.id).url,
-    })),
+    ...images.flatMap((image) => [
+      {
+        url: image.url,
+        alt: image.alt || `Picture from ${image.project.title}`,
+        usedBy: image.project.title,
+        usage: 'Project picture',
+        editHref: LINKS.dashboardProjectEditWithId(image.project.id).url,
+      },
+      ...(image.darkUrl
+        ? [
+            {
+              url: image.darkUrl,
+              alt: `${image.alt || `Picture from ${image.project.title}`}, for dark themes`,
+              usedBy: image.project.title,
+              usage: 'Project picture, dark themes',
+              editHref: LINKS.dashboardProjectEditWithId(image.project.id).url,
+            },
+          ]
+        : []),
+    ]),
   ];
 
   return (

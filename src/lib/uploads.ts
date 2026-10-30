@@ -127,8 +127,8 @@ export async function deleteImages(urls: string[]) {
   );
 }
 
-// The given pictures that something still uses: a cover (a project's dark one and a post's thumbnail too), a project's
-// picture, or an address written into a text
+// The given pictures that something still uses: a cover (dark ones and a post's thumbnail too), a project's picture or
+// its dark version, or an address written into a text
 async function usedImages(urls: string[]) {
   const keys = urls.flatMap((url) => ownImageKey(url) ?? []);
   const inText = (field: 'content' | 'description') =>
@@ -137,9 +137,19 @@ async function usedImages(urls: string[]) {
   const [posts, projects, images, postTexts, projectTexts] = await Promise.all([
     prisma.post.findMany({
       where: {
-        OR: [{ coverUrl: { in: urls } }, { thumbnailUrl: { in: urls } }],
+        OR: [
+          { coverUrl: { in: urls } },
+          { thumbnailUrl: { in: urls } },
+          { coverDarkUrl: { in: urls } },
+          { thumbnailDarkUrl: { in: urls } },
+        ],
       },
-      select: { coverUrl: true, thumbnailUrl: true },
+      select: {
+        coverUrl: true,
+        thumbnailUrl: true,
+        coverDarkUrl: true,
+        thumbnailDarkUrl: true,
+      },
     }),
     prisma.project.findMany({
       where: {
@@ -148,8 +158,8 @@ async function usedImages(urls: string[]) {
       select: { coverUrl: true, coverDarkUrl: true },
     }),
     prisma.projectImage.findMany({
-      where: { url: { in: urls } },
-      select: { url: true },
+      where: { OR: [{ url: { in: urls } }, { darkUrl: { in: urls } }] },
+      select: { url: true, darkUrl: true },
     }),
     prisma.post.findMany({
       where: { OR: inText('content') },
@@ -166,12 +176,17 @@ async function usedImages(urls: string[]) {
     ...projectTexts.map(({ description }) => description),
   ];
   return new Set([
-    ...posts.flatMap(({ coverUrl, thumbnailUrl }) => [coverUrl, thumbnailUrl]),
+    ...posts.flatMap((post) => [
+      post.coverUrl,
+      post.thumbnailUrl,
+      post.coverDarkUrl,
+      post.thumbnailDarkUrl,
+    ]),
     ...projects.flatMap(({ coverUrl, coverDarkUrl }) => [
       coverUrl,
       coverDarkUrl,
     ]),
-    ...images.map(({ url }) => url),
+    ...images.flatMap(({ url, darkUrl }) => [url, darkUrl]),
     ...urls.filter((url) => {
       const key = ownImageKey(url);
       return key && texts.some((text) => text.includes(key));
@@ -196,8 +211,8 @@ export async function discardUnusedImages(urls: string[]) {
 }
 
 /**
- * Everything that uses one picture: as a post's cover or thumbnail, a project's cover or dark cover, a project's
- * picture, or an address written into a post's or project's text.
+ * Everything that uses one picture: as a post's cover or thumbnail or their dark versions, a project's cover or dark
+ * cover, a project's picture or its dark version, or an address written into a post's or project's text.
  */
 export async function pictureUses(url: string) {
   const key = ownImageKey(url);
@@ -205,7 +220,14 @@ export async function pictureUses(url: string) {
 
   const [posts, projects, images, postTexts, projectTexts] = await Promise.all([
     prisma.post.findMany({
-      where: { OR: [{ coverUrl: url }, { thumbnailUrl: url }] },
+      where: {
+        OR: [
+          { coverUrl: url },
+          { thumbnailUrl: url },
+          { coverDarkUrl: url },
+          { thumbnailDarkUrl: url },
+        ],
+      },
       select: { id: true, slug: true, title: true },
     }),
     prisma.project.findMany({
@@ -213,7 +235,7 @@ export async function pictureUses(url: string) {
       select: { id: true, slug: true, title: true },
     }),
     prisma.projectImage.findMany({
-      where: { url },
+      where: { OR: [{ url }, { darkUrl: url }] },
       select: { project: { select: { id: true, slug: true, title: true } } },
     }),
     prisma.post.findMany({

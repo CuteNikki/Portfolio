@@ -21,7 +21,12 @@ function entriesOf(form: HTMLFormElement): Entries {
 // further pictures
 function imagesIn(entries: Entries) {
   return entries.flatMap(([key, value]) => {
-    if (key === 'coverUrl' || key === 'coverDarkUrl' || key === 'thumbnailUrl')
+    if (
+      key === 'coverUrl' ||
+      key === 'coverDarkUrl' ||
+      key === 'thumbnailUrl' ||
+      key === 'thumbnailDarkUrl'
+    )
       return value ? [value] : [];
     if (key !== 'gallery') return [];
     try {

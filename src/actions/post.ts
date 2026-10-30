@@ -61,6 +61,8 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
       slug,
       coverUrl: readCover(formData) ?? null,
       thumbnailUrl: readCover(formData, 'thumbnailUrl') ?? null,
+      coverDarkUrl: readCover(formData, 'coverDarkUrl') ?? null,
+      thumbnailDarkUrl: readCover(formData, 'thumbnailDarkUrl') ?? null,
       createdAt,
       publishedAt: isPublished ? new Date() : null,
       // The picked authors, or else whoever creates it
@@ -96,10 +98,13 @@ export async function deletePost(formData: FormData): Promise<ActionResult> {
     where: { id: post.id },
   });
 
-  // Its cover and thumbnail go too, once the response is sent
-  const pictures = [deletedPost.coverUrl, deletedPost.thumbnailUrl].filter(
-    (url): url is string => !!url,
-  );
+  // Its cover and thumbnail go too, dark ones included, once the response is sent
+  const pictures = [
+    deletedPost.coverUrl,
+    deletedPost.thumbnailUrl,
+    deletedPost.coverDarkUrl,
+    deletedPost.thumbnailDarkUrl,
+  ].filter((url): url is string => !!url);
   if (pictures.length > 0) after(() => deleteImages(pictures));
 
   revalidatePostPaths(deletedPost.id, deletedPost.slug);
@@ -126,7 +131,13 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
 
   const currentPost = await prisma.post.findFirst({
     where: { id },
-    select: { publishedAt: true, coverUrl: true, thumbnailUrl: true },
+    select: {
+      publishedAt: true,
+      coverUrl: true,
+      thumbnailUrl: true,
+      coverDarkUrl: true,
+      thumbnailDarkUrl: true,
+    },
   });
 
   if (!currentPost) {
@@ -145,6 +156,8 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
   const authors = await readAuthors(formData);
   const coverUrl = readCover(formData);
   const thumbnailUrl = readCover(formData, 'thumbnailUrl');
+  const coverDarkUrl = readCover(formData, 'coverDarkUrl');
+  const thumbnailDarkUrl = readCover(formData, 'thumbnailDarkUrl');
 
   await prisma.post.update({
     where: { id },
@@ -154,6 +167,8 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
       }),
       ...(coverUrl !== undefined && { coverUrl }),
       ...(thumbnailUrl !== undefined && { thumbnailUrl }),
+      ...(coverDarkUrl !== undefined && { coverDarkUrl }),
+      ...(thumbnailDarkUrl !== undefined && { thumbnailDarkUrl }),
       title,
       slug,
       content,
@@ -164,12 +179,13 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
   });
 
   // A replaced or removed cover or thumbnail goes once the response is sent
+  const sent = { coverUrl, thumbnailUrl, coverDarkUrl, thumbnailDarkUrl };
+  const fields = Object.keys(sent) as (keyof typeof sent)[];
   const removed = removedImages(
-    [currentPost.coverUrl, currentPost.thumbnailUrl],
-    [
-      coverUrl === undefined ? currentPost.coverUrl : coverUrl,
-      thumbnailUrl === undefined ? currentPost.thumbnailUrl : thumbnailUrl,
-    ],
+    fields.map((field) => currentPost[field]),
+    fields.map((field) =>
+      sent[field] === undefined ? currentPost[field] : sent[field],
+    ),
   );
   if (removed.length > 0) after(() => deleteImages(removed));
 

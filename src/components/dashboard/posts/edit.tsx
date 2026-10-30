@@ -170,7 +170,12 @@ export function EditPostForm({
             <FormCard>
               <AuthorsField options={authorOptions} defaultValue={authors} />
               <CoverField defaultValue={post.coverUrl} />
+              <CoverField defaultValue={post.coverDarkUrl} kind='dark' />
               <CoverField defaultValue={post.thumbnailUrl} kind='thumbnail' />
+              <CoverField
+                defaultValue={post.thumbnailDarkUrl}
+                kind='darkThumbnail'
+              />
             </FormCard>
           </>
         }

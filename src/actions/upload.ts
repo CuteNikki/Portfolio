@@ -134,6 +134,14 @@ export async function removePicture(
       where: { thumbnailUrl: url },
       data: { thumbnailUrl: null },
     }),
+    prisma.post.updateMany({
+      where: { coverDarkUrl: url },
+      data: { coverDarkUrl: null },
+    }),
+    prisma.post.updateMany({
+      where: { thumbnailDarkUrl: url },
+      data: { thumbnailDarkUrl: null },
+    }),
     // Its colour came from the cover, so it goes with it
     prisma.project.updateMany({
       where: { coverUrl: url },
@@ -144,6 +152,11 @@ export async function removePicture(
       data: { coverDarkUrl: null },
     }),
     prisma.projectImage.deleteMany({ where: { url } }),
+    // A dark version goes on its own; its picture stays
+    prisma.projectImage.updateMany({
+      where: { darkUrl: url },
+      data: { darkUrl: null },
+    }),
   ]);
   await deleteImages([url]);
 

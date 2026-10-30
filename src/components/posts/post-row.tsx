@@ -20,6 +20,8 @@ export interface PostRowData {
   // Reading time
   minutes: number;
   coverUrl: string | null;
+  // Shown instead in dark themes
+  coverDarkUrl: string | null;
   // Unpublished posts only writers see
   isDraft: boolean;
 }
@@ -62,6 +64,7 @@ export function PostRow({
           {post.coverUrl ? (
             <StoredImage
               url={post.coverUrl}
+              darkUrl={post.coverDarkUrl}
               alt=''
               fill
               sizes='(min-width: 768px) 256px, calc(100vw - 32px)'

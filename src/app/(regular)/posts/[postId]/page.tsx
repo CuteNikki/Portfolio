@@ -206,6 +206,7 @@ async function PostContent({
           >
             <StoredImage
               url={post.coverUrl}
+              darkUrl={post.coverDarkUrl}
               alt={`${post.title}'s cover picture`}
               fill
               priority
