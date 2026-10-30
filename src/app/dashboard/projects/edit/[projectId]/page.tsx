@@ -77,7 +77,11 @@ export default async function EditProjectPage({
       </DashboardPageHeader>
       <EditProjectForm
         project={project}
-        gallery={project.images.map(({ url, alt }) => ({ url, alt }))}
+        gallery={project.images.map(({ url, darkUrl, alt }) => ({
+          url,
+          darkUrl,
+          alt,
+        }))}
         authorOptions={await getAuthorOptions()}
         authors={authorEntries(project.authors)}
       />

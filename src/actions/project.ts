@@ -103,7 +103,7 @@ export async function deleteProject(formData: FormData): Promise<ActionResult> {
 
   const deletedProject = await prisma.project.delete({
     where: { id: project.id },
-    include: { images: { select: { url: true } } },
+    include: { images: { select: { url: true, darkUrl: true } } },
   });
 
   // Its pictures go too, once the response is sent
@@ -112,7 +112,7 @@ export async function deleteProject(formData: FormData): Promise<ActionResult> {
       [
         deletedProject.coverUrl,
         deletedProject.coverDarkUrl,
-        ...deletedProject.images.map(({ url }) => url),
+        ...deletedProject.images.flatMap(({ url, darkUrl }) => [url, darkUrl]),
       ].filter((url): url is string => !!url),
     ),
   );
@@ -152,7 +152,7 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
       publishedAt: true,
       coverUrl: true,
       coverDarkUrl: true,
-      images: { select: { url: true } },
+      images: { select: { url: true, darkUrl: true } },
     },
   });
 
@@ -208,14 +208,15 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
   const before = [
     currentProject.coverUrl,
     currentProject.coverDarkUrl,
-    ...currentProject.images.map(({ url }) => url),
+    ...currentProject.images.flatMap(({ url, darkUrl }) => [url, darkUrl]),
   ];
   const now = [
     coverUrl === undefined ? currentProject.coverUrl : coverUrl,
     coverDarkUrl === undefined ? currentProject.coverDarkUrl : coverDarkUrl,
-    ...(gallery
-      ? gallery.map(({ url }) => url)
-      : currentProject.images.map(({ url }) => url)),
+    ...(gallery ?? currentProject.images).flatMap(({ url, darkUrl }) => [
+      url,
+      darkUrl,
+    ]),
   ];
   const removed = removedImages(before, now);
   if (removed.length > 0) after(() => deleteImages(removed));

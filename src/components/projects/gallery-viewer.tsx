@@ -4,6 +4,7 @@ import { ChevronLeftIcon, ChevronRightIcon, XIcon } from 'lucide-react';
 import { Dialog } from 'radix-ui';
 
 import { imageUrl } from '@/lib/images';
+import { cn } from '@/lib/utils';
 
 import type { GalleryPicture } from '@/components/projects/project-gallery';
 import { Button } from '@/components/ui/button';
@@ -60,14 +61,25 @@ export default function GalleryViewer({
                 {describe(current, open)}
               </Dialog.Description>
               <figure className='flex max-h-full w-full max-w-6xl flex-col items-center gap-3'>
-                {/* The large copy at its own size, fitted into the window */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  key={current.url}
-                  src={imageUrl(current.url, 'large')}
-                  alt={describe(current, open)}
-                  className='max-h-[calc(100svh-9rem)] w-auto max-w-full rounded-xl object-contain shadow-2xl'
-                />
+                {/* The large copy at its own size, fitted into the window, in the version for the theme */}
+                {[current.url, current.darkUrl].map(
+                  (url, version) =>
+                    url && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        key={url}
+                        src={imageUrl(url, 'large')}
+                        alt={describe(current, open)}
+                        className={cn(
+                          'max-h-[calc(100svh-9rem)] w-auto max-w-full rounded-xl object-contain shadow-2xl',
+                          current.darkUrl &&
+                            (version === 0
+                              ? 'dark:hidden'
+                              : 'hidden dark:block'),
+                        )}
+                      />
+                    ),
+                )}
                 <figcaption className='flex w-full items-center justify-between gap-4 text-sm text-white/85'>
                   <span>{current.alt}</span>
                   <span className='shrink-0 tabular-nums'>

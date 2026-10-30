@@ -278,7 +278,11 @@ async function ProjectContent({
             </h2>
             <ProjectGallery
               title={project.title}
-              pictures={project.images.map(({ url, alt }) => ({ url, alt }))}
+              pictures={project.images.map(({ url, darkUrl, alt }) => ({
+                url,
+                darkUrl,
+                alt,
+              }))}
             />
           </section>
         )}

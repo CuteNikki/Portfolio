@@ -159,6 +159,8 @@ model ProjectImage {
   id        String @id @default(cuid())
   projectId String
   url       String
+  // The picture for dark themes, if it has one; the one above is used everywhere else
+  darkUrl   String?
   // Describes the picture for screen readers
   alt       String @default("")
   position  Int    @default(0)

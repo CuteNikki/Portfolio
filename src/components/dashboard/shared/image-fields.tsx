@@ -7,6 +7,7 @@ import {
   ArrowRightIcon,
   ImageUpIcon,
   LoaderCircleIcon,
+  MoonIcon,
   RefreshCwIcon,
   Trash2Icon,
 } from 'lucide-react';
@@ -23,6 +24,8 @@ import { Input } from '@/components/ui/input';
 
 export interface GalleryImage {
   url: string;
+  // Shown instead in dark themes
+  darkUrl: string | null;
   alt: string;
 }
 
@@ -224,8 +227,8 @@ export function CoverField({
   );
 }
 
-// A project's further pictures, each with a description for screen readers, in the order they're shown. They go to
-// the form as JSON in a hidden `gallery` field.
+// A project's further pictures, each with a description for screen readers and optionally a version for dark themes, in
+// the order they're shown. They go to the form as JSON in a hidden `gallery` field.
 export function GalleryField({
   defaultValue,
 }: {
@@ -233,7 +236,11 @@ export function GalleryField({
 }) {
   const [images, setImages] = useState(defaultValue);
   const [progress, setProgress] = useState<number | null>(null);
-  const saved = new Set(defaultValue.map(({ url }) => url));
+  // The picture whose dark version is uploading
+  const [darkUploading, setDarkUploading] = useState<string | null>(null);
+  const saved = new Set(
+    defaultValue.flatMap(({ url, darkUrl }) => [url, darkUrl]),
+  );
 
   const upload = async (files: File[]) => {
     const room = MAX_GALLERY_PICTURES - images.length;
@@ -249,7 +256,7 @@ export function GalleryField({
         const url = await uploadImage(file, (p) =>
           setProgress((index + p) / batch.length),
         );
-        setImages((current) => [...current, { url, alt: '' }]);
+        setImages((current) => [...current, { url, darkUrl: null, alt: '' }]);
       } catch (error) {
         toast.error(`"${file.name}" couldn't be uploaded`, {
           description: message(error),
@@ -268,9 +275,38 @@ export function GalleryField({
     });
 
   const remove = (index: number) => {
-    const { url } = images[index];
-    if (!saved.has(url)) void discardImages([url]);
+    const { url, darkUrl } = images[index];
+    const unsaved = [url, darkUrl].filter(
+      (picture): picture is string => !!picture && !saved.has(picture),
+    );
+    if (unsaved.length > 0) void discardImages(unsaved);
     setImages((current) => current.filter((_, i) => i !== index));
+  };
+
+  // Sets or clears a picture's dark version; one uploaded in this form and then replaced was never saved, so it goes
+  const setDark = (url: string, darkUrl: string | null) =>
+    setImages((current) =>
+      current.map((image) => {
+        if (image.url !== url) return image;
+        if (image.darkUrl && !saved.has(image.darkUrl)) {
+          void discardImages([image.darkUrl]);
+        }
+        return { ...image, darkUrl };
+      }),
+    );
+
+  const uploadDark = async (url: string, [file]: File[]) => {
+    setDarkUploading(url);
+    try {
+      // The button shows a spinner meanwhile, rather than the progress
+      setDark(url, await uploadImage(file, () => {}));
+    } catch (error) {
+      toast.error("The dark version couldn't be uploaded", {
+        description: message(error),
+      });
+    } finally {
+      setDarkUploading(null);
+    }
   };
 
   return (
@@ -291,6 +327,44 @@ export function GalleryField({
                 className='size-full object-cover'
               />
             </div>
+            {image.darkUrl ? (
+              <div className='flex items-center gap-2'>
+                <div className='bg-muted relative aspect-16/10 h-9 shrink-0 overflow-hidden rounded-md border'>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={imageUrl(image.darkUrl, 'thumb')}
+                    alt=''
+                    className='size-full object-cover'
+                  />
+                </div>
+                <span className='text-muted-foreground flex-1 text-xs'>
+                  Dark version
+                </span>
+                <Button
+                  type='button'
+                  variant='ghost'
+                  size='icon-sm'
+                  aria-label={`Remove the dark version of picture ${index + 1}`}
+                  onClick={() => setDark(image.url, null)}
+                >
+                  <Trash2Icon />
+                </Button>
+              </div>
+            ) : (
+              <DropArea
+                look='button'
+                disabled={darkUploading !== null}
+                onFiles={(files) => uploadDark(image.url, files)}
+                className='h-9 text-xs'
+              >
+                {darkUploading === image.url ? (
+                  <LoaderCircleIcon className='animate-spin' />
+                ) : (
+                  <MoonIcon />
+                )}
+                Add dark version
+              </DropArea>
+            )}
             <label className='sr-only' htmlFor={`gallery-alt-${index}`}>
               Description of picture {index + 1}
             </label>

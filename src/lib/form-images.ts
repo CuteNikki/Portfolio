@@ -36,13 +36,14 @@ export function readGallery(formData: FormData) {
   const seen = new Set<string>();
   return images
     .filter(
-      (image): image is { url: string; alt?: unknown } =>
+      (image): image is { url: string; darkUrl?: unknown; alt?: unknown } =>
         ownImageKey(image?.url) !== null,
     )
     .filter(({ url }) => !seen.has(url) && !!seen.add(url))
     .slice(0, MAX_GALLERY_PICTURES)
-    .map(({ url, alt }, position) => ({
+    .map(({ url, darkUrl, alt }, position) => ({
       url,
+      darkUrl: ownImageKey(darkUrl) ? (darkUrl as string) : null,
       alt: typeof alt === 'string' ? alt.trim().slice(0, MAX_ALT_LENGTH) : '',
       position,
     }));

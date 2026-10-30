@@ -6,6 +6,8 @@ import { StoredImage } from '@/components/common/stored-image';
 
 export interface GalleryPicture {
   url: string;
+  // Shown instead in dark themes
+  darkUrl: string | null;
   alt: string;
 }
 
@@ -64,6 +66,7 @@ export function ProjectGallery({
             >
               <StoredImage
                 url={picture.url}
+                darkUrl={picture.darkUrl}
                 alt=''
                 fill
                 sizes='(min-width: 1200px) 276px, (min-width: 1024px) calc(25vw - 28px), calc(50vw - 24px)'
