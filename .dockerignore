@@ -1,0 +1,6 @@
+# What the image is built without: installed and built inside it, or secret
+node_modules
+.next
+generated
+.env*
+.git

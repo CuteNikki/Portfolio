@@ -1,0 +1,25 @@
+# Built with Bun, run on Node: Next's own standalone server, with just what it needs.
+FROM oven/bun:1.4.0-alpine AS build
+WORKDIR /app
+# Dependencies first, so a change to the code alone reuses them
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+COPY . .
+# The site's .env comes in as a build secret: Prisma's config needs DATABASE_URL,
+# the NEXT_PUBLIC_ settings are built into the pages, and prerendering the posts
+# and projects reads them from the database. It's there for this step only, and
+# the copy Next makes of it into the standalone server is deleted in the same
+# step, so the image doesn't keep it: the server gets its settings at runtime
+RUN --mount=type=secret,id=env,target=/app/.env bun run build && rm -f .next/standalone/.env
+
+FROM node:24-alpine
+WORKDIR /app
+# Next listens on HOSTNAME, which Docker sets to the container's id; every address instead
+ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
+# Owned by node, as the server writes its cache into .next/cache
+COPY --from=build --chown=node:node /app/.next/standalone ./
+COPY --from=build --chown=node:node /app/.next/static ./.next/static
+COPY --from=build --chown=node:node /app/public ./public
+USER node
+EXPOSE 3000
+CMD ["node", "server.js"]
