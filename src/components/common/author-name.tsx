@@ -20,7 +20,7 @@ export function AuthorName({
       <Avatar
         className={cn(
           'rounded-md after:rounded-md',
-          size === 'sm' ? 'size-5' : 'size-6',
+          size === 'sm' ? 'size-5' : 'size-6'
         )}
       >
         {author.avatarUrl && (
@@ -29,7 +29,7 @@ export function AuthorName({
         <AvatarFallback
           className={cn(
             'rounded-md',
-            size === 'sm' ? 'text-[9px]' : 'text-[10px]',
+            size === 'sm' ? 'text-[9px]' : 'text-[10px]'
           )}
         >
           {author.name.slice(0, 2).toUpperCase()}
@@ -47,7 +47,7 @@ export function AuthorName({
         href={author.url}
         target='_blank'
         rel='noopener noreferrer'
-        className='group hover:text-primary-text flex items-center gap-0.5 transition-colors'
+        className='group flex items-center gap-0.5 transition-colors hover:text-primary-text'
       >
         {content}
         <ArrowUpRightIcon

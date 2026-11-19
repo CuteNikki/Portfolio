@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   if (!Array.isArray(urls)) return new NextResponse(null, { status: 400 });
 
   await discardUnusedImages(
-    urls.filter((url): url is string => typeof url === 'string').slice(0, 50),
+    urls.filter((url): url is string => typeof url === 'string').slice(0, 50)
   );
   return new NextResponse(null, { status: 204 });
 }

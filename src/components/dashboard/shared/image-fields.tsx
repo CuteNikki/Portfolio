@@ -11,11 +11,10 @@ import {
   RefreshCwIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { toast } from '@/lib/toast';
 
 import { discardImages } from '@/actions/upload';
-
 import { imageUrl, MAX_GALLERY_PICTURES } from '@/lib/images';
+import { toast } from '@/lib/toast';
 import { uploadImage } from '@/lib/upload-image';
 import { cn } from '@/lib/utils';
 
@@ -51,7 +50,7 @@ function DropArea({
 
   const pick = (list: FileList | null) => {
     const files = [...(list ?? [])].filter((file) =>
-      file.type.startsWith('image/'),
+      file.type.startsWith('image/')
     );
     if (files.length > 0) onFiles(multiple ? files : files.slice(0, 1));
   };
@@ -86,9 +85,9 @@ function DropArea({
         className={cn(
           look === 'button'
             ? buttonVariants({ variant: 'outline' })
-            : 'text-muted-foreground hover:border-line-strong hover:text-foreground flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed text-[13px] transition-colors disabled:pointer-events-none',
+            : 'flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed text-[13px] text-muted-foreground transition-colors hover:border-line-strong hover:text-foreground disabled:pointer-events-none',
           over && 'border-primary-text bg-primary-soft text-foreground',
-          className,
+          className
         )}
       >
         {children}
@@ -102,9 +101,9 @@ function Progress({ value }: { value: number }) {
     <span className='flex flex-col items-center gap-2'>
       <LoaderCircleIcon className='size-5 animate-spin' />
       <span>Uploading {Math.round(value * 100)}%</span>
-      <span className='bg-muted h-1 w-32 overflow-hidden rounded-full'>
+      <span className='h-1 w-32 overflow-hidden rounded-full bg-muted'>
         <span
-          className='bg-primary block h-full transition-[width]'
+          className='block h-full bg-primary transition-[width]'
           style={{ width: `${value * 100}%` }}
         />
       </span>
@@ -189,7 +188,7 @@ export function CoverField({
       <input type='hidden' name={words.field} value={url ?? ''} />
       {url && progress === null ? (
         <figure aria-labelledby={labelId} className='flex flex-col gap-2'>
-          <div className='bg-muted relative aspect-2/1 overflow-hidden rounded-xl border'>
+          <div className='relative aspect-2/1 overflow-hidden rounded-xl border bg-muted'>
             {/* The small copy is plenty for a preview */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -213,16 +212,16 @@ export function CoverField({
         <DropArea
           disabled={progress !== null}
           onFiles={upload}
-          className='bg-muted/30 aspect-2/1 w-full gap-1.5 px-6 py-5 text-center'
+          className='aspect-2/1 w-full gap-1.5 bg-muted/30 px-6 py-5 text-center'
         >
           {progress !== null ? (
             <Progress value={progress} />
           ) : (
             <>
-              <span className='bg-muted text-foreground grid size-10 place-items-center rounded-lg'>
+              <span className='grid size-10 place-items-center rounded-lg bg-muted text-foreground'>
                 <ImageUpIcon className='size-5' />
               </span>
-              <span className='text-foreground font-semibold'>
+              <span className='font-semibold text-foreground'>
                 {words.upload}
               </span>
               <span className='text-xs text-balance'>{words.hint}</span>
@@ -246,14 +245,14 @@ export function GalleryField({
   // The picture whose dark version is uploading
   const [darkUploading, setDarkUploading] = useState<string | null>(null);
   const saved = new Set(
-    defaultValue.flatMap(({ url, darkUrl }) => [url, darkUrl]),
+    defaultValue.flatMap(({ url, darkUrl }) => [url, darkUrl])
   );
 
   const upload = async (files: File[]) => {
     const room = MAX_GALLERY_PICTURES - images.length;
     if (files.length > room) {
       toast.warning(
-        `A project can have ${MAX_GALLERY_PICTURES} pictures; the first ${room} are added.`,
+        `A project can have ${MAX_GALLERY_PICTURES} pictures; the first ${room} are added.`
       );
     }
     const batch = files.slice(0, room);
@@ -261,7 +260,7 @@ export function GalleryField({
     for (const [index, file] of batch.entries()) {
       try {
         const url = await uploadImage(file, (p) =>
-          setProgress((index + p) / batch.length),
+          setProgress((index + p) / batch.length)
         );
         setImages((current) => [...current, { url, darkUrl: null, alt: '' }]);
       } catch (error) {
@@ -284,7 +283,7 @@ export function GalleryField({
   const remove = (index: number) => {
     const { url, darkUrl } = images[index];
     const unsaved = [url, darkUrl].filter(
-      (picture): picture is string => !!picture && !saved.has(picture),
+      (picture): picture is string => !!picture && !saved.has(picture)
     );
     if (unsaved.length > 0) void discardImages(unsaved);
     setImages((current) => current.filter((_, i) => i !== index));
@@ -299,7 +298,7 @@ export function GalleryField({
           void discardImages([image.darkUrl]);
         }
         return { ...image, darkUrl };
-      }),
+      })
     );
 
   const uploadDark = async (url: string, [file]: File[]) => {
@@ -324,9 +323,9 @@ export function GalleryField({
         {images.map((image, index) => (
           <li
             key={image.url}
-            className='bg-card flex flex-col gap-2 rounded-xl border p-2'
+            className='flex flex-col gap-2 rounded-xl border bg-card p-2'
           >
-            <div className='bg-muted relative aspect-16/10 overflow-hidden rounded-lg'>
+            <div className='relative aspect-16/10 overflow-hidden rounded-lg bg-muted'>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imageUrl(image.url, 'thumb')}
@@ -336,7 +335,7 @@ export function GalleryField({
             </div>
             {image.darkUrl ? (
               <div className='flex items-center gap-2'>
-                <div className='bg-muted relative aspect-16/10 h-9 shrink-0 overflow-hidden rounded-md border'>
+                <div className='relative aspect-16/10 h-9 shrink-0 overflow-hidden rounded-md border bg-muted'>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={imageUrl(image.darkUrl, 'thumb')}
@@ -344,7 +343,7 @@ export function GalleryField({
                     className='size-full object-cover'
                   />
                 </div>
-                <span className='text-muted-foreground flex-1 text-xs'>
+                <span className='flex-1 text-xs text-muted-foreground'>
                   Dark version
                 </span>
                 <Button
@@ -382,8 +381,8 @@ export function GalleryField({
               onChange={(event) =>
                 setImages((current) =>
                   current.map((img, i) =>
-                    i === index ? { ...img, alt: event.target.value } : img,
-                  ),
+                    i === index ? { ...img, alt: event.target.value } : img
+                  )
                 )
               }
             />
@@ -427,16 +426,16 @@ export function GalleryField({
               multiple
               disabled={progress !== null}
               onFiles={upload}
-              className='bg-muted/30 aspect-16/10 h-full min-h-40 w-full gap-1.5 px-6 py-5 text-center'
+              className='aspect-16/10 h-full min-h-40 w-full gap-1.5 bg-muted/30 px-6 py-5 text-center'
             >
               {progress !== null ? (
                 <Progress value={progress} />
               ) : (
                 <>
-                  <span className='bg-muted text-foreground grid size-10 place-items-center rounded-lg'>
+                  <span className='grid size-10 place-items-center rounded-lg bg-muted text-foreground'>
                     <ImageUpIcon className='size-5' />
                   </span>
-                  <span className='text-foreground font-semibold'>
+                  <span className='font-semibold text-foreground'>
                     Add pictures
                   </span>
                   <span className='text-xs'>Drop them here or click</span>

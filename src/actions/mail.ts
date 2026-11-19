@@ -1,13 +1,5 @@
 'use server';
 
-import { render } from '@react-email/render';
-import nodemailer from 'nodemailer';
-import { createElement } from 'react';
-
-import { hit, hitsSoFar, visitorHash } from '@/lib/rate-limit';
-
-import { ContactTemplate } from '@/components/contact/contact-template';
-
 import {
   AntiSpamData,
   antiSpamSchema,
@@ -15,6 +7,13 @@ import {
   mailSubmitSchema,
   MIN_SUBMIT_TIME_MS,
 } from '@/types/mail';
+import { render } from '@react-email/render';
+import nodemailer from 'nodemailer';
+import { createElement } from 'react';
+
+import { hit, hitsSoFar, visitorHash } from '@/lib/rate-limit';
+
+import { ContactTemplate } from '@/components/contact/contact-template';
 
 function getSpamReason(data: MailSubmitData, antiSpam: unknown) {
   const validatedAntiSpam = antiSpamSchema.safeParse(antiSpam);
@@ -74,7 +73,7 @@ export async function sendMail(data: MailSubmitData, antiSpam: AntiSpamData) {
       replyTo: email,
       subject: `[Portfolio] ${subject}`,
       html: await render(
-        createElement(ContactTemplate, { name, email, subject, message }),
+        createElement(ContactTemplate, { name, email, subject, message })
       ),
       // For clients that show or quote plain text: just who wrote and what
       text: `${name} (${email}) wrote through the contact form:\n\n${message}`,

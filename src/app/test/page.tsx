@@ -1,10 +1,9 @@
+import { NO_INDEX } from '@/constants/metadata';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Intro } from '@/app/test/intro';
 import Text from '@/app/test/text';
-
-import { NO_INDEX } from '@/constants/metadata';
 
 export const metadata: Metadata = { robots: NO_INDEX };
 

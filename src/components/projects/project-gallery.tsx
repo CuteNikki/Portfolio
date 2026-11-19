@@ -38,7 +38,7 @@ export function ProjectGallery({
       // Tried again on the next click
       () => {
         loading.current = false;
-      },
+      }
     );
   };
 
@@ -62,7 +62,7 @@ export function ProjectGallery({
                 setOpen(index);
               }}
               aria-label={`Open picture ${index + 1}: ${describe(picture, index)}`}
-              className='bg-muted ring-foreground/0 hover:ring-foreground/20 focus-visible:ring-ring relative block aspect-16/10 w-full cursor-zoom-in overflow-hidden rounded-xl ring-1 transition-shadow ring-inset'
+              className='relative block aspect-16/10 w-full cursor-zoom-in overflow-hidden rounded-xl bg-muted ring-1 ring-foreground/0 transition-shadow ring-inset hover:ring-foreground/20 focus-visible:ring-ring'
             >
               <StoredImage
                 url={picture.url}

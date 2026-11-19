@@ -1,19 +1,20 @@
 'use client';
 
-import { useRef, useState, useTransition } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useRef, useState, useTransition } from 'react';
 
 import { GlobeIcon, Trash2Icon } from 'lucide-react';
-import { fadeOutRow } from '@/lib/row-motion';
-import { toast } from '@/lib/toast';
 
 import { deleteComment } from '@/actions/post';
-
+import { fadeOutRow } from '@/lib/row-motion';
+import { toast } from '@/lib/toast';
 import { formatShortDate, proxiedAvatarUrl } from '@/lib/utils';
 
+import { NewTabItem } from '@/components/common/menu-at-point';
 import { sortableHeader } from '@/components/dashboard/shared/column-parts';
+import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
 import {
   AlertDialog,
@@ -26,8 +27,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { NewTabItem } from '@/components/common/menu-at-point';
-import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import {
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -147,7 +146,7 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
           height={24}
           className='size-6 shrink-0 rounded-md'
         />
-        <span className='group-hover:text-primary-text truncate font-semibold transition-colors'>
+        <span className='truncate font-semibold transition-colors group-hover:text-primary-text'>
           {row.original.author}
         </span>
       </Link>
@@ -161,7 +160,7 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
     cell: ({ row }) => (
       <span className='flex min-w-0 items-center gap-2'>
         {row.original.isReply && <Badge variant='outline'>Reply</Badge>}
-        <span className='text-body truncate'>{row.original.excerpt}</span>
+        <span className='truncate text-body'>{row.original.excerpt}</span>
       </span>
     ),
   },
@@ -173,7 +172,7 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
     cell: ({ row }) => (
       <Link
         href={row.original.postHref}
-        className='hover:text-primary-text block truncate transition-colors'
+        className='block truncate transition-colors hover:text-primary-text'
       >
         {row.original.postTitle}
       </Link>
@@ -185,7 +184,7 @@ export const columns: DashboardColumnDef<CommentRow>[] = [
     meta: { label: 'Date' },
     header: sortableHeader('Date'),
     cell: ({ row }) => (
-      <span className='text-muted-foreground whitespace-nowrap'>
+      <span className='whitespace-nowrap text-muted-foreground'>
         {formatShortDate(row.original.createdAt)}
       </span>
     ),

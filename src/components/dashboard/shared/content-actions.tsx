@@ -1,23 +1,25 @@
 'use client';
 
-import { useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useRef, useState, useTransition } from 'react';
 
 import {
-  GlobeIcon,
   EyeOffIcon,
+  GlobeIcon,
   LinkIcon,
   PencilLineIcon,
   SendHorizonalIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { fadeOutRow, flashRow } from '@/lib/row-motion';
-import { toast } from '@/lib/toast';
 
 import { deletePost, setPostPublished } from '@/actions/post';
 import { deleteProject, setProjectPublished } from '@/actions/project';
+import { fadeOutRow, flashRow } from '@/lib/row-motion';
+import { toast } from '@/lib/toast';
 
+import { NewTabItem } from '@/components/common/menu-at-point';
+import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,8 +30,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { NewTabItem } from '@/components/common/menu-at-point';
-import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenuItem,
@@ -74,12 +74,12 @@ export function ContentActions({
         if (error) {
           toast.error(
             `The ${kind} couldn't be ${publish ? 'published' : 'unpublished'}`,
-            { description: error },
+            { description: error }
           );
           return;
         }
         toast.success(
-          `${kind === 'post' ? 'Post' : 'Project'} ${publish ? 'published' : 'back to a draft'}`,
+          `${kind === 'post' ? 'Post' : 'Project'} ${publish ? 'published' : 'back to a draft'}`
         );
         flashRow(actions.current);
         router.refresh();

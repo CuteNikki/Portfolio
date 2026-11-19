@@ -1,26 +1,25 @@
 'use server';
 
+import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
+import { canWrite } from '@/constants/roles';
 import { revalidatePath, updateTag } from 'next/cache';
-import { after } from 'next/server';
 import { headers } from 'next/headers';
+import { after } from 'next/server';
 
 import {
+  fail,
   type ActionResult,
   type CreateResult,
-  fail,
 } from '@/lib/action-result';
 import { getCurrentSession, getWriterSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { commentsTag } from '@/lib/data';
 import { readDate, readText } from '@/lib/form-fields';
 import { readCover, removedImages } from '@/lib/form-images';
-import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
 import { hit, visitorHash } from '@/lib/rate-limit';
 import { resolveSlug } from '@/lib/slug';
-
-import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
-import { canWrite } from '@/constants/roles';
+import { deleteImages } from '@/lib/uploads';
 
 function isPostSlugTaken(exceptId?: string) {
   return async (slug: string) =>
@@ -49,7 +48,7 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
   const resolved = await resolveSlug(
     formData.get('slug'),
     title,
-    isPostSlugTaken(),
+    isPostSlugTaken()
   );
   if ('error' in resolved) return fail(resolved.error);
   const { slug } = resolved;
@@ -68,7 +67,7 @@ export async function createPost(formData: FormData): Promise<CreateResult> {
       // The picked authors, or else whoever creates it
       authors: {
         create: authorRows(
-          (await readAuthors(formData)) ?? [{ userId: session.user.id }],
+          (await readAuthors(formData)) ?? [{ userId: session.user.id }]
         ),
       },
     },
@@ -147,7 +146,7 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
   const resolved = await resolveSlug(
     formData.get('slug'),
     title,
-    isPostSlugTaken(id),
+    isPostSlugTaken(id)
   );
   if ('error' in resolved) return fail(resolved.error);
   const { slug } = resolved;
@@ -184,8 +183,8 @@ export async function updatePost(formData: FormData): Promise<ActionResult> {
   const removed = removedImages(
     fields.map((field) => currentPost[field]),
     fields.map((field) =>
-      sent[field] === undefined ? currentPost[field] : sent[field],
-    ),
+      sent[field] === undefined ? currentPost[field] : sent[field]
+    )
   );
   if (removed.length > 0) after(() => deleteImages(removed));
 
@@ -400,7 +399,7 @@ export async function addView(formData: FormData): Promise<ActionResult> {
  */
 export async function setPostPublished(
   postId: string,
-  published: boolean,
+  published: boolean
 ): Promise<ActionResult> {
   if (!(await getWriterSession())) {
     return fail('Only writers and admins can do that.');

@@ -6,7 +6,7 @@ import remarkGemoji from 'remark-gemoji';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
-import { type PluggableList, unified } from 'unified';
+import { unified, type PluggableList } from 'unified';
 
 import { shorten } from '@/lib/utils';
 

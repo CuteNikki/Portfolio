@@ -29,7 +29,7 @@ export function CommentActionsTrigger(props: React.ComponentProps<'button'>) {
 
 const loadMenu = () =>
   import('@/components/dashboard/posts/comment-actions-loaded').then(
-    (module) => module.default,
+    (module) => module.default
   );
 
 // A comment's ⋯ menu: reply, copy the author's ID, edit or delete. Its menu loads on first use (see LazyMenu).

@@ -1,13 +1,12 @@
 'use client';
 
+import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 
 import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from 'lucide-react';
 
 import type { Author } from '@/lib/author-list';
 import { proxiedAvatarUrl } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
 
 import { StoredImage } from '@/components/common/stored-image';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -77,7 +76,7 @@ export function TitleCell({
 }) {
   return (
     <Link href={editHref} className='group flex min-w-0 items-center gap-3'>
-      <span className='bg-muted rounded-thumb relative h-6 w-12 shrink-0 overflow-hidden'>
+      <span className='relative h-6 w-12 shrink-0 overflow-hidden rounded-thumb bg-muted'>
         {coverUrl && (
           <StoredImage
             url={coverUrl}
@@ -88,7 +87,7 @@ export function TitleCell({
           />
         )}
       </span>
-      <span className='group-hover:text-primary-text truncate font-semibold transition-colors'>
+      <span className='truncate font-semibold transition-colors group-hover:text-primary-text'>
         {title}
       </span>
     </Link>
@@ -118,7 +117,7 @@ export function AuthorsCell({ authors }: { authors: Author[] }) {
       <div className='flex -space-x-2'>
         {authors.slice(0, 3).map((author) => {
           const avatar = (
-            <Avatar className='ring-card size-6 rounded-md ring-2 after:rounded-md'>
+            <Avatar className='size-6 rounded-md ring-2 ring-card after:rounded-md'>
               {author.avatarUrl && (
                 <AvatarImage
                   src={proxiedAvatarUrl(author.avatarUrl)}
@@ -153,7 +152,7 @@ export function AuthorsCell({ authors }: { authors: Author[] }) {
         {firstHref ? (
           <Link
             href={firstHref}
-            className='hover:text-primary-text transition-colors'
+            className='transition-colors hover:text-primary-text'
           >
             {first.name}
           </Link>

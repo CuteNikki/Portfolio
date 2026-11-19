@@ -31,7 +31,7 @@ export function StoredImage({
     <img
       src={imageUrl(address, 'large')}
       srcSet={IMAGE_SIZE_NAMES.map(
-        (size) => `${imageUrl(address, size)} ${IMAGE_SIZES[size]}w`,
+        (size) => `${imageUrl(address, size)} ${IMAGE_SIZES[size]}w`
       ).join(', ')}
       sizes={sizes}
       alt={alt}
@@ -41,7 +41,7 @@ export function StoredImage({
       className={cn(
         fill && 'absolute inset-0 size-full',
         className,
-        themeClass,
+        themeClass
       )}
     />
   );

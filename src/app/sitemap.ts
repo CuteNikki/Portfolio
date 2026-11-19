@@ -1,8 +1,7 @@
+import { SITE_URL } from '@/constants/metadata';
 import type { MetadataRoute } from 'next';
 
 import { getPublishedPosts, getPublishedProjects } from '@/lib/data';
-
-import { SITE_URL } from '@/constants/metadata';
 
 const STATIC_ROUTES = [
   '',

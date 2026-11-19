@@ -26,7 +26,7 @@ import {
  */
 export async function requestImageUpload(
   type: string,
-  bytes: Record<ImageSize, number>,
+  bytes: Record<ImageSize, number>
 ) {
   // Reasons go back as values: a production build hides a thrown error's message
   if (!(await getWriterSession())) {
@@ -43,7 +43,7 @@ export async function requestImageUpload(
 
   // Only the expected sizes go on, whatever else the browser sent
   const checked = Object.fromEntries(
-    IMAGE_SIZE_NAMES.map((size) => [size, bytes[size]]),
+    IMAGE_SIZE_NAMES.map((size) => [size, bytes[size]])
   ) as Record<ImageSize, number>;
 
   return newUpload(type as ImageType, checked);
@@ -84,7 +84,7 @@ export async function cleanUpImages(): Promise<
  * in the meantime, it stays.
  */
 export async function deleteUnusedImage(
-  url: string,
+  url: string
 ): Promise<{ error: string } | { removed: true }> {
   if (!(await getWriterSession())) {
     return { error: 'Only writers can delete pictures.' };
@@ -111,7 +111,7 @@ export async function deleteUnusedImage(
  * leave a broken image in the middle of the text.
  */
 export async function removePicture(
-  url: string,
+  url: string
 ): Promise<{ error: string } | { removed: true }> {
   if (!(await getWriterSession())) {
     return { error: 'Only writers can delete pictures.' };

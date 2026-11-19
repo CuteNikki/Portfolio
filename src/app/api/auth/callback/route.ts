@@ -1,4 +1,5 @@
 import { timingSafeEqual } from 'node:crypto';
+import { LINKS } from '@/constants/links';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -11,8 +12,6 @@ import {
 } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { getUserAvatarUrl } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -28,7 +27,7 @@ export async function GET(req: NextRequest) {
   if (!state || !expectedState || !isSameString(state, expectedState)) {
     return NextResponse.json(
       { error: 'Login expired or was started elsewhere. Please try again.' },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -57,7 +56,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       { error: `OAuth Error: ${error}` },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -66,7 +65,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       { error: 'No authorization code provided' },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -83,7 +82,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       { error: 'Missing Discord OAuth Configuration' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
@@ -108,7 +107,7 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json(
         { error: 'Failed to exchange code for token' },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -126,14 +125,14 @@ export async function GET(req: NextRequest) {
 
       return NextResponse.json(
         { error: 'Failed to fetch user profile' },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     const avatarUrl = getUserAvatarUrl(
       userData.id,
       userData.discriminator,
-      userData.avatar,
+      userData.avatar
     );
 
     // 3. Upsert the user in your database (Update if exists, Create if new). The Discord tokens aren't kept: the profile
@@ -204,7 +203,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(
       { error: 'Internal Server Error' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

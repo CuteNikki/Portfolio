@@ -22,7 +22,7 @@ export function flashRow(element: Element | null) {
       },
       { backgroundColor: 'transparent' },
     ],
-    { duration: 1200, easing: 'ease-out' },
+    { duration: 1200, easing: 'ease-out' }
   );
 }
 
@@ -37,6 +37,6 @@ export async function fadeOutRow(element: Element | null) {
       { opacity: 1, transform: 'none' },
       { opacity: 0, transform: 'translateX(8px)' },
     ],
-    { duration: 220, easing: 'ease-in', fill: 'forwards' },
+    { duration: 220, easing: 'ease-in', fill: 'forwards' }
   ).finished;
 }

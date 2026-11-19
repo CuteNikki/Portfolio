@@ -12,7 +12,7 @@ export function DiscordTrigger(props: React.ComponentProps<'button'>) {
   return (
     <button
       type='button'
-      className='text-muted-foreground hover:text-primary-text focus-visible:text-primary-text focus-visible:outline-ring flex items-center gap-2 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2'
+      className='flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary-text focus-visible:text-primary-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring'
       {...props}
     >
       {/* The icon has its own "Discord" title, which screen readers would read before the label */}
@@ -24,7 +24,7 @@ export function DiscordTrigger(props: React.ComponentProps<'button'>) {
 
 const loadMenu = () =>
   import('@/components/navigation/discord-menu-loaded').then(
-    (module) => module.default,
+    (module) => module.default
   );
 
 // Copy the Discord username or open the profile. Its menu loads on first use (see LazyMenu).

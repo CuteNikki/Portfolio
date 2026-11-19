@@ -55,7 +55,7 @@ function monthOf(word: string) {
   const w = word.replace(/\.$/, '');
   if (w.length < 3) return null;
   const index = MONTH_NAMES.findIndex((names) =>
-    names.some((name) => name.startsWith(w)),
+    names.some((name) => name.startsWith(w))
   );
   return index === -1 ? null : index + 1;
 }
@@ -193,6 +193,6 @@ export function matchesDateQuery(time: number, queries: DateQuery[]): boolean {
     ({ day, month, year }) =>
       (day === null || day === date.getUTCDate()) &&
       (month === null || month === date.getUTCMonth() + 1) &&
-      (year === null || year === date.getUTCFullYear()),
+      (year === null || year === date.getUTCFullYear())
   );
 }

@@ -1,7 +1,6 @@
 'use client';
 
 import type { UserHoverProps } from '@/components/common/user-hover';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   HoverCard,

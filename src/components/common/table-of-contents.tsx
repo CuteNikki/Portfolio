@@ -50,7 +50,7 @@ export function TableOfContents({
       setReading(
         atBottom
           ? (items.at(-1)?.id ?? null)
-          : (current ?? items[0]?.id ?? null),
+          : (current ?? items[0]?.id ?? null)
       );
     };
     const schedule = () => {
@@ -69,10 +69,10 @@ export function TableOfContents({
 
   return (
     <nav aria-label={label} className={cn('text-[13px]', className)}>
-      <h2 className='text-primary-text mb-3.5 text-[11px] font-semibold tracking-[0.14em] uppercase'>
+      <h2 className='mb-3.5 text-[11px] font-semibold tracking-[0.14em] text-primary-text uppercase'>
         {label}
       </h2>
-      <ol className='border-border border-l'>
+      <ol className='border-l border-border'>
         {items.map(({ id, text, level }) => (
           <li key={id}>
             <a
@@ -83,7 +83,7 @@ export function TableOfContents({
                 level === 3 ? 'pl-6' : 'pl-3.5',
                 reading === id
                   ? 'border-primary text-foreground'
-                  : 'text-muted-foreground hover:text-foreground border-transparent',
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
               )}
             >
               {text}
@@ -93,7 +93,7 @@ export function TableOfContents({
       </ol>
       <a
         href='#top'
-        className='text-muted-foreground hover:text-foreground mt-5 inline-flex items-center gap-1.5 transition-colors'
+        className='mt-5 inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground'
       >
         <ArrowUpIcon className='size-3.5' />
         Back to top

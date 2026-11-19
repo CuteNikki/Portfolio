@@ -25,7 +25,7 @@ export default function SortMenuLoaded<T extends string>({
         <SortTrigger current={current} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-56'>
-        <DropdownMenuLabel className='text-muted-foreground px-2.5 pt-1.5 pb-1 text-[11px] font-normal tracking-widest uppercase'>
+        <DropdownMenuLabel className='px-2.5 pt-1.5 pb-1 text-[11px] font-normal tracking-widest text-muted-foreground uppercase'>
           Sort by
         </DropdownMenuLabel>
         <DropdownMenuRadioGroup

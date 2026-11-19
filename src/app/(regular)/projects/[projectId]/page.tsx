@@ -1,9 +1,11 @@
+import { LINKS } from '@/constants/links';
+import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
+import { SiGithub } from '@icons-pack/react-simple-icons';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
-import { SiGithub } from '@icons-pack/react-simple-icons';
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -20,9 +22,6 @@ import {
 } from '@/lib/data';
 import { headingsOf, toDescription } from '@/lib/markdown';
 import { formatShortDate, projectTone } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
-import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 
 import { AuthorName } from '@/components/common/author-name';
 import { TableOfContents } from '@/components/common/table-of-contents';
@@ -131,13 +130,13 @@ async function ProjectContent({
           />
           <nav
             aria-label='Breadcrumb'
-            className='animate-hero-in text-muted-foreground text-[13px]'
+            className='animate-hero-in text-[13px] text-muted-foreground'
           >
             <ol className='flex flex-wrap items-center gap-2'>
               <li>
                 <Link
                   href={LINKS.projects.url}
-                  className='nav-underline hover:text-foreground lowercase transition-colors'
+                  className='nav-underline lowercase transition-colors hover:text-foreground'
                 >
                   projects
                 </Link>
@@ -205,7 +204,7 @@ async function ProjectContent({
             </div>
           </div>
 
-          <dl className='animate-hero-in bg-card grid gap-x-8 gap-y-5 rounded-xl border p-6 text-[13px] delay-3 sm:grid-cols-2 lg:grid-cols-4'>
+          <dl className='animate-hero-in grid gap-x-8 gap-y-5 rounded-xl border bg-card p-6 text-[13px] delay-3 sm:grid-cols-2 lg:grid-cols-4'>
             <div className='flex flex-col gap-1.5'>
               <dt className='text-muted-foreground'>Date</dt>
               <dd>
@@ -343,7 +342,7 @@ function NeighbourCard({
     <Link
       href={project.href}
       data-reveal=''
-      className='group edge-glow bg-card flex flex-col gap-4 rounded-xl border p-3 sm:flex-row'
+      className='group edge-glow flex flex-col gap-4 rounded-xl border bg-card p-3 sm:flex-row'
     >
       <ProjectThumbnail
         title={project.title}
@@ -354,7 +353,7 @@ function NeighbourCard({
         className='aspect-16/10 shrink-0 rounded-lg sm:w-50'
       />
       <span className='flex min-w-0 flex-col gap-1 py-1 pr-2'>
-        <span className='text-muted-foreground flex items-center gap-1 text-xs [&_svg]:size-3.5'>
+        <span className='flex items-center gap-1 text-xs text-muted-foreground [&_svg]:size-3.5'>
           {direction === 'newer' ? (
             <>
               <ArrowLeftIcon />
@@ -370,10 +369,10 @@ function NeighbourCard({
         <span className='text-[17px] font-bold tracking-[-0.04em]'>
           {project.title}
         </span>
-        <span className='text-body line-clamp-2 text-[13px] leading-relaxed'>
+        <span className='line-clamp-2 text-[13px] leading-relaxed text-body'>
           {project.excerpt}
         </span>
-        <span className='text-muted-foreground mt-auto pt-1.5 text-xs'>
+        <span className='mt-auto pt-1.5 text-xs text-muted-foreground'>
           {[project.date, project.technologies.slice(0, 3).join(' · ')]
             .filter(Boolean)
             .join(' · ')}

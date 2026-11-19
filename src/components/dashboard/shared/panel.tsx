@@ -13,13 +13,13 @@ export function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className='bg-card min-w-0 overflow-hidden rounded-xl border'>
+    <section className='min-w-0 overflow-hidden rounded-xl border bg-card'>
       <div className='flex items-center justify-between gap-3 border-b px-5 py-3.5'>
         <h2 className='text-[15px] font-bold'>{title}</h2>
         {href && (
           <Link
             href={href}
-            className='nav-underline text-muted-foreground hover:text-foreground text-xs transition-colors'
+            className='nav-underline text-xs text-muted-foreground transition-colors hover:text-foreground'
           >
             {linkLabel}
           </Link>
@@ -32,6 +32,6 @@ export function Panel({
 
 export function PanelEmpty({ children }: { children: React.ReactNode }) {
   return (
-    <p className='text-muted-foreground px-5 py-6 text-[13px]'>{children}</p>
+    <p className='px-5 py-6 text-[13px] text-muted-foreground'>{children}</p>
   );
 }

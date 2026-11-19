@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 
 import {
   ChevronDownIcon,
@@ -9,10 +9,10 @@ import {
   LoaderCircleIcon,
   Trash2Icon,
 } from 'lucide-react';
-import { toast } from '@/lib/toast';
-import { cn } from '@/lib/utils';
 
 import { deleteUnusedImage } from '@/actions/upload';
+import { toast } from '@/lib/toast';
+import { cn } from '@/lib/utils';
 
 import { ContextMenuFor } from '@/components/common/menu-at-point';
 import { StoredImage } from '@/components/common/stored-image';
@@ -40,14 +40,14 @@ export function UnusedPictures({ pictures }: { pictures: UnusedPicture[] }) {
   const previews = pictures.filter(({ complete }) => complete).slice(0, 4);
 
   return (
-    <section className='bg-card flex flex-col rounded-xl border'>
+    <section className='flex flex-col rounded-xl border bg-card'>
       <div className='flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center'>
         {/* A glimpse of them beside the text; on phones the text needs the room, and View all shows them */}
         <ul className='hidden -space-x-3 sm:flex' aria-hidden>
           {previews.map(({ url }) => (
             <li
               key={url}
-              className='bg-muted ring-card rounded-thumb relative h-7 w-14 overflow-hidden ring-2'
+              className='relative h-7 w-14 overflow-hidden rounded-thumb bg-muted ring-2 ring-card'
             >
               <StoredImage
                 url={url}
@@ -63,7 +63,7 @@ export function UnusedPictures({ pictures }: { pictures: UnusedPicture[] }) {
           <h2 className='text-[15px] font-bold'>
             {count === 1 ? '1 unused picture' : `${count} unused pictures`}
           </h2>
-          <p className='text-muted-foreground mt-0.5 text-xs'>
+          <p className='mt-0.5 text-xs text-muted-foreground'>
             In storage but on no post or project, e.g. from a form that was left
             without saving. They are cleared out after a day.
           </p>
@@ -144,8 +144,8 @@ function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
   return (
     <li
       className={cn(
-        'bg-background flex flex-col overflow-hidden rounded-lg border transition-opacity',
-        pending && 'opacity-50',
+        'flex flex-col overflow-hidden rounded-lg border bg-background transition-opacity',
+        pending && 'opacity-50'
       )}
     >
       <ContextMenuFor>
@@ -164,7 +164,7 @@ function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
           Delete
         </DropdownMenuItem>
       </ContextMenuFor>
-      <span className='bg-muted relative aspect-2/1'>
+      <span className='relative aspect-2/1 bg-muted'>
         {picture.complete ? (
           <StoredImage
             url={picture.url}
@@ -175,13 +175,13 @@ function UnusedPictureCard({ picture }: { picture: UnusedPicture }) {
           />
         ) : (
           // An upload that never finished has no thumbnail to show
-          <span className='text-muted-foreground absolute inset-0 grid place-items-center'>
+          <span className='absolute inset-0 grid place-items-center text-muted-foreground'>
             <ImageOffIcon className='size-5' />
           </span>
         )}
       </span>
       <span className='flex items-center justify-between gap-2 py-1.5 pr-1.5 pl-3'>
-        <span className='text-muted-foreground truncate text-xs'>
+        <span className='truncate text-xs text-muted-foreground'>
           Uploaded {uploadedAgo(picture.uploadedAt)}
         </span>
         <Button

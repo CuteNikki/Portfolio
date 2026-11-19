@@ -1,9 +1,9 @@
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
+
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { shorten } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
-import { SITE_METADATA } from '@/constants/metadata';
 
 import { columns } from '@/components/dashboard/comments/columns';
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';

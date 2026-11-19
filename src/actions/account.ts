@@ -3,10 +3,9 @@
 import { revalidatePath, updateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
-import { Role } from '@/lib/generated/prisma/enums';
-
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession, SESSION_COOKIE } from '@/lib/auth';
+import { Role } from '@/lib/generated/prisma/enums';
 import prisma from '@/lib/prisma';
 
 const NOT_SIGNED_IN = 'You need to be signed in.';
@@ -50,7 +49,7 @@ export async function signOutOtherDevices(): Promise<ActionResult> {
  * and projects stay, since others may have written them too. You confirm by typing your username.
  */
 export async function deleteAccount(
-  confirmation: string,
+  confirmation: string
 ): Promise<ActionResult> {
   const session = await getCurrentSession();
   if (!session) return { error: NOT_SIGNED_IN };

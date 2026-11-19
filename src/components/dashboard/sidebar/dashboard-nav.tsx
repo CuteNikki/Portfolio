@@ -1,8 +1,14 @@
 'use client';
 
-import { useState, useSyncExternalStore } from 'react';
+import {
+  DASHBOARD_ADMIN_LINKS,
+  DASHBOARD_LINKS,
+  LINKS,
+  type Link as NavLink,
+} from '@/constants/links';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState, useSyncExternalStore } from 'react';
 
 import {
   PanelLeftCloseIcon,
@@ -11,13 +17,6 @@ import {
   PresentationIcon,
   SquarePenIcon,
 } from 'lucide-react';
-
-import {
-  DASHBOARD_ADMIN_LINKS,
-  DASHBOARD_LINKS,
-  LINKS,
-  type Link as NavLink,
-} from '@/constants/links';
 
 import { cn } from '@/lib/utils';
 
@@ -136,9 +135,9 @@ function SidebarLink({
       className={cn(
         'flex h-10 items-center gap-3 rounded-lg px-3 text-sm transition-colors [&_svg]:size-4.5 [&_svg]:shrink-0',
         current
-          ? 'bg-primary-soft text-foreground [&_svg]:text-primary-text font-semibold'
+          ? 'bg-primary-soft font-semibold text-foreground [&_svg]:text-primary-text'
           : 'text-body hover:bg-muted hover:text-foreground [&_svg]:text-muted-foreground',
-        collapsed && 'justify-center px-0',
+        collapsed && 'justify-center px-0'
       )}
     >
       {Icon && <Icon aria-hidden />}
@@ -146,7 +145,7 @@ function SidebarLink({
         <>
           <span className='flex-1 truncate'>{link.label}</span>
           {count !== undefined && (
-            <span className='text-muted-foreground text-xs tabular-nums'>
+            <span className='text-xs text-muted-foreground tabular-nums'>
               {count}
             </span>
           )}
@@ -184,7 +183,7 @@ export function DashboardSidebar({
       aria-label='Dashboard'
       className={cn(
         'hidden shrink-0 border-r transition-[width] duration-300 ease-(--ease-out-soft) lg:block',
-        collapsed ? 'w-18' : 'w-66',
+        collapsed ? 'w-18' : 'w-66'
       )}
     >
       <div className='sticky top-16 flex max-h-[calc(100svh-4rem)] flex-col gap-6 overflow-y-auto px-3 py-6'>
@@ -204,7 +203,7 @@ export function DashboardSidebar({
         {sectionsFor(isAdmin).map(({ label, links }) => (
           <nav key={label} aria-label={label} className='flex flex-col gap-0.5'>
             {!collapsed && (
-              <span className='text-muted-foreground px-3 pb-1.5 text-[11px] tracking-widest uppercase'>
+              <span className='px-3 pb-1.5 text-[11px] tracking-widest text-muted-foreground uppercase'>
                 {label}
               </span>
             )}
@@ -249,7 +248,7 @@ export function DashboardMobileNav({
             <span className='sr-only'>Dashboard:</span>
             <span className='truncate'>{current?.label ?? 'Dashboard'}</span>
             {currentCount !== undefined && (
-              <span className='text-muted-foreground ml-auto text-xs font-normal tabular-nums'>
+              <span className='ml-auto text-xs font-normal text-muted-foreground tabular-nums'>
                 {currentCount}
               </span>
             )}
@@ -269,7 +268,7 @@ export function DashboardMobileNav({
               aria-label={label}
               className='flex flex-col gap-0.5'
             >
-              <span className='text-muted-foreground px-3 pb-1.5 text-[11px] tracking-widest uppercase'>
+              <span className='px-3 pb-1.5 text-[11px] tracking-widest text-muted-foreground uppercase'>
                 {label}
               </span>
               {links.map((link) => (

@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   if (!CLIENT_ID || !REDIRECT_URI) {
     return NextResponse.json(
       { error: 'Missing Discord OAuth Configuration' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 

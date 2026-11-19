@@ -1,6 +1,7 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { attachDatabasePool } from '@vercel/functions';
 import { Pool } from 'pg';
+
 import { PrismaClient } from '@/lib/generated/prisma/client';
 
 const globalForPrisma = global as unknown as {
@@ -18,7 +19,7 @@ const pool = new Pool({
 });
 // A connection the server closed while idle is dropped from the pool rather than crashing the process.
 pool.on('error', (error) =>
-  console.warn('Idle database connection closed:', error.message),
+  console.warn('Idle database connection closed:', error.message)
 );
 // Lets Vercel close idle connections before it suspends the function, instead of leaving them open on the server.
 attachDatabasePool(pool);

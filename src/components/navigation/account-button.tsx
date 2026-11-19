@@ -1,8 +1,8 @@
+import { canWrite } from '@/constants/roles';
+
 import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
 
 import { getDisplaySession } from '@/lib/auth';
-
-import { canWrite } from '@/constants/roles';
 
 import { AccountMenu } from '@/components/navigation/account-menu';
 
@@ -33,13 +33,13 @@ export function AccountButtonPlaceholder() {
     <>
       <span
         aria-hidden
-        className='border-border bg-card text-muted-foreground hidden size-10 place-items-center rounded-lg border sm:grid'
+        className='hidden size-10 place-items-center rounded-lg border border-border bg-card text-muted-foreground sm:grid'
       >
         <CircleUserRoundIcon className='size-4.5' />
       </span>
       <span
         aria-hidden
-        className='border-border bg-card text-muted-foreground grid size-10 place-items-center rounded-lg border sm:hidden'
+        className='grid size-10 place-items-center rounded-lg border border-border bg-card text-muted-foreground sm:hidden'
       >
         <MenuIcon className='size-5' />
       </span>

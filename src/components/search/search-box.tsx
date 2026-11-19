@@ -1,8 +1,8 @@
 'use client';
 
-import { Fragment, useId, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Fragment, useId, useState } from 'react';
 
 import { ArrowUpRightIcon, SearchIcon, XIcon } from 'lucide-react';
 
@@ -36,7 +36,7 @@ function Highlighted({ text, query }: { text: string; query: string }) {
   return (
     <>
       {text.slice(0, at)}
-      <mark className='bg-primary-soft text-foreground rounded-[3px]'>
+      <mark className='rounded-[3px] bg-primary-soft text-foreground'>
         {text.slice(at, at + query.length)}
       </mark>
       {text.slice(at + query.length)}
@@ -113,17 +113,15 @@ export function SearchBox({
 
   // Where each section's suggestions start among all of them, for the arrow keys and screen readers
   const starts = sections.map((_, i) =>
-    sections
-      .slice(0, i)
-      .reduce((sum, section) => sum + section.items.length, 0),
+    sections.slice(0, i).reduce((sum, section) => sum + section.items.length, 0)
   );
 
   return (
     <div className='relative'>
-      <label className='bg-card focus-within:border-primary-text/60 focus-within:ring-primary/20 flex h-12 items-center gap-3 rounded-lg border px-4 transition-[border-color,box-shadow] focus-within:ring-3'>
+      <label className='flex h-12 items-center gap-3 rounded-lg border bg-card px-4 transition-[border-color,box-shadow] focus-within:border-primary-text/60 focus-within:ring-3 focus-within:ring-primary/20'>
         <SearchIcon
           aria-hidden
-          className='text-muted-foreground size-4.5 shrink-0'
+          className='size-4.5 shrink-0 text-muted-foreground'
         />
         <span className='sr-only'>{label}</span>
         <input
@@ -148,7 +146,7 @@ export function SearchBox({
           onClick={() => setOpen(true)}
           onBlur={close}
           onKeyDown={onKeyDown}
-          className='placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-sm outline-none'
+          className='h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground'
         />
         {value && (
           <button
@@ -156,7 +154,7 @@ export function SearchBox({
             aria-label='Clear search'
             onMouseDown={keepFocus}
             onClick={() => onChange('')}
-            className='text-muted-foreground hover:text-foreground hover:bg-muted -mr-2 grid size-8 place-items-center rounded-md transition-colors'
+            className='-mr-2 grid size-8 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'
           >
             <XIcon className='size-4' />
           </button>
@@ -169,7 +167,7 @@ export function SearchBox({
           role='listbox'
           aria-label='Suggestions'
           onMouseDown={keepFocus}
-          className='animate-pop-in bg-popover text-popover-foreground ring-foreground/10 absolute inset-x-0 top-14 z-40 max-h-[min(28rem,70vh)] overflow-y-auto rounded-xl p-2 shadow-lg ring-1'
+          className='animate-pop-in absolute inset-x-0 top-14 z-40 max-h-[min(28rem,70vh)] overflow-y-auto rounded-xl bg-popover p-2 text-popover-foreground shadow-lg ring-1 ring-foreground/10'
         >
           {sections.map((section, sectionIndex) =>
             section.items.length === 0 ? null : (
@@ -177,8 +175,8 @@ export function SearchBox({
                 <div
                   role='presentation'
                   className={cn(
-                    'text-muted-foreground px-2.5 pt-1.5 pb-2 text-[11px] tracking-widest uppercase',
-                    sectionIndex > 0 && 'mt-1.5 border-t pt-3',
+                    'px-2.5 pt-1.5 pb-2 text-[11px] tracking-widest text-muted-foreground uppercase',
+                    sectionIndex > 0 && 'mt-1.5 border-t pt-3'
                   )}
                 >
                   {section.heading}
@@ -189,7 +187,7 @@ export function SearchBox({
                   className={cn(
                     section.layout === 'chips'
                       ? 'flex flex-wrap gap-1.5 px-2 pb-2'
-                      : 'flex flex-col',
+                      : 'flex flex-col'
                   )}
                 >
                   {section.items.map((item, itemIndex) => {
@@ -212,8 +210,8 @@ export function SearchBox({
                           {...optionProps}
                           onClick={() => choose(item)}
                           className={cn(
-                            'bg-background [&_svg]:text-primary-text flex h-8.5 items-center gap-2 rounded-lg border px-3 text-[13px] transition-colors [&_svg]:size-3.5',
-                            isActive && 'border-primary-text/60 bg-card',
+                            'flex h-8.5 items-center gap-2 rounded-lg border bg-background px-3 text-[13px] transition-colors [&_svg]:size-3.5 [&_svg]:text-primary-text',
+                            isActive && 'border-primary-text/60 bg-card'
                           )}
                         >
                           {item.icon}
@@ -221,7 +219,7 @@ export function SearchBox({
                             <Highlighted text={item.label} query={query} />
                           </span>
                           {item.count !== undefined && (
-                            <span className='text-muted-foreground text-[11px]'>
+                            <span className='text-[11px] text-muted-foreground'>
                               {item.count}
                             </span>
                           )}
@@ -237,27 +235,27 @@ export function SearchBox({
                             <Highlighted text={item.label} query={query} />
                           </span>
                           {item.meta && (
-                            <span className='text-muted-foreground block truncate text-xs'>
+                            <span className='block truncate text-xs text-muted-foreground'>
                               {item.meta}
                             </span>
                           )}
                         </span>
                         {item.count !== undefined && (
-                          <span className='text-muted-foreground text-xs'>
+                          <span className='text-xs text-muted-foreground'>
                             {item.count}
                           </span>
                         )}
                         {item.href && (
                           <ArrowUpRightIcon
                             aria-hidden
-                            className='text-muted-foreground size-4'
+                            className='size-4 text-muted-foreground'
                           />
                         )}
                       </>
                     );
                     const rowClass = cn(
                       'flex min-h-12 w-full items-center gap-3 rounded-lg px-2.5 py-1.5 text-left transition-colors',
-                      isActive && 'bg-accent',
+                      isActive && 'bg-accent'
                     );
 
                     return item.href ? (
@@ -284,11 +282,11 @@ export function SearchBox({
                   })}
                 </div>
               </Fragment>
-            ),
+            )
           )}
 
           {items.length === 0 && query && (
-            <p className='text-muted-foreground px-2.5 py-3 text-[13px]'>
+            <p className='px-2.5 py-3 text-[13px] text-muted-foreground'>
               {emptyText}
             </p>
           )}
@@ -303,12 +301,12 @@ export function SearchBox({
               onMouseEnter={() => setActive(items.length)}
               onClick={close}
               className={cn(
-                'text-body mt-1.5 flex min-h-10 w-full items-center justify-between rounded-lg border-t px-2.5 text-left text-[13px] transition-colors',
-                active === items.length && 'bg-accent',
+                'mt-1.5 flex min-h-10 w-full items-center justify-between rounded-lg border-t px-2.5 text-left text-[13px] text-body transition-colors',
+                active === items.length && 'bg-accent'
               )}
             >
               Show all {resultsLabel}
-              <kbd className='text-muted-foreground rounded-md border px-1.5 text-[11px]'>
+              <kbd className='rounded-md border px-1.5 text-[11px] text-muted-foreground'>
                 Enter
               </kbd>
             </button>

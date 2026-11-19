@@ -331,7 +331,7 @@
   }
   /* Next only turns smooth scrolling off for route changes when <html> also has data-scroll-behavior="smooth" */
   html {
-    @apply bg-background scroll-smooth;
+    @apply scroll-smooth bg-background;
   }
   body {
     @apply bg-background text-foreground;

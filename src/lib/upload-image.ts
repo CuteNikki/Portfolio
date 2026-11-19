@@ -1,7 +1,6 @@
 'use client';
 
 import { requestImageUpload } from '@/actions/upload';
-
 import {
   IMAGE_SIZE_NAMES,
   IMAGE_SIZES,
@@ -24,7 +23,7 @@ async function shrink(bitmap: ImageBitmap, size: number, type: ImageType) {
   context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
 
   const blob = await new Promise<Blob | null>((resolve) =>
-    canvas.toBlob(resolve, type, 0.85),
+    canvas.toBlob(resolve, type, 0.85)
   );
   if (!blob) throw new Error("This picture couldn't be prepared for upload.");
   return blob;
@@ -79,11 +78,11 @@ function put(url: string, blob: Blob, onProgress: (sent: number) => void) {
  */
 export async function uploadImage(
   file: File,
-  onProgress: (progress: number) => void,
+  onProgress: (progress: number) => void
 ) {
   const { type, copies } = await shrinkAll(file);
   const sizes = Object.fromEntries(
-    IMAGE_SIZE_NAMES.map((size) => [size, copies[size].size]),
+    IMAGE_SIZE_NAMES.map((size) => [size, copies[size].size])
   ) as Record<ImageSize, number>;
   const total = IMAGE_SIZE_NAMES.reduce((sum, size) => sum + sizes[size], 0);
 
@@ -94,7 +93,7 @@ export async function uploadImage(
   let done = 0;
   for (const size of IMAGE_SIZE_NAMES) {
     await put(uploads[size], copies[size], (sent) =>
-      onProgress((done + sent) / total),
+      onProgress((done + sent) / total)
     );
     done += copies[size].size;
   }

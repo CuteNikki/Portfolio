@@ -28,7 +28,7 @@ function storage() {
   const secretAccessKey = process.env.STORAGE_SECRET_ACCESS_KEY;
   if (!accessKeyId || !secretAccessKey) {
     throw new Error(
-      'STORAGE_ACCESS_KEY_ID and STORAGE_SECRET_ACCESS_KEY must be set to upload pictures',
+      'STORAGE_ACCESS_KEY_ID and STORAGE_SECRET_ACCESS_KEY must be set to upload pictures'
     );
   }
 
@@ -51,7 +51,7 @@ const apiUrl = (objectKey = '') =>
 export async function signUpload(
   objectKey: string,
   type: string,
-  size: number,
+  size: number
 ) {
   const url = apiUrl(objectKey);
   url.searchParams.set('X-Amz-Expires', String(UPLOAD_LINK_SECONDS));
@@ -88,7 +88,7 @@ export async function listObjects(prefix: string) {
     for (const [, entry] of xml.matchAll(/<Contents>([\s\S]*?)<\/Contents>/g)) {
       const key = entry.match(/<Key>([^<]*)<\/Key>/)?.[1];
       const modified = entry.match(
-        /<LastModified>([^<]*)<\/LastModified>/,
+        /<LastModified>([^<]*)<\/LastModified>/
       )?.[1];
       const size = Number(entry.match(/<Size>([^<]*)<\/Size>/)?.[1] ?? 0);
       if (key && modified) {
@@ -100,7 +100,7 @@ export async function listObjects(prefix: string) {
       }
     }
     token = xml.match(
-      /<NextContinuationToken>([^<]*)<\/NextContinuationToken>/,
+      /<NextContinuationToken>([^<]*)<\/NextContinuationToken>/
     )?.[1];
   } while (token);
 

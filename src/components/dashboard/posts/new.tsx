@@ -1,31 +1,30 @@
 'use client';
 
+import { LINKS } from '@/constants/links';
 import { useRouter } from 'next/navigation';
 import { useLayoutEffect, useRef, useState, useTransition } from 'react';
-import { toast } from '@/lib/toast';
 
 import { createPost } from '@/actions/post';
-
 import type { AuthorEntry } from '@/lib/authors';
-import { LINKS } from '@/constants/links';
+import { toast } from '@/lib/toast';
 
-import {
-  type AuthorOption,
-  AuthorsField,
-} from '@/components/dashboard/shared/authors-field';
-import { CoverField } from '@/components/dashboard/shared/image-fields';
 import {
   getEditAction,
   type SubmitIntent,
 } from '@/components/dashboard/shared/actions-edit';
 import { NewActionButtons } from '@/components/dashboard/shared/actions-new';
-import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
+import {
+  AuthorsField,
+  type AuthorOption,
+} from '@/components/dashboard/shared/authors-field';
 import {
   Field,
   FormCard,
   FormColumns,
   MarkdownField,
 } from '@/components/dashboard/shared/form-parts';
+import { CoverField } from '@/components/dashboard/shared/image-fields';
+import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
 import { Input } from '@/components/ui/input';
 
 export function NewPostForm({

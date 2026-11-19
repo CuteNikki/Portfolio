@@ -1,8 +1,7 @@
+import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 
 import { formatShortDate } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
 
 import { StoredImage } from '@/components/common/stored-image';
 import { ContentActions } from '@/components/dashboard/shared/content-actions';
@@ -28,7 +27,7 @@ export function ContentRow({ item }: { item: ContentRowItem }) {
 
   return (
     <li className='flex items-center gap-4 px-5 py-3'>
-      <span className='bg-muted rounded-thumb relative h-7 w-14 shrink-0 overflow-hidden'>
+      <span className='relative h-7 w-14 shrink-0 overflow-hidden rounded-thumb bg-muted'>
         {item.coverUrl && (
           <StoredImage
             url={item.coverUrl}
@@ -42,11 +41,11 @@ export function ContentRow({ item }: { item: ContentRowItem }) {
       <span className='min-w-0 flex-1'>
         <Link
           href={editHref}
-          className='hover:text-primary-text block truncate text-sm font-semibold transition-colors'
+          className='block truncate text-sm font-semibold transition-colors hover:text-primary-text'
         >
           {item.title}
         </Link>
-        <span className='text-muted-foreground block truncate text-xs'>
+        <span className='block truncate text-xs text-muted-foreground'>
           {isPost ? 'Post' : 'Project'} ·{' '}
           <span className='hidden sm:inline'>updated </span>
           {formatShortDate(item.updatedAt)}

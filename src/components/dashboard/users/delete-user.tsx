@@ -1,9 +1,9 @@
 'use client';
 
 import { useTransition } from 'react';
-import { toast } from '@/lib/toast';
 
 import { deleteUser } from '@/actions/user';
+import { toast } from '@/lib/toast';
 
 import {
   AlertDialog,

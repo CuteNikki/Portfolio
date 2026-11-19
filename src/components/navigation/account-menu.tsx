@@ -4,9 +4,8 @@ import { useEffect } from 'react';
 
 import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
 
-import type { Role } from '@/lib/generated/prisma/enums';
-
 import { setCanWrite } from '@/lib/can-write';
+import type { Role } from '@/lib/generated/prisma/enums';
 import { cn } from '@/lib/utils';
 
 import { LazyMenu } from '@/components/common/lazy-menu';
@@ -84,7 +83,7 @@ export function AccountTrigger({
 
 const loadMenu = () =>
   import('@/components/navigation/account-menu-loaded').then(
-    (module) => module.default,
+    (module) => module.default
   );
 
 // The account dropdown. On phones (`withPages`) the same menu also holds the page links, in their own group under the

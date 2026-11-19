@@ -1,12 +1,12 @@
 'use client';
 
 import {
-  type ColumnSizingState,
-  type ColumnVisibilityState,
   flexRender,
   RowData,
   SortingState,
   useTable,
+  type ColumnSizingState,
+  type ColumnVisibilityState,
 } from '@tanstack/react-table';
 import { useEffect, useRef, useState } from 'react';
 
@@ -22,8 +22,8 @@ import {
 import { cn } from '@/lib/utils';
 
 import {
-  dashboardTableFeatures,
   DashboardColumnDef,
+  dashboardTableFeatures,
 } from '@/components/dashboard/shared/table-features';
 import { Button } from '@/components/ui/button';
 import {
@@ -119,12 +119,12 @@ export function DataTable<TData extends RowData & { id: string }>({
   const [scrolledUnder, setScrolledUnder] = useState(false);
   useEffect(() => {
     const scroller = frame.current?.querySelector<HTMLElement>(
-      '[data-slot="table-container"]',
+      '[data-slot="table-container"]'
     );
     if (!scroller) return;
     const update = () =>
       setScrolledUnder(
-        scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft > 1,
+        scroller.scrollWidth - scroller.clientWidth - scroller.scrollLeft > 1
       );
     update();
     const resized = new ResizeObserver(update);
@@ -141,7 +141,7 @@ export function DataTable<TData extends RowData & { id: string }>({
     cn(
       'sticky right-0 z-10',
       scrolledUnder &&
-        'bg-card shadow-[-10px_0_12px_-10px_rgb(0_0_0/0.4)] group-hover/row:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))]',
+        'bg-card shadow-[-10px_0_12px_-10px_rgb(0_0_0/0.4)] group-hover/row:bg-[color-mix(in_oklab,var(--muted)_50%,var(--card))]'
     );
 
   // Read after the first render, which matches the server's, so the page doesn't change under React as it takes over
@@ -193,8 +193,8 @@ export function DataTable<TData extends RowData & { id: string }>({
       .map((column) =>
         'accessorKey' in column && column.accessorKey
           ? String(column.accessorKey)
-          : column.id,
-      ),
+          : column.id
+      )
   );
   const hasSize = (column: { id: string }) => sizedIds.has(column.id);
   // Wide enough for every sized column and some room for the flexible ones; wider than the page, it scrolls sideways
@@ -214,10 +214,10 @@ export function DataTable<TData extends RowData & { id: string }>({
     <div className='flex flex-col gap-3'>
       <div className='flex items-center gap-2'>
         {/* Like the search on the projects and posts pages, at the height of a button */}
-        <label className='bg-card focus-within:border-primary-text/60 focus-within:ring-primary/20 flex h-10 w-full max-w-sm items-center gap-2.5 rounded-lg border px-3 transition-[border-color,box-shadow] focus-within:ring-3'>
+        <label className='flex h-10 w-full max-w-sm items-center gap-2.5 rounded-lg border bg-card px-3 transition-[border-color,box-shadow] focus-within:border-primary-text/60 focus-within:ring-3 focus-within:ring-primary/20'>
           <SearchIcon
             aria-hidden
-            className='text-muted-foreground size-4 shrink-0'
+            className='size-4 shrink-0 text-muted-foreground'
           />
           <span className='sr-only'>{filterPlaceholder}</span>
           <input
@@ -225,14 +225,14 @@ export function DataTable<TData extends RowData & { id: string }>({
             placeholder={filterPlaceholder}
             value={globalFilter ?? ''}
             onChange={(event) => setGlobalFilter(event.target.value)}
-            className='placeholder:text-muted-foreground h-full min-w-0 flex-1 bg-transparent text-[13px] outline-none [&::-webkit-search-cancel-button]:hidden'
+            className='h-full min-w-0 flex-1 bg-transparent text-[13px] outline-none placeholder:text-muted-foreground [&::-webkit-search-cancel-button]:hidden'
           />
           {globalFilter && (
             <button
               type='button'
               aria-label='Clear search'
               onClick={() => setGlobalFilter('')}
-              className='text-muted-foreground hover:text-foreground hover:bg-muted -mr-1.5 grid size-7 place-items-center rounded-md transition-colors'
+              className='-mr-1.5 grid size-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'
             >
               <XIcon className='size-4' />
             </button>
@@ -283,7 +283,7 @@ export function DataTable<TData extends RowData & { id: string }>({
 
       <div
         ref={frame}
-        className='bg-card w-full overflow-hidden rounded-xl border'
+        className='w-full overflow-hidden rounded-xl border bg-card'
       >
         <Table
           className='lg:min-w-(--table-min) lg:table-fixed'
@@ -301,7 +301,7 @@ export function DataTable<TData extends RowData & { id: string }>({
                       className={cn(
                         'relative',
                         sized && 'lg:w-(--column-width)',
-                        pinned(header.column.id),
+                        pinned(header.column.id)
                       )}
                       style={
                         sized
@@ -315,7 +315,7 @@ export function DataTable<TData extends RowData & { id: string }>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                       {resizable && (
                         // Drag to resize, double-click for the column's usual width. Mouse and touch only; Reset
@@ -329,9 +329,9 @@ export function DataTable<TData extends RowData & { id: string }>({
                         >
                           <span
                             className={cn(
-                              'bg-line-strong absolute inset-y-2 left-1/2 w-px -translate-x-1/2 opacity-0 transition-opacity group-hover/resize:opacity-100',
+                              'absolute inset-y-2 left-1/2 w-px -translate-x-1/2 bg-line-strong opacity-0 transition-opacity group-hover/resize:opacity-100',
                               header.column.getIsResizing() &&
-                                'bg-primary-text opacity-100',
+                                'bg-primary-text opacity-100'
                             )}
                           />
                         </div>
@@ -352,12 +352,12 @@ export function DataTable<TData extends RowData & { id: string }>({
                       // What doesn't fit a narrowed column is cut off at its edge rather than running into the next
                       className={cn(
                         cell.column.getCanResize() && 'lg:overflow-hidden',
-                        pinned(cell.column.id),
+                        pinned(cell.column.id)
                       )}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
@@ -377,7 +377,7 @@ export function DataTable<TData extends RowData & { id: string }>({
         </Table>
       </div>
 
-      <div className='text-muted-foreground flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-[13px]'>
+      <div className='flex flex-wrap items-center justify-between gap-x-6 gap-y-3 text-[13px] text-muted-foreground'>
         <p role='status'>
           {rowCount} {rowCount === 1 ? noun : `${noun}s`}
         </p>

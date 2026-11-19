@@ -3,12 +3,10 @@
 import { useTransition } from 'react';
 
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from 'lucide-react';
-import { toast } from '@/lib/toast';
 
 import { signOutDevice, signOutOtherDevices } from '@/actions/account';
-
 import type { ActionResult } from '@/lib/action-result';
-
+import { toast } from '@/lib/toast';
 import type { DeviceKind } from '@/lib/user-agent';
 
 import { Badge } from '@/components/ui/badge';
@@ -56,7 +54,7 @@ export function DeviceList({ devices }: { devices: Device[] }) {
             <li key={device.id} className='flex items-center gap-4 py-3.5'>
               <Icon
                 aria-hidden
-                className='text-muted-foreground size-5 shrink-0'
+                className='size-5 shrink-0 text-muted-foreground'
               />
               <div className='min-w-0 flex-1'>
                 <p className='flex flex-wrap items-center gap-2 text-sm font-semibold'>
@@ -65,7 +63,7 @@ export function DeviceList({ devices }: { devices: Device[] }) {
                     <Badge variant='secondary'>This device</Badge>
                   )}
                 </p>
-                <p className='text-muted-foreground text-xs'>
+                <p className='text-xs text-muted-foreground'>
                   Last used {device.lastUsed} · signed in {device.signedIn}
                 </p>
               </div>
@@ -78,7 +76,7 @@ export function DeviceList({ devices }: { devices: Device[] }) {
                   onClick={() =>
                     run(
                       () => signOutDevice(device.id),
-                      'Signed that device out',
+                      'Signed that device out'
                     )
                   }
                 >

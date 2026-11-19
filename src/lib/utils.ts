@@ -28,7 +28,7 @@ export function getUserAvatarUrl(
   userId: string,
   discriminator: string,
   avatarHash: string | null,
-  size: number = 64,
+  size: number = 64
 ): string {
   // If they have a custom avatar, return it immediately
   if (avatarHash) {

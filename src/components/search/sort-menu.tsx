@@ -40,14 +40,14 @@ export function SortTrigger({
     >
       <ArrowDownUpIcon className='text-muted-foreground' />
       <span className='hidden sm:inline'>{current.short}</span>
-      <ChevronDownIcon className='text-muted-foreground size-3.5' />
+      <ChevronDownIcon className='size-3.5 text-muted-foreground' />
     </Button>
   );
 }
 
 const loadMenu = () =>
   import('@/components/search/sort-menu-loaded').then(
-    (module) => module.default,
+    (module) => module.default
   );
 
 // The sort button next to a search field. Its menu loads on first use (see LazyMenu).

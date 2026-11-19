@@ -24,6 +24,7 @@ import {
   SiTailwindcss,
   SiTypescript,
 } from '@icons-pack/react-simple-icons';
+
 import { CoffeeIcon, LucideIcon, MailIcon } from 'lucide-react';
 
 import { GithubIcon, LinkedinIcon } from '@/components/common/brand-icons';

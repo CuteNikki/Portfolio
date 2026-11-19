@@ -11,11 +11,11 @@ import {
 } from 'lucide-react';
 
 import {
-  type DateQuery,
   describeDateQuery,
   matchesDateQuery,
   parseDateQuery,
   shortDateQuery,
+  type DateQuery,
 } from '@/lib/date-query';
 import { toneFor } from '@/lib/utils';
 
@@ -24,7 +24,7 @@ import {
   SearchBox,
   type SuggestionSection,
 } from '@/components/search/search-box';
-import { type SortOption, SortMenu } from '@/components/search/sort-menu';
+import { SortMenu, type SortOption } from '@/components/search/sort-menu';
 import { Button } from '@/components/ui/button';
 
 type Sort = 'new' | 'old' | 'views';
@@ -57,14 +57,14 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
         (dates
           ? matchesDateQuery(p.time, dates)
           : !text || `${p.title} ${p.excerpt}`.toLowerCase().includes(text)) &&
-        (!date || matchesDateQuery(p.time, [date])),
+        (!date || matchesDateQuery(p.time, [date]))
     )
     .sort((a, b) =>
       sort === 'views'
         ? b.views - a.views
         : sort === 'old'
           ? a.time - b.time
-          : b.time - a.time,
+          : b.time - a.time
     );
 
   const postItems = (list: PostRowData[]) =>
@@ -95,7 +95,7 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
         id: `date-${shortDateQuery(d)}`,
         label: `Published ${describeDateQuery(d)}`,
         count: posts.filter((p) => matchesDateQuery(p.time, [d])).length,
-        icon: <CalendarIcon className='text-primary-text size-4' />,
+        icon: <CalendarIcon className='size-4 text-primary-text' />,
         onSelect: () => {
           setDate(d);
           setQuery('');
@@ -110,7 +110,7 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
     items: postItems(
       text
         ? shown.slice(0, 4)
-        : [...posts].sort((a, b) => b.time - a.time).slice(0, 3),
+        : [...posts].sort((a, b) => b.time - a.time).slice(0, 3)
     ),
   });
 
@@ -148,7 +148,7 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
               type='button'
               aria-label={`Remove filter: published ${describeDateQuery(date)}`}
               onClick={() => setDate(null)}
-              className='border-primary-text bg-primary-soft text-foreground flex h-9 items-center gap-2 rounded-lg border pr-2.5 pl-3 text-[13px] [&_svg]:size-3.5'
+              className='flex h-9 items-center gap-2 rounded-lg border border-primary-text bg-primary-soft pr-2.5 pl-3 text-[13px] text-foreground [&_svg]:size-3.5'
             >
               <CalendarIcon className='text-primary-text' />
               {shortDateQuery(date)}
@@ -156,7 +156,7 @@ export function PostBrowser({ posts }: { posts: PostRowData[] }) {
             </button>
           )}
         </div>
-        <p role='status' className='text-muted-foreground text-[13px]'>
+        <p role='status' className='text-[13px] text-muted-foreground'>
           {plural(shown.length)}
         </p>
       </div>

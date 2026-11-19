@@ -2,20 +2,21 @@
 
 import dynamic from 'next/dynamic';
 
+import { cn } from '@/lib/utils';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
 
 // The preview's Markdown renderer and syntax highlighter are most of the editor's code, so they load the first time
 // someone opens the Preview tab
 const MarkdownViewer = dynamic(
   () =>
     import('@/components/dashboard/posts/markdown').then(
-      (module) => module.MarkdownViewer,
+      (module) => module.MarkdownViewer
     ),
   {
     loading: () => <p className='text-muted-foreground'>Loading preview…</p>,
-  },
+  }
 );
 
 // The post and project forms: the writing on the left, publishing and the rest in a column on the right that stays
@@ -52,15 +53,15 @@ export function FormCard({
   return (
     <section
       className={cn(
-        'bg-card flex min-w-0 flex-col gap-5 rounded-xl border p-4 sm:p-5',
-        className,
+        'flex min-w-0 flex-col gap-5 rounded-xl border bg-card p-4 sm:p-5',
+        className
       )}
     >
       {title && (
         <header>
           <h2 className='text-[15px] font-bold'>{title}</h2>
           {description && (
-            <p className='text-muted-foreground mt-0.5 text-xs'>
+            <p className='mt-0.5 text-xs text-muted-foreground'>
               {description}
             </p>
           )}
@@ -91,7 +92,7 @@ export function Field({
         {label}
       </label>
       {children}
-      {hint && <p className='text-muted-foreground text-xs'>{hint}</p>}
+      {hint && <p className='text-xs text-muted-foreground'>{hint}</p>}
     </div>
   );
 }
@@ -137,7 +138,7 @@ export function MarkdownField({
         </TabsContent>
 
         <TabsContent value='preview'>
-          <div className='prose catppuccin-macchiato:prose-invert dark:prose-invert border-input min-h-112 w-full max-w-none rounded-lg border px-4 py-3 text-sm wrap-break-word'>
+          <div className='prose min-h-112 w-full max-w-none rounded-lg border border-input px-4 py-3 text-sm wrap-break-word dark:prose-invert catppuccin-macchiato:prose-invert'>
             {value ? (
               <MarkdownViewer content={value} />
             ) : (

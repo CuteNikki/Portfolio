@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 
 import { LoaderCircleIcon, PencilLineIcon, Trash2Icon } from 'lucide-react';
-import { toast } from '@/lib/toast';
 
 import { removePicture } from '@/actions/upload';
+import { toast } from '@/lib/toast';
 
 import { ContextMenuFor } from '@/components/common/menu-at-point';
 import { PictureMenuItems } from '@/components/dashboard/media/picture-menu-items';
@@ -95,7 +95,7 @@ export function RemovePictureButton({
         aria-label={`Delete the ${usage.toLowerCase()} of ${usedBy}`}
         onClick={() => setConfirming(true)}
         disabled={pending}
-        className='bg-card/95 text-destructive hover:bg-card hover:text-destructive absolute top-2 right-2 shadow-sm backdrop-blur-sm transition-opacity group-hover/picture:opacity-100 focus-visible:opacity-100 [@media(hover:hover)]:opacity-0'
+        className='absolute top-2 right-2 bg-card/95 text-destructive shadow-sm backdrop-blur-sm transition-opacity group-hover/picture:opacity-100 hover:bg-card hover:text-destructive focus-visible:opacity-100 [@media(hover:hover)]:opacity-0'
       >
         {pending ? (
           <LoaderCircleIcon className='animate-spin' />

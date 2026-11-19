@@ -1,6 +1,8 @@
+import { LINKS } from '@/constants/links';
+import { PERSONAL_DETAILS } from '@/constants/personal';
+import { SiDiscord } from '@icons-pack/react-simple-icons';
 import Link from 'next/link';
 
-import { SiDiscord } from '@icons-pack/react-simple-icons';
 import {
   CheckIcon,
   CircleQuestionMarkIcon,
@@ -24,9 +26,6 @@ import {
   UserStarIcon,
 } from 'lucide-react';
 
-import { LINKS } from '@/constants/links';
-import { PERSONAL_DETAILS } from '@/constants/personal';
-
 import { cn } from '@/lib/utils';
 
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
@@ -48,7 +47,7 @@ const CONTENT = {
     },
     languageToggle: 'Read in German',
     notice: {
-      icon: <ShieldIcon className='text-primary-text shrink-0' />,
+      icon: <ShieldIcon className='shrink-0 text-primary-text' />,
       title: 'Your Privacy Matters',
       description:
         'This is a portfolio website. We only collect data necessary for its operation.',
@@ -81,7 +80,7 @@ const CONTENT = {
       title: 'Discord OAuth Login',
       description:
         'This website uses Discord OAuth for authentication. When you log in with Discord, we receive and store the following information:',
-      dataIcon: <CheckIcon className='text-primary-text shrink-0' />,
+      dataIcon: <CheckIcon className='shrink-0 text-primary-text' />,
       data: [
         {
           title: 'Discord User ID',
@@ -194,7 +193,7 @@ const CONTENT = {
         //   duration: 'Duration: Session',
         // },
       ],
-      noteIcon: <InfoIcon className='text-primary-text shrink-0' />,
+      noteIcon: <InfoIcon className='shrink-0 text-primary-text' />,
       note: 'These cookies are technically necessary for the operation of the website and cannot be disabled. We do not use any tracking, analytics, or advertising cookies.',
     },
     yourRights: {
@@ -234,7 +233,7 @@ const CONTENT = {
           description: 'Lodge a complaint with your data protection authority',
         },
       ],
-      noticeIcon: <InfoIcon className='text-primary-text shrink-0' />,
+      noticeIcon: <InfoIcon className='shrink-0 text-primary-text' />,
       notice:
         'To exercise any of these rights, please contact us at {mail}. We will respond to your request within 30 days.',
     },
@@ -243,7 +242,7 @@ const CONTENT = {
       title: 'Third-Party Services',
       services: [
         {
-          icon: <SiDiscord className='text-primary-text shrink-0' />,
+          icon: <SiDiscord className='shrink-0 text-primary-text' />,
           name: 'Discord Inc.',
           description:
             "We use Discord's OAuth 2.0 API for authentication and Discord's API. When you use this site, your data is processed by Discord according to their privacy policy.",
@@ -262,7 +261,7 @@ const CONTENT = {
       title: 'Data Security',
       description:
         'We implement appropriate technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse:',
-      measuresIcon: <CheckIcon className='text-primary-text shrink-0' />,
+      measuresIcon: <CheckIcon className='shrink-0 text-primary-text' />,
       measures: [
         'HTTPS/TLS encryption for all connections',
         'Regular security updates',
@@ -288,7 +287,7 @@ const CONTENT = {
     },
     languageToggle: 'Read in English',
     notice: {
-      icon: <ShieldIcon className='text-primary-text shrink-0' />,
+      icon: <ShieldIcon className='shrink-0 text-primary-text' />,
       title: 'Ihre Privatsphäre ist uns wichtig',
       description:
         'Dies ist eine Portfolio-Website. Wir erfassen nur Daten, die für den Betrieb notwendig sind.',
@@ -321,7 +320,7 @@ const CONTENT = {
       title: 'Discord OAuth Login',
       description:
         'Diese Seite verwendet Discord OAuth zur Authentifizierung. Wenn Sie sich mit Discord anmelden, erhalten und speichern wir folgende Informationen:',
-      dataIcon: <CheckIcon className='text-primary-text shrink-0' />,
+      dataIcon: <CheckIcon className='shrink-0 text-primary-text' />,
       data: [
         {
           title: 'Discord User ID',
@@ -435,7 +434,7 @@ const CONTENT = {
         //   duration: 'Dauer: Sitzung',
         // },
       ],
-      noteIcon: <InfoIcon className='text-primary-text shrink-0' />,
+      noteIcon: <InfoIcon className='shrink-0 text-primary-text' />,
       note: 'Diese Cookies sind technisch notwendig für den Betrieb der Website und können nicht deaktiviert werden. Wir verwenden keine Tracking-, Analyse- oder Werbe-Cookies.',
     },
     yourRights: {
@@ -480,7 +479,7 @@ const CONTENT = {
             'Reichen Sie eine Beschwerde bei Ihrer zuständigen Datenschutzbehörde ein',
         },
       ],
-      noticeIcon: <InfoIcon className='text-primary-text shrink-0' />,
+      noticeIcon: <InfoIcon className='shrink-0 text-primary-text' />,
       notice:
         'Um eines dieser Rechte auszuüben, kontaktieren Sie uns bitte unter {mail}. Wir werden Ihre Anfrage innerhalb von 30 Tagen beantworten.',
     },
@@ -489,7 +488,7 @@ const CONTENT = {
       title: 'Drittanbieter-Dienste',
       services: [
         {
-          icon: <SiDiscord className='text-primary-text shrink-0' />,
+          icon: <SiDiscord className='shrink-0 text-primary-text' />,
           name: 'Discord Inc.',
           description:
             'Wir verwenden Discords OAuth 2.0 API für die Authentifizierung und Discords API. Wenn Sie diese Seite nutzen, werden Ihre Daten von Discord gemäß deren Datenschutzrichtlinie verarbeitet.',
@@ -508,7 +507,7 @@ const CONTENT = {
       title: 'Datensicherheit',
       description:
         'Wir setzen geeignete technische und organisatorische Maßnahmen ein, um Ihre personenbezogenen Daten vor unbefugtem Zugriff, Verlust oder Missbrauch zu schützen:',
-      measuresIcon: <CheckIcon className='text-primary-text shrink-0' />,
+      measuresIcon: <CheckIcon className='shrink-0 text-primary-text' />,
       measures: [
         'HTTPS/TLS-Verschlüsselung für alle Verbindungen',
         'Regelmäßige Sicherheitsupdates',
@@ -566,7 +565,7 @@ export function PrivacyContent({
           <div data-reveal=''>
             <LegalNote icon={content.notice.icon} className='px-5 py-4'>
               <p className='text-[15px] font-bold'>{content.notice.title}</p>
-              <p className='text-body mt-1'>{content.notice.description}</p>
+              <p className='mt-1 text-body'>{content.notice.description}</p>
             </LegalNote>
           </div>
 
@@ -582,7 +581,7 @@ export function PrivacyContent({
                 <li className='text-muted-foreground'>
                   {content.dataController.addressLine1}
                 </li>
-                <li className='text-muted-foreground pb-2'>
+                <li className='pb-2 text-muted-foreground'>
                   {content.dataController.addressLine2}
                 </li>
               </ul>
@@ -601,7 +600,7 @@ export function PrivacyContent({
                 <li key={title} className='flex flex-row items-center gap-4'>
                   {content.discordOAuthLogin.dataIcon}
                   <p className='text-muted-foreground'>
-                    <b className='text-foreground whitespace-nowrap'>{title}</b>
+                    <b className='whitespace-nowrap text-foreground'>{title}</b>
                     {' - '}
                     {description}
                   </p>
@@ -623,7 +622,7 @@ export function PrivacyContent({
                 href={content.discordOAuthLogin.dataSharing.url}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='hover:text-primary-text underline underline-offset-4 transition-colors'
+                className='underline underline-offset-4 transition-colors hover:text-primary-text'
               >
                 {content.discordOAuthLogin.dataSharing.privacyPolicy}
               </Link>
@@ -639,7 +638,7 @@ export function PrivacyContent({
             <ul
               className={cn(
                 LEGAL_BOX,
-                'marker:text-primary-text flex list-outside list-disc flex-col gap-2 pl-8',
+                'flex list-outside list-disc flex-col gap-2 pl-8 marker:text-primary-text'
               )}
             >
               {content.serverLogs.data.map((text) => (
@@ -671,7 +670,7 @@ export function PrivacyContent({
             <ul
               className={cn(
                 LEGAL_BOX,
-                'marker:text-primary-text flex list-outside list-disc flex-col gap-2 pl-8',
+                'flex list-outside list-disc flex-col gap-2 pl-8 marker:text-primary-text'
               )}
             >
               {content.dataRetention.data.map(({ title, description }) => (
@@ -695,16 +694,16 @@ export function PrivacyContent({
                   <li key={title} className={LEGAL_BOX}>
                     <div className='flex flex-col gap-2'>
                       <h3 className='flex gap-2'>
-                        <Icon className='text-primary-text shrink-0' />
+                        <Icon className='shrink-0 text-primary-text' />
                         {title} {essential}
                       </h3>
                       <p className='text-muted-foreground'>{description}</p>
-                      <p className='text-muted-foreground text-sm'>
+                      <p className='text-sm text-muted-foreground'>
                         {duration}
                       </p>
                     </div>
                   </li>
-                ),
+                )
               )}
             </ul>
             <LegalNote icon={content.cookiesAndSessions.noteIcon}>
@@ -722,19 +721,19 @@ export function PrivacyContent({
               {content.yourRights.rights.map(
                 ({ icon: Icon, name, description }) => (
                   <li key={name} className={cn(LEGAL_BOX, 'flex gap-4')}>
-                    <Icon className='text-primary-text shrink-0' />
+                    <Icon className='shrink-0 text-primary-text' />
                     <div className='flex flex-col'>
                       <h3>{name}</h3>
                       <p className='text-muted-foreground'>{description}</p>
                     </div>
                   </li>
-                ),
+                )
               )}
             </ul>
             <LegalNote icon={content.yourRights.noticeIcon}>
               {content.yourRights.notice.replace(
                 '{mail}',
-                PERSONAL_DETAILS.email,
+                PERSONAL_DETAILS.email
               )}
             </LegalNote>
           </LegalSection>
@@ -749,7 +748,7 @@ export function PrivacyContent({
                 key={service.name}
                 className={cn(LEGAL_BOX, 'flex flex-col gap-2')}
               >
-                <h3 className='text-foreground flex items-center gap-2 text-[15px] font-semibold'>
+                <h3 className='flex items-center gap-2 text-[15px] font-semibold text-foreground'>
                   {service.icon}
                   {service.name}
                 </h3>
@@ -762,7 +761,7 @@ export function PrivacyContent({
                   href={service.url}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='hover:text-primary-text flex items-center gap-2 text-sm underline underline-offset-4 transition-colors'
+                  className='flex items-center gap-2 text-sm underline underline-offset-4 transition-colors hover:text-primary-text'
                 >
                   {service.privacyPolicy}
                   <ExternalLinkIcon className='size-4 shrink-0' />
@@ -798,7 +797,7 @@ export function PrivacyContent({
             <div className={LEGAL_BOX}>
               <EmailAndPhone language={language} />
             </div>
-            <p className='text-muted-foreground text-sm'>
+            <p className='text-sm text-muted-foreground'>
               {content.questions.note}
             </p>
           </LegalSection>

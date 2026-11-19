@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { toast } from '@/lib/toast';
 
 import {
   ClipboardCopyIcon,
@@ -11,7 +10,12 @@ import {
 } from 'lucide-react';
 
 import { deleteComment } from '@/actions/post';
+import { toast } from '@/lib/toast';
 
+import {
+  CommentActionsTrigger,
+  type CommentActionsProps,
+} from '@/components/dashboard/posts/comment-actions';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,10 +26,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import {
-  CommentActionsTrigger,
-  type CommentActionsProps,
-} from '@/components/dashboard/posts/comment-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,

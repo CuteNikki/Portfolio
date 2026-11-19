@@ -13,11 +13,11 @@ import {
 } from 'lucide-react';
 
 import {
-  type DateQuery,
   describeDateQuery,
   matchesDateQuery,
   parseDateQuery,
   shortDateQuery,
+  type DateQuery,
 } from '@/lib/date-query';
 import { imageUrl } from '@/lib/images';
 import { cn } from '@/lib/utils';
@@ -30,7 +30,7 @@ import {
   SearchBox,
   type SuggestionSection,
 } from '@/components/search/search-box';
-import { type SortOption, SortMenu } from '@/components/search/sort-menu';
+import { SortMenu, type SortOption } from '@/components/search/sort-menu';
 import { Button } from '@/components/ui/button';
 
 type Sort = 'new' | 'old' | 'az';
@@ -49,7 +49,7 @@ const SORTS: SortOption<Sort>[] = [
 // How many times each value appears across the projects, most common first
 function countValues(
   projects: ProjectCardData[],
-  pick: (p: ProjectCardData) => string[],
+  pick: (p: ProjectCardData) => string[]
 ) {
   const counts = new Map<string, number>();
   for (const project of projects) {
@@ -57,7 +57,7 @@ function countValues(
       counts.set(value, (counts.get(value) ?? 0) + 1);
   }
   return [...counts.entries()].sort(
-    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0])
   );
 }
 
@@ -90,14 +90,14 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
   const shown = projects
     .filter(
       (p) =>
-        matchesQuery(p) && matchesFilters(p) && (!tag || p.tags.includes(tag)),
+        matchesQuery(p) && matchesFilters(p) && (!tag || p.tags.includes(tag))
     )
     .sort((a, b) =>
       sort === 'az'
         ? a.title.localeCompare(b.title)
         : sort === 'old'
           ? a.time - b.time
-          : b.time - a.time,
+          : b.time - a.time
     );
 
   const tags = countValues(projects, (p) => p.tags);
@@ -146,7 +146,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
         heading: 'Recently published',
         layout: 'list',
         items: projectItems(
-          [...projects].sort((a, b) => b.time - a.time).slice(0, 3),
+          [...projects].sort((a, b) => b.time - a.time).slice(0, 3)
         ),
       },
     ];
@@ -160,7 +160,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
           id: `date-${shortDateQuery(d)}`,
           label: `Published ${describeDateQuery(d)}`,
           count: projects.filter((p) => matchesDateQuery(p.time, [d])).length,
-          icon: <CalendarIcon className='text-primary-text size-4' />,
+          icon: <CalendarIcon className='size-4 text-primary-text' />,
           onSelect: () => {
             setDate(d);
             setQuery('');
@@ -258,7 +258,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
                 (p) =>
                   matchesQuery(p) &&
                   matchesFilters(p) &&
-                  (!t || p.tags.includes(t)),
+                  (!t || p.tags.includes(t))
               ).length;
               return (
                 <button
@@ -270,11 +270,11 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
                     'flex h-9 items-center gap-2 rounded-lg border px-3 text-[13px] transition-colors',
                     on
                       ? 'border-primary-text bg-primary-soft text-foreground'
-                      : 'bg-card text-body hover:border-line-strong hover:text-foreground',
+                      : 'bg-card text-body hover:border-line-strong hover:text-foreground'
                   )}
                 >
                   {t ?? 'All'}
-                  <span className='text-muted-foreground text-[11px]'>
+                  <span className='text-[11px] text-muted-foreground'>
                     {count}
                   </span>
                 </button>
@@ -297,7 +297,7 @@ export function ProjectBrowser({ projects }: { projects: ProjectCardData[] }) {
             />
           )}
         </div>
-        <p role='status' className='text-muted-foreground text-[13px]'>
+        <p role='status' className='text-[13px] text-muted-foreground'>
           {plural(shown.length)}
         </p>
       </div>
@@ -344,7 +344,7 @@ function ActiveFilter({
       type='button'
       aria-label={`Remove filter: ${description}`}
       onClick={onRemove}
-      className='border-primary-text bg-primary-soft text-foreground flex h-9 items-center gap-2 rounded-lg border pr-2.5 pl-3 text-[13px] [&_svg]:size-3.5'
+      className='flex h-9 items-center gap-2 rounded-lg border border-primary-text bg-primary-soft pr-2.5 pl-3 text-[13px] text-foreground [&_svg]:size-3.5'
     >
       <span className='text-primary-text'>{icon}</span>
       {label}
@@ -380,7 +380,7 @@ function ProjectSwatch({
         'relative h-7.5 w-12 shrink-0 overflow-hidden rounded-md',
         // A colour picked by hand is shown as it is, as on the cards
         !tone.startsWith('#') &&
-          'bg-[color-mix(in_oklab,var(--tone)_18%,var(--card))]',
+          'bg-[color-mix(in_oklab,var(--tone)_18%,var(--card))]'
       )}
       style={
         {
@@ -389,7 +389,7 @@ function ProjectSwatch({
         } as React.CSSProperties
       }
     >
-      <span className='bg-card absolute inset-x-[14%] top-[22%] bottom-[-10%] rounded-[3px]' />
+      <span className='absolute inset-x-[14%] top-[22%] bottom-[-10%] rounded-[3px] bg-card' />
     </span>
   );
 }

@@ -1,3 +1,5 @@
+import { LINKS } from '@/constants/links';
+import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -6,24 +8,22 @@ import { Suspense } from 'react';
 
 import { LogInIcon, PencilLineIcon } from 'lucide-react';
 
-import { LINKS } from '@/constants/links';
-import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 import { getDisplaySession } from '@/lib/auth';
 import {
+  authorsOf,
   getComments,
   getDraftPost,
   getPublishedPost,
   getPublishedPosts,
-  authorsOf,
 } from '@/lib/data';
 import { headingsOf, readingMinutes, toDescription } from '@/lib/markdown';
 import { formatShortDate } from '@/lib/utils';
 
+import { AuthorName } from '@/components/common/author-name';
 import { ReadingColumns } from '@/components/common/reading-columns';
 import { ScrollReveal } from '@/components/common/scroll-reveal';
-import { TableOfContents } from '@/components/common/table-of-contents';
 import { StoredImage } from '@/components/common/stored-image';
-import { AuthorName } from '@/components/common/author-name';
+import { TableOfContents } from '@/components/common/table-of-contents';
 import { WriterMenu } from '@/components/common/writer-menu';
 import { WriterOnly } from '@/components/common/writer-only';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
@@ -135,13 +135,13 @@ async function PostContent({
           />
           <nav
             aria-label='Breadcrumb'
-            className='animate-hero-in text-muted-foreground text-[13px]'
+            className='animate-hero-in text-[13px] text-muted-foreground'
           >
             <ol className='flex flex-wrap items-center gap-2'>
               <li>
                 <Link
                   href={LINKS.posts.url}
-                  className='nav-underline hover:text-foreground lowercase transition-colors'
+                  className='nav-underline lowercase transition-colors hover:text-foreground'
                 >
                   posts
                 </Link>
@@ -149,7 +149,7 @@ async function PostContent({
               <li aria-hidden>/</li>
               <li
                 aria-current='page'
-                className='text-foreground truncate lowercase'
+                className='truncate text-foreground lowercase'
               >
                 {post.slug ?? post.title}
               </li>
@@ -161,7 +161,7 @@ async function PostContent({
           </h1>
 
           <div className='animate-hero-in flex flex-col gap-5 delay-2 sm:flex-row sm:items-center sm:justify-between'>
-            <div className='text-muted-foreground flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px]'>
+            <div className='flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-muted-foreground'>
               {authors.length > 0 && (
                 <span className='flex flex-wrap items-center gap-x-3 gap-y-1.5'>
                   {authors.map((author) => (
@@ -202,7 +202,7 @@ async function PostContent({
           <div
             data-reveal=''
             style={{ '--reveal-index': 3 } as React.CSSProperties}
-            className='bg-muted relative mx-auto aspect-2/1 w-full max-w-4xl overflow-hidden rounded-xl border'
+            className='relative mx-auto aspect-2/1 w-full max-w-4xl overflow-hidden rounded-xl border bg-muted'
           >
             <StoredImage
               url={post.coverUrl}
@@ -235,7 +235,7 @@ async function PostContent({
       <ScrollReveal className='mx-auto w-full max-w-4xl'>
         <section
           aria-labelledby='comments-heading'
-          className='bg-card mt-2 flex flex-col gap-6 rounded-xl border p-5 sm:mt-4 sm:p-8 lg:mt-6'
+          className='mt-2 flex flex-col gap-6 rounded-xl border bg-card p-5 sm:mt-4 sm:p-8 lg:mt-6'
         >
           <h2
             id='comments-heading'
@@ -261,7 +261,7 @@ async function CommentCount({ postId }: { postId: string }) {
   await connection();
   const comments = await getComments(postId);
   return (
-    <span className='text-muted-foreground font-normal'>{comments.length}</span>
+    <span className='font-normal text-muted-foreground'>{comments.length}</span>
   );
 }
 
@@ -278,7 +278,7 @@ async function Comments({ post, path }: { post: Post; path: string }) {
     <>
       {session?.user ? (
         <div className='flex flex-col gap-3'>
-          <p className='text-muted-foreground flex items-center gap-2 text-[13px]'>
+          <p className='flex items-center gap-2 text-[13px] text-muted-foreground'>
             <Avatar className='size-6 rounded-md after:rounded-md'>
               <AvatarImage
                 src={session.user.avatarUrl}
@@ -297,8 +297,8 @@ async function Comments({ post, path }: { post: Post; path: string }) {
           <CommentForm postId={post.id} slug={post.slug || ''} />
         </div>
       ) : (
-        <div className='bg-background flex flex-col items-start justify-between gap-4 rounded-xl border p-5 sm:flex-row sm:items-center'>
-          <p className='text-body text-sm'>
+        <div className='flex flex-col items-start justify-between gap-4 rounded-xl border bg-background p-5 sm:flex-row sm:items-center'>
+          <p className='text-sm text-body'>
             Sign in with Discord to join the conversation.
           </p>
           <Button asChild>

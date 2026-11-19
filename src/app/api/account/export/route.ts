@@ -9,7 +9,7 @@ export async function GET() {
   if (!session) {
     return NextResponse.json(
       { error: 'Sign in to download your data.' },
-      { status: 401 },
+      { status: 401 }
     );
   }
 

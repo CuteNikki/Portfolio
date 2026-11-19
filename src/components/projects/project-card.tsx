@@ -2,10 +2,9 @@ import Link from 'next/link';
 
 import { ArrowUpRightIcon } from 'lucide-react';
 
-import { WriterMenu } from '@/components/common/writer-menu';
-
 import { cn } from '@/lib/utils';
 
+import { WriterMenu } from '@/components/common/writer-menu';
 import { ProjectThumbnail } from '@/components/projects/project-thumbnail';
 import { Badge } from '@/components/ui/badge';
 
@@ -59,8 +58,8 @@ export function ProjectCard({
             : ({ '--reveal-index': revealIndex } as React.CSSProperties)
         }
         className={cn(
-          'card-lift group bg-card flex flex-col overflow-hidden rounded-xl border',
-          featured && 'lg:col-span-2',
+          'card-lift group flex flex-col overflow-hidden rounded-xl border bg-card',
+          featured && 'lg:col-span-2'
         )}
       >
         <ProjectThumbnail
@@ -85,13 +84,13 @@ export function ProjectCard({
             </h3>
             <ArrowUpRightIcon
               aria-hidden
-              className='text-primary-text size-4 shrink-0 -translate-x-1 translate-y-1 opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-0 group-hover:opacity-100 group-focus-visible:translate-0 group-focus-visible:opacity-100'
+              className='size-4 shrink-0 -translate-x-1 translate-y-1 text-primary-text opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-0 group-hover:opacity-100 group-focus-visible:translate-0 group-focus-visible:opacity-100'
             />
           </div>
-          <p className='text-body line-clamp-3 text-[13px]'>
+          <p className='line-clamp-3 text-[13px] text-body'>
             {project.excerpt}
           </p>
-          <div className='text-muted-foreground mt-auto flex flex-col gap-1 pt-2 text-xs'>
+          <div className='mt-auto flex flex-col gap-1 pt-2 text-xs text-muted-foreground'>
             <time dateTime={new Date(project.time).toISOString()}>
               {project.date}
             </time>

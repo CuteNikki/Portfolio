@@ -1,13 +1,11 @@
 'use client';
 
+import { canWrite } from '@/constants/roles';
 import { useState } from 'react';
 
+import type { PublicUser } from '@/lib/data';
 import type { Comment as CommentType } from '@/lib/generated/prisma/browser';
 import type { Role } from '@/lib/generated/prisma/enums';
-
-import type { PublicUser } from '@/lib/data';
-
-import { canWrite } from '@/constants/roles';
 
 import { Comment } from '@/components/dashboard/posts/comment';
 
@@ -27,7 +25,7 @@ export function CommentWrapper({
     // The page's comments section has the heading; `id` is where links to the comments jump to
     <div id='comments' className='flex scroll-mt-24 flex-col gap-4'>
       {post.comments.length === 0 ? (
-        <p className='text-muted-foreground text-sm'>
+        <p className='text-sm text-muted-foreground'>
           No comments yet. Be the first!
         </p>
       ) : (

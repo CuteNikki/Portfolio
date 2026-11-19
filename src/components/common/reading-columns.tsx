@@ -15,7 +15,7 @@ export function ReadingColumns({
       {...props}
       className={cn(
         'mx-auto grid w-full max-w-3xl gap-10 xl:max-w-none xl:grid-cols-[minmax(0,1fr)_minmax(0,48rem)_minmax(0,1fr)]',
-        className,
+        className
       )}
     >
       <div className='min-w-0 xl:col-start-2'>{children}</div>

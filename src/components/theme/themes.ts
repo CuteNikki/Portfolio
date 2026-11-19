@@ -1,10 +1,10 @@
 import {
   CoffeeIcon,
-  type LucideIcon,
   MonitorIcon,
   MoonIcon,
   MoonStarIcon,
   SunIcon,
+  type LucideIcon,
 } from 'lucide-react';
 
 export const THEMES: { id: string; label: string; icon: LucideIcon }[] = [

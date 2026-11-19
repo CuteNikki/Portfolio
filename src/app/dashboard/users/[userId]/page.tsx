@@ -1,17 +1,15 @@
+import { LINKS } from '@/constants/links';
+import { ROLE_LABELS } from '@/constants/roles';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { UserRoundCogIcon } from 'lucide-react';
 
-import { Role } from '@/lib/generated/prisma/enums';
-
 import { requireWriter } from '@/lib/auth';
+import { Role } from '@/lib/generated/prisma/enums';
 import prisma from '@/lib/prisma';
 import { formatShortDate, proxiedAvatarUrl, shorten } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
-import { ROLE_LABELS } from '@/constants/roles';
 
 import { CommentActions } from '@/components/dashboard/comments/columns';
 import { ContentRow } from '@/components/dashboard/shared/content-row';
@@ -122,7 +120,7 @@ export default async function UserPage({
             <h1 className='truncate text-[28px] leading-tight font-bold tracking-tighter'>
               {name}
             </h1>
-            <p className='text-muted-foreground mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]'>
+            <p className='mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-muted-foreground'>
               <span>@{user.username}</span>
               <Badge
                 variant={user.role === Role.USER ? 'outline' : 'secondary'}
@@ -222,7 +220,7 @@ export default async function UserPage({
                   className='flex items-start gap-4 px-5 py-3.5'
                 >
                   <div className='min-w-0 flex-1'>
-                    <p className='text-muted-foreground truncate text-xs'>
+                    <p className='truncate text-xs text-muted-foreground'>
                       {formatShortDate(comment.createdAt)}
                       {comment.parentId && ' · reply'} · on{' '}
                       <Link
@@ -232,7 +230,7 @@ export default async function UserPage({
                         {comment.post.title}
                       </Link>
                     </p>
-                    <p className='text-body mt-0.5 line-clamp-2 text-[13px]'>
+                    <p className='mt-0.5 line-clamp-2 text-[13px] text-body'>
                       {shorten(comment.content, 200)}
                     </p>
                   </div>

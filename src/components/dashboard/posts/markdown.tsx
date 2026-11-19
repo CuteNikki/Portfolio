@@ -2,7 +2,7 @@
 // stay out of the browser. The dashboard editors import it from client components for their live preview.
 
 import type { ElementContent } from 'hast';
-import { Children, type ComponentPropsWithoutRef, isValidElement } from 'react';
+import { Children, isValidElement, type ComponentPropsWithoutRef } from 'react';
 import ReactMarkdown, { type ExtraProps } from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import rehypeExternalLinks from 'rehype-external-links';
@@ -43,7 +43,7 @@ const InlineCode = ({
 }: ComponentPropsWithoutRef<'code'> & ExtraProps) => (
   <code
     {...rest}
-    className='text-foreground bg-muted rounded-md px-1.5 py-0.5 text-sm font-medium before:content-none after:content-none'
+    className='rounded-md bg-muted px-1.5 py-0.5 text-sm font-medium text-foreground before:content-none after:content-none'
   >
     {children}
   </code>
@@ -57,7 +57,7 @@ const CodeBlock = ({ node }: ExtraProps) => {
 
   const classes = code.properties.className;
   const language = /language-(\w+)/.exec(
-    Array.isArray(classes) ? classes.join(' ') : '',
+    Array.isArray(classes) ? classes.join(' ') : ''
   )?.[1];
   const text = code.children
     .map((child) => ('value' in child ? child.value : ''))
@@ -65,10 +65,10 @@ const CodeBlock = ({ node }: ExtraProps) => {
     .replace(/\n$/, '');
 
   return (
-    <div className='not-prose border-border my-6 overflow-hidden rounded-xl border shadow-sm'>
+    <div className='not-prose my-6 overflow-hidden rounded-xl border border-border shadow-sm'>
       {/* Header Bar */}
       {language && (
-        <div className='border-border bg-muted text-muted-foreground flex items-center justify-between border-b px-4 py-2 text-xs font-semibold tracking-wider uppercase'>
+        <div className='flex items-center justify-between border-b border-border bg-muted px-4 py-2 text-xs font-semibold tracking-wider text-muted-foreground uppercase'>
           <span>{language}</span>
         </div>
       )}
@@ -116,9 +116,9 @@ const Picture = ({
       loading='lazy'
       decoding='async'
       className={cn(
-        'bg-card m-0 block w-full rounded-xl border',
+        'm-0 block w-full rounded-xl border bg-card',
         theme === 'light' && 'dark:hidden',
-        theme === 'dark' && 'hidden dark:block',
+        theme === 'dark' && 'hidden dark:block'
       )}
     />
   );
@@ -143,7 +143,7 @@ const Paragraph = ({
     .map((child) =>
       child.type === 'element' && typeof child.properties.title === 'string'
         ? child.properties.title
-        : '',
+        : ''
     )
     .find(Boolean);
 
@@ -152,10 +152,10 @@ const Paragraph = ({
       {/* Only the pictures. A line break between them would start an empty line above the second whenever the first
           is hidden, pushing a dark picture lower than its light one. */}
       {Children.toArray(children).filter(
-        (child) => isValidElement(child) && child.type !== 'br',
+        (child) => isValidElement(child) && child.type !== 'br'
       )}
       {caption && (
-        <figcaption className='text-muted-foreground mt-3 text-center text-xs'>
+        <figcaption className='mt-3 text-center text-xs text-muted-foreground'>
           {caption}
         </figcaption>
       )}
@@ -165,7 +165,7 @@ const Paragraph = ({
 
 export function MarkdownViewer({ content }: { content: string }) {
   return (
-    <div className='prose prose-zinc dark:prose-invert max-w-none'>
+    <div className='prose max-w-none prose-zinc dark:prose-invert'>
       <ReactMarkdown
         remarkPlugins={remarkPlugins}
         rehypePlugins={[

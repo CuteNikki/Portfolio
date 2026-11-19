@@ -35,7 +35,7 @@ export function ProjectThumbnail({
       className={cn(
         'relative overflow-hidden',
         !exact && 'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]',
-        className,
+        className
       )}
       style={
         {
@@ -46,12 +46,12 @@ export function ProjectThumbnail({
     >
       <div
         aria-hidden
-        className='reveal-window border-border bg-card absolute inset-x-[7%] top-[11%] bottom-[-12%] flex flex-col overflow-hidden rounded-lg border shadow-[0_16px_40px_rgb(0_0_0/0.14)] transition-transform duration-700 ease-(--ease-out-soft) group-hover:-translate-y-1.5'
+        className='reveal-window absolute inset-x-[7%] top-[11%] bottom-[-12%] flex flex-col overflow-hidden rounded-lg border border-border bg-card shadow-[0_16px_40px_rgb(0_0_0/0.14)] transition-transform duration-700 ease-(--ease-out-soft) group-hover:-translate-y-1.5'
       >
-        <div className='border-border flex h-6 shrink-0 items-center gap-1.25 border-b px-3'>
-          <span className='bg-line-strong size-1.75 rounded-full' />
-          <span className='bg-line-strong size-1.75 rounded-full' />
-          <span className='bg-line-strong size-1.75 rounded-full' />
+        <div className='flex h-6 shrink-0 items-center gap-1.25 border-b border-border px-3'>
+          <span className='size-1.75 rounded-full bg-line-strong' />
+          <span className='size-1.75 rounded-full bg-line-strong' />
+          <span className='size-1.75 rounded-full bg-line-strong' />
         </div>
         {coverUrl ? (
           <StoredImage
@@ -65,8 +65,8 @@ export function ProjectThumbnail({
         ) : (
           <div className='flex flex-col gap-2.25 p-5'>
             <div className='h-3 w-[55%] rounded bg-(--tone)' />
-            <div className='bg-border h-1.5 w-[80%] rounded-sm' />
-            <div className='bg-border h-1.5 w-[62%] rounded-sm' />
+            <div className='h-1.5 w-[80%] rounded-sm bg-border' />
+            <div className='h-1.5 w-[62%] rounded-sm bg-border' />
           </div>
         )}
       </div>

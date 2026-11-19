@@ -1,3 +1,6 @@
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
+import { ROLE_LABELS } from '@/constants/roles';
 import { Suspense } from 'react';
 
 import { DownloadIcon, LogInIcon, RefreshCwIcon } from 'lucide-react';
@@ -6,10 +9,6 @@ import { getDisplaySession } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { describeDevice } from '@/lib/user-agent';
 import { formatShortDate, shorten } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
-import { ROLE_LABELS } from '@/constants/roles';
-import { SITE_METADATA } from '@/constants/metadata';
 
 import { CommentList } from '@/components/account/comment-list';
 import { DeleteAccount } from '@/components/account/delete-account';
@@ -45,13 +44,13 @@ async function AccountContent() {
     return (
       <section
         data-reveal=''
-        className='bg-card flex flex-col items-start gap-4 rounded-xl border p-8 sm:flex-row sm:items-center sm:justify-between'
+        className='flex flex-col items-start gap-4 rounded-xl border bg-card p-8 sm:flex-row sm:items-center sm:justify-between'
       >
         <div>
           <h2 className='text-lg font-bold tracking-[-0.03em]'>
             Not signed in
           </h2>
-          <p className='text-body mt-1 text-sm'>
+          <p className='mt-1 text-sm text-body'>
             Sign in with Discord to see your profile, comments and devices.
           </p>
         </div>
@@ -93,14 +92,14 @@ async function AccountContent() {
           </Avatar>
           <div className='min-w-0'>
             <p className='text-lg font-bold tracking-[-0.03em]'>{name}</p>
-            <p className='text-muted-foreground text-[13px]'>
+            <p className='text-[13px] text-muted-foreground'>
               @{user.username} · {ROLE_LABELS[user.role]} · member since{' '}
               {formatShortDate(user.createdAt)}
             </p>
           </div>
         </div>
         <div className='mt-5 flex flex-wrap items-center justify-between gap-4'>
-          <p className='text-muted-foreground max-w-md text-[13px] leading-relaxed'>
+          <p className='max-w-md text-[13px] leading-relaxed text-muted-foreground'>
             Your name and picture come from Discord. Changed them there? Refresh
             to bring them over.
           </p>
@@ -144,7 +143,7 @@ async function AccountContent() {
 
       <Section id='data' title='Your data'>
         <div className='flex flex-wrap items-center justify-between gap-4'>
-          <p className='text-body max-w-md text-sm'>
+          <p className='max-w-md text-sm text-body'>
             Download your profile, comments and devices as a JSON file.
           </p>
           <Button asChild variant='outline'>
@@ -160,16 +159,16 @@ async function AccountContent() {
       <section
         id='delete'
         aria-labelledby='delete-heading'
-        className='bg-card border-destructive/30 flex scroll-mt-28 flex-wrap items-center justify-between gap-4 rounded-xl border p-6'
+        className='flex scroll-mt-28 flex-wrap items-center justify-between gap-4 rounded-xl border border-destructive/30 bg-card p-6'
       >
         <div className='max-w-md'>
           <h2
             id='delete-heading'
-            className='text-destructive text-base font-bold'
+            className='text-base font-bold text-destructive'
           >
             Delete account
           </h2>
-          <p className='text-body mt-1 text-sm'>
+          <p className='mt-1 text-sm text-body'>
             Removes your profile, your comments and every signed-in device.
             Posts and projects you wrote stay. This can't be undone.
           </p>
@@ -198,12 +197,12 @@ function Section({
     <section
       id={id}
       aria-labelledby={`${id}-heading`}
-      className='bg-card scroll-mt-28 rounded-xl border p-6'
+      className='scroll-mt-28 rounded-xl border bg-card p-6'
     >
       <h2 id={`${id}-heading`} className='mb-4 text-base font-bold'>
         {title}
         {count !== undefined && (
-          <span className='text-muted-foreground ml-2 font-normal'>
+          <span className='ml-2 font-normal text-muted-foreground'>
             {count}
           </span>
         )}

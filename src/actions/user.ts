@@ -3,15 +3,14 @@
 import { revalidatePath, updateTag } from 'next/cache';
 import z from 'zod';
 
-import { Role } from '@/lib/generated/prisma/enums';
-
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';
 import { readText } from '@/lib/form-fields';
+import { Role } from '@/lib/generated/prisma/enums';
 import prisma from '@/lib/prisma';
 
 export async function updateUserRole(
-  formData: FormData,
+  formData: FormData
 ): Promise<ActionResult> {
   const session = await getCurrentSession();
 

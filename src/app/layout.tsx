@@ -4,7 +4,6 @@ import { JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
 import { SITE_METADATA } from '@/constants/metadata';
-
 import { ThemeProvider } from '@/providers/theme';
 import { ToastProvider } from '@/providers/toast';
 

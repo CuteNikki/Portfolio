@@ -3,8 +3,14 @@
 import { useState } from 'react';
 
 import { CheckIcon, CopyIcon, ExternalLinkIcon } from 'lucide-react';
+
 import { toast } from '@/lib/toast';
 
+import {
+  DiscordTrigger,
+  DISCORD_URL as discordUrl,
+  DISCORD_USERNAME as discordUsername,
+} from '@/components/navigation/discord-menu';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,12 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-import {
-  DISCORD_URL as discordUrl,
-  DISCORD_USERNAME as discordUsername,
-  DiscordTrigger,
-} from '@/components/navigation/discord-menu';
 
 // The Discord menu itself, loaded on first use by DiscordMenu
 export default function DiscordMenuLoaded({

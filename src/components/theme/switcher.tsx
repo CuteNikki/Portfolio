@@ -1,7 +1,7 @@
 'use client';
 
-import { useSyncExternalStore } from 'react';
 import { useTheme } from 'next-themes';
+import { useSyncExternalStore } from 'react';
 
 import { SunMoonIcon } from 'lucide-react';
 
@@ -19,7 +19,7 @@ export function ThemeSwitcher({ className }: { className?: string }) {
   const mounted = useSyncExternalStore(
     subscribeToNothing,
     () => true,
-    () => false,
+    () => false
   );
   const { theme } = useTheme();
 

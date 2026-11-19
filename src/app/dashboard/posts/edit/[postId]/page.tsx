@@ -1,3 +1,4 @@
+import { LINKS } from '@/constants/links';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -7,8 +8,6 @@ import { ExternalLinkIcon } from 'lucide-react';
 import { requireWriter } from '@/lib/auth';
 import { authorEntries, getAuthorOptions } from '@/lib/authors';
 import prisma from '@/lib/prisma';
-
-import { LINKS } from '@/constants/links';
 
 import { EditPostForm } from '@/components/dashboard/posts/edit';
 import { DashboardPageHeader } from '@/components/dashboard/shared/page-header';

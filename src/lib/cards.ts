@@ -1,10 +1,10 @@
+import { LINKS } from '@/constants/links';
+
 import { readingMinutes, toExcerpt } from '@/lib/markdown';
 import { formatShortDate, projectTone } from '@/lib/utils';
 
-import { LINKS } from '@/constants/links';
-
-import type { ProjectCardData } from '@/components/projects/project-card';
 import type { PostRowData } from '@/components/posts/post-row';
+import type { ProjectCardData } from '@/components/projects/project-card';
 
 interface ProjectLike {
   id: string;

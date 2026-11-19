@@ -1,4 +1,5 @@
 import { SITE_METADATA } from '@/constants/metadata';
+
 import { requireWriter } from '@/lib/auth';
 import { getAuthorOptions } from '@/lib/authors';
 

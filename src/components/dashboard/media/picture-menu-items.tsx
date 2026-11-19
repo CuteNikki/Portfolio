@@ -46,12 +46,12 @@ export function PictureMenuItems({ url }: { url: string }) {
                 window.open(
                   imageUrl(url, size),
                   '_blank',
-                  'noopener,noreferrer',
+                  'noopener,noreferrer'
                 )
               }
             >
               {label}
-              <span className='text-muted-foreground ml-auto text-xs tabular-nums'>
+              <span className='ml-auto text-xs text-muted-foreground tabular-nums'>
                 {IMAGE_SIZES[size]}px
               </span>
             </DropdownMenuItem>

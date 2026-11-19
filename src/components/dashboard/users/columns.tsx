@@ -1,10 +1,9 @@
 'use client';
 
+import { LINKS } from '@/constants/links';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useOptimistic, useRef, useState, useTransition } from 'react';
-import { fadeOutRow } from '@/lib/row-motion';
-import { toast } from '@/lib/toast';
 
 import {
   ClipboardCopyIcon,
@@ -13,20 +12,18 @@ import {
   UserRoundIcon,
 } from 'lucide-react';
 
-import type { Role } from '@/lib/generated/prisma/client';
-
+import { updateUserRole } from '@/actions/user';
 import type { PublicUser as User } from '@/lib/data';
+import type { Role } from '@/lib/generated/prisma/client';
+import { fadeOutRow } from '@/lib/row-motion';
+import { toast } from '@/lib/toast';
 import { proxiedAvatarUrl } from '@/lib/utils';
 
-import { LINKS } from '@/constants/links';
-
-import { updateUserRole } from '@/actions/user';
-
+import { NewTabItem } from '@/components/common/menu-at-point';
 import { sortableHeader } from '@/components/dashboard/shared/column-parts';
+import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import type { DashboardColumnDef } from '@/components/dashboard/shared/table-features';
 import { DeleteUserDialog } from '@/components/dashboard/users/delete-user';
-import { NewTabItem } from '@/components/common/menu-at-point';
-import { RowMenu } from '@/components/dashboard/shared/row-menu';
 import {
   DropdownMenuItem,
   DropdownMenuSeparator,
@@ -57,7 +54,7 @@ const userColumn: DashboardColumnDef<User> = {
         width={24}
         height={24}
       />
-      <span className='group-hover:text-primary-text font-semibold transition-colors'>
+      <span className='font-semibold transition-colors group-hover:text-primary-text'>
         {row.original.username}
       </span>
     </Link>

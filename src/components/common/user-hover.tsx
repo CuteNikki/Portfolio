@@ -18,7 +18,7 @@ type Card = React.ComponentType<UserHoverProps & { defaultOpen?: boolean }>;
 export function UserHover(props: UserHoverProps) {
   // The card, and whether the pointer was still there when it arrived
   const [loaded, setLoaded] = useState<{ Card: Card; open: boolean } | null>(
-    null,
+    null
   );
   const loading = useRef(false);
   const hovering = useRef(false);
@@ -34,7 +34,7 @@ export function UserHover(props: UserHoverProps) {
       // Tried again on the next hover
       () => {
         loading.current = false;
-      },
+      }
     );
   };
 

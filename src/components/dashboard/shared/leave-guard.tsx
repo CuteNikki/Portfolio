@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { discardImages } from '@/actions/upload';
 
@@ -49,7 +49,7 @@ function imagesIn(entries: Entries) {
  */
 export function useLeaveGuard(
   formRef: React.RefObject<HTMLFormElement | null>,
-  onDiscard: () => void,
+  onDiscard: () => void
 ) {
   const router = useRouter();
   // Taken once per visit: coming back to a page kept in the background must still count earlier changes
@@ -62,7 +62,7 @@ export function useLeaveGuard(
   const lastForm = useRef<HTMLFormElement | null>(null);
   const currentForm = useCallback(
     () => formRef.current ?? lastForm.current,
-    [formRef],
+    [formRef]
   );
 
   const isDirty = useCallback(() => {
@@ -102,7 +102,7 @@ export function useLeaveGuard(
       discard();
       leave();
     },
-    [isDirty, discard],
+    [isDirty, discard]
   );
 
   useEffect(() => {
@@ -122,7 +122,7 @@ export function useLeaveGuard(
           '/api/uploads/discard',
           new Blob([JSON.stringify({ urls: images })], {
             type: 'application/json',
-          }),
+          })
         );
       }
     };

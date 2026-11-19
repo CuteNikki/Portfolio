@@ -20,7 +20,7 @@ function Tabs({
       orientation={orientation}
       className={cn(
         'group/tabs flex gap-2 data-horizontal:flex-col',
-        className,
+        className
       )}
       {...props}
     />
@@ -32,14 +32,14 @@ const tabsListVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-muted/60 border',
+        default: 'border bg-muted/60',
         line: 'gap-1 bg-transparent',
       },
     },
     defaultVariants: {
       variant: 'default',
     },
-  },
+  }
 );
 
 function TabsList({
@@ -71,11 +71,11 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot='tabs-trigger'
       className={cn(
-        "text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring data-active:text-foreground relative inline-flex h-full flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2.5 py-0.5 text-[13px] font-medium whitespace-nowrap transition-[color,background-color,border-color] group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 data-active:font-semibold [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "relative inline-flex h-full flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2.5 py-0.5 text-[13px] font-medium whitespace-nowrap text-muted-foreground transition-[color,background-color,border-color] group-data-vertical/tabs:w-full group-data-vertical/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 has-data-[icon=inline-end]:pr-1 has-data-[icon=inline-start]:pl-1 data-active:font-semibold data-active:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         variant === 'line'
-          ? 'data-active:after:bg-foreground after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5'
-          : 'data-active:bg-primary-soft data-active:border-primary-text/40',
-        className,
+          ? 'after:absolute after:inset-x-0 after:-bottom-1 after:h-0.5 data-active:after:bg-foreground'
+          : 'data-active:border-primary-text/40 data-active:bg-primary-soft',
+        className
       )}
       {...props}
     />

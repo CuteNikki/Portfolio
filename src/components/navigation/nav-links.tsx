@@ -1,9 +1,8 @@
 'use client';
 
+import { NAVBAR_LINKS } from '@/constants/links';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-
-import { NAVBAR_LINKS } from '@/constants/links';
 
 import { cn } from '@/lib/utils';
 
@@ -29,8 +28,8 @@ export function NavLinks() {
               href={url}
               aria-current={current ? 'page' : undefined}
               className={cn(
-                'nav-underline hover:text-foreground lowercase transition-colors',
-                current ? 'text-foreground' : 'text-muted-foreground',
+                'nav-underline lowercase transition-colors hover:text-foreground',
+                current ? 'text-foreground' : 'text-muted-foreground'
               )}
             >
               {label}

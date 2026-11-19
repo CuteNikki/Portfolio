@@ -1,8 +1,7 @@
+import { PERSONAL_DETAILS } from '@/constants/personal';
 import Link from 'next/link';
 
 import { ArrowUpRightIcon } from 'lucide-react';
-
-import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { PageHeader } from '@/components/common/page-header';
 import { ContactForm } from '@/components/contact/contact-form';
@@ -12,7 +11,7 @@ import { DiscordMenu } from '@/components/navigation/discord-menu';
 // and their icons; only the form runs in the browser.
 export function ContactContent() {
   const socials = PERSONAL_DETAILS.socials.filter(
-    ({ platform }) => platform !== 'Mail' && platform !== 'Discord',
+    ({ platform }) => platform !== 'Mail' && platform !== 'Discord'
   );
 
   return (
@@ -27,7 +26,7 @@ export function ContactContent() {
         <section
           aria-labelledby='contact-form-heading'
           data-reveal=''
-          className='bg-card rounded-xl border p-5 sm:p-8'
+          className='rounded-xl border bg-card p-5 sm:p-8'
         >
           <h2 id='contact-form-heading' className='mb-6 text-[15px] font-bold'>
             Send a message
@@ -39,19 +38,19 @@ export function ContactContent() {
           aria-labelledby='contact-other-heading'
           data-reveal=''
           style={{ '--reveal-index': 1 } as React.CSSProperties}
-          className='bg-card flex flex-col gap-5 rounded-xl border p-5 sm:p-6'
+          className='flex flex-col gap-5 rounded-xl border bg-card p-5 sm:p-6'
         >
           <div>
             <h2 id='contact-other-heading' className='text-[15px] font-bold'>
               Other ways
             </h2>
-            <p className='text-muted-foreground mt-1 text-xs'>
+            <p className='mt-1 text-xs text-muted-foreground'>
               Rather write directly? Reach me here.
             </p>
           </div>
           <a
             href={PERSONAL_DETAILS.emailLink}
-            className='hover:text-primary-text text-sm font-semibold break-all transition-colors'
+            className='text-sm font-semibold break-all transition-colors hover:text-primary-text'
           >
             {PERSONAL_DETAILS.email}
           </a>
@@ -62,7 +61,7 @@ export function ContactContent() {
                   href={url}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='group text-muted-foreground hover:text-primary-text flex items-center gap-2 transition-colors'
+                  className='group flex items-center gap-2 text-muted-foreground transition-colors hover:text-primary-text'
                 >
                   <Icon className='size-4 shrink-0' />
                   {platform}

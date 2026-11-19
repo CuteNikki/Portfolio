@@ -2,11 +2,10 @@ import Link from 'next/link';
 
 import { ArrowUpRightIcon } from 'lucide-react';
 
-import { WriterMenu } from '@/components/common/writer-menu';
-
 import { cn, toneFor } from '@/lib/utils';
 
 import { StoredImage } from '@/components/common/stored-image';
+import { WriterMenu } from '@/components/common/writer-menu';
 import { Badge } from '@/components/ui/badge';
 
 export interface PostRowData {
@@ -52,12 +51,12 @@ export function PostRow({
             ? undefined
             : ({ '--reveal-index': revealIndex } as React.CSSProperties)
         }
-        className='card-lift group bg-card flex flex-col gap-5 rounded-xl border p-3 md:flex-row md:items-center md:gap-7'
+        className='card-lift group flex flex-col gap-5 rounded-xl border bg-card p-3 md:flex-row md:items-center md:gap-7'
       >
         <div
           className={cn(
             'relative aspect-2/1 w-full shrink-0 overflow-hidden rounded-lg md:w-64',
-            'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]',
+            'bg-[color-mix(in_oklab,var(--tone)_14%,var(--card))]'
           )}
           style={{ '--tone': toneFor(post.title) } as React.CSSProperties}
         >
@@ -81,7 +80,7 @@ export function PostRow({
         </div>
         <div className='flex min-w-0 flex-1 flex-col gap-2 px-2 pb-2 md:px-0 md:pr-4 md:pb-0'>
           <div className='flex items-start justify-between gap-4'>
-            <span className='text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs'>
+            <span className='flex flex-wrap items-center gap-x-2 gap-y-1.5 text-xs text-muted-foreground'>
               {post.isDraft && <Badge>Draft</Badge>}
               <time dateTime={new Date(post.time).toISOString()}>
                 {post.date}
@@ -99,13 +98,13 @@ export function PostRow({
             </span>
             <ArrowUpRightIcon
               aria-hidden
-              className='text-primary-text size-4 shrink-0 -translate-x-1 translate-y-1 opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-0 group-hover:opacity-100 group-focus-visible:translate-0 group-focus-visible:opacity-100'
+              className='size-4 shrink-0 -translate-x-1 translate-y-1 text-primary-text opacity-0 transition-[opacity,translate] duration-300 group-hover:translate-0 group-hover:opacity-100 group-focus-visible:translate-0 group-focus-visible:opacity-100'
             />
           </div>
           <h3 className='text-xl leading-snug font-bold tracking-[-0.04em] text-balance'>
             {post.title}
           </h3>
-          <p className='text-body max-w-2xl text-sm'>{post.excerpt}</p>
+          <p className='max-w-2xl text-sm text-body'>{post.excerpt}</p>
         </div>
       </Link>
     </WriterMenu>

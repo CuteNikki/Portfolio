@@ -15,7 +15,7 @@ export function Intro({ images }: { images: string[] }) {
           duration: 1,
           delay: stagger(0.25, { startDelay: 0.35 }),
           ease: 'easeOut',
-        },
+        }
       );
 
       await animate(
@@ -29,12 +29,12 @@ export function Intro({ images }: { images: string[] }) {
         {
           duration: 1,
           ease: 'easeInOut',
-        },
+        }
       );
 
       if (scope.current) {
         const container = scope.current.querySelector(
-          '#intro-container',
+          '#intro-container'
         ) as HTMLDivElement;
         if (container) container.style.aspectRatio = 'unset';
       }
@@ -45,7 +45,7 @@ export function Intro({ images }: { images: string[] }) {
         {
           duration: 0.85,
           ease: 'easeOut',
-        },
+        }
       );
     };
 

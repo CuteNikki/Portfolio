@@ -1,8 +1,7 @@
+import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 
 import { AlertCircleIcon, ChevronLeftIcon } from 'lucide-react';
-
-import { LINKS } from '@/constants/links';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { Button } from '@/components/ui/button';
@@ -14,7 +13,7 @@ export default function PostNotFound() {
         <p
           data-reveal=''
           style={{ '--reveal-index': 0 } as React.CSSProperties}
-          className='text-primary-text flex items-center gap-2 text-sm font-semibold tracking-[0.2em] uppercase'
+          className='flex items-center gap-2 text-sm font-semibold tracking-[0.2em] text-primary-text uppercase'
         >
           <AlertCircleIcon className='size-4' /> Error 404
         </p>
@@ -28,7 +27,7 @@ export default function PostNotFound() {
         <p
           data-reveal=''
           style={{ '--reveal-index': 2 } as React.CSSProperties}
-          className='text-muted-foreground mt-6 max-w-xl text-lg leading-relaxed text-pretty'
+          className='mt-6 max-w-xl text-lg leading-relaxed text-pretty text-muted-foreground'
         >
           It may have been renamed, unpublished or removed. The rest of the blog
           is still here.

@@ -1,12 +1,11 @@
 'use client';
 
-import type { Post } from '@/lib/generated/prisma/browser';
+import { LINKS } from '@/constants/links';
 
 import { authorsOf } from '@/lib/author-list';
 import type { PublicUser } from '@/lib/data';
+import type { Post } from '@/lib/generated/prisma/browser';
 import { formatShortDate } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
 
 import {
   AuthorsCell,
@@ -72,7 +71,7 @@ export const columns: DashboardColumnDef<Row>[] = [
     meta: { label: 'Updated' },
     header: sortableHeader('Updated'),
     cell: ({ row }) => (
-      <span className='text-muted-foreground whitespace-nowrap'>
+      <span className='whitespace-nowrap text-muted-foreground'>
         {formatShortDate(row.original.updatedAt)}
       </span>
     ),

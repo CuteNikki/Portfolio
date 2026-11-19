@@ -1,6 +1,5 @@
-import { Metadata } from 'next';
-
 import { PERSONAL_DETAILS } from '@/constants/personal';
+import { Metadata } from 'next';
 
 export const SITE_URL = 'https://niso.moe';
 export const SITE_NAME = 'niso.moe';

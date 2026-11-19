@@ -1,3 +1,6 @@
+import { LINKS } from '@/constants/links';
+import { PERSONAL_DETAILS } from '@/constants/personal';
+
 import {
   CopyrightIcon,
   HouseIcon,
@@ -7,11 +10,8 @@ import {
   ScaleIcon,
 } from 'lucide-react';
 
-import { LINKS } from '@/constants/links';
-import { PERSONAL_DETAILS } from '@/constants/personal';
-
-import { ReadingColumns } from '@/components/common/reading-columns';
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
+import { ReadingColumns } from '@/components/common/reading-columns';
 import { LegalHeader, LegalSection } from '@/components/legal/legal-parts';
 
 const CONTENT = {
@@ -134,11 +134,11 @@ export function ImprintContent({
               title={content.provider.title}
             >
               <div>
-                <p className='text-foreground font-semibold'>
+                <p className='font-semibold text-foreground'>
                   {content.provider.name}
                 </p>
                 <p className='mt-1 flex items-start gap-2'>
-                  <MapPinIcon className='text-primary-text mt-0.5 size-4 shrink-0' />
+                  <MapPinIcon className='mt-0.5 size-4 shrink-0 text-primary-text' />
                   <span>
                     {content.provider.addressLineOne}
                     <br />

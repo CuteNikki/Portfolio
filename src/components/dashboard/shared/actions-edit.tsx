@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import {
   ArrowLeftIcon,
@@ -29,7 +29,7 @@ export type EditAction = SubmitIntent | 'delete';
 // the form: Update for a published entry, so it stays live, and Save draft otherwise. Delete isn't a submit button, so
 // Enter never deletes.
 export function getEditAction(
-  event: React.SubmitEvent<HTMLFormElement>,
+  event: React.SubmitEvent<HTMLFormElement>
 ): SubmitIntent {
   const value = (event.submitter as HTMLButtonElement | null)?.value;
   return value === 'publish' ? 'publish' : 'save';

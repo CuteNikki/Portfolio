@@ -15,7 +15,7 @@ export function DashboardPageHeader({
         <h1 className='text-[28px] leading-tight font-bold tracking-tighter'>
           {title}
         </h1>
-        <p className='text-muted-foreground mt-1 text-[13px]'>{description}</p>
+        <p className='mt-1 text-[13px] text-muted-foreground'>{description}</p>
       </div>
       {children && <div className='flex flex-wrap gap-2'>{children}</div>}
     </header>

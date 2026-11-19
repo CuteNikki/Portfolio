@@ -1,21 +1,17 @@
 'use client';
 
+import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
 import { useId, useState } from 'react';
-import { toast } from '@/lib/toast';
-
-import type { Comment as CommentType } from '@/lib/generated/prisma/browser';
-
-import type { PublicUser } from '@/lib/data';
 
 import { editComment } from '@/actions/post';
-
-import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
+import type { PublicUser } from '@/lib/data';
+import type { Comment as CommentType } from '@/lib/generated/prisma/browser';
+import { toast } from '@/lib/toast';
+import { cn, formatShortDate } from '@/lib/utils';
 
 import { UserHover } from '@/components/common/user-hover';
 import { CommentActions } from '@/components/dashboard/posts/comment-actions';
 import { CommentForm } from '@/components/dashboard/posts/comment-form';
-import { cn, formatShortDate } from '@/lib/utils';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Field, FieldDescription, FieldLabel } from '@/components/ui/field';
@@ -52,7 +48,7 @@ export function Comment({
       <div className='relative flex items-start gap-3'>
         {(replies?.length ?? 0) > 0 && (
           // The thread line runs down from the middle of the 36px avatar
-          <div className='border-border absolute top-9 bottom-0 left-4.25 border-l-2' />
+          <div className='absolute top-9 bottom-0 left-4.25 border-l-2 border-border' />
         )}
 
         <Avatar className='z-10 size-9 rounded-lg after:rounded-lg'>
@@ -67,7 +63,7 @@ export function Comment({
         </Avatar>
 
         <div className='flex w-full min-w-0 flex-col'>
-          <div className='xs:gap-2 xs:flex-row xs:items-center flex flex-col justify-between'>
+          <div className='flex flex-col justify-between xs:flex-row xs:items-center xs:gap-2'>
             <UserHover user={comment.author} className='block min-w-0'>
               <span className='block truncate text-sm font-bold'>
                 {comment.author.displayName || `@${comment.author.username}`}
@@ -76,7 +72,7 @@ export function Comment({
             <div className='flex items-center gap-2'>
               <time
                 dateTime={new Date(comment.createdAt).toISOString()}
-                className='text-muted-foreground text-xs whitespace-nowrap'
+                className='text-xs whitespace-nowrap text-muted-foreground'
               >
                 {formatShortDate(comment.createdAt)}
               </time>
@@ -103,7 +99,7 @@ export function Comment({
               />
             </div>
           ) : (
-            <p className='text-body mt-1 text-sm wrap-break-word whitespace-pre-wrap'>
+            <p className='mt-1 text-sm wrap-break-word whitespace-pre-wrap text-body'>
               {comment.content}
             </p>
           )}
@@ -125,7 +121,7 @@ export function Comment({
           className={cn(
             'ml-4.25 flex flex-col',
             // Phones run out of room after two levels: the deepest replies line up with the comment they answer
-            depth >= MAX_PHONE_INDENT && 'max-sm:ml-0',
+            depth >= MAX_PHONE_INDENT && 'max-sm:ml-0'
           )}
         >
           {replies?.map((reply, index) => {
@@ -136,21 +132,21 @@ export function Comment({
                 key={reply.id}
                 className={cn(
                   'relative pt-4 pl-5',
-                  flatOnPhones && 'max-sm:pl-0',
+                  flatOnPhones && 'max-sm:pl-0'
                 )}
               >
                 {!isLast && (
                   <>
                     <div
                       className={cn(
-                        'border-border absolute top-0 bottom-0 left-0 border-l-2',
-                        flatOnPhones && 'max-sm:hidden',
+                        'absolute top-0 bottom-0 left-0 border-l-2 border-border',
+                        flatOnPhones && 'max-sm:hidden'
                       )}
                     />
                     <div
                       className={cn(
-                        'border-border absolute top-0 left-0 h-8.5 w-5 border-b-2',
-                        flatOnPhones && 'max-sm:hidden',
+                        'absolute top-0 left-0 h-8.5 w-5 border-b-2 border-border',
+                        flatOnPhones && 'max-sm:hidden'
                       )}
                     />
                   </>
@@ -159,8 +155,8 @@ export function Comment({
                 {isLast && (
                   <div
                     className={cn(
-                      'border-border absolute top-0 left-0 h-8.5 w-5 rounded-bl-xl border-b-2 border-l-2',
-                      flatOnPhones && 'max-sm:hidden',
+                      'absolute top-0 left-0 h-8.5 w-5 rounded-bl-xl border-b-2 border-l-2 border-border',
+                      flatOnPhones && 'max-sm:hidden'
                     )}
                   />
                 )}
@@ -170,8 +166,8 @@ export function Comment({
                 {flatOnPhones && (
                   <div
                     className={cn(
-                      'border-border absolute top-0 left-4.25 border-l-2 sm:hidden',
-                      isLast ? 'h-4' : 'bottom-0',
+                      'absolute top-0 left-4.25 border-l-2 border-border sm:hidden',
+                      isLast ? 'h-4' : 'bottom-0'
                     )}
                   />
                 )}

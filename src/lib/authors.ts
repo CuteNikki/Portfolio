@@ -1,7 +1,7 @@
+import { canWrite } from '@/constants/roles';
+
 import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';
-
-import { canWrite } from '@/constants/roles';
 
 import type { AuthorOption } from '@/components/dashboard/shared/authors-field';
 
@@ -55,7 +55,7 @@ function readUrl(value: unknown): string | null {
  * @returns The authors, or null when the form had none that count.
  */
 export async function readAuthors(
-  formData: FormData,
+  formData: FormData
 ): Promise<AuthorEntry[] | null> {
   let raw: unknown;
   try {
@@ -80,7 +80,7 @@ export async function readAuthors(
   }
 
   const userIds = entries.flatMap((entry) =>
-    'userId' in entry ? [entry.userId] : [],
+    'userId' in entry ? [entry.userId] : []
   );
   const existing = new Set(
     (
@@ -88,7 +88,7 @@ export async function readAuthors(
         where: { id: { in: userIds } },
         select: { id: true },
       })
-    ).map(({ id }) => id),
+    ).map(({ id }) => id)
   );
 
   const seen = new Set<string>();
@@ -111,7 +111,7 @@ export function authorRows(authors: AuthorEntry[]) {
   return authors.map((author, position) =>
     'userId' in author
       ? { userId: author.userId, position }
-      : { name: author.name, url: author.url, position },
+      : { name: author.name, url: author.url, position }
   );
 }
 
@@ -119,9 +119,9 @@ export function authorRows(authors: AuthorEntry[]) {
  * A saved author list as the dashboard form starts with it.
  */
 export function authorEntries(
-  authors: { userId: string | null; name: string | null; url: string | null }[],
+  authors: { userId: string | null; name: string | null; url: string | null }[]
 ): AuthorEntry[] {
   return authors.flatMap(({ userId, name, url }): AuthorEntry[] =>
-    userId ? [{ userId }] : name ? [{ name, url }] : [],
+    userId ? [{ userId }] : name ? [{ name, url }] : []
   );
 }

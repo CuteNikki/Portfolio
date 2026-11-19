@@ -30,7 +30,7 @@ export function LazyMenu<P extends object>({
   const open = () => {
     preload().then(
       (component) => setMenu(() => component),
-      () => {},
+      () => {}
     );
   };
 

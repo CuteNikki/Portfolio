@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { useState, useTransition } from 'react';
 
 import { LoaderCircleIcon, Trash2Icon } from 'lucide-react';
-import { toast } from '@/lib/toast';
 
 import { cleanUpImages } from '@/actions/upload';
+import { toast } from '@/lib/toast';
 
 import {
   AlertDialog,
@@ -39,7 +39,7 @@ export function CleanUpButton({ count }: { count: number }) {
         toast.success(
           result.removed === 1
             ? '1 unused picture deleted'
-            : `${result.removed} unused pictures deleted`,
+            : `${result.removed} unused pictures deleted`
         );
         router.refresh();
       } catch {

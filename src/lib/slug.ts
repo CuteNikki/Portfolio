@@ -7,7 +7,7 @@ import { slugify } from '@/lib/utils';
 export async function resolveSlug(
   entered: FormDataEntryValue | null,
   title: string,
-  isTaken: (slug: string) => Promise<boolean>,
+  isTaken: (slug: string) => Promise<boolean>
 ): Promise<{ slug: string | null } | { error: string }> {
   if (typeof entered === 'string' && entered.trim()) {
     const slug = slugify(entered);

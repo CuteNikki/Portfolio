@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useTransition } from 'react';
 import Link from 'next/link';
+import { useState, useTransition } from 'react';
 
 import { Trash2Icon } from 'lucide-react';
-import { toast } from '@/lib/toast';
 
 import { deleteComment } from '@/actions/post';
+import { toast } from '@/lib/toast';
 
 import {
   AlertDialog,
@@ -37,7 +37,7 @@ export function CommentList({ comments }: { comments: OwnComment[] }) {
 
   if (comments.length === 0) {
     return (
-      <p className='text-muted-foreground text-sm'>
+      <p className='text-sm text-muted-foreground'>
         You haven't commented yet.
       </p>
     );
@@ -75,7 +75,7 @@ export function CommentList({ comments }: { comments: OwnComment[] }) {
         {comments.map((comment) => (
           <li key={comment.id} className='flex items-start gap-4 py-3.5'>
             <div className='min-w-0 flex-1'>
-              <p className='text-muted-foreground text-xs'>
+              <p className='text-xs text-muted-foreground'>
                 {comment.isReply ? 'Reply on ' : 'On '}
                 <Link
                   href={comment.postHref}
@@ -85,7 +85,7 @@ export function CommentList({ comments }: { comments: OwnComment[] }) {
                 </Link>{' '}
                 · {comment.date}
               </p>
-              <p className='text-body mt-1 text-sm wrap-break-word'>
+              <p className='mt-1 text-sm wrap-break-word text-body'>
                 {comment.excerpt}
               </p>
             </div>

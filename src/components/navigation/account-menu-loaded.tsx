@@ -1,5 +1,7 @@
 'use client';
 
+import { LINKS, NAVBAR_LINKS } from '@/constants/links';
+import { ROLE_LABELS } from '@/constants/roles';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -7,22 +9,19 @@ import {
   LayoutDashboardIcon,
   LogInIcon,
   LogOutIcon,
-  type LucideIcon,
   MessageSquareIcon,
   SquarePenIcon,
   UserIcon,
+  type LucideIcon,
 } from 'lucide-react';
-
-import { LINKS, NAVBAR_LINKS } from '@/constants/links';
-import { ROLE_LABELS } from '@/constants/roles';
 
 import { cn } from '@/lib/utils';
 
 import {
   AccountTrigger,
+  UserAvatar,
   type AccountMenuProps,
   type AccountMenuUser,
-  UserAvatar,
 } from '@/components/navigation/account-menu';
 import { isCurrent } from '@/components/navigation/nav-links';
 import { buttonVariants } from '@/components/ui/button';
@@ -74,7 +73,7 @@ export function accountLinkGroups(user: AccountMenuUser) {
 // (which is also how menus show hover) gets the button's hover look instead.
 export const SIGN_IN_ITEM_CLASS = cn(
   buttonVariants(),
-  'focus:bg-primary focus:text-primary-foreground not-data-[variant=destructive]:focus:**:text-primary-foreground w-full cursor-pointer justify-center focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)]',
+  'w-full cursor-pointer justify-center focus:bg-primary focus:text-primary-foreground focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--primary)_28%,transparent)] not-data-[variant=destructive]:focus:**:text-primary-foreground'
 );
 
 // Signing in returns to the page it started from
@@ -134,10 +133,10 @@ export default function AccountMenuLoaded({
             <DropdownMenuLabel className='flex items-center gap-3 px-2.5 py-2.5 font-normal'>
               <UserAvatar user={user} className='size-10 rounded-[10px]' />
               <span className='min-w-0 leading-snug'>
-                <span className='text-foreground block truncate text-sm font-bold'>
+                <span className='block truncate text-sm font-bold text-foreground'>
                   {user.name}
                 </span>
-                <span className='text-muted-foreground block truncate text-xs'>
+                <span className='block truncate text-xs text-muted-foreground'>
                   @{user.username} · {ROLE_LABELS[user.role]}
                 </span>
               </span>
@@ -156,7 +155,7 @@ export default function AccountMenuLoaded({
         {showAccount && !user && (
           <div className='p-2'>
             <p className='text-sm font-bold'>Not signed in</p>
-            <p className='text-muted-foreground mt-1 mb-3.5 text-[13px] leading-relaxed'>
+            <p className='mt-1 mb-3.5 text-[13px] leading-relaxed text-muted-foreground'>
               Sign in with Discord to comment on posts and manage your account.
             </p>
             <DropdownMenuItem asChild className={SIGN_IN_ITEM_CLASS}>

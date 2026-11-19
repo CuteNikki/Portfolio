@@ -1,9 +1,9 @@
 'use client';
 
+import { Dialog } from 'radix-ui';
 import { useId, useState } from 'react';
 
 import { LinkIcon, PlusIcon, UserPlusIcon, XIcon } from 'lucide-react';
-import { Dialog } from 'radix-ui';
 
 import type { AuthorEntry } from '@/lib/authors';
 import { proxiedAvatarUrl } from '@/lib/utils';
@@ -51,7 +51,7 @@ export function AuthorsField({
 
   const byId = new Map(options.map((option) => [option.id, option]));
   const chosenIds = new Set(
-    authors.flatMap((author) => ('userId' in author ? [author.userId] : [])),
+    authors.flatMap((author) => ('userId' in author ? [author.userId] : []))
   );
   const remaining = options.filter((option) => !chosenIds.has(option.id));
   const writers = remaining.filter((option) => option.isWriter);
@@ -82,14 +82,14 @@ export function AuthorsField({
             <li
               key={user ? user.id : `${index}-${name}`}
               title={user ? `@${user.username}` : (url ?? 'No account')}
-              className='bg-card flex h-10 max-w-full min-w-0 items-center gap-2 rounded-lg border pr-1 pl-1.5 text-[13px]'
+              className='flex h-10 max-w-full min-w-0 items-center gap-2 rounded-lg border bg-card pr-1 pl-1.5 text-[13px]'
             >
               <AuthorAvatar name={name} avatarUrl={user?.avatarUrl ?? null} />
               <span className='truncate font-medium'>{name}</span>
               {url && (
                 <LinkIcon
                   aria-label='Has a link'
-                  className='text-muted-foreground size-3.5 shrink-0'
+                  className='size-3.5 shrink-0 text-muted-foreground'
                 />
               )}
               <Button
@@ -178,7 +178,7 @@ function OptionItem({
       <AuthorAvatar name={option.name} avatarUrl={option.avatarUrl} />
       <span className='min-w-0'>
         <span className='block truncate font-medium'>{option.name}</span>
-        <span className='text-muted-foreground block truncate text-xs'>
+        <span className='block truncate text-xs text-muted-foreground'>
           @{option.username}
         </span>
       </span>
@@ -226,13 +226,13 @@ function GuestDialog({
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className='data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 fixed inset-0 z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs' />
-        <Dialog.Content className='bg-popover text-popover-foreground ring-foreground/10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 gap-5 rounded-xl p-5 ring-1 duration-100 outline-none'>
+        <Dialog.Overlay className='fixed inset-0 z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0' />
+        <Dialog.Content className='fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 gap-5 rounded-xl bg-popover p-5 text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95'>
           <div>
             <Dialog.Title className='text-[15px] font-bold'>
               Add someone without an account
             </Dialog.Title>
-            <Dialog.Description className='text-muted-foreground mt-1 text-xs'>
+            <Dialog.Description className='mt-1 text-xs text-muted-foreground'>
               Their name shows with the other authors, linking to their page if
               you add one.
             </Dialog.Description>

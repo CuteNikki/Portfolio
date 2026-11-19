@@ -17,7 +17,7 @@ export function readCover(
     | 'coverUrl'
     | 'coverDarkUrl'
     | 'thumbnailUrl'
-    | 'thumbnailDarkUrl' = 'coverUrl',
+    | 'thumbnailDarkUrl' = 'coverUrl'
 ): string | null | undefined {
   if (!formData.has(field)) return undefined;
   const url = formData.get(field);
@@ -42,7 +42,7 @@ export function readGallery(formData: FormData) {
   return images
     .filter(
       (image): image is { url: string; darkUrl?: unknown; alt?: unknown } =>
-        ownImageKey(image?.url) !== null,
+        ownImageKey(image?.url) !== null
     )
     .filter(({ url }) => !seen.has(url) && !!seen.add(url))
     .slice(0, MAX_GALLERY_PICTURES)
@@ -59,7 +59,7 @@ export function readGallery(formData: FormData) {
  */
 export function removedImages(
   before: (string | null)[],
-  after: (string | null)[],
+  after: (string | null)[]
 ) {
   const kept = new Set(after.filter(Boolean));
   return before.filter((url): url is string => !!url && !kept.has(url));

@@ -34,7 +34,7 @@ export function RevealOnScroll() {
         .forEach(({ element }, order) => {
           element.style.setProperty(
             '--reveal-order',
-            String(Math.min(order, 6)),
+            String(Math.min(order, 6))
           );
           element.dataset.reveal = 'shown';
           reveal.unobserve(element);
@@ -52,15 +52,15 @@ export function RevealOnScroll() {
                 isEnough(
                   intersectionRect.height,
                   boundingClientRect.height,
-                  rootBounds?.height ?? innerHeight,
-                ),
+                  rootBounds?.height ?? innerHeight
+                )
             )
-            .map(({ target }) => target as HTMLElement),
+            .map(({ target }) => target as HTMLElement)
         ),
       {
         threshold: THRESHOLDS,
         rootMargin: `0px 0px -${BOTTOM_MARGIN * 100}% 0px`,
-      },
+      }
     );
 
     // At the end of the page, something low down may never get far enough up to count as in view, so whatever shows
@@ -75,7 +75,7 @@ export function RevealOnScroll() {
         ].filter((element) => {
           const { top, bottom } = element.getBoundingClientRect();
           return top < innerHeight && bottom > 0;
-        }),
+        })
       );
     };
     addEventListener('scroll', atEnd, { passive: true });
@@ -91,7 +91,7 @@ export function RevealOnScroll() {
     const hold = () => {
       let pending = false;
       for (const element of document.querySelectorAll<HTMLElement>(
-        '[data-reveal=""]',
+        '[data-reveal=""]'
       )) {
         // One that holds others only groups them
         if (element.querySelector('[data-reveal]')) continue;
@@ -112,7 +112,7 @@ export function RevealOnScroll() {
     // Elements an earlier run held back still need watching: the effect can start again while they wait, e.g. when
     // React pauses it for a page kept in the background, or Fast Refresh replaces it. Without this they'd stay hidden.
     for (const element of document.querySelectorAll(
-      '[data-reveal="waiting"]',
+      '[data-reveal="waiting"]'
     )) {
       reveal.observe(element);
     }

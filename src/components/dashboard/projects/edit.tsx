@@ -1,26 +1,15 @@
 'use client';
 
+import { LINKS } from '@/constants/links';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
-import { toast } from '@/lib/toast';
-
-import { Project } from '@/lib/generated/prisma/browser';
 
 import { deleteProject, updateProject } from '@/actions/project';
-
 import type { AuthorEntry } from '@/lib/authors';
-import { LINKS } from '@/constants/links';
+import { Project } from '@/lib/generated/prisma/browser';
+import { toast } from '@/lib/toast';
 import { formatShortDate, projectTone } from '@/lib/utils';
 
-import {
-  type AuthorOption,
-  AuthorsField,
-} from '@/components/dashboard/shared/authors-field';
-import {
-  CoverField,
-  type GalleryImage,
-  GalleryField,
-} from '@/components/dashboard/shared/image-fields';
 import { ProjectDetailFields } from '@/components/dashboard/projects/detail-fields';
 import { ToneField } from '@/components/dashboard/projects/tone-field';
 import {
@@ -28,13 +17,22 @@ import {
   getEditAction,
   type EditAction,
 } from '@/components/dashboard/shared/actions-edit';
-import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
+import {
+  AuthorsField,
+  type AuthorOption,
+} from '@/components/dashboard/shared/authors-field';
 import {
   Field,
   FormCard,
   FormColumns,
   MarkdownField,
 } from '@/components/dashboard/shared/form-parts';
+import {
+  CoverField,
+  GalleryField,
+  type GalleryImage,
+} from '@/components/dashboard/shared/image-fields';
+import { useLeaveGuard } from '@/components/dashboard/shared/leave-guard';
 import { Input } from '@/components/ui/input';
 
 export function EditProjectForm({
@@ -77,7 +75,7 @@ export function EditProjectForm({
           return;
         }
         toast.success(
-          intent === 'publish' ? 'Project published' : 'Draft saved',
+          intent === 'publish' ? 'Project published' : 'Draft saved'
         );
         markSaved();
         router.refresh();

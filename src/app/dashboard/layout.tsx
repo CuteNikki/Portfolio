@@ -1,9 +1,8 @@
-import { Role } from '@/lib/generated/prisma/enums';
+import { SITE_METADATA } from '@/constants/metadata';
 
 import { requireWriter } from '@/lib/auth';
+import { Role } from '@/lib/generated/prisma/enums';
 import prisma from '@/lib/prisma';
-
-import { SITE_METADATA } from '@/constants/metadata';
 
 import {
   DashboardMobileNav,

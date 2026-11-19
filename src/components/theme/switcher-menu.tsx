@@ -2,6 +2,7 @@
 
 import { useTheme } from 'next-themes';
 
+import { themeById, THEMES } from '@/components/theme/themes';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -11,7 +12,6 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { THEMES, themeById } from '@/components/theme/themes';
 
 // The theme menu itself, loaded on first use by ThemeSwitcher
 export default function ThemeMenu({
@@ -37,7 +37,7 @@ export default function ThemeMenu({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align='end' className='w-64'>
-        <DropdownMenuLabel className='text-muted-foreground px-2.5 pt-1.5 pb-1 text-[11px] font-normal tracking-widest uppercase'>
+        <DropdownMenuLabel className='px-2.5 pt-1.5 pb-1 text-[11px] font-normal tracking-widest text-muted-foreground uppercase'>
           Theme
         </DropdownMenuLabel>
         <DropdownMenuRadioGroup value={current.id} onValueChange={setTheme}>

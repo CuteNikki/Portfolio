@@ -23,6 +23,6 @@ export function useCanWrite() {
   return useSyncExternalStore(
     subscribe,
     () => canWrite,
-    () => false,
+    () => false
   );
 }

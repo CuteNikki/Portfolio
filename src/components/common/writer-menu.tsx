@@ -1,8 +1,9 @@
 'use client';
 
-import { useTransition } from 'react';
+import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 
 import {
   EyeOffIcon,
@@ -11,13 +12,10 @@ import {
   SendHorizonalIcon,
 } from 'lucide-react';
 
-import { useCanWrite } from '@/lib/can-write';
-import { toast } from '@/lib/toast';
-
-import { LINKS } from '@/constants/links';
-
 import { setPostPublished } from '@/actions/post';
 import { setProjectPublished } from '@/actions/project';
+import { useCanWrite } from '@/lib/can-write';
+import { toast } from '@/lib/toast';
 
 import {
   MenuAtPoint,
@@ -83,7 +81,7 @@ export function WriterMenu({
         if (error) {
           toast.error(
             `"${title}" couldn't be ${publish ? 'published' : 'unpublished'}`,
-            { description: error },
+            { description: error }
           );
           return;
         }

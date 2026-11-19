@@ -1,14 +1,13 @@
-import { Suspense } from 'react';
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import { PlusIcon } from 'lucide-react';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { cn, shorten } from '@/lib/utils';
-
-import { LINKS } from '@/constants/links';
-import { SITE_METADATA } from '@/constants/metadata';
 
 import { UserHover } from '@/components/common/user-hover';
 import { ContentRow } from '@/components/dashboard/shared/content-row';
@@ -213,20 +212,20 @@ export default async function DashboardPage() {
                     <span className='flex items-baseline justify-between gap-3 text-[13px]'>
                       <Link
                         href={LINKS.postWithSlugOrId(post.slug ?? post.id).url}
-                        className='hover:text-primary-text truncate transition-colors'
+                        className='truncate transition-colors hover:text-primary-text'
                       >
                         {post.title}
                       </Link>
-                      <span className='text-muted-foreground shrink-0 tabular-nums'>
+                      <span className='shrink-0 text-muted-foreground tabular-nums'>
                         {post.views}
                       </span>
                     </span>
                     <span
                       aria-hidden
-                      className='bg-muted h-1.5 overflow-hidden rounded-full'
+                      className='h-1.5 overflow-hidden rounded-full bg-muted'
                     >
                       <span
-                        className='bg-primary block h-full rounded-full'
+                        className='block h-full rounded-full bg-primary'
                         style={{ width: `${(post.views / mostViews) * 100}%` }}
                       />
                     </span>
@@ -260,7 +259,7 @@ export default async function DashboardPage() {
                       </Avatar>
                     </UserHover>
                     <div className='min-w-0'>
-                      <p className='text-muted-foreground truncate text-xs'>
+                      <p className='truncate text-xs text-muted-foreground'>
                         <Link
                           href={
                             LINKS.dashboardUserWithId(comment.author.id).url
@@ -278,7 +277,7 @@ export default async function DashboardPage() {
                           {comment.post.title}
                         </Link>
                       </p>
-                      <p className='text-body mt-0.5 line-clamp-2 text-[13px]'>
+                      <p className='mt-0.5 line-clamp-2 text-[13px] text-body'>
                         {shorten(comment.content, 140)}
                       </p>
                     </div>

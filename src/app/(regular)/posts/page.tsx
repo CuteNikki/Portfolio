@@ -1,9 +1,8 @@
+import { SITE_METADATA } from '@/constants/metadata';
 import { Suspense } from 'react';
 
 import { toPostRow } from '@/lib/cards';
 import { getDraftPosts, getPublishedPosts } from '@/lib/data';
-
-import { SITE_METADATA } from '@/constants/metadata';
 
 import { PageHeader } from '@/components/common/page-header';
 import { PostBrowser } from '@/components/posts/post-browser';
@@ -33,7 +32,7 @@ async function PublishedPosts() {
 
   if (posts.length === 0) {
     return (
-      <p className='text-muted-foreground py-20 text-center'>
+      <p className='py-20 text-center text-muted-foreground'>
         No posts yet. Check back later!
       </p>
     );
@@ -51,7 +50,7 @@ async function Drafts() {
     <section aria-labelledby='drafts-heading' className='flex flex-col gap-2'>
       <h2 id='drafts-heading' className='text-lg font-bold tracking-[-0.03em]'>
         Drafts{' '}
-        <span className='text-muted-foreground font-normal'>
+        <span className='font-normal text-muted-foreground'>
           · only writers see these
         </span>
       </h2>

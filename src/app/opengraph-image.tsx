@@ -1,6 +1,6 @@
-import { OG_SIZE, renderOgImage } from '@/lib/og';
-
 import { PERSONAL_DETAILS } from '@/constants/personal';
+
+import { OG_SIZE, renderOgImage } from '@/lib/og';
 
 // Only the initial of the last name, since link previews travel further than the site
 const NAME = `${PERSONAL_DETAILS.firstName} ${PERSONAL_DETAILS.middleName} ${PERSONAL_DETAILS.lastName[0]}.`;

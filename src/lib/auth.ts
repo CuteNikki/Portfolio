@@ -1,14 +1,12 @@
 import { createHash } from 'node:crypto';
+import { canWrite } from '@/constants/roles';
 import { cookies } from 'next/headers';
 import { redirect, unstable_rethrow } from 'next/navigation';
 import { after, connection } from 'next/server';
 import { cache } from 'react';
 
 import { Role } from '@/lib/generated/prisma/enums';
-
 import prisma from '@/lib/prisma';
-
-import { canWrite } from '@/constants/roles';
 
 export const SESSION_COOKIE = 'auth_session';
 export const OAUTH_STATE_COOKIE = 'oauth_state';
@@ -69,7 +67,7 @@ export const getCurrentSession = cache(async () => {
           where: { id: session.id },
           data: { lastSeenAt: new Date() },
         })
-        .catch(() => {}),
+        .catch(() => {})
     );
   }
 

@@ -25,10 +25,10 @@ const isCustom = (tone: string | null): tone is string =>
 // The look of one choice; the selected one gets the light violet chip look
 const choice = (selected: boolean) =>
   cn(
-    'has-focus-visible:ring-ring/50 flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors has-focus-visible:ring-3',
+    'flex cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors has-focus-visible:ring-3 has-focus-visible:ring-ring/50',
     selected
       ? 'border-primary-text/40 bg-primary-soft text-foreground'
-      : 'text-muted-foreground hover:border-line-strong',
+      : 'text-muted-foreground hover:border-line-strong'
   );
 
 // A project's colour, which tints its cards and thumbnails: Auto, the chart colour closest to its cover's main colour,
@@ -45,7 +45,7 @@ export function ToneField({
   const [tone, setTone] = useState<string | null>(defaultValue);
   // Kept while another choice is selected, so going back to Custom restores it
   const [custom, setCustom] = useState(
-    isCustom(defaultValue) ? defaultValue : '#a78bfa',
+    isCustom(defaultValue) ? defaultValue : '#a78bfa'
   );
   // What's typed in the hex field, which may be half-finished; it only becomes the colour once it's a whole one
   const [typed, setTyped] = useState(custom);
@@ -145,7 +145,7 @@ export function ToneField({
           />
         </div>
       )}
-      <span className='text-muted-foreground text-xs'>
+      <span className='text-xs text-muted-foreground'>
         The panel behind the project's cover. The five colours tint it softly; a
         custom colour fills it as it is. Auto matches the cover.
       </span>

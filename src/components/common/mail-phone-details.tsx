@@ -1,8 +1,7 @@
+import { PERSONAL_DETAILS } from '@/constants/personal';
 import Link from 'next/link';
 
 import { AtSignIcon, PhoneIcon } from 'lucide-react';
-
-import { PERSONAL_DETAILS } from '@/constants/personal';
 
 export function EmailAndPhone({ language }: { language: 'en' | 'de' }) {
   const CONTENT = {
@@ -20,16 +19,16 @@ export function EmailAndPhone({ language }: { language: 'en' | 'de' }) {
     <div className='flex flex-col gap-2 text-sm'>
       <Link
         href={PERSONAL_DETAILS.emailLink}
-        className='group hover:text-primary-text flex items-center gap-2 transition-colors'
+        className='group flex items-center gap-2 transition-colors hover:text-primary-text'
       >
-        <AtSignIcon className='text-primary-text size-4 shrink-0' />
+        <AtSignIcon className='size-4 shrink-0 text-primary-text' />
         {CONTENT[language].email} <span>{PERSONAL_DETAILS.email}</span>
       </Link>
       <Link
         href={PERSONAL_DETAILS.phoneLink}
-        className='group hover:text-primary-text flex items-center gap-2 transition-colors'
+        className='group flex items-center gap-2 transition-colors hover:text-primary-text'
       >
-        <PhoneIcon className='text-primary-text size-4 shrink-0' />
+        <PhoneIcon className='size-4 shrink-0 text-primary-text' />
         {CONTENT[language].phone} <span>{PERSONAL_DETAILS.phone}</span>
       </Link>
     </div>

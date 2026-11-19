@@ -1,14 +1,13 @@
-import { after } from 'next/server';
-import { Suspense } from 'react';
-import Link from 'next/link';
-
-import { requireWriter } from '@/lib/auth';
-import { findUnusedImages, sweepUnusedImages } from '@/lib/uploads';
-import prisma from '@/lib/prisma';
-import { cn } from '@/lib/utils';
-
 import { LINKS } from '@/constants/links';
 import { SITE_METADATA } from '@/constants/metadata';
+import Link from 'next/link';
+import { after } from 'next/server';
+import { Suspense } from 'react';
+
+import { requireWriter } from '@/lib/auth';
+import prisma from '@/lib/prisma';
+import { findUnusedImages, sweepUnusedImages } from '@/lib/uploads';
+import { cn } from '@/lib/utils';
 
 import { StoredImage } from '@/components/common/stored-image';
 import { RemovePictureButton } from '@/components/dashboard/media/remove-picture';
@@ -83,12 +82,12 @@ export default async function MediaPage() {
         post.coverDarkUrl,
         post.thumbnailDarkUrl,
       ].filter(Boolean).length,
-    0,
+    0
   );
   const projectCovers = projects.reduce(
     (sum, { coverUrl, coverDarkUrl }) =>
       sum + (coverUrl ? 1 : 0) + (coverDarkUrl ? 1 : 0),
-    0,
+    0
   );
 
   const pictures: Picture[] = [
@@ -216,7 +215,7 @@ export default async function MediaPage() {
       </Suspense>
 
       {pictures.length === 0 ? (
-        <p className='text-muted-foreground rounded-xl border border-dashed px-6 py-16 text-center text-sm'>
+        <p className='rounded-xl border border-dashed px-6 py-16 text-center text-sm text-muted-foreground'>
           No pictures yet. Add a cover to a post or project to see it here.
         </p>
       ) : (
@@ -225,9 +224,9 @@ export default async function MediaPage() {
             <li key={picture.url} className='group/picture relative'>
               <Link
                 href={picture.editHref}
-                className='group bg-card hover:border-line-strong flex flex-col overflow-hidden rounded-xl border transition-colors'
+                className='group flex flex-col overflow-hidden rounded-xl border bg-card transition-colors hover:border-line-strong'
               >
-                <span className='bg-muted relative aspect-2/1'>
+                <span className='relative aspect-2/1 bg-muted'>
                   <StoredImage
                     url={picture.url}
                     alt={picture.alt}
@@ -237,10 +236,10 @@ export default async function MediaPage() {
                   />
                 </span>
                 <span className='flex flex-col gap-0.5 px-3.5 py-3'>
-                  <span className='group-hover:text-primary-text truncate text-[13px] font-semibold transition-colors'>
+                  <span className='truncate text-[13px] font-semibold transition-colors group-hover:text-primary-text'>
                     {picture.usedBy}
                   </span>
-                  <span className='text-muted-foreground text-xs'>
+                  <span className='text-xs text-muted-foreground'>
                     {picture.usage}
                   </span>
                 </span>

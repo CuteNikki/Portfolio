@@ -1,6 +1,5 @@
-import z from 'zod';
-
 import { CONTACT_FIELDS, INVALID_EMAIL } from '@/constants/contact';
+import z from 'zod';
 
 export { MAX_MESSAGE_LENGTH, MIN_SUBMIT_TIME_MS } from '@/constants/contact';
 

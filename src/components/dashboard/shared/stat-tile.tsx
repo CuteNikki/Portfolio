@@ -20,15 +20,15 @@ export function StatTile({
   return (
     <div
       className={cn(
-        'bg-card relative flex h-full flex-col gap-1 rounded-xl border px-4 py-4 sm:px-5',
-        TILE_HEIGHT,
+        'relative flex h-full flex-col gap-1 rounded-xl border bg-card px-4 py-4 sm:px-5',
+        TILE_HEIGHT
       )}
     >
-      <dt className='text-muted-foreground text-xs'>{label}</dt>
+      <dt className='text-xs text-muted-foreground'>{label}</dt>
       <dd className='text-[28px] leading-tight font-bold tracking-tighter tabular-nums'>
         {value}
       </dd>
-      <dd className='text-muted-foreground text-xs'>{note}</dd>
+      <dd className='text-xs text-muted-foreground'>{note}</dd>
       {children}
     </div>
   );
@@ -71,10 +71,10 @@ export async function StorageTile() {
     >
       <dd
         aria-hidden
-        className='bg-muted absolute inset-x-4 bottom-3.5 h-1.5 overflow-hidden rounded-full sm:inset-x-5'
+        className='absolute inset-x-4 bottom-3.5 h-1.5 overflow-hidden rounded-full bg-muted sm:inset-x-5'
       >
         <span
-          className='bg-primary block h-full rounded-full'
+          className='block h-full rounded-full bg-primary'
           style={{ width: `${Math.max(share * 100, 1)}%` }}
         />
       </dd>

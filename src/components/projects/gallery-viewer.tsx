@@ -1,7 +1,8 @@
 'use client';
 
-import { ChevronLeftIcon, ChevronRightIcon, XIcon } from 'lucide-react';
 import { Dialog } from 'radix-ui';
+
+import { ChevronLeftIcon, ChevronRightIcon, XIcon } from 'lucide-react';
 
 import { imageUrl } from '@/lib/images';
 import { cn } from '@/lib/utils';
@@ -39,7 +40,7 @@ export default function GalleryViewer({
       onOpenChange={(isOpen) => !isOpen && setOpen(null)}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className='data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 fixed inset-0 z-50 bg-black/80 backdrop-blur-sm' />
+        <Dialog.Overlay className='fixed inset-0 z-50 bg-black/80 backdrop-blur-sm data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0' />
         <Dialog.Content
           onCloseAutoFocus={(event) => {
             event.preventDefault();
@@ -50,7 +51,7 @@ export default function GalleryViewer({
             if (event.key === 'ArrowLeft') step(-1);
             if (event.key === 'ArrowRight') step(1);
           }}
-          className='data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 p-4 outline-none sm:p-10'
+          className='fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 p-4 outline-none sm:p-10 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95'
         >
           {current && open !== null && (
             <>
@@ -75,10 +76,10 @@ export default function GalleryViewer({
                           current.darkUrl &&
                             (version === 0
                               ? 'dark:hidden'
-                              : 'hidden dark:block'),
+                              : 'hidden dark:block')
                         )}
                       />
-                    ),
+                    )
                 )}
                 <figcaption className='flex w-full items-center justify-between gap-4 text-sm text-white/85'>
                   <span>{current.alt}</span>

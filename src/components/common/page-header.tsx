@@ -15,13 +15,13 @@ export function PageHeader({
   return (
     <header className='relative isolate flex flex-col gap-4 pt-6 pb-2 sm:pt-10'>
       {backdrop && <GridBackdrop />}
-      <p className='animate-hero-in text-primary-text text-[13px] font-semibold tracking-[0.14em] uppercase'>
+      <p className='animate-hero-in text-[13px] font-semibold tracking-[0.14em] text-primary-text uppercase'>
         {eyebrow}
       </p>
       <h1 className='animate-hero-in text-5xl leading-[1.04] font-bold tracking-[-0.06em] delay-1 sm:text-[64px]'>
         {title}
       </h1>
-      <p className='animate-hero-in text-body max-w-xl text-pretty delay-2'>
+      <p className='animate-hero-in max-w-xl text-pretty text-body delay-2'>
         {description}
       </p>
     </header>

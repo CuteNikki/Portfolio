@@ -1,9 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-
 import { cacheLife } from 'next/cache';
 import { ImageResponse } from 'next/og';
-
 import sharp from 'sharp';
 
 import { imageUrl } from '@/lib/images';
@@ -62,7 +60,7 @@ async function loadCover(url: string) {
     if (!response.ok) return null;
 
     const { data, info } = await sharp(
-      Buffer.from(await response.arrayBuffer()),
+      Buffer.from(await response.arrayBuffer())
     )
       .resize(COVER.width, OG_SIZE.height * 2, { fit: 'inside' })
       .png()
@@ -262,7 +260,7 @@ async function renderOgPng({
         { name: 'JetBrains Mono', data: regular, weight: 400, style: 'normal' },
         { name: 'JetBrains Mono', data: bold, weight: 700, style: 'normal' },
       ],
-    },
+    }
   );
 
   return new Uint8Array(await image.arrayBuffer());

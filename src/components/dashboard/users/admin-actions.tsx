@@ -1,13 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { LINKS } from '@/constants/links';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { Trash2Icon } from 'lucide-react';
 
 import type { Role } from '@/lib/generated/prisma/enums';
-
-import { LINKS } from '@/constants/links';
 
 import { RoleSelect } from '@/components/dashboard/users/columns';
 import { DeleteUserDialog } from '@/components/dashboard/users/delete-user';

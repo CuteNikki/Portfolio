@@ -1,7 +1,6 @@
+import { FOOTER_LINKS } from '@/constants/links';
 import { cacheLife } from 'next/cache';
 import Link from 'next/link';
-
-import { FOOTER_LINKS } from '@/constants/links';
 
 import { cn } from '@/lib/utils';
 
@@ -11,8 +10,8 @@ export function Footer({ wide }: { wide?: boolean }) {
     <footer className='w-full border-t'>
       <div
         className={cn(
-          'text-muted-foreground mx-auto flex flex-wrap items-center justify-between gap-x-8 gap-y-4 px-4 py-7 text-[13px] sm:px-6',
-          wide ? 'lg:px-6' : 'container max-w-6xl lg:px-8',
+          'mx-auto flex flex-wrap items-center justify-between gap-x-8 gap-y-4 px-4 py-7 text-[13px] text-muted-foreground sm:px-6',
+          wide ? 'lg:px-6' : 'container max-w-6xl lg:px-8'
         )}
       >
         <p>
@@ -25,7 +24,7 @@ export function Footer({ wide }: { wide?: boolean }) {
                 <Link
                   href={url}
                   lang={lang}
-                  className='hover:text-foreground lowercase transition-colors'
+                  className='lowercase transition-colors hover:text-foreground'
                 >
                   {label}
                 </Link>

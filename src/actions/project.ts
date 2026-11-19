@@ -4,18 +4,18 @@ import { revalidatePath, updateTag } from 'next/cache';
 import { after } from 'next/server';
 
 import {
+  fail,
   type ActionResult,
   type CreateResult,
-  fail,
 } from '@/lib/action-result';
 import { getWriterSession } from '@/lib/auth';
 import { authorRows, readAuthors } from '@/lib/authors';
 import { readDate, readList, readText } from '@/lib/form-fields';
 import { readCover, readGallery, removedImages } from '@/lib/form-images';
-import { coverTone } from '@/lib/tone';
-import { deleteImages } from '@/lib/uploads';
 import prisma from '@/lib/prisma';
 import { resolveSlug } from '@/lib/slug';
+import { coverTone } from '@/lib/tone';
+import { deleteImages } from '@/lib/uploads';
 
 function isProjectSlugTaken(exceptId?: string) {
   return async (slug: string) =>
@@ -49,7 +49,7 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
   const resolved = await resolveSlug(
     formData.get('slug'),
     title,
-    isProjectSlugTaken(),
+    isProjectSlugTaken()
   );
   if ('error' in resolved) return fail(resolved.error);
   const { slug } = resolved;
@@ -74,7 +74,7 @@ export async function createProject(formData: FormData): Promise<CreateResult> {
       // The picked authors, or else whoever creates it
       authors: {
         create: authorRows(
-          (await readAuthors(formData)) ?? [{ userId: session.user.id }],
+          (await readAuthors(formData)) ?? [{ userId: session.user.id }]
         ),
       },
       publishedAt: isPublished ? new Date() : null,
@@ -113,8 +113,8 @@ export async function deleteProject(formData: FormData): Promise<ActionResult> {
         deletedProject.coverUrl,
         deletedProject.coverDarkUrl,
         ...deletedProject.images.flatMap(({ url, darkUrl }) => [url, darkUrl]),
-      ].filter((url): url is string => !!url),
-    ),
+      ].filter((url): url is string => !!url)
+    )
   );
 
   revalidateProjectPaths(deletedProject.id, deletedProject.slug);
@@ -163,7 +163,7 @@ export async function updateProject(formData: FormData): Promise<ActionResult> {
   const resolved = await resolveSlug(
     formData.get('slug'),
     title,
-    isProjectSlugTaken(id),
+    isProjectSlugTaken(id)
   );
   if ('error' in resolved) return fail(resolved.error);
   const { slug } = resolved;
@@ -240,7 +240,7 @@ function readLink(value: FormDataEntryValue | null): string | false {
   if (!text) return '';
   try {
     const url = new URL(
-      /^[a-z][a-z\d+.-]*:/i.test(text) ? text : `https://${text}`,
+      /^[a-z][a-z\d+.-]*:/i.test(text) ? text : `https://${text}`
     );
     return url.protocol === 'https:' || url.protocol === 'http:'
       ? url.href
@@ -258,7 +258,7 @@ function readLink(value: FormDataEntryValue | null): string | false {
  */
 export async function setProjectPublished(
   projectId: string,
-  published: boolean,
+  published: boolean
 ): Promise<ActionResult> {
   if (!(await getWriterSession())) {
     return fail('Only writers and admins can do that.');

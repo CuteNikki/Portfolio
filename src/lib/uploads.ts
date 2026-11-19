@@ -5,9 +5,9 @@ import { createHash, randomUUID } from 'node:crypto';
 import {
   IMAGE_SIZE_NAMES,
   IMAGE_TYPES,
+  MAX_IMAGE_BYTES,
   type ImageSize,
   type ImageType,
-  MAX_IMAGE_BYTES,
 } from '@/lib/images';
 import prisma from '@/lib/prisma';
 import {
@@ -33,7 +33,7 @@ function uploadFolder() {
  */
 export async function newUpload(
   type: ImageType,
-  bytes: Record<ImageSize, number>,
+  bytes: Record<ImageSize, number>
 ) {
   const extension = IMAGE_TYPES[type];
   const key = `${uploadFolder()}/${randomUUID()}`;
@@ -44,8 +44,8 @@ export async function newUpload(
         [
           size,
           await signUpload(`${key}/${size}.${extension}`, type, bytes[size]),
-        ] as const,
-    ),
+        ] as const
+    )
   );
 
   return {
@@ -94,7 +94,7 @@ export async function storageUsage() {
   try {
     const files = await listObjects(`${uploadFolder()}/`);
     const pictures = new Set(
-      files.map(({ key }) => key.split('/').slice(0, 3).join('/')),
+      files.map(({ key }) => key.split('/').slice(0, 3).join('/'))
     );
     return {
       bytes: files.reduce((sum, file) => sum + file.size, 0),
@@ -123,7 +123,7 @@ export async function deleteImages(urls: string[]) {
       } catch (error) {
         console.error(`Couldn't delete the picture ${key}:`, error);
       }
-    }),
+    })
   );
 }
 
@@ -200,7 +200,7 @@ async function usedImages(urls: string[]) {
  */
 export async function discardUnusedImages(urls: string[]) {
   const candidates = [...new Set(urls)].filter(
-    (url) => ownImageKey(url) !== null,
+    (url) => ownImageKey(url) !== null
   );
   if (candidates.length === 0) return 0;
 
@@ -253,8 +253,8 @@ export async function pictureUses(url: string) {
     projects: [
       ...new Map(
         [...projects, ...images.map(({ project }) => project)].map(
-          (project) => [project.id, project],
-        ),
+          (project) => [project.id, project]
+        )
       ).values(),
     ],
     inText: [...postTexts, ...projectTexts].map(({ title }) => title),
@@ -295,25 +295,25 @@ export async function findUnusedImages(minAgeMs = 0) {
     .filter(([, { large }]) => !large)
     .map(([folder]) => folder);
   const urls = old.flatMap(([, { large }]) =>
-    large ? [`${IMAGE_PUBLIC_URL}/${large}`] : [],
+    large ? [`${IMAGE_PUBLIC_URL}/${large}`] : []
   );
   const used = urls.length > 0 ? await usedImages(urls) : new Set<string>();
   // Pictures with every copy, which can be shown as a thumbnail
   const complete = new Set(
     old
       .filter(([, { copies }]) =>
-        IMAGE_SIZE_NAMES.every((size) => copies.has(size)),
+        IMAGE_SIZE_NAMES.every((size) => copies.has(size))
       )
       .flatMap(([, { large }]) =>
-        large ? [`${IMAGE_PUBLIC_URL}/${large}`] : [],
-      ),
+        large ? [`${IMAGE_PUBLIC_URL}/${large}`] : []
+      )
   );
 
   const unused = urls.filter((url) => !used.has(url));
   const uploadedAt = new Map<string, number>(
     old.flatMap(([, { newest, large }]) =>
-      large ? [[`${IMAGE_PUBLIC_URL}/${large}`, newest]] : [],
-    ),
+      large ? [[`${IMAGE_PUBLIC_URL}/${large}`, newest]] : []
+    )
   );
   return {
     urls: unused,
@@ -328,7 +328,7 @@ export async function findUnusedImages(minAgeMs = 0) {
       .sort((a, b) => b.uploadedAt - a.uploadedAt),
     unfinishedFiles: files
       .filter((file) =>
-        unfinished.some((folder) => file.key.startsWith(`${folder}/`)),
+        unfinished.some((folder) => file.key.startsWith(`${folder}/`))
       )
       .map((file) => file.key),
   };
@@ -344,9 +344,9 @@ export async function removeUnusedImages(minAgeMs = 0) {
   await Promise.all(
     unused.unfinishedFiles.map((key) =>
       deleteObject(key).catch((error) =>
-        console.error(`Couldn't delete ${key}:`, error),
-      ),
-    ),
+        console.error(`Couldn't delete ${key}:`, error)
+      )
+    )
   );
   await deleteImages(unused.urls);
   return unused.urls.length;

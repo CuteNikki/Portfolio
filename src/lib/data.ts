@@ -1,8 +1,7 @@
 import { cacheLife, cacheTag } from 'next/cache';
 
-import type { Prisma } from '@/lib/generated/prisma/client';
-
 import { isWriter } from '@/lib/auth';
+import type { Prisma } from '@/lib/generated/prisma/client';
 import prisma from '@/lib/prisma';
 
 // The user fields that are safe to show publicly

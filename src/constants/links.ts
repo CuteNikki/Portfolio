@@ -1,9 +1,9 @@
 import {
   HomeIcon,
   ImagesIcon,
-  MessageSquareIcon,
   LucideIcon,
   MailIcon,
+  MessageSquareIcon,
   NewspaperIcon,
   PanelsTopLeftIcon,
   PresentationIcon,

@@ -1,4 +1,5 @@
 import { SITE_METADATA } from '@/constants/metadata';
+
 import { requireAdmin } from '@/lib/auth';
 import { PUBLIC_USER_SELECT } from '@/lib/data';
 import prisma from '@/lib/prisma';

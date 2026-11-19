@@ -23,13 +23,13 @@ const linear = (channel: number) => {
 function oklch(r: number, g: number, b: number) {
   const [lr, lg, lb] = [linear(r), linear(g), linear(b)];
   const l = Math.cbrt(
-    0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb,
+    0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb
   );
   const m = Math.cbrt(
-    0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb,
+    0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb
   );
   const s = Math.cbrt(
-    0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb,
+    0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb
   );
   const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
   const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
@@ -61,7 +61,7 @@ export async function coverTone(url: string | null | undefined) {
     if (!response.ok) return null;
 
     const { data, info } = await sharp(
-      Buffer.from(await response.arrayBuffer()),
+      Buffer.from(await response.arrayBuffer())
     )
       .resize(120, 60, { fit: 'inside' })
       .removeAlpha()
@@ -76,7 +76,7 @@ export async function coverTone(url: string | null | undefined) {
       const { lightness, chroma, hue } = oklch(
         data[i],
         data[i + 1],
-        data[i + 2],
+        data[i + 2]
       );
       if (chroma < MIN_CHROMA || lightness < 0.25 || lightness > 0.97) continue;
       bins[Math.floor(hue / 10) % 36] += chroma;
