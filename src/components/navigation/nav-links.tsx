@@ -15,12 +15,20 @@ export function isCurrent(pathname: string, url: string) {
 // The navbar's page links on larger screens; on phones they are in the mobile menu. Imports the links itself rather
 // than taking them as a prop: their icons are components, which a Server Component can't pass to a Client Component.
 export function NavLinks() {
-  const pathname = usePathname();
+  return <NavLinkList pathname={usePathname()} />;
+}
 
+// Until the path is known, as on a post or project the build didn't know about: the same links, none current yet.
+// Only the current link's color differs, so nothing moves when NavLinks takes over.
+export function NavLinksPlaceholder() {
+  return <NavLinkList pathname={null} />;
+}
+
+function NavLinkList({ pathname }: { pathname: string | null }) {
   return (
     <ul className='flex items-center gap-8 text-sm'>
       {NAVBAR_LINKS.map(({ url, label }) => {
-        const current = isCurrent(pathname, url);
+        const current = pathname !== null && isCurrent(pathname, url);
 
         return (
           <li key={url}>

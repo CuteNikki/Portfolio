@@ -9,7 +9,10 @@ import {
   AccountButtonPlaceholder,
 } from '@/components/navigation/account-button';
 import { AccountMenu } from '@/components/navigation/account-menu';
-import { NavLinks } from '@/components/navigation/nav-links';
+import {
+  NavLinks,
+  NavLinksPlaceholder,
+} from '@/components/navigation/nav-links';
 import { ThemeSwitcher } from '@/components/theme/switcher';
 
 // `showAccount` adds the account menu, which reads the session. Leave it out only where the session can't be read.
@@ -37,7 +40,11 @@ export function Navbar({
         </Link>
 
         <nav aria-label='Main' className='hidden sm:block'>
-          <NavLinks />
+          {/* Reads the path, which a page prerendered for a post or project the build didn't know about only has
+              once it's asked for */}
+          <Suspense fallback={<NavLinksPlaceholder />}>
+            <NavLinks />
+          </Suspense>
         </nav>
 
         <div className='flex items-center gap-2'>
