@@ -3,7 +3,7 @@
 import { revalidatePath, updateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 
-import { Role } from '@/generated/prisma/enums';
+import { Role } from '@/lib/generated/prisma/enums';
 
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession, SESSION_COOKIE } from '@/lib/auth';

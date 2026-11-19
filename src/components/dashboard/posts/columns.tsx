@@ -1,6 +1,6 @@
 'use client';
 
-import type { Post } from '@/generated/prisma/browser';
+import type { Post } from '@/lib/generated/prisma/browser';
 
 import { authorsOf } from '@/lib/author-list';
 import type { PublicUser } from '@/lib/data';

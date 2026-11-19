@@ -3,7 +3,7 @@
 import { revalidatePath, updateTag } from 'next/cache';
 import z from 'zod';
 
-import { Role } from '@/generated/prisma/enums';
+import { Role } from '@/lib/generated/prisma/enums';
 
 import type { ActionResult } from '@/lib/action-result';
 import { getCurrentSession } from '@/lib/auth';

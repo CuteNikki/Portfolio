@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 import { Trash2Icon } from 'lucide-react';
 
-import type { Role } from '@/generated/prisma/enums';
+import type { Role } from '@/lib/generated/prisma/enums';
 
 import { LINKS } from '@/constants/links';
 

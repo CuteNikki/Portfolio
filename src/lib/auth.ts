@@ -4,7 +4,7 @@ import { redirect, unstable_rethrow } from 'next/navigation';
 import { after, connection } from 'next/server';
 import { cache } from 'react';
 
-import { Role } from '@/generated/prisma/enums';
+import { Role } from '@/lib/generated/prisma/enums';
 
 import prisma from '@/lib/prisma';
 

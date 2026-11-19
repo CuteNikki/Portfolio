@@ -3,7 +3,7 @@
 import { useId, useState } from 'react';
 import { toast } from '@/lib/toast';
 
-import type { Comment as CommentType } from '@/generated/prisma/browser';
+import type { Comment as CommentType } from '@/lib/generated/prisma/browser';
 
 import type { PublicUser } from '@/lib/data';
 

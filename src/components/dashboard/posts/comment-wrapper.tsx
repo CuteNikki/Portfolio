@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 
-import type { Comment as CommentType } from '@/generated/prisma/browser';
-import type { Role } from '@/generated/prisma/enums';
+import type { Comment as CommentType } from '@/lib/generated/prisma/browser';
+import type { Role } from '@/lib/generated/prisma/enums';
 
 import type { PublicUser } from '@/lib/data';
 

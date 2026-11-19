@@ -13,7 +13,7 @@ import {
   UserRoundIcon,
 } from 'lucide-react';
 
-import type { Role } from '@/generated/prisma/client';
+import type { Role } from '@/lib/generated/prisma/client';
 
 import type { PublicUser as User } from '@/lib/data';
 import { proxiedAvatarUrl } from '@/lib/utils';

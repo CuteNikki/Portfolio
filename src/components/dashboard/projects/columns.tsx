@@ -1,6 +1,6 @@
 'use client';
 
-import type { Project } from '@/generated/prisma/browser';
+import type { Project } from '@/lib/generated/prisma/browser';
 
 import { authorsOf } from '@/lib/author-list';
 import type { PublicUser } from '@/lib/data';

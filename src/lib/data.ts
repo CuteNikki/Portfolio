@@ -1,6 +1,6 @@
 import { cacheLife, cacheTag } from 'next/cache';
 
-import type { Prisma } from '@/generated/prisma/client';
+import type { Prisma } from '@/lib/generated/prisma/client';
 
 import { isWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';

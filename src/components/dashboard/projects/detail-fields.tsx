@@ -1,4 +1,4 @@
-import type { Project } from '@/generated/prisma/browser';
+import type { Project } from '@/lib/generated/prisma/browser';
 
 import { Field } from '@/components/dashboard/shared/form-parts';
 import { Input } from '@/components/ui/input';

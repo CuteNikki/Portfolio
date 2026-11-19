@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
 
-import type { Role } from '@/generated/prisma/enums';
+import type { Role } from '@/lib/generated/prisma/enums';
 
 import { setCanWrite } from '@/lib/can-write';
 import { cn } from '@/lib/utils';

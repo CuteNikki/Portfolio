@@ -63,11 +63,8 @@ STORAGE_SECRET_ACCESS_KEY=
 ### Installation
 
 ```bash
-# Install dependencies
+# Install dependencies (this also generates the Prisma client)
 bun install
-
-# Generate Prisma client
-bun run prisma:generate
 
 # Run database migrations
 bun run prisma:migrate
@@ -85,7 +82,7 @@ The build doesn't touch the database. Apply new migrations to the live database 
 | Script                   | Description                    |
 | ------------------------ | ------------------------------ |
 | `bun run dev`            | Start development server       |
-| `bun run build`          | Generate Prisma client & build |
+| `bun run build`          | Build for production           |
 | `bun run start`          | Start production server        |
 | `bun run lint`           | Run ESLint                     |
 | `bun run format`         | Format code with Prettier      |

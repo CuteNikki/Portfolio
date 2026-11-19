@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { UserRoundCogIcon } from 'lucide-react';
 
-import { Role } from '@/generated/prisma/enums';
+import { Role } from '@/lib/generated/prisma/enums';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';
