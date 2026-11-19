@@ -8,8 +8,8 @@
     "start": "next start",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write \"**/*.{ts,tsx,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,css}\"",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
@@ -17,11 +17,38 @@
     "db:reset": "prisma migrate reset"
   },
   "prettier": {
+    "endOfLine": "lf",
+    "semi": true,
+    "singleQuote": true,
+    "jsxSingleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 80,
     "plugins": [
+      "@ianvs/prettier-plugin-sort-imports",
       "prettier-plugin-tailwindcss"
     ],
-    "singleQuote": true,
-    "jsxSingleQuote": true
+    "importOrder": [
+      "<BUILTIN_MODULES>",
+      "<THIRD_PARTY_MODULES>",
+      "",
+      "^lucide-react$",
+      "",
+      "^@/actions/(.*)$",
+      "^@/data/(.*)$",
+      "^@/lib/(.*)$",
+      "^@/app/(.*)$",
+      "",
+      "^@/components/(.*)$",
+      "^@/hooks/(.*)$",
+      "",
+      "^[.]"
+    ],
+    "tailwindStylesheet": "src/app/globals.css",
+    "tailwindFunctions": [
+      "cn",
+      "cva"
+    ]
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^13.15.1",
@@ -61,6 +88,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.1",
     "@tailwindcss/postcss": "^4.3.5",
     "@tailwindcss/typography": "^0.5.20",
     "@types/hast": "^3.0.5",
