@@ -67,7 +67,7 @@ STORAGE_SECRET_ACCESS_KEY=
 bun install
 
 # Run database migrations
-bun run prisma:migrate
+bun run db:migrate
 
 # Start development server
 bun run dev
@@ -79,16 +79,19 @@ The build doesn't touch the database. Apply new migrations to the live database 
 
 ### Available Scripts
 
-| Script                   | Description                    |
-| ------------------------ | ------------------------------ |
-| `bun run dev`            | Start development server       |
-| `bun run build`          | Build for production           |
-| `bun run start`          | Start production server        |
-| `bun run lint`           | Run ESLint                     |
-| `bun run format`         | Format code with Prettier      |
-| `bun run prisma:studio`  | Open Prisma Studio             |
-| `bun run prisma:migrate` | Run database migrations        |
-| `bun run prisma:reset`   | Reset database                 |
+| Script                 | Description                                |
+| ---------------------- | ------------------------------------------ |
+| `bun run dev`          | Start development server                   |
+| `bun run build`        | Build for production                       |
+| `bun run start`        | Start production server                    |
+| `bun run typecheck`    | Check types                                |
+| `bun run lint`         | Run ESLint                                 |
+| `bun run format`       | Format code with Prettier                  |
+| `bun run format:check` | Check formatting                           |
+| `bun run db:migrate`   | Create and apply migrations in development |
+| `bun run db:deploy`    | Apply migrations to the database           |
+| `bun run db:studio`    | Open Prisma Studio                         |
+| `bun run db:reset`     | Reset database                             |
 
 ## Pictures
 

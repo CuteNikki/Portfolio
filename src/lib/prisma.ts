@@ -17,7 +17,9 @@ const pool = new Pool({
   idleTimeoutMillis: 5000,
 });
 // A connection the server closed while idle is dropped from the pool rather than crashing the process.
-pool.on('error', (error) => console.warn('Idle database connection closed:', error.message));
+pool.on('error', (error) =>
+  console.warn('Idle database connection closed:', error.message),
+);
 // Lets Vercel close idle connections before it suspends the function, instead of leaving them open on the server.
 attachDatabasePool(pool);
 
