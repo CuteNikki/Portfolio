@@ -1,7 +1,8 @@
 import { timingSafeEqual } from 'node:crypto';
-import { LINKS } from '@/constants/links';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+
+import { LINKS } from '@/constants/links';
 
 import {
   hashSessionToken,

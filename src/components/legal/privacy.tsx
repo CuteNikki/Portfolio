@@ -1,5 +1,3 @@
-import { LINKS } from '@/constants/links';
-import { PERSONAL_DETAILS } from '@/constants/personal';
 import { SiDiscord } from '@icons-pack/react-simple-icons';
 import Link from 'next/link';
 
@@ -25,6 +23,9 @@ import {
   Trash2Icon,
   UserStarIcon,
 } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { cn } from '@/lib/utils';
 

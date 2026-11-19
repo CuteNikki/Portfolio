@@ -1,10 +1,11 @@
-import { LINKS } from '@/constants/links';
-import { ROLE_LABELS } from '@/constants/roles';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { UserRoundCogIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { ROLE_LABELS } from '@/constants/roles';
 
 import { requireWriter } from '@/lib/auth';
 import { Role } from '@/lib/generated/prisma/enums';

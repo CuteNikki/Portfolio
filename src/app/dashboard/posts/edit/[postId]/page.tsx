@@ -1,9 +1,10 @@
-import { LINKS } from '@/constants/links';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { ExternalLinkIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
 
 import { requireWriter } from '@/lib/auth';
 import { authorEntries, getAuthorOptions } from '@/lib/authors';

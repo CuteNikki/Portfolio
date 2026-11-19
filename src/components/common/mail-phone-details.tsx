@@ -1,7 +1,8 @@
-import { PERSONAL_DETAILS } from '@/constants/personal';
 import Link from 'next/link';
 
 import { AtSignIcon, PhoneIcon } from 'lucide-react';
+
+import { PERSONAL_DETAILS } from '@/constants/personal';
 
 export function EmailAndPhone({ language }: { language: 'en' | 'de' }) {
   const CONTENT = {

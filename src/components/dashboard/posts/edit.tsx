@@ -1,10 +1,12 @@
 'use client';
 
-import { LINKS } from '@/constants/links';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 
 import { deletePost, updatePost } from '@/actions/post';
+
+import { LINKS } from '@/constants/links';
+
 import type { AuthorEntry } from '@/lib/authors';
 import type { Post } from '@/lib/generated/prisma/client';
 import { toast } from '@/lib/toast';

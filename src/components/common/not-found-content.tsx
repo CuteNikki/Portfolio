@@ -1,7 +1,8 @@
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 
 import { ArrowRightIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
 
 import { HomeButton } from '@/components/common/home-button';
 import { GridBackdrop, PageHeader } from '@/components/common/page-header';

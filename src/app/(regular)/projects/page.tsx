@@ -1,5 +1,6 @@
-import { SITE_METADATA } from '@/constants/metadata';
 import { Suspense } from 'react';
+
+import { SITE_METADATA } from '@/constants/metadata';
 
 import { toProjectCard } from '@/lib/cards';
 import { getDraftProjects, getPublishedProjects } from '@/lib/data';

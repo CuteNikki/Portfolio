@@ -1,6 +1,7 @@
-import { FOOTER_LINKS } from '@/constants/links';
 import { cacheLife } from 'next/cache';
 import Link from 'next/link';
+
+import { FOOTER_LINKS } from '@/constants/links';
 
 import { cn } from '@/lib/utils';
 

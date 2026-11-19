@@ -1,5 +1,6 @@
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
+
+import { LINKS } from '@/constants/links';
 
 import { formatShortDate } from '@/lib/utils';
 

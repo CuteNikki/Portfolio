@@ -1,6 +1,3 @@
-import { LINKS } from '@/constants/links';
-import { PERSONAL_DETAILS } from '@/constants/personal';
-
 import {
   CopyrightIcon,
   HouseIcon,
@@ -9,6 +6,9 @@ import {
   MapPinIcon,
   ScaleIcon,
 } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { EmailAndPhone } from '@/components/common/mail-phone-details';
 import { ReadingColumns } from '@/components/common/reading-columns';

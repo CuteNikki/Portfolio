@@ -1,7 +1,8 @@
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 
 import { ArrowLeftIcon, SearchXIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
 
 import { Button } from '@/components/ui/button';
 

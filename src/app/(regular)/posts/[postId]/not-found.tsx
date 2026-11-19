@@ -1,7 +1,8 @@
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 
 import { AlertCircleIcon, ChevronLeftIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
 
 import { ScrollReveal } from '@/components/common/scroll-reveal';
 import { Button } from '@/components/ui/button';

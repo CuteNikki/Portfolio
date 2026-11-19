@@ -1,5 +1,6 @@
-import { SITE_METADATA } from '@/constants/metadata';
 import { Suspense } from 'react';
+
+import { SITE_METADATA } from '@/constants/metadata';
 
 import { toPostRow } from '@/lib/cards';
 import { getDraftPosts, getPublishedPosts } from '@/lib/data';

@@ -1,10 +1,12 @@
 'use client';
 
-import { LINKS } from '@/constants/links';
 import { useRouter } from 'next/navigation';
 import { useLayoutEffect, useRef, useState, useTransition } from 'react';
 
 import { createProject } from '@/actions/project';
+
+import { LINKS } from '@/constants/links';
+
 import type { AuthorEntry } from '@/lib/authors';
 import { toast } from '@/lib/toast';
 

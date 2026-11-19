@@ -1,6 +1,6 @@
-import { canWrite } from '@/constants/roles';
-
 import { CircleUserRoundIcon, MenuIcon } from 'lucide-react';
+
+import { canWrite } from '@/constants/roles';
 
 import { getDisplaySession } from '@/lib/auth';
 

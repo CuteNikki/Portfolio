@@ -1,9 +1,11 @@
 'use client';
 
-import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
 import { useId, useState } from 'react';
 
 import { editComment } from '@/actions/post';
+
+import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
+
 import type { PublicUser } from '@/lib/data';
 import type { Comment as CommentType } from '@/lib/generated/prisma/browser';
 import { toast } from '@/lib/toast';

@@ -1,10 +1,11 @@
-import { LINKS } from '@/constants/links';
-import { SITE_METADATA } from '@/constants/metadata';
-import { PERSONAL_DETAILS, WHAT_I_DO } from '@/constants/personal';
 import { cacheLife } from 'next/cache';
 import Link from 'next/link';
 
 import { ArrowRightIcon, BriefcaseIcon, GraduationCapIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
+import { PERSONAL_DETAILS, WHAT_I_DO } from '@/constants/personal';
 
 import { toPostRow, toProjectCard } from '@/lib/cards';
 import { getPublishedPosts, getPublishedProjects } from '@/lib/data';

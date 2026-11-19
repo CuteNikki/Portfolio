@@ -1,9 +1,10 @@
 'use client';
 
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 
 import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
 
 import type { Author } from '@/lib/author-list';
 import { proxiedAvatarUrl } from '@/lib/utils';

@@ -1,10 +1,11 @@
 'use server';
 
-import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
-import { canWrite } from '@/constants/roles';
 import { revalidatePath, updateTag } from 'next/cache';
 import { headers } from 'next/headers';
 import { after } from 'next/server';
+
+import { MAX_COMMENT_DEPTH, MAX_COMMENT_LENGTH } from '@/constants/comments';
+import { canWrite } from '@/constants/roles';
 
 import {
   fail,

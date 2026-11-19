@@ -1,8 +1,9 @@
 'use client';
 
-import { NAVBAR_LINKS } from '@/constants/links';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+
+import { NAVBAR_LINKS } from '@/constants/links';
 
 import { cn } from '@/lib/utils';
 

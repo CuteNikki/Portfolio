@@ -1,6 +1,7 @@
-import { NO_INDEX } from '@/constants/metadata';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+import { NO_INDEX } from '@/constants/metadata';
 
 import { Intro } from '@/app/test/intro';
 import Text from '@/app/test/text';

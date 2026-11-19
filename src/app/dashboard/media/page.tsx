@@ -1,8 +1,9 @@
-import { LINKS } from '@/constants/links';
-import { SITE_METADATA } from '@/constants/metadata';
 import Link from 'next/link';
 import { after } from 'next/server';
 import { Suspense } from 'react';
+
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';

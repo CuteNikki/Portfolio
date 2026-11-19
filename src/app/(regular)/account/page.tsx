@@ -1,9 +1,10 @@
-import { LINKS } from '@/constants/links';
-import { SITE_METADATA } from '@/constants/metadata';
-import { ROLE_LABELS } from '@/constants/roles';
 import { Suspense } from 'react';
 
 import { DownloadIcon, LogInIcon, RefreshCwIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
+import { ROLE_LABELS } from '@/constants/roles';
 
 import { getDisplaySession } from '@/lib/auth';
 import prisma from '@/lib/prisma';

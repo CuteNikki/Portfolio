@@ -1,5 +1,3 @@
-import { LINKS } from '@/constants/links';
-import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -7,6 +5,9 @@ import { connection } from 'next/server';
 import { Suspense } from 'react';
 
 import { LogInIcon, PencilLineIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 
 import { getDisplaySession } from '@/lib/auth';
 import {

@@ -1,7 +1,8 @@
-import { PERSONAL_DETAILS } from '@/constants/personal';
 import Link from 'next/link';
 
 import { ArrowUpRightIcon } from 'lucide-react';
+
+import { PERSONAL_DETAILS } from '@/constants/personal';
 
 import { PageHeader } from '@/components/common/page-header';
 import { ContactForm } from '@/components/contact/contact-form';

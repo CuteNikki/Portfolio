@@ -1,5 +1,6 @@
-import { SITE_URL } from '@/constants/metadata';
 import type { MetadataRoute } from 'next';
+
+import { SITE_URL } from '@/constants/metadata';
 
 export default function robots(): MetadataRoute.Robots {
   return {

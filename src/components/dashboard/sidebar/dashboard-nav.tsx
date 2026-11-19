@@ -1,11 +1,5 @@
 'use client';
 
-import {
-  DASHBOARD_ADMIN_LINKS,
-  DASHBOARD_LINKS,
-  LINKS,
-  type Link as NavLink,
-} from '@/constants/links';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useSyncExternalStore } from 'react';
@@ -17,6 +11,13 @@ import {
   PresentationIcon,
   SquarePenIcon,
 } from 'lucide-react';
+
+import {
+  DASHBOARD_ADMIN_LINKS,
+  DASHBOARD_LINKS,
+  LINKS,
+  type Link as NavLink,
+} from '@/constants/links';
 
 import { cn } from '@/lib/utils';
 

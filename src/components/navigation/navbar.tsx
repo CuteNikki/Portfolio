@@ -1,6 +1,7 @@
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 import { Suspense } from 'react';
+
+import { LINKS } from '@/constants/links';
 
 import { cn } from '@/lib/utils';
 

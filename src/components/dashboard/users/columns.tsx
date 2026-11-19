@@ -1,6 +1,5 @@
 'use client';
 
-import { LINKS } from '@/constants/links';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useOptimistic, useRef, useState, useTransition } from 'react';
@@ -13,6 +12,9 @@ import {
 } from 'lucide-react';
 
 import { updateUserRole } from '@/actions/user';
+
+import { LINKS } from '@/constants/links';
+
 import type { PublicUser as User } from '@/lib/data';
 import type { Role } from '@/lib/generated/prisma/client';
 import { fadeOutRow } from '@/lib/row-motion';

@@ -6,6 +6,7 @@ import { useState, useTransition } from 'react';
 import { Trash2Icon } from 'lucide-react';
 
 import { deleteAccount } from '@/actions/account';
+
 import { toast } from '@/lib/toast';
 
 import {

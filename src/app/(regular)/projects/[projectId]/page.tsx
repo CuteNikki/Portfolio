@@ -1,5 +1,3 @@
-import { LINKS } from '@/constants/links';
-import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -12,6 +10,9 @@ import {
   ArrowUpRightIcon,
   PencilLineIcon,
 } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { NO_INDEX, SITE_OPEN_GRAPH } from '@/constants/metadata';
 
 import { toProjectCard } from '@/lib/cards';
 import {

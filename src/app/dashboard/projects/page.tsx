@@ -1,8 +1,9 @@
-import { LINKS } from '@/constants/links';
-import { SITE_METADATA } from '@/constants/metadata';
 import Link from 'next/link';
 
 import { PlusIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
 
 import { requireWriter } from '@/lib/auth';
 import { PUBLIC_USER_SELECT } from '@/lib/data';

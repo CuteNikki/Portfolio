@@ -1,9 +1,10 @@
-import { LINKS } from '@/constants/links';
-import { SITE_METADATA } from '@/constants/metadata';
 import Link from 'next/link';
 import { Suspense } from 'react';
 
 import { PlusIcon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
+import { SITE_METADATA } from '@/constants/metadata';
 
 import { requireWriter } from '@/lib/auth';
 import prisma from '@/lib/prisma';

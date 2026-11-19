@@ -1,10 +1,12 @@
 'use client';
 
-import { LINKS } from '@/constants/links';
 import { useRouter } from 'next/navigation';
 import { useRef, useState, useTransition } from 'react';
 
 import { deleteProject, updateProject } from '@/actions/project';
+
+import { LINKS } from '@/constants/links';
+
 import type { AuthorEntry } from '@/lib/authors';
 import { Project } from '@/lib/generated/prisma/browser';
 import { toast } from '@/lib/toast';

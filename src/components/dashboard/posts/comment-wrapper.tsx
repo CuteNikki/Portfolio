@@ -1,7 +1,8 @@
 'use client';
 
-import { canWrite } from '@/constants/roles';
 import { useState } from 'react';
+
+import { canWrite } from '@/constants/roles';
 
 import type { PublicUser } from '@/lib/data';
 import type { Comment as CommentType } from '@/lib/generated/prisma/browser';

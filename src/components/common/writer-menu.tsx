@@ -1,6 +1,5 @@
 'use client';
 
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
@@ -14,6 +13,9 @@ import {
 
 import { setPostPublished } from '@/actions/post';
 import { setProjectPublished } from '@/actions/project';
+
+import { LINKS } from '@/constants/links';
+
 import { useCanWrite } from '@/lib/can-write';
 import { toast } from '@/lib/toast';
 

@@ -1,7 +1,5 @@
 'use client';
 
-import { LINKS, NAVBAR_LINKS } from '@/constants/links';
-import { ROLE_LABELS } from '@/constants/roles';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -14,6 +12,9 @@ import {
   UserIcon,
   type LucideIcon,
 } from 'lucide-react';
+
+import { LINKS, NAVBAR_LINKS } from '@/constants/links';
+import { ROLE_LABELS } from '@/constants/roles';
 
 import { cn } from '@/lib/utils';
 

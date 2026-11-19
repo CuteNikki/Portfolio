@@ -1,9 +1,10 @@
 import { createHash } from 'node:crypto';
-import { canWrite } from '@/constants/roles';
 import { cookies } from 'next/headers';
 import { redirect, unstable_rethrow } from 'next/navigation';
 import { after, connection } from 'next/server';
 import { cache } from 'react';
+
+import { canWrite } from '@/constants/roles';
 
 import { Role } from '@/lib/generated/prisma/enums';
 import prisma from '@/lib/prisma';

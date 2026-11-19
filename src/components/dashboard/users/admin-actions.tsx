@@ -1,10 +1,11 @@
 'use client';
 
-import { LINKS } from '@/constants/links';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { Trash2Icon } from 'lucide-react';
+
+import { LINKS } from '@/constants/links';
 
 import type { Role } from '@/lib/generated/prisma/enums';
 

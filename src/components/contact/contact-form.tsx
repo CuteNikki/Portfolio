@@ -1,17 +1,19 @@
 'use client';
 
-import {
-  CONTACT_FIELDS,
-  INVALID_EMAIL,
-  MAX_MESSAGE_LENGTH,
-} from '@/constants/contact';
-import { LINKS } from '@/constants/links';
 import Link from 'next/link';
 import { useEffect, useRef, useState, useTransition } from 'react';
 
 import { SendHorizontalIcon } from 'lucide-react';
 
 import { sendMail } from '@/actions/mail';
+
+import {
+  CONTACT_FIELDS,
+  INVALID_EMAIL,
+  MAX_MESSAGE_LENGTH,
+} from '@/constants/contact';
+import { LINKS } from '@/constants/links';
+
 import { toast } from '@/lib/toast';
 import { cn } from '@/lib/utils';
 

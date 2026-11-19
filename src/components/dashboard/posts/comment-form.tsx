@@ -1,9 +1,11 @@
 'use client';
 
-import { MAX_COMMENT_LENGTH } from '@/constants/comments';
 import React from 'react';
 
 import { createComment } from '@/actions/post';
+
+import { MAX_COMMENT_LENGTH } from '@/constants/comments';
+
 import { toast } from '@/lib/toast';
 
 import { Button } from '@/components/ui/button';

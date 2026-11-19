@@ -1,5 +1,9 @@
 'use server';
 
+import { render } from '@react-email/render';
+import nodemailer from 'nodemailer';
+import { createElement } from 'react';
+
 import {
   AntiSpamData,
   antiSpamSchema,
@@ -7,9 +11,6 @@ import {
   mailSubmitSchema,
   MIN_SUBMIT_TIME_MS,
 } from '@/types/mail';
-import { render } from '@react-email/render';
-import nodemailer from 'nodemailer';
-import { createElement } from 'react';
 
 import { hit, hitsSoFar, visitorHash } from '@/lib/rate-limit';
 

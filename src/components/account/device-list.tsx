@@ -5,6 +5,7 @@ import { useTransition } from 'react';
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from 'lucide-react';
 
 import { signOutDevice, signOutOtherDevices } from '@/actions/account';
+
 import type { ActionResult } from '@/lib/action-result';
 import { toast } from '@/lib/toast';
 import type { DeviceKind } from '@/lib/user-agent';
