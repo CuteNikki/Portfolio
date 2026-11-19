@@ -75,7 +75,7 @@ bun run dev
 
 The app will be available at `http://localhost:3000`.
 
-The build doesn't touch the database. Apply new migrations to the live database with `bunx prisma migrate deploy`, and when a migration removes something, deploy the code that stops using it first.
+The build reads the published posts and projects to prerender them, but never changes the database. New migrations are applied by the Docker image's `migrate` stage, which runs before the site starts (or by hand with `bun run db:deploy`). When a migration removes something, deploy the code that stops using it first.
 
 ### Available Scripts
 
