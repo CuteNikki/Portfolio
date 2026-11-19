@@ -89,5 +89,6 @@
   "overrides": {
     "mysql2": "3.24.6",
     "zod": "^4.6.7"
-  }
+  },
+  "packageManager": "bun@1.4.4"
 }
