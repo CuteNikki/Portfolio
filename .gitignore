@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 /src/lib/generated/prisma
+
+# Settings for one server only (networks, names), kept on that server
+compose.override.yaml
