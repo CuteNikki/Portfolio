@@ -31,8 +31,8 @@ export async function hitsSoFar(key: string) {
   return row?.count ?? 0;
 }
 
-// Identifies the visitor by a hash of their IP, so rate limits never store the address itself. Vercel sets
-// x-forwarded-for itself, so visitors can't choose it.
+// Identifies the visitor by a hash of their IP, so rate limits never store the address itself. The reverse proxy in
+// front (Caddy) sets x-forwarded-for itself, replacing any a visitor sends, so visitors can't choose it.
 export async function visitorHash(...extra: string[]) {
   const headerList = await headers();
   const ip =
