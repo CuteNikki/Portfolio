@@ -11,10 +11,11 @@ export const IMAGE_TYPES = {
 export type ImageType = keyof typeof IMAGE_TYPES;
 
 // The longest side of each copy, in pixels. Pictures are never scaled up.
-// A card on a phone is shown about 565 pixels wide on its screen, which the phone copy covers without the small one.
+// On a phone, a project card is shown about 570 pixels wide on the screen and a post row about 665, which the phone
+// copy covers without the small one.
 export const IMAGE_SIZES = {
   thumb: 400,
-  phone: 640,
+  phone: 720,
   small: 960,
   large: 2000,
 } as const;
