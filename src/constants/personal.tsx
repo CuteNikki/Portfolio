@@ -1,5 +1,6 @@
 import {
   IconType,
+  SiBlender,
   SiBun,
   SiClaude,
   SiCss,
@@ -13,14 +14,20 @@ import {
   SiIntellijidea,
   SiJavascript,
   SiMongodb,
+  SiMui,
+  SiMysql,
   SiNestjs,
   SiNextdotjs,
   SiNodedotjs,
+  SiNpm,
+  SiPnpm,
   SiPostgresql,
   SiPython,
   SiReact,
   SiRedis,
+  SiSass,
   SiShadcnui,
+  SiSqlite,
   SiTailwindcss,
   SiTypescript,
 } from '@icons-pack/react-simple-icons';
@@ -243,24 +250,14 @@ export const PERSONAL_DETAILS = {
     return {
       languages: [
         {
-          name: 'JavaScript',
-          description: 'Dynamic scripting language for the web.',
-          icon: <SiJavascript />,
-        },
-        {
           name: 'TypeScript',
           description: 'Superset of JavaScript with typing.',
           icon: <SiTypescript />,
         },
         {
-          name: 'HTML',
-          description: 'Markup language for structuring web content.',
-          icon: <SiHtml5 />,
-        },
-        {
-          name: 'CSS',
-          description: 'Style sheet language for designing web pages.',
-          icon: <SiCss />,
+          name: 'JavaScript',
+          description: 'Dynamic scripting language for the web.',
+          icon: <SiJavascript />,
         },
         {
           name: 'Java',
@@ -273,6 +270,56 @@ export const PERSONAL_DETAILS = {
           description:
             'High-level programming language for general-purpose programming.',
           icon: <SiPython />,
+        },
+        {
+          name: 'HTML',
+          description: 'Markup language for structuring web content.',
+          icon: <SiHtml5 />,
+        },
+        {
+          name: 'CSS',
+          description: 'Style sheet language for designing web pages.',
+          icon: <SiCss />,
+        },
+      ] as const,
+      runtimes: [
+        {
+          name: 'Node.js',
+          description: 'JavaScript runtime for server-side development.',
+          icon: <SiNodedotjs />,
+        },
+        {
+          name: 'Bun',
+          description: 'Fast all-in-one JavaScript toolkit/runtime/bundler.',
+          icon: <SiBun />,
+        },
+        {
+          name: 'npm',
+          description: 'Package manager that comes with Node.js.',
+          icon: <SiNpm />,
+        },
+        {
+          name: 'pnpm',
+          description: 'Fast, disk-efficient package manager.',
+          icon: <SiPnpm />,
+        },
+      ] as const,
+      backend: [
+        {
+          name: 'Express',
+          description: 'Minimalist web framework for Node.js.',
+          icon: <ExpressMonogram />,
+        },
+        {
+          name: 'NestJS',
+          description:
+            'Progressive Node.js framework for building scalable server-side apps.',
+          icon: <SiNestjs />,
+        },
+        {
+          name: 'discord.js',
+          description: 'Library for interacting with the Discord API.',
+          icon: <SiDiscorddotjs />,
         },
       ] as const,
       frontend: [
@@ -291,62 +338,55 @@ export const PERSONAL_DETAILS = {
           description: 'React framework for SSR, static sites and routing.',
           icon: <SiNextdotjs />,
         },
+      ] as const,
+      styling: [
         {
           name: 'Tailwind CSS',
           description: 'Utility-first CSS framework.',
           icon: <SiTailwindcss />,
         },
         {
-          name: 'Shadcn/UI',
+          name: 'Sass',
+          description: 'CSS with variables, nesting and mixins.',
+          icon: <SiSass />,
+        },
+        {
+          name: 'shadcn/ui',
           description: 'Customizable UI components for React.',
           icon: <SiShadcnui />,
         },
-      ] as const,
-
-      backend: [
         {
-          name: 'Node.js',
-          description: 'JavaScript runtime for server-side development.',
-          icon: <SiNodedotjs />,
-        },
-        {
-          name: 'Bun',
-          description: 'Fast all-in-one JavaScript toolkit/runtime/bundler.',
-          icon: <SiBun />,
-        },
-        {
-          name: 'Express.js',
-          description: 'Minimalist web framework for Node.js.',
-          icon: <ExpressMonogram />,
-        },
-        {
-          name: 'Nest.js',
-          description:
-            'Progressive Node.js framework for building scalable server-side apps.',
-          icon: <SiNestjs />,
-        },
-        {
-          name: 'Discord.js',
-          description: 'Library for interacting with the Discord API.',
-          icon: <SiDiscorddotjs />,
+          name: 'MUI',
+          description: 'React components following Material Design.',
+          icon: <SiMui />,
         },
       ] as const,
       databases: [
-        {
-          name: 'MongoDB',
-          description: 'NoSQL document database for flexible data storage.',
-          icon: <SiMongodb />,
-        },
         {
           name: 'PostgreSQL',
           description: 'Powerful open-source relational database system.',
           icon: <SiPostgresql />,
         },
         {
+          name: 'MySQL',
+          description: 'Widely used open-source relational database.',
+          icon: <SiMysql />,
+        },
+        {
+          name: 'MongoDB',
+          description: 'NoSQL document database for flexible data storage.',
+          icon: <SiMongodb />,
+        },
+        {
           name: 'Redis',
           description:
             'In-memory data structure store for caching and messaging.',
           icon: <SiRedis />,
+        },
+        {
+          name: 'SQLite',
+          description: 'Small, file-based SQL database.',
+          icon: <SiSqlite />,
         },
       ] as const,
       tools: [
@@ -356,21 +396,49 @@ export const PERSONAL_DETAILS = {
           icon: <SiGit />,
         },
         {
-          name: 'Claude',
-          description:
-            'AI assistant I pair with on code, reviews and research.',
-          icon: <SiClaude />,
-        },
-        {
           name: 'Docker',
           description:
             'Platform for developing, shipping, and running applications in containers.',
           icon: <SiDocker />,
         },
         {
+          name: 'Claude',
+          description:
+            'AI assistant I pair with on code, reviews and research.',
+          icon: <SiClaude />,
+        },
+      ] as const,
+      design: [
+        {
           name: 'Figma',
           description: 'Collaborative interface design and prototyping tool.',
           icon: <SiFigma />,
+        },
+        {
+          name: 'Illustrator',
+          description: 'Software for vector graphics and illustration.',
+          icon: (
+            <svg
+              width='48'
+              height='48'
+              viewBox='0 0 48 48'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                d='M3 18.2C3 12.8795 3 10.2193 4.03544 8.18709C4.94624 6.39955 6.39955 4.94624 8.18709 4.03544C10.2193 3 12.8795 3 18.2 3H29.8C35.1205 3 37.7807 3 39.8129 4.03544C41.6004 4.94624 43.0538 6.39955 43.9646 8.18709C45 10.2193 45 12.8795 45 18.2V29.8C45 35.1205 45 37.7807 43.9646 39.8129C43.0538 41.6004 41.6004 43.0538 39.8129 43.9646C37.7807 45 35.1205 45 29.8 45H18.2C12.8795 45 10.2193 45 8.18709 43.9646C6.39955 43.0538 4.94624 41.6004 4.03544 39.8129C3 37.7807 3 35.1205 3 29.8V18.2Z'
+                fill='currentColor'
+              />
+              <path
+                d='M23.3526 29.3944H16.8442L15.52 33.6134C15.4832 33.7702 15.3389 33.8812 15.1819 33.8735H11.8854C11.6974 33.8735 11.6317 33.7676 11.6882 33.5556L17.3231 16.9107C17.3795 16.7374 17.4359 16.5399 17.4922 16.3183C17.5659 15.9328 17.6037 15.5409 17.6049 15.148C17.5888 15.0319 17.6908 14.9294 17.8022 14.9457H22.2819C22.4132 14.9457 22.4883 14.9939 22.5073 15.0902L28.9031 33.5845C28.9594 33.7773 28.9031 33.8737 28.734 33.8735H25.0712C24.9428 33.8881 24.8201 33.8 24.7895 33.6712L23.3526 29.3944ZM17.8585 25.7533H22.3101C21.5787 23.2541 20.7533 20.7876 20.0843 18.2689C19.3625 20.7919 18.575 23.3047 17.8585 25.7533Z'
+                className='fill-background'
+              />
+              <path
+                d='M32.7064 18.0087C32.419 18.0206 32.1324 17.9701 31.8654 17.8605C31.5984 17.751 31.3569 17.5848 31.1568 17.373C30.9572 17.152 30.8021 16.8927 30.7006 16.61C30.599 16.3273 30.553 16.0268 30.565 15.7258C30.5548 15.4278 30.6059 15.1309 30.7152 14.8546C30.8244 14.5782 30.9893 14.3286 31.199 14.122C31.4066 13.9176 31.6518 13.7574 31.9202 13.6508C32.1886 13.5441 32.4749 13.4931 32.7627 13.5007C33.4389 13.5007 33.9696 13.7078 34.3546 14.122C34.549 14.3373 34.7 14.5897 34.7991 14.8649C34.8982 15.1401 34.9434 15.4327 34.9321 15.7258C34.9439 16.028 34.8964 16.3295 34.7923 16.6125C34.6883 16.8954 34.5298 17.1541 34.3264 17.373C34.1138 17.5879 33.8601 17.7554 33.5813 17.8648C33.3025 17.9742 33.0046 18.0232 32.7064 18.0087ZM30.7622 33.5844V19.7714C30.7622 19.5981 30.8371 19.5114 30.9877 19.5114H34.4532C34.6033 19.5114 34.6785 19.5981 34.6786 19.7714V33.5844C34.6786 33.7772 34.6035 33.8736 34.4532 33.8734H31.0159C30.8468 33.8734 30.7623 33.7771 30.7622 33.5844Z'
+                className='fill-background'
+              />
+            </svg>
+          ),
         },
         {
           name: 'Photoshop',
@@ -399,30 +467,9 @@ export const PERSONAL_DETAILS = {
           ),
         },
         {
-          name: 'Illustrator',
-          description: 'Software for vector graphics and illustration.',
-          icon: (
-            <svg
-              width='48'
-              height='48'
-              viewBox='0 0 48 48'
-              fill='none'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                d='M3 18.2C3 12.8795 3 10.2193 4.03544 8.18709C4.94624 6.39955 6.39955 4.94624 8.18709 4.03544C10.2193 3 12.8795 3 18.2 3H29.8C35.1205 3 37.7807 3 39.8129 4.03544C41.6004 4.94624 43.0538 6.39955 43.9646 8.18709C45 10.2193 45 12.8795 45 18.2V29.8C45 35.1205 45 37.7807 43.9646 39.8129C43.0538 41.6004 41.6004 43.0538 39.8129 43.9646C37.7807 45 35.1205 45 29.8 45H18.2C12.8795 45 10.2193 45 8.18709 43.9646C6.39955 43.0538 4.94624 41.6004 4.03544 39.8129C3 37.7807 3 35.1205 3 29.8V18.2Z'
-                fill='currentColor'
-              />
-              <path
-                d='M23.3526 29.3944H16.8442L15.52 33.6134C15.4832 33.7702 15.3389 33.8812 15.1819 33.8735H11.8854C11.6974 33.8735 11.6317 33.7676 11.6882 33.5556L17.3231 16.9107C17.3795 16.7374 17.4359 16.5399 17.4922 16.3183C17.5659 15.9328 17.6037 15.5409 17.6049 15.148C17.5888 15.0319 17.6908 14.9294 17.8022 14.9457H22.2819C22.4132 14.9457 22.4883 14.9939 22.5073 15.0902L28.9031 33.5845C28.9594 33.7773 28.9031 33.8737 28.734 33.8735H25.0712C24.9428 33.8881 24.8201 33.8 24.7895 33.6712L23.3526 29.3944ZM17.8585 25.7533H22.3101C21.5787 23.2541 20.7533 20.7876 20.0843 18.2689C19.3625 20.7919 18.575 23.3047 17.8585 25.7533Z'
-                className='fill-background'
-              />
-              <path
-                d='M32.7064 18.0087C32.419 18.0206 32.1324 17.9701 31.8654 17.8605C31.5984 17.751 31.3569 17.5848 31.1568 17.373C30.9572 17.152 30.8021 16.8927 30.7006 16.61C30.599 16.3273 30.553 16.0268 30.565 15.7258C30.5548 15.4278 30.6059 15.1309 30.7152 14.8546C30.8244 14.5782 30.9893 14.3286 31.199 14.122C31.4066 13.9176 31.6518 13.7574 31.9202 13.6508C32.1886 13.5441 32.4749 13.4931 32.7627 13.5007C33.4389 13.5007 33.9696 13.7078 34.3546 14.122C34.549 14.3373 34.7 14.5897 34.7991 14.8649C34.8982 15.1401 34.9434 15.4327 34.9321 15.7258C34.9439 16.028 34.8964 16.3295 34.7923 16.6125C34.6883 16.8954 34.5298 17.1541 34.3264 17.373C34.1138 17.5879 33.8601 17.7554 33.5813 17.8648C33.3025 17.9742 33.0046 18.0232 32.7064 18.0087ZM30.7622 33.5844V19.7714C30.7622 19.5981 30.8371 19.5114 30.9877 19.5114H34.4532C34.6033 19.5114 34.6785 19.5981 34.6786 19.7714V33.5844C34.6786 33.7772 34.6035 33.8736 34.4532 33.8734H31.0159C30.8468 33.8734 30.7623 33.7771 30.7622 33.5844Z'
-                className='fill-background'
-              />
-            </svg>
-          ),
+          name: 'Blender',
+          description: 'Open-source 3D modelling and rendering suite.',
+          icon: <SiBlender />,
         },
       ] as const,
       editors: [

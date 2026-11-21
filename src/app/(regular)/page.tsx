@@ -269,7 +269,7 @@ export default function Home() {
           </SectionHeading>
           <div
             data-reveal=''
-            className='edge-glow grid gap-x-6 gap-y-8 rounded-xl border bg-card p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-4'
+            className='edge-glow grid gap-x-6 gap-y-8 rounded-xl border bg-card p-7 sm:grid-cols-2 sm:p-8 lg:grid-cols-3'
           >
             {Object.entries(PERSONAL_DETAILS.skillsTechnologies).map(
               ([category, skills]) => (
