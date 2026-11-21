@@ -31,7 +31,7 @@ export interface GalleryImage {
 
 // Picks picture files with a button, or by dropping them onto the area. `children` is what the area shows. As a
 // `button`, it looks like the outline buttons next to it but still takes a dropped picture.
-function DropArea({
+export function DropArea({
   look = 'area',
   multiple,
   disabled,
@@ -97,7 +97,7 @@ function DropArea({
   );
 }
 
-function Progress({ value }: { value: number }) {
+export function Progress({ value }: { value: number }) {
   return (
     <span className='flex flex-col items-center gap-2'>
       <LoaderCircleIcon className='size-5 animate-spin' />
