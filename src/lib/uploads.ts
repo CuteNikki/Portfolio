@@ -17,8 +17,13 @@ import {
   signUpload,
 } from '@/lib/storage';
 
-// Each database keeps its pictures in its own folder, so a local test database can never touch the live site's.
+// Each database keeps its pictures in its own folder, so a local test database can never touch the live site's. The
+// folder is named after the database's address, unless STORAGE_FOLDER names it: the address changes when the database
+// moves or is reached another way, and the pictures already saved stay in the folder they were uploaded to.
 function uploadFolder() {
+  const folder = process.env.STORAGE_FOLDER?.replace(/^\/+|\/+$/g, '');
+  if (folder) return folder;
+
   const database = new URL(process.env.DATABASE_URL ?? 'postgresql://unknown');
   const owner = createHash('sha256')
     .update(database.host + database.pathname)
