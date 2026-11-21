@@ -1,7 +1,7 @@
 // Pictures for posts and projects, stored on our own Garage server at images.niso.moe next to the plushies site's.
-// The browser saves each one in three sizes before upload, so every place can load a copy close to the size it's shown
-// at: a thumbnail for small previews, a small copy for cards and phones and a large one for big screens. This file is
-// shared by the browser and the server.
+// The browser saves each one in four sizes before upload, so every place can load a copy close to the size it's shown
+// at: a thumbnail for small previews, a phone copy for cards on phones, a small copy for cards on bigger screens and a
+// large one for big screens. This file is shared by the browser and the server.
 
 export const IMAGE_TYPES = {
   'image/webp': 'webp',
@@ -11,7 +11,13 @@ export const IMAGE_TYPES = {
 export type ImageType = keyof typeof IMAGE_TYPES;
 
 // The longest side of each copy, in pixels. Pictures are never scaled up.
-export const IMAGE_SIZES = { thumb: 400, small: 960, large: 2000 } as const;
+// A card on a phone is shown about 565 pixels wide on its screen, which the phone copy covers without the small one.
+export const IMAGE_SIZES = {
+  thumb: 400,
+  phone: 640,
+  small: 960,
+  large: 2000,
+} as const;
 
 export type ImageSize = keyof typeof IMAGE_SIZES;
 

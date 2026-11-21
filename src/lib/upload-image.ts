@@ -43,10 +43,11 @@ async function shrinkAll(file: File) {
       type = 'image/jpeg';
       thumb = await shrink(bitmap, IMAGE_SIZES.thumb, type);
     }
-    const small = await shrink(bitmap, IMAGE_SIZES.small, type);
-    const large = await shrink(bitmap, IMAGE_SIZES.large, type);
-
-    const copies: Record<ImageSize, Blob> = { thumb, small, large };
+    const copies = { thumb } as Record<ImageSize, Blob>;
+    for (const size of IMAGE_SIZE_NAMES) {
+      if (size !== 'thumb')
+        copies[size] = await shrink(bitmap, IMAGE_SIZES[size], type);
+    }
     return { type, copies };
   } finally {
     bitmap.close();

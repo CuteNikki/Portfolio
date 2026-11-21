@@ -16,6 +16,7 @@ import {
 const SIZES: { size: ImageSize; label: string }[] = [
   { size: 'large', label: 'Large' },
   { size: 'small', label: 'Small' },
+  { size: 'phone', label: 'Phone' },
   { size: 'thumb', label: 'Thumbnail' },
 ];
 
