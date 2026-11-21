@@ -1,5 +1,11 @@
 import type { Nodes as HastNodes } from 'hast';
-import type { Nodes as MdastNodes } from 'mdast';
+import type {
+  Nodes as MdastNodes,
+  Parent,
+  PhrasingContent,
+  Root,
+  Underline,
+} from 'mdast';
 import rehypeSlug from 'rehype-slug';
 import remarkBreaks from 'remark-breaks';
 import remarkGemoji from 'remark-gemoji';
@@ -10,12 +16,56 @@ import { unified, type PluggableList } from 'unified';
 
 import { shorten } from '@/lib/utils';
 
+// Underlined text, which Markdown has no syntax for
+declare module 'mdast' {
+  interface Underline extends Parent {
+    type: 'underline';
+    children: PhrasingContent[];
+  }
+  interface PhrasingContentMap {
+    underline: Underline;
+  }
+  interface RootContentMap {
+    underline: Underline;
+  }
+}
+
+const isTag = (node: MdastNodes, tag: string) =>
+  node.type === 'html' && node.value.trim().toLowerCase() === tag;
+
+/**
+ * Underlines text written between `<u>` and `</u>`, which the editor's Underline button writes. Only that pair of tags
+ * within one paragraph or heading becomes an underline; any other HTML in a text stays ignored, as before.
+ */
+function remarkUnderline() {
+  const walk = (node: MdastNodes) => {
+    if (!('children' in node)) return;
+    const children = node.children as MdastNodes[];
+    for (let open = 0; open < children.length; open++) {
+      if (!isTag(children[open], '<u>')) continue;
+      const close = children.findIndex(
+        (child, index) => index > open && isTag(child, '</u>')
+      );
+      if (close === -1) break;
+      const underline = {
+        type: 'underline',
+        children: children.slice(open + 1, close),
+        data: { hName: 'u' },
+      } as Underline;
+      children.splice(open, close - open + 1, underline);
+    }
+    children.forEach(walk);
+  };
+  return (tree: Root) => walk(tree);
+}
+
 // The Markdown that posts and projects are written in. MarkdownViewer renders it with these, and the text and headings
 // taken from it here are read with them too, so they match the page.
 export const remarkPlugins = [
   remarkGfm,
   remarkBreaks,
   remarkGemoji,
+  remarkUnderline,
 ] satisfies PluggableList;
 
 const toMdast = unified().use(remarkParse).use(remarkPlugins);
