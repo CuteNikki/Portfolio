@@ -9,7 +9,13 @@ import {
   useState,
 } from 'react';
 
-import { headingAt, insertBlock, type TextState } from '@/lib/markdown-edit';
+import {
+  continueList,
+  headingAt,
+  indentLines,
+  insertBlock,
+  type TextState,
+} from '@/lib/markdown-edit';
 import { cn } from '@/lib/utils';
 
 import {
@@ -186,6 +192,21 @@ export function MarkdownField({
               readHeading();
             }}
             onKeyDown={(event) => {
+              const plain = !event.ctrlKey && !event.metaKey && !event.altKey;
+              // In a list, Enter starts the next item and Tab nests it; elsewhere they do what they always do
+              if (plain && !event.nativeEvent.isComposing) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                  if (history.apply(continueList)) event.preventDefault();
+                } else if (event.key === 'Tab') {
+                  if (
+                    history.apply((s) =>
+                      indentLines(s, event.shiftKey ? -1 : 1)
+                    )
+                  )
+                    event.preventDefault();
+                }
+                return;
+              }
               if (!(event.ctrlKey || event.metaKey) || event.altKey) return;
               const key = event.key.toLowerCase();
               if (key === 'z' || key === 'y') {
@@ -289,17 +310,20 @@ function useHistory(
     onChange(state.value);
   };
 
-  const apply = (edit: (state: TextState) => TextState) => {
+  // Applies an edit, and says whether it did anything; an edit that gives null leaves the text to the browser
+  const apply = (edit: (state: TextState) => TextState | null) => {
     const before = current();
     const after = edit(before);
+    if (!after) return false;
     if (after.value === before.value) {
       // Nothing changed, but the selection may have
       textarea.current?.setSelectionRange(after.start, after.end);
-      return;
+      return true;
     }
     push(before);
     lastTyped.current = 0;
     show(after);
+    return true;
   };
 
   const type = (next: string) => {

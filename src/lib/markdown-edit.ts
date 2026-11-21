@@ -141,6 +141,243 @@ export function toggleLines(state: TextState, kind: LineKind): TextState {
   return replace(state, from, to, text, [0, text.length]);
 }
 
+// A list item's or quote line's parts: its indent, its marker with the space after it, and what follows
+interface Item {
+  indent: string;
+  marker: string;
+  kind: LineKind;
+  // For a numbered item: its number, and whether it's written with . or )
+  number?: number;
+  delimiter?: string;
+}
+
+function itemOf(line: string): Item | null {
+  let match = /^(\s*)([-*+] \[[ xX]\] )/.exec(line);
+  if (match) return { indent: match[1], marker: match[2], kind: 'task' };
+  match = /^(\s*)([-*+] )/.exec(line);
+  if (match) return { indent: match[1], marker: match[2], kind: 'bullet' };
+  match = /^(\s*)((\d+)([.)]) )/.exec(line);
+  if (match)
+    return {
+      indent: match[1],
+      marker: match[2],
+      kind: 'numbered',
+      number: Number(match[3]),
+      delimiter: match[4],
+    };
+  match = /^(\s*)(> ?)/.exec(line);
+  if (match) return { indent: match[1], marker: match[2], kind: 'quote' };
+  return null;
+}
+
+// The marker for the item after `item`: the next number, an unticked box, the same bullet or quote mark
+function nextMarker(item: Item) {
+  if (item.kind === 'numbered') return `${item.number! + 1}${item.delimiter} `;
+  if (item.kind === 'task') return `${item.marker[0]} [ ] `;
+  if (item.kind === 'quote') return '> ';
+  return item.marker;
+}
+
+// Numbers the numbered list that line `index` belongs to in order again, from its first item's number. Only items at
+// that line's indent count; deeper lines, such as a nested list, are stepped over, and the list ends at an empty line,
+// a shallower line or a line that isn't one of its items. Changes `lines` in place.
+function renumberLines(lines: string[], index: number) {
+  const item = itemOf(lines[index] ?? '');
+  if (item?.kind !== 'numbered') return;
+  const depth = item.indent.length;
+
+  // A line deeper than the list's items, which belongs to the item above it
+  const deeper = (line: string) =>
+    line.trim() !== '' && (/^\s*/.exec(line)?.[0].length ?? 0) > depth;
+  const sibling = (line: string) => {
+    const other = itemOf(line);
+    return other?.kind === 'numbered' && other.indent.length === depth;
+  };
+
+  let first = index;
+  for (let i = index - 1; i >= 0; i--) {
+    if (sibling(lines[i])) first = i;
+    else if (!deeper(lines[i])) break;
+  }
+
+  let number = itemOf(lines[first])!.number!;
+  for (let i = first; i < lines.length; i++) {
+    const line = lines[i];
+    if (sibling(line)) {
+      const current = itemOf(line)!;
+      lines[i] =
+        current.indent +
+        `${number++}${current.delimiter} ` +
+        line.slice(current.indent.length + current.marker.length);
+    } else if (!deeper(line)) {
+      break;
+    }
+  }
+}
+
+// A numbered item just nested with no item above it at its new depth starts its own list, so it's numbered from 1
+function startSublist(lines: string[], index: number) {
+  const item = itemOf(lines[index]);
+  if (item?.kind !== 'numbered') return;
+  const depth = item.indent.length;
+  for (let i = index - 1; i >= 0; i--) {
+    const above = itemOf(lines[i]);
+    const aboveDepth = /^\s*/.exec(lines[i])?.[0].length ?? 0;
+    if (above?.kind === 'numbered' && above.indent.length === depth) return;
+    if (lines[i].trim() === '' || aboveDepth < depth) break;
+  }
+  lines[index] =
+    item.indent +
+    `1${item.delimiter} ` +
+    lines[index].slice(depth + item.marker.length);
+}
+
+// The line a position is on, and how far into that line it is
+function lineAt(value: string, offset: number) {
+  const before = value.slice(0, offset).split('\n');
+  return { line: before.length - 1, column: before[before.length - 1].length };
+}
+
+// A position from a line and how far into it, clamped to the line
+function offsetOf(lines: string[], line: number, column: number) {
+  let offset = 0;
+  for (let i = 0; i < line; i++) offset += lines[i].length + 1;
+  return offset + Math.min(column, lines[line]?.length ?? 0);
+}
+
+/**
+ * What Enter does in a list or quote: starts the next item, with the text after the cursor moving into it, and numbers
+ * a numbered list in order again. On an empty item it ends the list instead, or moves a nested item out a level. Null
+ * where Enter should just break the line, such as outside a list or with text selected.
+ */
+export function continueList(state: TextState): TextState | null {
+  if (state.start !== state.end) return null;
+  const { value, start } = state;
+  const [from, to] = lineRange(value, start, start);
+  const line = value.slice(from, to);
+  const item = itemOf(line);
+  const markerEnd = from + (item ? item.indent.length + item.marker.length : 0);
+  if (!item || start < markerEnd) return null;
+
+  if (line.slice(item.indent.length + item.marker.length).trim() === '') {
+    // A nested empty item moves out a level, a top-level one ends the list
+    if (item.indent.length > 0) return indentLines(state, -1);
+    return {
+      value: value.slice(0, from) + value.slice(to),
+      start: from,
+      end: from,
+    };
+  }
+
+  const marker = item.indent + nextMarker(item);
+  // The text after the cursor moves into the new item, without the space it was split at
+  const rest = value.slice(start).replace(/^[ \t]+/, '');
+  const lines = (
+    value.slice(0, start).replace(/[ \t]+$/, '') +
+    '\n' +
+    marker +
+    rest
+  ).split('\n');
+  const { line: current } = lineAt(value, start);
+  if (item.kind === 'numbered') renumberLines(lines, current + 1);
+
+  // The cursor goes after the new item's marker, wherever renumbering moved it
+  const newItem = itemOf(lines[current + 1])!;
+  const cursor = offsetOf(
+    lines,
+    current + 1,
+    newItem.indent.length + newItem.marker.length
+  );
+  return { value: lines.join('\n'), start: cursor, end: cursor };
+}
+
+/**
+ * What Tab (`direction` 1) and Shift+Tab (-1) do on list lines: indent the selected lines by the marker width of the
+ * item above them, so an item nests under it, or move them out to the item they're nested under. Numbered lists are
+ * numbered in order again around them, so a newly nested list starts from 1. Null when no selected line is a list
+ * item, so Tab can move on to the next field.
+ */
+export function indentLines(
+  state: TextState,
+  direction: 1 | -1
+): TextState | null {
+  const lines = state.value.split('\n');
+  const first = lineAt(state.value, state.start);
+  const last = lineAt(
+    state.value,
+    // A selection that ends right after a line break doesn't take in the next line
+    state.end > state.start && state.value[state.end - 1] === '\n'
+      ? state.end - 1
+      : state.end
+  );
+  const listLine = (line: string) => {
+    const item = itemOf(line);
+    return !!item && item.kind !== 'quote';
+  };
+  if (!lines.slice(first.line, last.line + 1).some(listLine)) return null;
+
+  const depthOf = (line: string) => /^\s*/.exec(line)?.[0].length ?? 0;
+  const shifts: number[] = [];
+  for (let i = first.line; i <= last.line; i++) {
+    const line = lines[i];
+    const depth = depthOf(line);
+    let shift = 0;
+    if (line.trim() !== '') {
+      if (direction === 1) {
+        // The width of the marker of the item above at the same depth, so this one lines up under its text
+        shift = 2;
+        for (let j = i - 1; j >= 0; j--) {
+          const above = itemOf(lines[j]);
+          if (
+            above &&
+            above.kind !== 'quote' &&
+            above.indent.length === depth
+          ) {
+            shift = above.marker.length - (above.kind === 'task' ? 4 : 0);
+            break;
+          }
+          if (lines[j].trim() !== '' && depthOf(lines[j]) < depth) break;
+        }
+        lines[i] = ' '.repeat(shift) + line;
+        startSublist(lines, i);
+      } else {
+        // Out to the depth of the item it's nested under, or all the way out
+        let target = 0;
+        for (let j = i - 1; j >= 0; j--) {
+          const above = itemOf(lines[j]);
+          if (above && above.indent.length < depth) {
+            target = above.indent.length;
+            break;
+          }
+        }
+        shift = target - depth;
+        lines[i] = line.slice(depth - target);
+      }
+    }
+    shifts.push(shift);
+  }
+
+  // Each changed line's list, and the one it left, which carries on below it, numbered in order again
+  for (let i = first.line; i <= last.line; i++) {
+    renumberLines(lines, i);
+    if (i > 0) renumberLines(lines, i - 1);
+    for (let j = i + 1; j < lines.length && j <= last.line + 1; j++)
+      renumberLines(lines, j);
+  }
+
+  const start = offsetOf(
+    lines,
+    first.line,
+    Math.max(0, first.column + shifts[0])
+  );
+  const end = offsetOf(
+    lines,
+    last.line,
+    Math.max(0, last.column + shifts[shifts.length - 1])
+  );
+  return { value: lines.join('\n'), start, end: Math.max(start, end) };
+}
+
 /**
  * Makes the selected lines a heading of `level` (2 to 4; the post's title is the page's only level 1), or plain text
  * with 0. A line that's already a heading of that level becomes plain again.
