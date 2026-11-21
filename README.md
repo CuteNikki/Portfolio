@@ -9,7 +9,7 @@ A personal portfolio website built with **Next.js 16**, **React 19**, and **Type
 - **Portfolio & About**: Home page with career, education, skills, and social links
 - **Projects**: Showcase of projects with tags, technologies, and links
 - **Blog Posts**: Markdown-powered blog with syntax highlighting, GFM support, and nested comments
-- **Contact Form**: Email delivery via our own mail server (Stalwart at mail.niso.moe)
+- **Contact Form**: Email delivery through any SMTP server (we run our own, Stalwart)
 - **Dashboard**: Protected area where writers and admins manage posts, projects, comments, and pictures, and admins manage users
 - **Authentication**: Discord OAuth2 login with session management
 - **Theming**: Light, dark, system, and Catppuccin themes
@@ -50,7 +50,7 @@ DISCORD_CLIENT_SECRET=
 NEXT_PUBLIC_DISCORD_CLIENT_ID=
 NEXT_PUBLIC_DISCORD_REDIRECT_URI=
 
-# Email: SMTP_URL logs in to the mail server, e.g. smtps://no-reply%40niso.moe:password@mail.niso.moe
+# Email: SMTP_URL logs in to the mail server, e.g. smtps://no-reply%40example.com:password@mail.example.com
 SMTP_URL=
 EMAIL_FROM=
 EMAIL_TO=
@@ -95,9 +95,9 @@ The build reads the published posts and projects to prerender them, but never ch
 
 ## Pictures
 
-Covers for posts and projects, and the further pictures of a project, are kept on our own [Garage](https://garagehq.deuxfleurs.fr) server, in a bucket of the site's own, `portfolio`, and load from `https://images.niso.moe/portfolio/`. The browser shrinks each picture into a small and a large WebP before it goes (`IMAGE_SIZES` in `src/lib/images.ts`), asks the site for links to upload them to (`requestImageUpload` in `src/actions/upload.ts`) and sends them there itself, through Garage's S3 API at `https://s3.niso.moe`. The links last 5 minutes, are signed for that file's type and size, and are only handed to writers and admins. The site saves the large copy's address; cards and lists show the small one. Pictures that are replaced, removed or left in an unsaved form are deleted again once the change is saved.
+Covers for posts and projects, and the further pictures of a project, are kept on our own [Garage](https://garagehq.deuxfleurs.fr) server, in a bucket of the site's own, `portfolio`, and load from `IMAGE_PUBLIC_URL` + `/portfolio/`. The browser shrinks each picture into a small and a large WebP before it goes (`IMAGE_SIZES` in `src/lib/images.ts`), asks the site for links to upload them to (`requestImageUpload` in `src/actions/upload.ts`) and sends them there itself, through Garage's S3 API at `STORAGE_ENDPOINT`. The links last 5 minutes, are signed for that file's type and size, and are only handed to writers and admins. The site saves the large copy's address; cards and lists show the small one. Pictures that are replaced, removed or left in an unsaved form are deleted again once the change is saved.
 
-Each picture is a folder `portfolio/<database>/<id>/` with `small.webp` and `large.webp` (`.jpg` from a browser that can't write WebP). `<database>` is named after the database's address (`uploadFolder` in `src/lib/uploads.ts`), so a local copy of the site never touches the live site's pictures. The address changes when the database moves or is reached another way, say through an SSH tunnel, so then set `STORAGE_FOLDER` to the folder the pictures are already in (`portfolio/<database>`). The `portfolio/` part is from when every site shared one bucket: addresses still start with it, and `src/lib/storage.ts` leaves it off inside the bucket, which Caddy serves at `images.niso.moe/portfolio/`.
+Each picture is a folder `portfolio/<database>/<id>/` with `small.webp` and `large.webp` (`.jpg` from a browser that can't write WebP). `<database>` is named after the database's address (`uploadFolder` in `src/lib/uploads.ts`), so a local copy of the site never touches the live site's pictures. The address changes when the database moves or is reached another way, say through an SSH tunnel, so then set `STORAGE_FOLDER` to the folder the pictures are already in (`portfolio/<database>`). The `portfolio/` part is from when every site shared one bucket: addresses still start with it, and `src/lib/storage.ts` leaves it off inside the bucket, which the image server serves under `/portfolio/`.
 
 To set it up on the server, with `garage` standing for `docker exec garage /garage`:
 
@@ -106,8 +106,8 @@ To set it up on the server, with `garage` standing for `docker exec garage /gara
    garage key create portfolio-site      # its Key ID and Secret key are STORAGE_ACCESS_KEY_ID and STORAGE_SECRET_ACCESS_KEY
    garage bucket allow --read --write portfolio --key portfolio-site
    ```
-2. Let the site's pages upload: the bucket's CORS rule allows `PUT` with a `content-type` header from `https://niso.moe` and `http://localhost:3000`.
-3. Set `STORAGE_ACCESS_KEY_ID` and `STORAGE_SECRET_ACCESS_KEY` on the host. Caddy serves `images.niso.moe/portfolio/` and `s3.niso.moe` already.
+2. Let the site's pages upload: the bucket's CORS rule allows `PUT` with a `content-type` header from the site's own address and `http://localhost:3000`.
+3. Set `STORAGE_ACCESS_KEY_ID` and `STORAGE_SECRET_ACCESS_KEY` on the host, and `STORAGE_ENDPOINT` and `IMAGE_PUBLIC_URL` if they differ from the defaults in `src/lib/storage.ts`. The reverse proxy in front has to serve the bucket's public reads and the S3 API.
 
 For local testing against another S3-compatible server, set `STORAGE_ENDPOINT` (its S3 API), `STORAGE_BUCKET` and `IMAGE_PUBLIC_URL` (where pictures are read from).
 
