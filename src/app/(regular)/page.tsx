@@ -99,7 +99,7 @@ export default function Home() {
           <span className='text-primary-text'>from the ground up.</span>
         </h1>
         <p className='animate-hero-in max-w-2xl text-base leading-[1.75] text-pretty text-body delay-2'>
-          I&apos;m {PERSONAL_DETAILS.firstName}, a <Age />
+          I&apos;m {PERSONAL_DETAILS.firstName} {PERSONAL_DETAILS.middleName}, a <Age />
           -year-old {PERSONAL_DETAILS.title.toLowerCase()} based in{' '}
           {PERSONAL_DETAILS.address.country}. I do full-stack development and
           design, focusing on the intersection of code and user experience.
