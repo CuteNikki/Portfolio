@@ -26,7 +26,7 @@ A personal portfolio website built with **Next.js 16**, **React 19**, and **Type
 | Styling    | Tailwind CSS 4, shadcn/ui, Radix UI                         |
 | Auth       | Discord OAuth2 (custom implementation)                      |
 | Email      | Nodemailer + React Email                                    |
-| Animations | Framer Motion                                               |
+| Animations | CSS keyframes                                               |
 | Markdown   | react-markdown, remark-gfm, rehype-slug, syntax-highlighter |
 | Tables     | TanStack Table                                              |
 | Forms      | Server Actions, Zod validation                              |
