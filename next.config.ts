@@ -8,8 +8,8 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
 
   images: {
-    // Vercel bills every image transformation, and nothing here needs them: the only remote images are Discord
-    // avatars, which Discord already sends resized as webp
+    // Nothing here needs Next's image resizing: every uploaded picture is stored in four sizes already, and the only
+    // remote images are Discord avatars, which Discord already sends resized as webp
     unoptimized: true,
   },
 
