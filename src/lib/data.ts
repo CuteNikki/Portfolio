@@ -41,13 +41,12 @@ const bySlugOrId = (idOrSlug: string) => ({
 
 // Published posts and projects look the same for every visitor, so they are
 // cached and prerendered. The post and project actions refresh them through
-// their tag, and `cacheLife` picks up view counts and profile changes.
-// Remote, so every function instance shares one copy: otherwise each new
-// instance, and each one after a save refreshes the tag, asks the database
-// again, a few connections each.
+// their tag, and `cacheLife` picks up view counts and profile changes. The
+// site runs as one server process, so the in-memory cache is shared by every
+// request already.
 
 export async function getPublishedPosts() {
-  'use cache: remote';
+  'use cache';
   cacheTag('posts');
   cacheLife('hours');
 
@@ -59,7 +58,7 @@ export async function getPublishedPosts() {
 }
 
 export async function getPublishedPost(idOrSlug: string) {
-  'use cache: remote';
+  'use cache';
   cacheTag('posts');
   cacheLife('hours');
 
@@ -74,7 +73,7 @@ export const commentsTag = (postId: string) => `comments:${postId}`;
 // A post's comments, newest first. They're cached apart from the post, so a new comment only refreshes these (through
 // the post's comments tag), not every page that shows the post. Deleting a user refreshes them all (`comments`).
 export async function getComments(postId: string) {
-  'use cache: remote';
+  'use cache';
   cacheTag('comments', commentsTag(postId));
   cacheLife('hours');
 
@@ -86,7 +85,7 @@ export async function getComments(postId: string) {
 }
 
 export async function getPublishedProjects() {
-  'use cache: remote';
+  'use cache';
   cacheTag('projects');
   cacheLife('hours');
 
@@ -98,7 +97,7 @@ export async function getPublishedProjects() {
 }
 
 export async function getPublishedProject(idOrSlug: string) {
-  'use cache: remote';
+  'use cache';
   cacheTag('projects');
   cacheLife('hours');
 
