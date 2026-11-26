@@ -1,4 +1,4 @@
-// Pictures for posts and projects, stored on our own Garage server at images.niso.moe next to the plushies site's.
+// Pictures for posts and projects, stored in this site's own bucket on our own Garage server.
 // The browser saves each one in four sizes before upload, so every place can load a copy close to the size it's shown
 // at: a thumbnail for small previews, a phone copy for cards on phones, a small copy for cards on bigger screens and a
 // large one for big screens. This file is shared by the browser and the server.
